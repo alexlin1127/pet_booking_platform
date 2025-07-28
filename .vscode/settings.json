@@ -3,23 +3,5 @@
         {
             "file": ".copilot-commit-message-instructions.md"
         }
-    ],
-    "css.validate": false,
-    "css.customData": [".vscode/css_custom_data.json"],
-    "less.validate": false,
-    "scss.validate": false,
-    "tailwindCSS.includeLanguages": {
-        "css": "css",
-        "html": "html",
-        "vue": "html"
-    },
-    "tailwindCSS.emmetCompletions": true,
-    "tailwindCSS.experimental.classRegex": [
-        "class\\s*[=:]\\s*[\"']([^\"']*)[\"']"
-    ],
-    "tailwindCSS.rootFontSize": 16,
-    "tailwindCSS.validate": true,
-    "emmet.includeLanguages": {
-        "vue-html": "html"
-    }
+    ]
 }
