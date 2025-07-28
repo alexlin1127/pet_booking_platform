@@ -1,0 +1,118 @@
+openapi: 3.0.3
+info:
+  title: Pet Booking Platform API
+  description: API for pet appointment booking platform
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@petbooking.com
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Development server
+
+paths:
+  /users:
+    get:
+      summary: Get all users
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: Create a new user
+      tags:
+        - Users
+      responses:
+        '201':
+          description: User created successfully
+
+  /pets:
+    get:
+      summary: Get all pets
+      tags:
+        - Pets
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: Register a new pet
+      tags:
+        - Pets
+      responses:
+        '201':
+          description: Pet registered successfully
+
+  /bookings:
+    get:
+      summary: Get all bookings
+      tags:
+        - Bookings
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: Create a new booking
+      tags:
+        - Bookings
+      responses:
+        '201':
+          description: Booking created successfully
+
+  /payments:
+    post:
+      summary: Process payment
+      tags:
+        - Payments
+      responses:
+        '200':
+          description: Payment processed successfully
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    Pet:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        species:
+          type: string
+        breed:
+          type: string
+        age:
+          type: integer
+        owner_id:
+          type: integer
+
+    Booking:
+      type: object
+      properties:
+        id:
+          type: integer
+        pet_id:
+          type: integer
+        service_type:
+          type: string
+        appointment_date:
+          type: string
+          format: date-time
+        status:
+          type: string
+        price:
+          type: number
