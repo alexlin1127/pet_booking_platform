@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: django-app
+Version: 0.1.0
+Summary: Add your description here
+Requires-Python: >=3.13
+Description-Content-Type: text/markdown
+Requires-Dist: django>=5.2.4
+Requires-Dist: django-cors-headers>=4.7.0
+Requires-Dist: djangorestframework>=3.16.0
