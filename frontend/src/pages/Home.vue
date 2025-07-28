@@ -1,3 +1,8 @@
+<script setup>
+    import { RouterLink } from 'vue-router';
+</script>
+
+
 <template>
   <div>
     <h1>歡迎來到寵旅匠</h1>
@@ -5,9 +10,4 @@
   </div>
 </template>
 
-<script setup>
-// 首頁組件
-</script>
-
-<style scoped>
-</style>
+<style scoped></style>
