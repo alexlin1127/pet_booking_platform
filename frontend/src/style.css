@@ -3,13 +3,42 @@
 @tailwind utilities;
 
 @layer components {
+  /* 導航欄（含手機版預留） */
   .nav {
-    @apply fixed top-0 left-0 right-0 z-50 w-full h-20 flex justify-between items-center px-6 md:px-12 bg-white shadow-md;
+    @apply fixed top-0 left-0 right-0 w-full h-20 z-50 flex justify-between items-center px-4 md:px-12 bg-white shadow-md;
   }
-
-  /* 為了不被固定的 navbar 遮住，給 main 加上 top padding */
+  .navtitle{
+    @apply flex gap-3 
+  }
+  .nav img {
+    @apply w-7 h-7 rounded-full border-2 border-gray-400 object-cover bg-gray-100;
+  }
+  .nav p{
+    /* text-base 手機板，屆時再移 */
+     @apply text-base sm:text-2xl
+  }
+  /* main 區塊（含手機版預留） */
   main {
     @apply pt-20;
+  }
+
+  /* 頁尾（含手機版預留） */
+  .footer {
+    @apply fixed bottom-0 left-0 right-0 z-50 gap-8 w-full h-20 flex justify-center items-center px-4 md:px-12 bg-white;
+    box-shadow: 0px -4px 16px rgba(0,0,0,0.12); /* 上方陰影 */
+  }
+
+  /* 手機版樣式預留 */
+  @media (max-width: 640px) {
+    .nav {
+      
+    }
+    main {
+      
+    }
+    .footer {
+      
+    }
   }
 
   .title {
