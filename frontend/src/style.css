@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer components {
-  /* 導航欄（含手機版預留） */
+  /* 導航欄 */
   .nav {
     @apply fixed top-0 left-0 right-0 w-full h-20 z-50 flex justify-between items-center px-4 md:px-12 bg-white shadow-md;
   }
@@ -17,12 +17,12 @@
     /* text-base 手機板，屆時再移 */
      @apply text-base sm:text-2xl
   }
-  /* main 區塊（含手機版預留） */
+  /* main 區塊 */
   main {
     @apply pt-20;
   }
 
-  /* 頁尾（含手機版預留） */
+  /* 頁尾 */
   .footer {
     @apply fixed bottom-0 left-0 right-0 z-50 gap-8 w-full h-20 flex justify-center items-center px-4 md:px-12 bg-white;
     box-shadow: 0px -4px 16px rgba(0,0,0,0.12); /* 上方陰影 */
@@ -39,18 +39,6 @@
     .footer {
       
     }
-  }
-
-  .title {
-    @apply flex items-center gap-3;
-  }
-
-  .title img {
-    @apply w-10 h-10 sm:w-16 sm:h-16 object-contain;
-  }
-
-  .title p {
-    @apply text-xl font-semibold text-gray-800;
   }
 
   .router {
@@ -71,5 +59,22 @@
 
   .logout-btn {
     @apply bg-black text-white hover:bg-gray-800;
+  }
+
+  /* FormTemplate 元件樣式 */
+  .form-template-container {
+    @apply max-w-md mx-auto p-6 bg-white rounded-lg shadow-md;
+  }
+  .form-template-title {
+    @apply text-2xl font-bold text-center mb-6 text-gray-800;
+  }
+  .form-template-content {
+    @apply space-y-4;
+  }
+  .form-template-actions {
+    @apply pt-4;
+  }
+  .form-template-button {
+    @apply w-full bg-black text-white hover:bg-gray-800 py-3 px-4 rounded-lg font-medium transition disabled:bg-gray-400 disabled:cursor-not-allowed;
   }
 }
