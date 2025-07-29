@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,12 +7,15 @@
   .nav {
     @apply fixed top-0 left-0 right-0 w-full h-20 z-50 flex justify-between items-center px-4 md:px-12 bg-white shadow-md;
   }
+
   .navtitle {
     @apply flex gap-3;
   }
+
   .nav img {
     @apply w-7 h-7 rounded-full border-2 border-gray-400 object-cover bg-gray-100;
   }
+
   .nav p {
     @apply text-base sm:text-2xl;
   }
@@ -21,16 +23,26 @@
 
 /* ================= Main 區塊 ================= */
 @layer components {
-  main {
+  .main-container {
     @apply pt-20;
+    min-height: calc(100vh - 10rem); /* 視窗高度減去 navbar(5rem) + footer(5rem) */
+  }
+  .main-content {
+    @apply w-full flex;
+    min-height: calc(100vh - 10rem); /* 與 main-container 一致 */
+    background-color: #f9fafb; /* bg-gray-50 */
+  }
+  .content-area {
+    @apply flex-1 p-4; /* 右側內容區域 */
   }
 }
 
 /* ================= 頁尾 ================= */
 @layer components {
   .footer {
-    @apply fixed bottom-0 left-0 right-0 z-50 gap-8 w-full h-20 flex justify-center items-center px-4 md:px-12 bg-white;
+    @apply w-full h-20 flex justify-center items-center px-4 md:px-12 bg-white gap-8;
     box-shadow: 0px -4px 16px rgba(0, 0, 0, 0.12);
+    position: static;
   }
 }
 
@@ -38,7 +50,9 @@
 @layer components {
   @media (max-width: 640px) {
     .nav {}
+
     main {}
+
     .footer {}
   }
 }
@@ -48,6 +62,7 @@
   .router {
     @apply flex gap-4 items-center;
   }
+
   .router a {
     @apply text-gray-700 hover:text-blue-600 transition;
   }
@@ -58,9 +73,11 @@
   .btn {
     @apply px-4 py-2 rounded-md font-medium transition;
   }
+
   .login-btn {
     @apply bg-black text-white hover:bg-gray-800;
   }
+
   .logout-btn {
     @apply bg-black text-white hover:bg-gray-800;
   }
@@ -71,26 +88,103 @@
   .form-template-container {
     @apply max-w-md mx-auto p-6 bg-white rounded-lg shadow-md;
   }
+
   .form-template-title {
     @apply text-2xl font-bold text-center mb-6 text-gray-800;
   }
+
   .form-template-content {
     @apply space-y-4;
   }
+
   .form-template-actions {
     @apply pt-4;
   }
+
   .form-regist-btn {
     @apply w-full bg-black text-white hover:bg-gray-800 py-3 px-4 rounded-lg font-medium transition disabled:bg-gray-400 disabled:cursor-not-allowed;
   }
 }
 
-/* ================= 使用者註冊畫面Css ================= */
+/* ================= 使用者註冊畫面 ================= */
 @layer components {
   .shops-page .shops-label {
     @apply block text-sm font-medium text-gray-700 mb-2;
   }
+
   .shops-page .shops-input {
     @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+}
+
+/* ================= 側邊欄 ================= */
+@layer components {
+  .sidebar {
+    background-color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-right: 2px solid #a3a9b7; /* 更粗更明顯的深灰色邊框 */
+    width: 200px;
+    min-width: 60px;
+    overflow: hidden;
+    height: 150vh;
+    z-index: 40;
+  }
+
+  .sidebar-collapsed {
+    width: 60px;
+  }
+
+  .sidebar-open {
+    width: 200px;
+  }
+
+  .functionmenu {
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1f2937;
+    user-select: none;
+  }
+  
+  .functionmenu-open {
+    height: 4rem; /* h-16 */
+  }
+  
+  .functionmenu-collapsed {
+    height: 150vh; /* 滿版高度 */
+    display: flex;
+    flex-direction: column; /* 垂直排列圖示和文字 */
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar-menu-text {
+    color: white;
+    display: flex;
+    align-items: center;
+  }
+
+  .sidebar-menu-icon {
+    color: white;
+    margin-left: 0.25rem;
+  }
+
+  .sidebar-menu-text-collapsed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2rem;
+    gap: 1rem;
+    font-size: 1.25rem; /* text-xl */
+    color: white;
+    width: 100%;
+    height: 100%;
+    line-height: 1.2;
   }
 }
