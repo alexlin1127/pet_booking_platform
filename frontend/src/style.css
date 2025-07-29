@@ -2,21 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+ 
+
+
 @layer components {
+
   /* 導航欄 */
   .nav {
     @apply fixed top-0 left-0 right-0 w-full h-20 z-50 flex justify-between items-center px-4 md:px-12 bg-white shadow-md;
   }
-  .navtitle{
-    @apply flex gap-3 
+
+  .navtitle {
+    @apply flex gap-3
   }
+
   .nav img {
     @apply w-7 h-7 rounded-full border-2 border-gray-400 object-cover bg-gray-100;
   }
-  .nav p{
+
+  .nav p {
     /* text-base 手機板，屆時再移 */
-     @apply text-base sm:text-2xl
+    @apply text-base sm:text-2xl
   }
+
   /* main 區塊 */
   main {
     @apply pt-20;
@@ -25,20 +33,17 @@
   /* 頁尾 */
   .footer {
     @apply fixed bottom-0 left-0 right-0 z-50 gap-8 w-full h-20 flex justify-center items-center px-4 md:px-12 bg-white;
-    box-shadow: 0px -4px 16px rgba(0,0,0,0.12); /* 上方陰影 */
+    box-shadow: 0px -4px 16px rgba(0, 0, 0, 0.12);
+    /* 上方陰影 */
   }
 
   /* 手機版樣式預留 */
   @media (max-width: 640px) {
-    .nav {
-      
-    }
-    main {
-      
-    }
-    .footer {
-      
-    }
+    .nav {}
+
+    main {}
+
+    .footer {}
   }
 
   .router {
@@ -65,16 +70,20 @@
   .form-template-container {
     @apply max-w-md mx-auto p-6 bg-white rounded-lg shadow-md;
   }
+
   .form-template-title {
     @apply text-2xl font-bold text-center mb-6 text-gray-800;
   }
+
   .form-template-content {
     @apply space-y-4;
   }
+
   .form-template-actions {
     @apply pt-4;
   }
-  .form-template-button {
+  .form-regist-btn {
     @apply w-full bg-black text-white hover:bg-gray-800 py-3 px-4 rounded-lg font-medium transition disabled:bg-gray-400 disabled:cursor-not-allowed;
   }
+
 }
