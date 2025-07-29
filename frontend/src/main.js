@@ -8,5 +8,6 @@ import { faPlay, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-i
 
 library.add(faPlay, faAngleLeft, faAngleRight)
 
+const app = createApp(App)
 app.component('FontAwesomeIcon', FontAwesomeIcon)
-createApp(App).use(router).mount('#app')
+app.use(router).mount('#app')
