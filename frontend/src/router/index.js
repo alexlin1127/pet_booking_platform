@@ -11,6 +11,7 @@ const routes = [
     {
         path: "/",
         component: Home,
+        meta: { sidebar: true }
     },
     {
         path: "/Login",
