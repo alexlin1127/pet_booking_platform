@@ -35,7 +35,7 @@ const buttonText = computed(() => {
 const handleSubmit = () => {
   if (currentStep.value == '1') {
     nextStep()
-  } 
+  }
   else {
     submitForm()
   }
@@ -44,41 +44,46 @@ const handleSubmit = () => {
 
 <template>
   <div class="shops-page min-h-screen bg-gray-50 py-8">
-    <FormTemplate 
-      :title="formTitle" 
-      :buttonText="buttonText"
-      :disabled="isDisabled" 
-      @submit="handleSubmit"
-    >
+    <FormTemplate :title="formTitle" @submit="handleSubmit">
       <!-- 第一步表單內容 -->
       <div v-if="currentStep == '1'">
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700 mb-2">商家名稱</label>
-          <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <input type="text"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700 mb-2">聯絡電話</label>
-          <input type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <input type="tel"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
       </div>
-      
+
       <!-- 第二步表單內容 -->
       <div v-else-if="currentStep == '2'">
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700 mb-2">商家地址</label>
-          <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3"></textarea>
+          <textarea
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows="3"></textarea>
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700 mb-2">營業時間</label>
-          <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <input type="text"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div class="mb-4 text-center">
-            <label>
-                <input type="checkbox"class="cursor-pointer" v-model="agreePrivacy" />
-                我同意隱私政策
-            </label>
+          <label>
+            <input type="checkbox" class="cursor-pointer" v-model="agreePrivacy" />
+            我同意隱私政策
+          </label>
         </div>
       </div>
+      <template #actions>
+        <button type="submit" class="form-regist-btn" :disabled="isDisabled">
+          {{ buttonText }}
+        </button>
+      </template>
     </FormTemplate>
   </div>
 </template>
