@@ -5,7 +5,7 @@
 /* ================= 側邊欄 ================= */
 @layer components {
   .sidebar {
-    @apply flex flex-col items-start w-[200px] min-w-[60px] overflow-hidden z-40 bg-white h-[150vh];
+    @apply flex flex-col items-start w-[200px] min-w-[60px] overflow-hidden z-40 bg-white h-full;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     border-right: 2px solid #a3a9b7;
     transition: all 0.3s ease;
