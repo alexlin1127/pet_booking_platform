@@ -22,7 +22,7 @@ const toggleSidebar = () => {
                 <span>單</span>
             </p>
         </div>
-        <div>
+        <div v-if="isOpen">
             <RouterLink>
                 <slot name="sidebar-link"></slot>
             </RouterLink>
