@@ -1,43 +1,236 @@
 <script setup>
+import { ref, computed, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Table from "../../components/Table.vue"
-import AccountCard from "../../components/Admin/AccountCard.vue";
+import AccountCard from "../../components/Admin/AccountCard.vue"
+import Pagination from "../../components/Pagination.vue"
+
+const route = useRoute()
+const router = useRouter()
+
+const pageSize = 4 // 每頁顯示4個
+const currentPage = ref(parseInt(route.params.page) || 1)
+
+// 篩選條件
+const selectedDate = ref('')
+const selectedType = ref('')
+
+// 篩選邏輯
+const filteredAccounts = computed(() => {
+    return accounts.filter(acc => {
+        const dateMatch = !selectedDate.value || acc.createdAt === selectedDate.value
+        const typeMatch = !selectedType.value || acc.type === selectedType.value
+        return dateMatch && typeMatch
+    })
+})
+
+// 分頁邏輯
+const totalPages = computed(() => Math.ceil(filteredAccounts.value.length / pageSize))
+const paginatedAccounts = computed(() => {
+    const start = (currentPage.value - 1) * pageSize
+    return filteredAccounts.value.slice(start, start + pageSize)
+})
+
+const handlePageChange = (page) => {
+    currentPage.value = page
+    router.push(`/Admin/Account/${page}`)
+}
+
+// 當篩選條件變更時，重置到第一頁
+watch([selectedDate, selectedType], () => {
+    currentPage.value = 1
+    router.push('/Admin/Account/1')
+})
 
 const accounts = [
-  {
-    id: "A0001",
-    type: "管理員",
-    name: "王小明",
-    account: "admin001",
-    store: "寵物樂園",
-    status: "啟用",
-    createdAt: "2025-07-01"
-  },
-  {
-    id: "S0002",
-    type: "店家",
-    name: "李小華",
-    account: "shop002",
-    store: "毛孩之家",
-    status: "停用",
-    createdAt: "2025-07-10"
-  },
-  {
-    id: "U0003",
-    type: "一般用戶",
-    name: "陳大仁",
-    account: "user003",
-    store: "寵物小棧",
-    status: "啟用",
-    createdAt: "2025-07-20"
-  }
+    {
+        id: "A0001",
+        type: "管理員",
+        name: "王小明",
+        account: "admin001",
+        store: "寵物樂園",
+        status: "啟用",
+        createdAt: "2025-07-01"
+    },
+    {
+        id: "S0002",
+        type: "店家",
+        name: "李小華",
+        account: "shop002",
+        store: "毛孩之家",
+        status: "停用",
+        createdAt: "2025-07-10"
+    },
+    {
+        id: "U0003",
+        type: "一般用戶",
+        name: "陳大仁",
+        account: "user003",
+        store: "寵物小棧",
+        status: "啟用",
+        createdAt: "2025-07-20"
+    },
+    {
+        id: "S0004",
+        type: "店家",
+        name: "林美麗",
+        account: "shop004",
+        store: "毛寶貝寵物醫院",
+        status: "啟用",
+        createdAt: "2025-07-25"
+    },
+    {
+        id: "U0005",
+        type: "一般用戶",
+        name: "張志明",
+        account: "user005",
+        store: "快樂寵物旅館",
+        status: "停用",
+        createdAt: "2025-07-28"
+    },
+    {
+        id: "A0006",
+        type: "管理員",
+        name: "劉小芳",
+        account: "admin006",
+        store: "愛心動物醫院",
+        status: "啟用",
+        createdAt: "2025-07-30"
+    },
+    {
+        id: "S0007",
+        type: "店家",
+        name: "吳大明",
+        account: "shop007",
+        store: "寵物美容坊",
+        status: "啟用",
+        createdAt: "2025-07-31"
+    },
+    {
+        id: "U0008",
+        type: "一般用戶",
+        name: "黃小玲",
+        account: "user008",
+        store: "寵物樂園",
+        status: "啟用",
+        createdAt: "2025-08-01"
+    },
+    {
+        id: "S0009",
+        type: "店家",
+        name: "蔡志偉",
+        account: "shop009",
+        store: "毛孩天堂",
+        status: "停用",
+        createdAt: "2025-08-02"
+    },
+    {
+        id: "U0010",
+        type: "一般用戶",
+        name: "許美華",
+        account: "user010",
+        store: "寵物小棧",
+        status: "啟用",
+        createdAt: "2025-08-03"
+    },
+    {
+        id: "A0011",
+        type: "管理員",
+        name: "楊志強",
+        account: "admin011",
+        store: "動物之家",
+        status: "啟用",
+        createdAt: "2025-08-04"
+    },{
+        id: "A0011",
+        type: "管理員",
+        name: "楊志強",
+        account: "admin011",
+        store: "動物之家",
+        status: "啟用",
+        createdAt: "2025-08-04"
+    },{
+        id: "A0011",
+        type: "管理員",
+        name: "楊志強",
+        account: "admin011",
+        store: "動物之家",
+        status: "啟用",
+        createdAt: "2025-08-04"
+    },{
+        id: "A0011",
+        type: "管理員",
+        name: "楊志強",
+        account: "admin011",
+        store: "動物之家",
+        status: "啟用",
+        createdAt: "2025-08-04"
+    },{
+        id: "A0011",
+        type: "管理員",
+        name: "楊志強",
+        account: "admin011",
+        store: "動物之家",
+        status: "啟用",
+        createdAt: "2025-08-04"
+    },{
+        id: "A0011",
+        type: "管理員",
+        name: "楊志強",
+        account: "admin011",
+        store: "動物之家",
+        status: "啟用",
+        createdAt: "2025-08-04"
+    },{
+        id: "A0011",
+        type: "管理員",
+        name: "楊志強",
+        account: "admin011",
+        store: "動物之家",
+        status: "啟用",
+        createdAt: "2025-08-04"
+    },{
+        id: "A0011",
+        type: "管理員",
+        name: "楊志強",
+        account: "admin011",
+        store: "動物之家",
+        status: "啟用",
+        createdAt: "2025-08-04"
+    },{
+        id: "A0011",
+        type: "管理員",
+        name: "楊志強",
+        account: "admin011",
+        store: "動物之家",
+        status: "啟用",
+        createdAt: "2025-08-04"
+    },
 ];
 </script>
 
 <template>
     <div>
-        <h1>帳號管理</h1>
+        <h1 class="text-4xl font-bold mb-4">帳號管理</h1>
     </div>
-    
+    <div class="flex gap-4 mb-4 items-center">
+        <!-- 選擇日期 -->
+        <label>
+            建立日期：
+            <input type="date" v-model="selectedDate" class="border rounded px-2 py-1" />
+        </label>
+        <!-- 選擇帳號類型 -->
+        <label>
+            帳號類型：
+            <select v-model="selectedType" class="border rounded px-2 py-1">
+                <option value="">全部</option>
+                <option value="管理員">管理員</option>
+                <option value="店家">店家</option>
+                <option value="一般用戶">一般用戶</option>
+            </select>
+        </label>
+    </div>
+
     <div>
         <Table>
             <template #header>
@@ -48,15 +241,16 @@ const accounts = [
                 <th>所屬店家</th>
                 <th>帳號狀態</th>
                 <th>建立日期</th>
-                <th>功能</th>
                 <th>操作</th>
             </template>
             <template #body>
-                <tr v-for="acc in accounts" :key="acc.id" class="card-row">
+                <tr v-for="acc in paginatedAccounts" :key="acc.id" class="card-row">
                     <AccountCard :acc="acc" />
                 </tr>
             </template>
         </Table>
+
+        <Pagination :current-page="currentPage" :total-pages="totalPages" @page-change="handlePageChange" />
     </div>
 
 </template>
