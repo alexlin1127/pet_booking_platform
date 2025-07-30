@@ -54,7 +54,7 @@ const routes = [
         component: StoreReview,
     },
     {
-        path: "/Admin/Account",
+        path: "/Admin/Account/:page?",
         component: AccountManagement,
         meta: { sidebar: true }
     },
