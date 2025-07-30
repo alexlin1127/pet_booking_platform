@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================= 側邊欄 ================= */
+@layer components {
+  .sidebar {
+    @apply flex flex-col items-start w-[200px] min-w-[60px] overflow-hidden z-40 bg-white h-[150vh];
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-right: 2px solid #a3a9b7;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-collapsed {
+    @apply w-[60px];
+  }
+
+  .sidebar-open {
+    @apply w-[200px];
+  }
+
+  .functionmenu {
+    @apply cursor-pointer w-full flex items-center justify-center select-none;
+    background-color: #1f2937;
+  }
+
+  .functionmenu-open {
+    @apply h-16;
+  }
+
+  .functionmenu-collapsed {
+    @apply h-full flex flex-col items-center justify-center;
+  }
+
+  .sidebar-menu-text {
+    @apply text-white flex items-center gap-2;
+  }
+
+  .sidebar-menu-icon {
+    @apply text-white ml-1;
+  }
+
+  .sidebar-menu-text-collapsed {
+    @apply flex flex-col items-center pt-8 gap-4 text-xl text-white w-full h-full leading-tight;
+  }
+}
