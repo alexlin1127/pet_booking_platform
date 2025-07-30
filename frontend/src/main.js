@@ -17,10 +17,13 @@ import './styles/components/form.css'
 import './styles/components/table.css'
 import './styles/components/sidebar.css'
 import './styles/components/modalbox.css'
+import './styles/components/pagination.css'
 
 import './styles/Admin/card.css'
 import './styles/Admin/review.css'
 import './styles/Admin/postmanage.css'
+import './styles/Admin/accmanage.css'
+import './styles/Admin/storemanage.css'
 
 import './styles/Users/register.css'
 
