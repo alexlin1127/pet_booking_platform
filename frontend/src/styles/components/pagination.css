@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================= Pagination ================= */
+@layer components {
+    .pagination-container {
+        @apply flex items-center justify-center gap-2 mt-4;
+    }
+
+    .pagination-btn {
+        @apply px-3 py-1 border rounded transition-colors duration-200 bg-white shadow-sm;
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+        @apply bg-gray-50;
+    }
+
+    .pagination-btn:disabled {
+        @apply opacity-80 cursor-not-allowed bg-gray-50;
+    }
+
+    .pagination-btn-active {
+        @apply bg-blue-500 text-white;
+    }
+
+    .pagination-btn-active:hover {
+        @apply bg-blue-600;
+    }
+}
