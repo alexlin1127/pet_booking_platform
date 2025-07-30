@@ -20,7 +20,7 @@
 		{
 			"label": "Start Vue Frontend",
 			"type": "shell",
-			"command": "cd frontend && pnpm dev",
+			"command": "cd frontend && pnpm run dev",
 			"group": "build",
 			"isBackground": true,
 			"problemMatcher": []
