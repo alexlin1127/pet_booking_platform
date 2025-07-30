@@ -24,18 +24,22 @@ const routes = [
     {
         path: "/Login",
         component: Login,
+        meta: { sidebar: false }
     },
     {
         path: "/Register",
         component: Register,
+        meta: { sidebar: false }
     },
     {
         path: "/Register/Users",
         component: UserRegister,
+        meta: { sidebar: false }
     },
     {
         path: "/Register/Shops/:step",
         component: ShopRegister,
+        meta: { sidebar: false }
     },
 
     // // 管理者頁面Router
@@ -52,6 +56,7 @@ const routes = [
     {
         path: "/Admin/Store/Review",
         component: StoreReview,
+        meta: { sidebar: false }
     },
     {
         path: "/Admin/Account/:page?",
