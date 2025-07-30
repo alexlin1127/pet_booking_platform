@@ -60,22 +60,4 @@ const stores = [
 
 </template>
 
-<style>
-table {
-  border-spacing: 0 12px;
-}
-.card-row {
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.2s;
-}
-.card-row:hover {
-  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
-}
-.card-row td {
-  padding: 16px 16px;
-  border: none;
-}
-</style>
+<style></style>
