@@ -21,27 +21,27 @@ const handleSubmit = () => submitForm()
 </script>
 
 <template>
-    <div class="shops-page min-h-screen bg-gray-50 py-8">
+    <div class="users-page min-h-screen bg-gray-50 py-8">
         <FormTemplate :title="formTitle" @submit="handleSubmit">
             <div class="mb-4">
-                <label class="shops-label name">姓名（必填）</label>
-                <input type="text" class="shops-input" placeholder="請填上您的姓名" required>
+                <label class="users-label name">姓名（必填）</label>
+                <input type="text" class="users-input" placeholder="請填上您的姓名" required>
             </div>
             <div class="mb-4">
-                <label class="shops-label account">帳號（必填）</label>
-                <input type="tel" class="shops-input" placeholder="請輸入您的電話" required>
+                <label class="users-label account">帳號（必填）</label>
+                <input type="tel" class="users-input" placeholder="請輸入您的電話" required>
             </div>
             <div class="mb-4">
-                <label class="shops-label password">密碼（必填）</label>
-                <input type="text" class="shops-input" placeholder="請輸入密碼" required>
+                <label class="users-label password">密碼（必填）</label>
+                <input type="text" class="users-input" placeholder="請輸入密碼" required>
             </div>
             <div class="mb-4">
-                <label class="shops-label checkpassword">確認密碼（必填）</label>
-                <input type="text" class="shops-input" placeholder="請再次輸入密碼" required>
+                <label class="users-label checkpassword">確認密碼（必填）</label>
+                <input type="text" class="users-input" placeholder="請再次輸入密碼" required>
             </div>
             <div class="mb-4">
-                <label class="shops-label localcall">聯絡市話（選填）</label>
-                <input type="text" class="shops-input">
+                <label class="users-label localcall">聯絡市話（選填）</label>
+                <input type="text" class="users-input">
             </div>
             <div class="mb-4 text-center">
                 <label>
