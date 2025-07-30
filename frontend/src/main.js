@@ -9,16 +9,18 @@ import { faPlay, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-i
 import './style.css'
 
 import './styles/main.css'
+import './styles/button.css'
 
 import './styles/components/navbar.css'
 import './styles/components/footer.css'
 import './styles/components/form.css'
 import './styles/components/table.css'
 import './styles/components/sidebar.css'
-
-import './styles/button.css'
+import './styles/components/modalbox.css'
 
 import './styles/Admin/card.css'
+import './styles/Admin/review.css'
+import './styles/Admin/postmanage.css'
 
 import './styles/Users/register.css'
 
