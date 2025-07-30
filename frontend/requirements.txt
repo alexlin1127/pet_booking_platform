@@ -1,0 +1,43 @@
+# 前端需求和安裝指南
+# 寵物預約平台 - 前端依賴項目
+
+## 前置需求
+- Node.js (v16 或更高版本)
+- pnpm (套件管理器)
+
+## 安裝步驟
+### 1. 安裝 pnpm (如果尚未安裝)
+npm install -g pnpm
+
+### 2. 安裝所有專案依賴項目
+pnpm install
+
+## 依賴項目
+### 生產環境依賴項目
+- vue@^3.5.17                  # Vue.js 框架
+- tailwindcss@^4.1.11         # Tailwind CSS 框架
+- @tailwindcss/vite@^4.1.11   # Tailwind CSS Vite 插件
+
+### 開發環境依賴項目
+- @vitejs/plugin-vue@^6.0.0   # Vue 的 Vite 插件
+- vite@^7.0.4                 # 建置工具和開發伺服器
+
+## Tailwind CSS 額外設定
+### 3. Tailwind CSS 已經設定在：
+- src/style.css (包含 @import "tailwindcss")
+- package.json (依賴項目)
+
+### 4. 執行開發伺服器
+pnpm run dev
+
+## 備註
+- 此專案使用 Vite 作為建置工具
+- Tailwind CSS v4.x 透過 Vite 插件設定
+- 所有依賴項目透過 pnpm 管理
+- CSS 框架在 src/style.css 中引入
+
+## 疑難排解
+如果 Tailwind 樣式無法正常運作：
+1. 確保 @import "tailwindcss" 在 src/style.css 中
+2. 檢查 style.css 是否正確引入到 main.js 中
+3. 重新啟動開發伺服器：pnpm run dev
