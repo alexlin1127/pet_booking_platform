@@ -11,7 +11,7 @@ const toggleSidebar = () => {
     <div :class="['sidebar', isOpen ? 'sidebar-open' : 'sidebar-collapsed']">
         <div :class="['functionmenu', isOpen ? 'functionmenu-open' : 'functionmenu-collapsed']" @click="toggleSidebar">
             <p v-if="isOpen" class="sidebar-menu-text">
-                功能選單
+                <span>功</span><span>能</span><span>選</span><span>單</span>
                 <FontAwesomeIcon icon="angle-left" class="sidebar-menu-icon" />
             </p>
             <p v-else class="sidebar-menu-text-collapsed">

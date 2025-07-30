@@ -24,16 +24,15 @@
 /* ================= Main 區塊 ================= */
 @layer components {
   .main-container {
-    @apply pt-20;
-    min-height: calc(100vh - 10rem); /* 視窗高度減去 navbar(5rem) + footer(5rem) */
+    @apply pt-20 min-h-[calc(100vh-10rem)];
   }
+
   .main-content {
-    @apply w-full flex;
-    min-height: calc(100vh - 10rem); /* 與 main-container 一致 */
-    background-color: #f9fafb; /* bg-gray-50 */
+    @apply w-full flex min-h-[calc(100vh-10rem)] bg-gray-50;
   }
+
   .content-area {
-    @apply flex-1 p-4; /* 右側內容區域 */
+    @apply flex-1 p-4;
   }
 }
 
@@ -120,71 +119,42 @@
 /* ================= 側邊欄 ================= */
 @layer components {
   .sidebar {
-    background-color: white;
-    transition: all 0.3s ease;
+    @apply flex flex-col items-start w-[200px] min-w-[60px] overflow-hidden z-40 bg-white h-[150vh];
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    border-right: 2px solid #a3a9b7; /* 更粗更明顯的深灰色邊框 */
-    width: 200px;
-    min-width: 60px;
-    overflow: hidden;
-    height: 150vh;
-    z-index: 40;
+    border-right: 2px solid #a3a9b7;
+    transition: all 0.3s ease;
   }
 
   .sidebar-collapsed {
-    width: 60px;
+    @apply w-[60px];
   }
 
   .sidebar-open {
-    width: 200px;
+    @apply w-[200px];
   }
 
   .functionmenu {
-    cursor: pointer;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @apply cursor-pointer w-full flex items-center justify-center select-none;
     background-color: #1f2937;
-    user-select: none;
   }
-  
+
   .functionmenu-open {
-    height: 4rem; /* h-16 */
+    @apply h-16;
   }
-  
+
   .functionmenu-collapsed {
-    height: 150vh; /* 滿版高度 */
-    display: flex;
-    flex-direction: column; /* 垂直排列圖示和文字 */
-    align-items: center;
-    justify-content: center;
+    @apply h-full flex flex-col items-center justify-center;
   }
 
   .sidebar-menu-text {
-    color: white;
-    display: flex;
-    align-items: center;
+    @apply text-white flex items-center gap-2;
   }
 
   .sidebar-menu-icon {
-    color: white;
-    margin-left: 0.25rem;
+    @apply text-white ml-1;
   }
 
   .sidebar-menu-text-collapsed {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 2rem;
-    gap: 1rem;
-    font-size: 1.25rem; /* text-xl */
-    color: white;
-    width: 100%;
-    height: 100%;
-    line-height: 1.2;
+    @apply flex flex-col items-center pt-8 gap-4 text-xl text-white w-full h-full leading-tight;
   }
 }
