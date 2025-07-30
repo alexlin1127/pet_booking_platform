@@ -5,7 +5,7 @@
 /* ================= 側邊欄 ================= */
 @layer components {
   .sidebar {
-    @apply flex flex-col items-start w-[200px] min-w-[60px] overflow-hidden z-40 bg-white h-full;
+    @apply flex flex-col items-start w-[200px] min-w-[60px] overflow-hidden z-40 bg-white min-h-full;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     border-right: 2px solid #a3a9b7;
     transition: all 0.3s ease;
@@ -29,7 +29,7 @@
   }
 
   .functionmenu-collapsed {
-    @apply h-full flex flex-col items-center justify-center;
+    @apply min-h-full flex flex-col items-center justify-center;
   }
 
   .sidebar-menu-text {
@@ -41,6 +41,6 @@
   }
 
   .sidebar-menu-text-collapsed {
-    @apply flex flex-col items-center pt-8 gap-4 text-xl text-white w-full h-full leading-tight;
+    @apply flex flex-col items-center pt-8 gap-4 text-xl text-white w-full min-h-full leading-tight;
   }
 }

@@ -9,10 +9,10 @@
   }
 
   .main-content {
-    @apply w-full flex h-[calc(100vh-10rem)] bg-gray-50;
+    @apply w-full flex min-h-[calc(100vh-10rem)] bg-gray-50;
   }
 
   .content-area {
-    @apply flex-1 p-4;
+    @apply flex-1 p-4 overflow-y-auto;
   }
 }
