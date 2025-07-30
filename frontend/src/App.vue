@@ -1,30 +1,27 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import Navbar from './components/Navbar.vue'
+import Footer from './components/Footer.vue'
+import Sidebar from './components/Sidebar.vue'
+
+const route = useRoute()
+const showSidebar = computed(() => route.meta.sidebar !== false)
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <Navbar/>
+
+  <div class="main-container">
+    <main class="main-content">
+      <Sidebar v-if="showSidebar" />
+      <div class="content-area">
+        <RouterView />
+      </div>
+    </main>
   </div>
-  <HelloWorld msg="Vite + Vue" />
+
+  <Footer/>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<style scoped></style>

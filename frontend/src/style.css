@@ -1,81 +1,160 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-.card {
-  padding: 2em;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+/* ================= 導航欄 ================= */
+@layer components {
+  .nav {
+    @apply fixed top-0 left-0 right-0 w-full h-20 z-50 flex justify-between items-center px-4 md:px-12 bg-white shadow-md;
   }
-  a:hover {
-    color: #747bff;
+
+  .navtitle {
+    @apply flex gap-3;
   }
-  button {
-    background-color: #f9f9f9;
+
+  .nav img {
+    @apply w-7 h-7 rounded-full border-2 border-gray-400 object-cover bg-gray-100;
+  }
+
+  .nav p {
+    @apply text-base sm:text-2xl;
+  }
+}
+
+/* ================= Main 區塊 ================= */
+@layer components {
+  .main-container {
+    @apply pt-20 min-h-[calc(100vh-10rem)];
+  }
+
+  .main-content {
+    @apply w-full flex min-h-[calc(100vh-10rem)] bg-gray-50;
+  }
+
+  .content-area {
+    @apply flex-1 p-4;
+  }
+}
+
+/* ================= 頁尾 ================= */
+@layer components {
+  .footer {
+    @apply w-full h-20 flex justify-center items-center px-4 md:px-12 bg-white gap-8;
+    box-shadow: 0px -4px 16px rgba(0, 0, 0, 0.12);
+    position: static;
+  }
+}
+
+/* ================= 手機版樣式預留 ================= */
+@layer components {
+  @media (max-width: 640px) {
+    .nav {}
+
+    main {}
+
+    .footer {}
+  }
+}
+
+/* ================= Router Link ================= */
+@layer components {
+  .router {
+    @apply flex gap-4 items-center;
+  }
+
+  .router a {
+    @apply text-gray-700 hover:text-blue-600 transition;
+  }
+}
+
+/* ================= 按鈕 ================= */
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition;
+  }
+
+  .login-btn {
+    @apply bg-black text-white hover:bg-gray-800;
+  }
+
+  .logout-btn {
+    @apply bg-black text-white hover:bg-gray-800;
+  }
+}
+
+/* ================= FormTemplate 元件 ================= */
+@layer components {
+  .form-template-container {
+    @apply max-w-md mx-auto p-6 bg-white rounded-lg shadow-md;
+  }
+
+  .form-template-title {
+    @apply text-2xl font-bold text-center mb-6 text-gray-800;
+  }
+
+  .form-template-content {
+    @apply space-y-4;
+  }
+
+  .form-template-actions {
+    @apply pt-4;
+  }
+
+  .form-regist-btn {
+    @apply w-full bg-black text-white hover:bg-gray-800 py-3 px-4 rounded-lg font-medium transition disabled:bg-gray-400 disabled:cursor-not-allowed;
+  }
+}
+
+/* ================= 使用者註冊畫面 ================= */
+@layer components {
+  .shops-page .shops-label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+  }
+
+  .shops-page .shops-input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+}
+
+/* ================= 側邊欄 ================= */
+@layer components {
+  .sidebar {
+    @apply flex flex-col items-start w-[200px] min-w-[60px] overflow-hidden z-40 bg-white h-[150vh];
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-right: 2px solid #a3a9b7;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-collapsed {
+    @apply w-[60px];
+  }
+
+  .sidebar-open {
+    @apply w-[200px];
+  }
+
+  .functionmenu {
+    @apply cursor-pointer w-full flex items-center justify-center select-none;
+    background-color: #1f2937;
+  }
+
+  .functionmenu-open {
+    @apply h-16;
+  }
+
+  .functionmenu-collapsed {
+    @apply h-full flex flex-col items-center justify-center;
+  }
+
+  .sidebar-menu-text {
+    @apply text-white flex items-center gap-2;
+  }
+
+  .sidebar-menu-icon {
+    @apply text-white ml-1;
+  }
+
+  .sidebar-menu-text-collapsed {
+    @apply flex flex-col items-center pt-8 gap-4 text-xl text-white w-full h-full leading-tight;
   }
 }
