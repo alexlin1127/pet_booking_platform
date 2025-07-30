@@ -9,11 +9,9 @@
     }
 
     .card-row {
-        border: 2px solid #e5e7eb;
-        border-radius: 12px;
-        background: #fff;
+        @apply border-2 border-gray-200 rounded-xl bg-white shadow transition-shadow duration-200;
+        /* box-shadow 需自訂顏色與透明度時仍用原生寫法 */
         box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
-        transition: box-shadow 0.2s;
     }
 
     .card-row:hover {
@@ -21,7 +19,10 @@
     }
 
     .card-row td {
-        padding: 16px 16px;
-        border: none;
+        @apply p-4 border-0;
+    }
+
+    .card-row .btn-td {
+        @apply flex gap-2 justify-center;   
     }
 }
