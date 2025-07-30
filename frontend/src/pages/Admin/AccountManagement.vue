@@ -210,49 +210,49 @@ const accounts = [
 </script>
 
 <template>
-    <div>
-        <h1 class="text-4xl font-bold mb-4">帳號管理</h1>
-    </div>
-    <div class="flex gap-4 mb-4 items-center">
-        <!-- 選擇日期 -->
-        <label>
-            建立日期：
-            <input type="date" v-model="selectedDate" class="border rounded px-2 py-1" />
-        </label>
-        <!-- 選擇帳號類型 -->
-        <label>
-            帳號類型：
-            <select v-model="selectedType" class="border rounded px-2 py-1">
-                <option value="">全部</option>
-                <option value="管理員">管理員</option>
-                <option value="店家">店家</option>
-                <option value="一般用戶">一般用戶</option>
-            </select>
-        </label>
-    </div>
+    <div class="accmanage-container">
+        <h1 class="accmanage-title">帳號管理</h1>
+        
+        <div class="accmanage-filters">
+            <!-- 選擇日期 -->
+            <label class="accmanage-filter-label">
+                建立日期：
+                <input type="date" v-model="selectedDate" class="accmanage-filter-input" />
+            </label>
+            <!-- 選擇帳號類型 -->
+            <label class="accmanage-filter-label">
+                帳號類型：
+                <select v-model="selectedType" class="accmanage-filter-input">
+                    <option value="">全部</option>
+                    <option value="管理員">管理員</option>
+                    <option value="店家">店家</option>
+                    <option value="一般用戶">一般用戶</option>
+                </select>
+            </label>
+        </div>
 
-    <div>
-        <Table>
-            <template #header>
-                <th>編號</th>
-                <th>帳號類型</th>
-                <th>名字</th>
-                <th>帳號</th>
-                <th>所屬店家</th>
-                <th>帳號狀態</th>
-                <th>建立日期</th>
-                <th>操作</th>
-            </template>
-            <template #body>
-                <tr v-for="acc in paginatedAccounts" :key="acc.id" class="card-row">
-                    <AccountCard :acc="acc" />
-                </tr>
-            </template>
-        </Table>
+        <div class="accmanage-table-container">
+            <Table>
+                <template #header>
+                    <th>編號</th>
+                    <th>帳號類型</th>
+                    <th>名字</th>
+                    <th>帳號</th>
+                    <th>所屬店家</th>
+                    <th>帳號狀態</th>
+                    <th>建立日期</th>
+                    <th>操作</th>
+                </template>
+                <template #body>
+                    <tr v-for="acc in paginatedAccounts" :key="acc.id" class="card-row">
+                        <AccountCard :acc="acc" />
+                    </tr>
+                </template>
+            </Table>
 
-        <Pagination :current-page="currentPage" :total-pages="totalPages" @page-change="handlePageChange" />
+            <Pagination :current-page="currentPage" :total-pages="totalPages" @page-change="handlePageChange" />
+        </div>
     </div>
-
 </template>
 
 <style></style>
