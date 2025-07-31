@@ -8,13 +8,20 @@ defineProps({
 </script>
 
 <template>
-  <td>{{ store.id }}</td>
   <td>{{ store.storeName }}</td>
-  <td>{{ store.registerDate }}</td>
-  <td>{{ store.region }}</td>
   <td>{{ store.owner }}</td>
   <td>{{ store.phone }}</td>
-  <td>{{ store.status }}</td>
+  <td>{{ store.address }}</td>
+  <td v-if="store.applystatus !=='已通過'">
+    {{ store.services }}
+  </td>
+  <td v-else>
+    {{ store.storestatus }}
+  </td>
+  <td>{{ store.registerDate }}</td>
+  <td v-if="store.applystatus !=='已通過'">
+    {{ store.applystatus }}
+  </td>
   <td v-if="store.status === '待審核'">
     <RouterLink :to="`/Admin/Store/review?id=${store.id}&name=${store.storeName}`">
       <button class="btn">審核</button>

@@ -20,146 +20,176 @@ const stores = [
         id: "H0001",
         storeName: "寵物樂園",
         registerDate: "2025-07-01",
-        region: "台北市",
+        address: "花蓮縣花蓮市",
         owner: "王小明",
+        services: "寵物美容",
         phone: "0912345678",
-        status: "首次申請"
+        applystatus: "首次申請",
+        storestatus: "營業中"
     },
     {
         id: "H0002",
         storeName: "毛孩之家之寵物美容沙龍及住宿",
         registerDate: "2025-07-10",
-        region: "新北市",
+        address: "新北市板橋區",
         owner: "李小華",
+        services: "寵物美容、住宿",
         phone: "0922333444",
-        status: "退回補件"
+        applystatus: "退回補件",
+        storestatus: "暫停營業"
     },
     {
         id: "H0004",
         storeName: "毛寶貝寵物醫院",
         registerDate: "2025-07-25",
-        region: "台中市",
+        address: "台中市西屯區",
         owner: "張美玲",
+        services: "寵物醫療",
         phone: "0944555666",
-        status: "已通過"
+        applystatus: "已通過",
+        storestatus: "營業中"
     },
     {
         id: "H0005",
         storeName: "快樂寵物旅館",
         registerDate: "2025-07-28",
-        region: "高雄市",
+        address: "高雄市左營區",
         owner: "林志明",
+        services: "寵物住宿",
         phone: "0955777888",
-        status: "補件申請"
+        applystatus: "補件申請",
+        storestatus: "營業中"
     },
     {
         id: "H0006",
         storeName: "愛心動物診所",
         registerDate: "2025-08-01",
-        region: "台南市",
+        address: "台南市安平區",
         owner: "黃美華",
+        services: "寵物醫療、美容",
         phone: "0966888999",
-        status: "退回補件"
+        applystatus: "退回補件",
+        storestatus: "暫停營業"
     },
     {
         id: "H0007",
         storeName: "寵物天堂",
         registerDate: "2025-08-03",
-        region: "基隆市",
+        address: "基隆市仁愛區",
         owner: "劉志強",
+        services: "寵物美容、用品販售",
         phone: "0977111222",
-        status: "已通過"
+        applystatus: "已通過",
+        storestatus: "營業中"
     },
     {
         id: "H0009",
         storeName: "寵愛一生動物醫院",
         registerDate: "2025-08-07",
-        region: "苗栗縣",
+        address: "苗栗縣頭份市",
         owner: "蔡正忠",
+        services: "寵物醫療",
         phone: "0999555666",
-        status: "首次申請"
+        applystatus: "首次申請",
+        storestatus: "營業中"
     },
     {
         id: "H0010",
         storeName: "快樂狗狗美容坊",
         registerDate: "2025-08-09",
-        region: "彰化縣",
+        address: "彰化縣員林市",
         owner: "許淑芬",
+        services: "寵物美容",
         phone: "0911777888",
-        status: "退回補件"
+        applystatus: "退回補件",
+        storestatus: "暫停營業"
     },
     {
         id: "H0011",
         storeName: "寵物大本營",
         registerDate: "2025-08-11",
-        region: "雲林縣",
+        address: "雲林縣斗六市",
         owner: "陳俊宏",
+        services: "寵物住宿、美容",
         phone: "0922999000",
-        status: "已通過"
+        applystatus: "已通過",
+        storestatus: "營業中"
     },
     {
         id: "H0013",
         storeName: "愛寵動物醫院",
         registerDate: "2025-08-15",
-        region: "屏東縣",
+        address: "屏東縣屏東市",
         owner: "楊志明",
+        services: "寵物醫療、住宿",
         phone: "0944333444",
-        status: "補件申請"
+        applystatus: "補件申請",
+        storestatus: "營業中"
     },
     {
         id: "H0014",
         storeName: "寵物樂活館",
         registerDate: "2025-08-17",
-        region: "宜蘭縣",
+        address: "宜蘭縣宜蘭市",
         owner: "蘇麗華",
+        services: "寵物美容、用品販售",
         phone: "0955555666",
-        status: "退回補件"
+        applystatus: "退回補件",
+        storestatus: "暫停營業"
     },
     {
         id: "H0015",
         storeName: "毛寶貝寵物店",
         registerDate: "2025-08-19",
-        region: "花蓮縣",
+        address: "花蓮縣吉安鄉",
         owner: "鄭大明",
+        services: "寵物用品販售",
         phone: "0966777888",
-        status: "已通過"
+        applystatus: "已通過",
+        storestatus: "營業中"
     },
     {
         id: "H0017",
         storeName: "愛心寵物診所",
         registerDate: "2025-08-23",
-        region: "澎湖縣",
+        address: "澎湖縣馬公市",
         owner: "謝志豪",
+        services: "寵物醫療",
         phone: "0988111222",
-        status: "首次申請"
+        applystatus: "首次申請",
+        storestatus: "營業中"
     },
     {
         id: "H0018",
         storeName: "寵物溫馨家",
         registerDate: "2025-08-25",
-        region: "金門縣",
+        address: "金門縣金城鎮",
         owner: "何美玲",
+        services: "寵物住宿、美容",
         phone: "0999333444",
-        status: "退回補件"
+        applystatus: "退回補件",
+        storestatus: "暫停營業"
     },
     {
         id: "H0019",
         storeName: "毛孩健康中心",
         registerDate: "2025-08-27",
-        region: "連江縣",
+        address: "連江縣南竿鄉",
         owner: "魏俊傑",
+        services: "寵物醫療、保健",
         phone: "0911555666",
-        status: "已通過"
+        applystatus: "已通過",
+        storestatus: "營業中"
     }
 ];
 
 // 根據狀態篩選店家
 const pendingStores = computed(() => {
-    return stores.filter(store => store.status === selectedStatus.value)
+    return stores.filter(store => store.applystatus === selectedStatus.value)
 })
 
 const operatingStores = computed(() => {
-    return stores.filter(store => store.status === "已通過")
+    return stores.filter(store => store.applystatus === "已通過")
 })
 
 // 篩選按鈕處理函數
@@ -215,13 +245,13 @@ const handlePageChange2 = (page) => {
         <div class="storemanage-table-container">
             <Table>
                 <template #header>
-                    <th>編號</th>
                     <th>店家</th>
-                    <th>註冊日期</th>
-                    <th>所在地區</th>
                     <th>負責人</th>
                     <th>聯絡電話</th>
-                    <th>申請狀況</th>
+                    <th>店址</th>
+                    <th>服務項目</th>
+                    <th>註冊日期</th>
+                    <th>申請狀態</th>
                     <th>操作</th>
                 </template>
                 <template #body>
@@ -249,13 +279,12 @@ const handlePageChange2 = (page) => {
         <div class="storemanage-table-container">
             <Table>
                 <template #header>
-                    <th>編號</th>
                     <th>店家</th>
-                    <th>註冊日期</th>
-                    <th>所在地區</th>
                     <th>負責人</th>
                     <th>聯絡電話</th>
+                    <th>店址</th>
                     <th>店家狀況</th>
+                    <th>註冊日期</th>
                     <th>操作</th>
                 </template>
                 <template #body>
