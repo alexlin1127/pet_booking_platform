@@ -14,12 +14,12 @@ defineProps({
   <td>{{ post.title }}</td>
   <td>{{ post.status }}</td>
   <td v-if="post.status === '待審核'">
-    <RouterLink :to="`/admin/post/review?id=${post.id}&title=${post.title}`">
+    <RouterLink :to="`/admin/post/review?id=${post.id}&title=${encodeURIComponent(post.title)}&storeName=${encodeURIComponent(post.storeName)}`">
       <button class="btn">查看並審核</button>
     </RouterLink>
   </td>
   <td v-else>
-    <RouterLink :to="`/admin/post/details?id=${post.id}&title=${post.title}`">
+    <RouterLink :to="`/admin/post/details?id=${post.id}&title=${encodeURIComponent(post.title)}&storeName=${encodeURIComponent(post.storeName)}`">
       <button class="btn">店家詳情</button>
     </RouterLink>
   </td>
