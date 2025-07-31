@@ -4,6 +4,7 @@
     
     // 定義登入狀態
     const login = ref(false);
+    const role = ref('admin')
 </script>
 
 <template>
@@ -18,12 +19,13 @@
 
         <!-- 右側 -->
         <div class="router">
-            <RouterLink to="/">首頁</RouterLink>
-            <a href="#">最新消息</a>
-            <a href="#">店家列表</a>
-            <a href="#">預約美容服務</a>
-            <a href="#">寵物小學堂</a>
-            <RouterLink to="/Login">
+            <RouterLink to="/" v-if="role !== 'admin'">首頁</RouterLink>
+            <a href="#" v-if="role !== 'admin'">最新消息</a>
+            <a href="#" v-if="role !== 'admin'">店家列表</a>
+            <a href="#" v-if="role !== 'admin'">預約美容服務</a>
+            <a href="#" v-if="role !== 'admin'">寵物小學堂</a>
+            <p  v-if="role == 'admin'"> Hi,管理者</p>
+            <RouterLink to="/login">
                 <button class="btn login-btn" v-if="!login">
                     註冊/登入
                 </button>
