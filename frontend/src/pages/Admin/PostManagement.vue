@@ -232,9 +232,6 @@ const handlePageChange2 = (page) => {
             <button class="btn" :class="{ 'btn-active': selectedStatus === '退回補件' }" @click="filterByStatus('退回補件')">
                 退回補件
             </button>
-            <button class="btn" :class="{ 'btn-active': selectedStatus === '已拒絕' }" @click="filterByStatus('已拒絕')">
-                已拒絕
-            </button>
         </div>
 
         <div class="storemanage-table-container">
