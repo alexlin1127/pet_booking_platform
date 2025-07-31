@@ -4,7 +4,6 @@ import { useRoute, useRouter } from 'vue-router'
 import Table from "../../components/Table.vue"
 import AccountCard from "../Admin/Card/AccountCard.vue"
 import Pagination from "../../components/Pagination.vue"
-import Sidebar from '../../components/Sidebar.vue'
 
 const route = useRoute()
 const router = useRouter()
