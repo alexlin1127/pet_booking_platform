@@ -1,7 +1,7 @@
 <!-- src/pages/Admin/PostManagerment.vue -->
 <script setup>
 import { ref, onMounted } from 'vue'
-// import ModalBox from '@/components/ModalBox.vue'
+import ModalBox from '@/components/ModalBox.vue'
 // 內容先用假資料
 const title = ref('今天的店裡超熱鬧！三位新朋友來洗香香')
 const content = ref([
@@ -76,4 +76,3 @@ const handleConfirm = (reason) => {
     />
   <!-- </div> -->
 </template>
-

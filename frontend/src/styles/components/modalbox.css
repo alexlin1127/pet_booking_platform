@@ -3,6 +3,41 @@
 @tailwind utilities;
 
 /* ================= ModalBox ================= */
+/* ================= Modal Box ================= */
 @layer components {
-    
+  .modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+  }
+
+  .modal-content {
+    @apply bg-white rounded-xl p-6 w-full max-w-xl shadow-lg;
+  }
+
+  .modal-row {
+    @apply flex justify-between mb-2;
+  }
+
+  .modal-label {
+    @apply font-medium;
+  }
+
+  .modal-title {
+    @apply mb-2 font-semibold;
+  }
+
+  .modal-select {
+    @apply border rounded w-full mb-4 p-2;
+  }
+
+  .modal-btn-row {
+    @apply flex justify-end gap-3;
+  }
+
+  .modal-btn-cancel {
+    @apply bg-gray-300 px-4 py-2 rounded;
+  }
+
+  .modal-btn-confirm {
+    @apply bg-blue-600 text-white px-4 py-2 rounded;
+  }
 }
