@@ -239,7 +239,7 @@ const handlePageChange2 = (page) => {
 
 <template>
     <div class="storemanage-container">
-        <h1 class="storemanage-title">店家審核及管理</h1>
+        <h1 class="storemanage-title">店家帳號審核及管理</h1>
 
         <div class="filter-buttons">
             <div class="storemanage-list">
