@@ -48,7 +48,7 @@ const accounts = [
         type: "管理員",
         name: "王小明",
         account: "admin001",
-        store: "寵物樂園",
+        store: "--",
         status: "啟用",
         createdAt: "2025-07-01"
     },
@@ -214,11 +214,6 @@ const accounts = [
         <h1 class="accmanage-title">帳號管理</h1>
         
         <div class="accmanage-filters">
-            <!-- 選擇日期 -->
-            <label class="accmanage-filter-label">
-                建立日期：
-                <input type="date" v-model="selectedDate" class="accmanage-filter-input" />
-            </label>
             <!-- 選擇帳號類型 -->
             <label class="accmanage-filter-label">
                 帳號類型：
@@ -228,6 +223,13 @@ const accounts = [
                     <option value="店家">店家</option>
                     <option value="一般用戶">一般用戶</option>
                 </select>
+            </label>
+            <!-- 選擇日期 -->
+            <label class="accmanage-filter-label">
+                建立日期：
+                <input type="date" v-model="selectedDate" class="accmanage-filter-input" />
+                ~
+                <input type="date" v-model="selectedDate" class="accmanage-filter-input" />
             </label>
         </div>
 
