@@ -2,7 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ================= Post Management ================= */
 @layer components {
-    
+  /* ================= 整頁佈局 ================= */
+  .page-layout {
+    @apply min-h-screen flex flex-col;
+  }
+
+  /* 主內容區塊 */
+  .page-main {
+    @apply flex-grow bg-white py-10 px-4 md:px-10 max-w-4xl mx-auto w-full pb-32;
+  }
+
+  /* ================= 文章標題 ================= */
+  .article-title {
+    @apply text-2xl md:text-3xl font-bold text-center mb-6;
+  }
+
+  /* ================= 文章圖片 ================= */
+  .article-img {
+    @apply w-full h-64 object-cover rounded-lg mb-6;
+  }
+
+  /* ================= 文章內容 ================= */
+  .article-content {
+    @apply text-base leading-relaxed space-y-4 mb-8;
+  }
+
+  /* ================= 按鈕區 ================= */
+  .article-buttons {
+    @apply flex justify-center gap-4;
+  }
+
+  /* 主要按鈕 (藍色) */
+  .btn-primary {
+    @apply bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600;
+  }
+
+  /* 次要按鈕 (灰色) */
+  .btn-secondary {
+    @apply bg-gray-300 text-black px-6 py-2 rounded hover:bg-gray-400;
+  }
 }
