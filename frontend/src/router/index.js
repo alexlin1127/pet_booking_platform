@@ -22,49 +22,49 @@ const routes = [
         meta: { sidebar: true }
     },
     {
-        path: "/Login",
+        path: "/login",
         component: Login,
         meta: { sidebar: false }
     },
     {
-        path: "/Register",
+        path: "/register",
         component: Register,
         meta: { sidebar: false }
     },
     {
-        path: "/Register/Users",
+        path: "/register/users",
         component: UserRegister,
         meta: { sidebar: false }
     },
     {
-        path: "/Register/Shops/:step",
+        path: "/register/shops/:step",
         component: ShopRegister,
         meta: { sidebar: false }
     },
 
     // // 管理者頁面Router
     {
-        path: "/Admin",
+        path: "/admin",
         component: Admin,
         meta: { sidebar: true }
     },
     {
-        path: "/Admin/Store/Manage",
+        path: "/admin/store/manage",
         component: StoreManagement,
         meta: { sidebar: true }
     },
     {
-        path: "/Admin/Store/:status",
+        path: "/admin/store/:status",
         component: StoreReview,
         meta: { sidebar: false }
     },
     {
-        path: "/Admin/Account/:page?",
+        path: "/admin/account/:page?",
         component: AccountManagement,
         meta: { sidebar: true }
     },
     {
-        path: "/Admin/Post",
+        path: "/admin/post",
         component: PostManagement,
         meta: { sidebar: true }
     },
