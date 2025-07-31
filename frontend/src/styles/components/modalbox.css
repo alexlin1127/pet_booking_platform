@@ -4,5 +4,116 @@
 
 /* ================= ModalBox ================= */
 @layer components {
-    
+  .modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+  }
+
+  .modal-content {
+    @apply bg-white p-6 rounded-2xl shadow-lg mx-4 w-[90%] max-w-[500px];
+  }
+
+  /* ================= Modal Header ================= */
+  .modal-header {
+    @apply flex justify-between items-center mb-4 pb-2 border-b border-gray-200;
+  }
+
+  .modal-title-text {
+    @apply text-lg font-semibold text-gray-800;
+  }
+
+  .modal-close-btn {
+    @apply text-gray-400 hover:text-gray-600 text-2xl font-bold w-8 h-8 flex items-center justify-center;
+  }
+
+  /* ================= Modal Content Sections ================= */
+  .modal-info-section {
+    @apply mb-4;
+  }
+
+  .modal-row {
+    @apply flex justify-between mb-3 py-2 border-b border-gray-100;
+  }
+
+  .modal-label {
+    @apply font-medium text-gray-700;
+  }
+
+  .modal-value {
+    @apply text-gray-900;
+  }
+
+  /* ================= Modal Form Fields ================= */
+  .modal-input-section,
+  .modal-textarea-section {
+    @apply mb-4;
+  }
+
+  .modal-field {
+    @apply mb-4;
+  }
+
+  .modal-field-input {
+    @apply flex items-center gap-3;
+  }
+
+  .modal-field-textarea {
+    @apply text-center;
+  }
+
+  .modal-field-label {
+    @apply text-sm font-medium text-gray-700;
+  }
+
+  .modal-field-label-input {
+    @apply text-sm font-medium text-gray-700 whitespace-nowrap;
+  }
+
+  .modal-field-label-textarea {
+    @apply block text-lg font-medium text-gray-700 mb-2;
+  }
+
+  .modal-input {
+    @apply flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+  }
+
+  .modal-textarea {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex items-center justify-center;
+  }
+
+  .modal-textarea::placeholder {
+    @apply text-center text-gray-400;
+  }
+
+  .modal-field-hint {
+    @apply text-xs text-gray-500 mt-1;
+  }
+
+  /* ================= Modal Buttons ================= */
+  .modal-buttons {
+    @apply flex gap-3 mt-6 pt-4 border-t border-gray-200;
+  }
+
+  .modal-btn {
+    @apply px-4 py-2 rounded-md font-medium transition-colors duration-200 flex-1;
+  }
+
+  .modal-btn-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+  }
+
+  .modal-btn-secondary {
+    @apply bg-gray-500 text-white hover:bg-gray-600;
+  }
+
+  .modal-btn-danger {
+    @apply bg-red-600 text-white hover:bg-red-700;
+  }
+
+  .modal-btn-cancel {
+    @apply bg-gray-300 text-gray-700 hover:bg-gray-400;
+  }
+
+  .modal-btn:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
 }
