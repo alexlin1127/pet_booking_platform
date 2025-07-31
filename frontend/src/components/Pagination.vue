@@ -69,4 +69,3 @@ const visiblePages = computed(() => {
     </button>
   </div>
 </template>
-
