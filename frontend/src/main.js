@@ -20,10 +20,10 @@ import './styles/components/modalbox.css'
 import './styles/components/pagination.css'
 
 import './styles/Admin/card.css'
-import './styles/Admin/review.css'
 import './styles/Admin/postmanage.css'
 import './styles/Admin/accmanage.css'
 import './styles/Admin/storemanage.css'
+import './styles/Admin/storereview.css'
 
 import './styles/Users/register.css'
 
