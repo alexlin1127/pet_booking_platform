@@ -13,7 +13,7 @@ const currentPage1 = ref(1)
 const currentPage2 = ref(1)
 
 // 篩選狀態
-const selectedStatus = ref('待審核')
+const selectedStatus = ref('首次申請')
 
 const stores = [
     {
@@ -23,7 +23,7 @@ const stores = [
         region: "台北市",
         owner: "王小明",
         phone: "0912345678",
-        status: "待審核"
+        status: "首次申請"
     },
     {
         id: "H0002",
@@ -33,15 +33,6 @@ const stores = [
         owner: "李小華",
         phone: "0922333444",
         status: "退回補件"
-    },
-    {
-        id: "H0003",
-        storeName: "寵物小棧",
-        registerDate: "2025-07-20",
-        region: "桃園市",
-        owner: "陳大仁",
-        phone: "0933222111",
-        status: "已拒絕"
     },
     {
         id: "H0004",
@@ -59,7 +50,7 @@ const stores = [
         region: "高雄市",
         owner: "林志明",
         phone: "0955777888",
-        status: "待審核"
+        status: "補件申請"
     },
     {
         id: "H0006",
@@ -80,22 +71,13 @@ const stores = [
         status: "已通過"
     },
     {
-        id: "H0008",
-        storeName: "毛毛小屋",
-        registerDate: "2025-08-05",
-        region: "新竹市",
-        owner: "吳雅婷",
-        phone: "0988333444",
-        status: "已拒絕"
-    },
-    {
         id: "H0009",
         storeName: "寵愛一生動物醫院",
         registerDate: "2025-08-07",
         region: "苗栗縣",
         owner: "蔡正忠",
         phone: "0999555666",
-        status: "待審核"
+        status: "首次申請"
     },
     {
         id: "H0010",
@@ -116,22 +98,13 @@ const stores = [
         status: "已通過"
     },
     {
-        id: "H0012",
-        storeName: "毛孩寵物旅館",
-        registerDate: "2025-08-13",
-        region: "嘉義市",
-        owner: "林美玲",
-        phone: "0933111222",
-        status: "已拒絕"
-    },
-    {
         id: "H0013",
         storeName: "愛寵動物醫院",
         registerDate: "2025-08-15",
         region: "屏東縣",
         owner: "楊志明",
         phone: "0944333444",
-        status: "待審核"
+        status: "補件申請"
     },
     {
         id: "H0014",
@@ -152,22 +125,13 @@ const stores = [
         status: "已通過"
     },
     {
-        id: "H0016",
-        storeName: "寵物好朋友",
-        registerDate: "2025-08-21",
-        region: "台東縣",
-        owner: "賴雅文",
-        phone: "0977999000",
-        status: "已拒絕"
-    },
-    {
         id: "H0017",
         storeName: "愛心寵物診所",
         registerDate: "2025-08-23",
         region: "澎湖縣",
         owner: "謝志豪",
         phone: "0988111222",
-        status: "待審核"
+        status: "首次申請"
     },
     {
         id: "H0018",
@@ -186,15 +150,6 @@ const stores = [
         owner: "魏俊傑",
         phone: "0911555666",
         status: "已通過"
-    },
-    {
-        id: "H0020",
-        storeName: "寵物快樂園",
-        registerDate: "2025-08-29",
-        region: "桃園市",
-        owner: "馬志強",
-        phone: "0922777888",
-        status: "已拒絕"
     }
 ];
 
@@ -245,24 +200,15 @@ const handlePageChange2 = (page) => {
             <div class="storemanage-list">
                 <p>{{ selectedStatus }}店家列表</p>
             </div>
-            
-            <button 
-                class="btn" 
-                :class="{ 'btn-active': selectedStatus === '待審核' }"
-                @click="filterByStatus('待審核')">
-                待審核
+
+            <button class="btn" :class="{ 'btn-active': selectedStatus === '首次申請' }" @click="filterByStatus('首次申請')">
+                首次申請
             </button>
-            <button 
-                class="btn" 
-                :class="{ 'btn-active': selectedStatus === '退回補件' }"
-                @click="filterByStatus('退回補件')">
+            <button class="btn" :class="{ 'btn-active': selectedStatus === '補件申請' }" @click="filterByStatus('補件申請')">
+                補件申請
+            </button>
+            <button class="btn" :class="{ 'btn-active': selectedStatus === '退回補件' }" @click="filterByStatus('退回補件')">
                 退回補件
-            </button>
-            <button 
-                class="btn" 
-                :class="{ 'btn-active': selectedStatus === '已拒絕' }"
-                @click="filterByStatus('已拒絕')">
-                已拒絕
             </button>
         </div>
 
@@ -275,7 +221,7 @@ const handlePageChange2 = (page) => {
                     <th>所在地區</th>
                     <th>負責人</th>
                     <th>聯絡電話</th>
-                    <th>審核狀況</th>
+                    <th>申請狀況</th>
                     <th>操作</th>
                 </template>
                 <template #body>
@@ -295,7 +241,9 @@ const handlePageChange2 = (page) => {
         <!-- 選擇日期 -->
         <label class="storemanage-filter-label">
             註冊日期：
-            <input type="date" v-model="selectedDate" class="storemanage-filter-input" />
+            <input type="date" v-model="selectedDate" class="accmanage-filter-input" />
+            ~
+            <input type="date" v-model="selectedDate" class="accmanage-filter-input" />
         </label>
 
         <div class="storemanage-table-container">
