@@ -240,10 +240,9 @@ const accounts = [
             <Table>
                 <template #header>
                     <th>編號</th>
-                    <th>帳號類型</th>
                     <th>名字</th>
                     <th>帳號</th>
-                    <th>所屬店家</th>
+                    <th>帳號類型</th>
                     <th>帳號狀態</th>
                     <th>建立日期</th>
                     <th>操作</th>

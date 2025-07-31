@@ -7,10 +7,9 @@ defineProps({
 
 <template>
   <td>{{ acc.id }}</td>
-  <td>{{ acc.type }}</td>
   <td>{{ acc.name }}</td>
   <td>{{ acc.account }}</td>
-  <td>{{ acc.store }}</td>
+  <td>{{ acc.type }}</td>
   <td>{{ acc.status }}</td>
   <td>{{ acc.createdAt }}</td>
   <td class="btn-td">
