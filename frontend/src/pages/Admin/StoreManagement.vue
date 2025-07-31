@@ -324,16 +324,4 @@ const handlePageChange2 = (page) => {
 
 </template>
 
-<style>
-
-/* .btn:hover {
-    background: #f3f4f6;
-    border-color: #d1d5db;
-}
-
-.btn-active {
-    background: #3b82f6 !important;
-    color: white !important;
-    border-color: #3b82f6 !important;
-}  */
-</style>
+<style></style>
