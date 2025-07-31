@@ -2,6 +2,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import ModalBox from '@/components/ModalBox.vue'
+// import axios from 'axios' // 若未來要打真 API
+const postId = ref('')      // ✅ 存貼文 ID
 // 內容先用假資料
 const title = ref('今天的店裡超熱鬧！三位新朋友來洗香香')
 const content = ref([
@@ -12,31 +14,47 @@ const content = ref([
 ])
 const show = ref(false)
 const infoRows = ref([])  //  將 infoRows 定義為 ref，方便從 API 更新
-const reasonList = ['資料錯誤', '資格不符', '系統異常']
+
 
 //  模擬從 API 拿資料（日後這段只要換成 axios.get()）
 onMounted(() => {
   // 假資料模擬後端返回格式
   const res = {
-    id: 'A1001',
-    name: '王小明',
-    account: 'ming123',
-    store: '貓狗城堡'
+    id: '001',
+    store: '毛星球寵物美容館',
+    title: '夏季洗澡限時優惠'
   }
-
+  postId.value = res.id
   // 將資料轉為 modal 可用格式（之後換後端資料也只需改這裡）
   infoRows.value = [
     ['編號', res.id],
-    ['名字', res.name],
-    ['帳號', res.account],
-    ['所屬店家', res.store]
+    ['店家名稱', res.store],
+    ['標題', res.title]
   ]
 })
 
-const handleConfirm = (reason) => {
-  alert(`選擇駁回原因：${reason}`)
+const handleConfirm = async (reason) => {
+  console.log('收到駁回原因：', reason)
+
+  // ✅ 模擬發送駁回資料給後端
+  const payload = {
+    postId: postId.value, 
+    reason: reason      // 從 modal 輸入框輸入的文字
+  }
+
+  // 模擬打 API（之後你可以改成 axios.post）
+  console.log('模擬送出 API 資料：', payload)
+  // await axios.post('/api/posts/reject', payload) 正式使用
+
+
+  // ✅ 關閉 modal
   show.value = false
+
+  // ✅ 顯示通知（可用 alert 或 toast）
+  alert('已成功駁回貼文')
 }
+
+
 </script>
 
 <template>
@@ -49,30 +67,18 @@ const handleConfirm = (reason) => {
         <p v-for="(para, idx) in content" :key="idx">{{ para }}</p>
       </div>
       <div class="article-buttons">
-        <button class="btn-secondary">返回首頁</button>
-        <button class="btn-primary" @click="show = true">立即預約</button>
+        <button class="btn-addQ" @click="show = true">加入問題件</button>
+        <button class="btn-check">核准</button>
       </div>
     </main>
   </div>
 
-  <!-- 按鈕區 -->
-  <!-- <div class="flex justify-center gap-4">
-    <button class="bg-gray-300 text-black px-6 py-2 rounded hover:bg-gray-400">返回首頁</button>
-    <button @click="show = true" class="bg-blue-500 text-white px-4 py-2 rounded">立即預約</button>
-  </div> -->
-<!-- </main> -->
-<!-- </div> -->
-
-    <!-- <button @click="show = true" class="bg-blue-500 text-white px-4 py-2 rounded">打開 Modal</button> -->
-
     <ModalBox
       :visible="show"
       :infoRows="infoRows"
-      :reasons="reasonList"
-      cancelText="取消駁回"
-      confirmText="確認駁回"
+      cancelText="取消"
+      confirmText="確認並通知店家"
       @cancel="show = false"
       @confirm="handleConfirm"
     />
-  <!-- </div> -->
 </template>

@@ -10,11 +10,11 @@
   }
 
   .modal-content {
-    @apply bg-white rounded-xl p-6 w-full max-w-xl shadow-lg;
+    @apply bg-white p-12 rounded-2xl w-full max-w-xl shadow-lg;
   }
 
   .modal-row {
-    @apply flex justify-between mb-2;
+    @apply flex justify-between mb-6;
   }
 
   .modal-label {
@@ -22,22 +22,18 @@
   }
 
   .modal-title {
-    @apply mb-2 font-semibold;
-  }
-
-  .modal-select {
-    @apply border rounded w-full mb-4 p-2;
+    @apply mt-10 mb-2 font-semibold text-center;
   }
 
   .modal-btn-row {
-    @apply flex justify-end gap-3;
+    @apply flex gap-4 mt-10;
   }
 
   .modal-btn-cancel {
-    @apply bg-gray-300 px-4 py-2 rounded;
+    @apply bg-black w-1/2 text-white hover:bg-gray-800 py-2 rounded-md font-medium transition;
   }
 
   .modal-btn-confirm {
-    @apply bg-blue-600 text-white px-4 py-2 rounded;
+    @apply bg-black w-1/2 text-white hover:bg-gray-800 py-2 rounded-md font-medium transition;
   }
 }
