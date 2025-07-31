@@ -4,7 +4,7 @@
 
 <template>
     <p>這是登入畫面</p>
-    <RouterLink to="/Register/Users">使用者註冊</RouterLink>
-    <RouterLink to="/Register/Shops/1">商家註冊</RouterLink>
+    <RouterLink to="/register/users">使用者註冊</RouterLink>
+    <RouterLink to="/register/shops/1">商家註冊</RouterLink>
 </template>
 <style></style>
