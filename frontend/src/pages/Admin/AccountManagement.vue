@@ -2,8 +2,9 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Table from "../../components/Table.vue"
-import AccountCard from "./Card/AccountCard.vue"
+import AccountCard from "../Admin/Card/AccountCard.vue"
 import Pagination from "../../components/Pagination.vue"
+import Sidebar from '../../components/Sidebar.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -141,7 +142,7 @@ const accounts = [
         store: "動物之家",
         status: "啟用",
         createdAt: "2025-08-04"
-    },{
+    }, {
         id: "A0011",
         type: "管理員",
         name: "楊志強",
@@ -149,7 +150,7 @@ const accounts = [
         store: "動物之家",
         status: "啟用",
         createdAt: "2025-08-04"
-    },{
+    }, {
         id: "A0011",
         type: "管理員",
         name: "楊志強",
@@ -157,7 +158,7 @@ const accounts = [
         store: "動物之家",
         status: "啟用",
         createdAt: "2025-08-04"
-    },{
+    }, {
         id: "A0011",
         type: "管理員",
         name: "楊志強",
@@ -165,7 +166,7 @@ const accounts = [
         store: "動物之家",
         status: "啟用",
         createdAt: "2025-08-04"
-    },{
+    }, {
         id: "A0011",
         type: "管理員",
         name: "楊志強",
@@ -173,7 +174,7 @@ const accounts = [
         store: "動物之家",
         status: "啟用",
         createdAt: "2025-08-04"
-    },{
+    }, {
         id: "A0011",
         type: "管理員",
         name: "楊志強",
@@ -181,7 +182,7 @@ const accounts = [
         store: "動物之家",
         status: "啟用",
         createdAt: "2025-08-04"
-    },{
+    }, {
         id: "A0011",
         type: "管理員",
         name: "楊志強",
@@ -189,7 +190,7 @@ const accounts = [
         store: "動物之家",
         status: "啟用",
         createdAt: "2025-08-04"
-    },{
+    }, {
         id: "A0011",
         type: "管理員",
         name: "楊志強",
@@ -197,7 +198,7 @@ const accounts = [
         store: "動物之家",
         status: "啟用",
         createdAt: "2025-08-04"
-    },{
+    }, {
         id: "A0011",
         type: "管理員",
         name: "楊志強",
@@ -209,10 +210,13 @@ const accounts = [
 ];
 </script>
 
+
+
 <template>
+    
     <div class="accmanage-container">
         <h1 class="accmanage-title">帳號管理</h1>
-        
+
         <div class="accmanage-filters">
             <!-- 選擇帳號類型 -->
             <label class="accmanage-filter-label">
