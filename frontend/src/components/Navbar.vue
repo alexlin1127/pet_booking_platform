@@ -4,7 +4,7 @@
     
     // 定義登入狀態
     const login = ref(false);
-    const role = ref('admin')
+    const role = ref()
 </script>
 
 <template>
