@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+    /* ================= 整頁佈局 ================= */
+    .page-layout {
+        @apply min-h-screen bg-white flex flex-col;
+    }
+
+    /* 主內容區塊 */
+    .page-main {
+        @apply flex-grow bg-white py-10 px-4 md:px-10 max-w-4xl mx-auto w-full pb-32;
+    }
+
+    /* ================= 文章標題 ================= */
+    .article-title {
+        @apply text-2xl md:text-3xl font-bold text-center mb-6;
+    }
+
+    /* ================= 文章圖片 ================= */
+    .article-img {
+        @apply w-full h-64 object-cover rounded-lg mb-6;
+    }
+
+    /* ================= 文章內容 ================= */
+    .article-content {
+        @apply text-base leading-relaxed space-y-4 mb-8;
+    }
+
+    /* ================= 按鈕區 ================= */
+    .article-buttons {
+        @apply flex justify-center gap-4;
+    }
+
+    /* 按鈕 有問題*/
+    .btn-back {
+        @apply bg-black w-1/4 mt-8 text-center text-white hover:bg-gray-800 px-14 py-2 rounded-md font-medium transition;
+    }
+
+    /* 按鈕 有問題*/
+    .btn-addQ {
+        @apply bg-black w-1/4 mt-8 text-white hover:bg-gray-800 px-14 py-2 rounded-md font-medium transition;
+    }
+
+    /* 按鈕 確認審核 */
+    .btn-check {
+        @apply bg-black w-1/4 mt-8 text-white hover:bg-gray-800 px-14 py-2 rounded-md font-medium transition;
+    }
+}
