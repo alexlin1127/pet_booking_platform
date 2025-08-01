@@ -17,11 +17,12 @@ import './styles/components/common/sidebar.css'
 import './styles/components/common/pagination.css'
 
 // UI組件樣式
+import './styles/components/UI/card.css'
 import './styles/components/UI/form.css'
-import './styles/components/UI/table.css'
 import './styles/components/UI/modalbox.css'
 import './styles/components/UI/button.css'
-import './styles/components/UI/card.css'
+import './styles/components/UI/table.css'
+import './styles/components/UI/tablecard.css'
 
 // 管理員頁面樣式
 import './styles/pages/Admin/index.css'
