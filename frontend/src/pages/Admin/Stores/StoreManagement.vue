@@ -45,6 +45,31 @@ const paginatedOperatingStores = computed(() => {
     return operatingStores.value.slice(start, start + pageSize)
 })
 
+// 搜尋店家
+const searchText = ref('')
+const searchedStores = ref([])
+const filteredStores = computed(() => {
+    const keyword = searchText.value.trim().toLowerCase()
+    if (!keyword) return operatingStores.value
+    return operatingStores.value.filter(store =>
+        store.storeName.toLowerCase().includes(keyword)
+    )
+})
+
+
+const handleSearch = () => {
+    const keyword = searchText.value.trim().toLowerCase()
+    if (!keyword) {
+        searchedStores.value = operatingStores.value
+    } else {
+        searchedStores.value = operatingStores.value.filter(store =>
+            store.storeName.toLowerCase().includes(keyword)
+        )
+    }
+}
+// 預設顯示全部
+searchedStores.value = operatingStores.value
+
 // 分頁處理函數
 const handlePageChange1 = (page) => {
     currentPage1.value = page
@@ -100,14 +125,27 @@ const handlePageChange2 = (page) => {
 
     <div class="storemanage-container">
         <h1 class="storemanage-title">營運中</h1>
+        <div class="flex flex-wrap items-center gap-4 py-2">
+            <!-- 搜尋店家 -->
+            <label class="flex items-center gap-2 px-2">
+                <span class="text-base font-medium">搜尋店家：</span>
+                <input type="text" v-model="searchText" @keyup.enter="handleSearch" placeholder="請輸入關鍵字"
+                    class="storemanage-search-input" />
+            </label>
 
-        <!-- 選擇日期 -->
-        <label class="storemanage-filter-label">
-            註冊日期：
-            <input type="date" v-model="selectedDate" class="accmanage-filter-input" />
-            ~
-            <input type="date" v-model="selectedDate" class="accmanage-filter-input" />
-        </label>
+            <!-- 選擇日期 -->
+            <label class="storemanage-filter-label flex items-center gap-2">
+                <span>註冊日期：</span>
+                <input type="date" v-model="selectedDate" class="accmanage-filter-input" />
+                <span>~</span>
+                <input type="date" v-model="selectedDate" class="accmanage-filter-input" />
+            </label>
+
+            <button class="btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                @click="handleSearch">搜尋</button>
+        </div>
+
+
 
         <div class="storemanage-table-container">
             <Table>
@@ -121,7 +159,7 @@ const handlePageChange2 = (page) => {
                     <th>操作</th>
                 </template>
                 <template #body>
-                    <tr v-for="store in paginatedOperatingStores" :key="store.id" class="card-row">
+                    <tr v-for="store in filteredStores" :key="store.id" class="card-row">
                         <StoreCard :store="store" />
                     </tr>
                 </template>
