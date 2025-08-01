@@ -107,13 +107,13 @@ const handleButtonClick = (event) => {
       <div class="article-content">
         <p v-for="(para, idx) in content" :key="idx">{{ para }}</p>
       </div>
-      <div class="article-buttons" v-if="route.path === '/admin/post/review'">
-        <RouterLink to="/admin/post" class="btn-back">返回</RouterLink>
+      <div class="article-buttons" v-if="route.path === '/admin/posts/review'">
+        <RouterLink to="/admin/posts" class="btn-back">返回</RouterLink>
         <button class="btn-addQ" @click="show = true">加入問題件</button>
         <button class="btn-check">核准</button>
       </div>
-      <div class="article-buttons" v-else-if="route.path === '/admin/post/details'">
-        <RouterLink to="/admin/post" class="btn-back">返回</RouterLink>
+      <div class="article-buttons" v-else-if="route.path === '/admin/posts/details'">
+        <RouterLink to="/admin/posts" class="btn-back">返回</RouterLink>
       </div>
     </main>
   </div>

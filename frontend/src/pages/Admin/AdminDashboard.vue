@@ -33,7 +33,7 @@ const statLabel = computed(() =>
                 <p class="countshop">{{ shopsawaitingreview }} 位</p>
             </template>
             <template #button>
-                <RouterLink to="/admin/store/manage" class="button">審核店家申請</RouterLink>
+                <RouterLink to="/admin/stores/manage" class="button">審核店家申請</RouterLink>
             </template>
         </Card>
         <Card type="vertical" :hasButton="true">
@@ -48,7 +48,7 @@ const statLabel = computed(() =>
                 <p>最新貼文待審核</p>
             </template>
             <template #button>
-                <RouterLink to="/admin/post" class="button">審核貼文管理</RouterLink>
+                <RouterLink to="/admin/posts" class="button">審核貼文管理</RouterLink>
             </template>
             <template #count>
                 <p class="countpost">

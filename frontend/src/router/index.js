@@ -3,9 +3,10 @@ import Home from "../auth/WelcomePage.vue";
 import Login from "../auth/Login.vue";
 import Register from "../auth/Register/Register.vue";
 // 使用者註冊畫面Router
-import UserRegister from "../pages/Customers/Index.vue"
+import CustomerRegister from "../auth/Register/CustomerRegister.vue"
 // 商家註冊畫面Router
-import ShopRegister from "../pages/Stores/StoresDashboard.vue"
+import StoreRegister from "../auth/Register/StoreRegister.vue"
+
 // 管理者頁面Router
 import Admin from "../pages/Admin/AdminDashboard.vue"
 import StoreManagement from "../pages/Admin/Stores/StoreManagement.vue"
@@ -33,13 +34,13 @@ const routes = [
         meta: { sidebar: false }
     },
     {
-        path: "/register/users",
-        component: UserRegister,
+        path: "/register/customers",
+        component: CustomerRegister,
         meta: { sidebar: false }
     },
     {
-        path: "/register/shops/:step",
-        component: ShopRegister,
+        path: "/register/stores/:step",
+        component: StoreRegister,
         meta: { sidebar: false }
     },
 
@@ -50,27 +51,27 @@ const routes = [
         meta: { sidebar: true }
     },
     {
-        path: "/admin/store/manage",
+        path: "/admin/stores/manage",
         component: StoreManagement,
         meta: { sidebar: true }
     },
     {
-        path: "/admin/store/:status",
+        path: "/admin/stores/:status",
         component: StoreReview,
         meta: { sidebar: false }
     },
     {
-        path: "/admin/account/:page?",
+        path: "/admin/accounts/:page?",
         component: AccountManagement,
         meta: { sidebar: true }
     },
     {
-        path: "/admin/post",
+        path: "/admin/posts",
         component: PostManagement,
         meta: { sidebar: true }
     },
     {
-        path: "/admin/post/:status",
+        path: "/admin/posts/:status",
         component: PostReview,
         meta: { sidebar: false }
     },

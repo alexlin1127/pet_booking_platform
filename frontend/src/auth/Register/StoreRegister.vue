@@ -17,7 +17,7 @@ const isDisabled = computed(() => {
 
 const nextStep = () => {
   const next = parseInt(currentStep.value) + 1
-  router.push(`/register/shops/${next}`)
+  router.push(`/register/stores/${next}`)
 }
 
 const submitForm = () => {
@@ -111,7 +111,7 @@ function submit() {
   }
   console.log("payload =>", { ...form.value, files: files.value });
   alert("已送出審核！");
-  router.push("/Admin/Store/Manage");
+  router.push("/admin/stores/manage");
 }
 </script>
 

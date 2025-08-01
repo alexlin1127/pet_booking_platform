@@ -24,17 +24,17 @@ defineProps({
     {{ store.applystatus }}
   </td>
   <td v-if="store.applystatus === '首次申請'">
-    <RouterLink :to="`/admin/store/review?id=${store.id}&name=${store.storeName}`">
+    <RouterLink :to="`/admin/stores/review?id=${store.id}&name=${store.storeName}`">
       <button class="btn">審核</button>
     </RouterLink>
   </td>
   <td v-else-if="store.applystatus === '補件申請'">
-    <RouterLink :to="`/admin/store/review?id=${store.id}&name=${store.storeName}`">
+    <RouterLink :to="`/admin/stores/review?id=${store.id}&name=${store.storeName}`">
       <button class="btn">重新審核</button>
     </RouterLink>
   </td>
   <td v-else>
-    <RouterLink :to="`/admin/store/details?id=${store.id}&name=${store.storeName}`">
+    <RouterLink :to="`/admin/stores/details?id=${store.id}&name=${store.storeName}`">
       <button class="btn">店家詳情</button>
     </RouterLink>
   </td>

@@ -84,9 +84,9 @@ const toggleSidebar = () => {
             <!-- 管理員選單 -->
             <div v-else class="sidebar-menu-section">
                 <RouterLink to="/admin" class="sidebar-link" active-class="sidebar-link-active">首頁</RouterLink>
-                <RouterLink to="/admin/store/manage" class="sidebar-link" active-class="sidebar-link-active">店家帳號審核及管理</RouterLink>
-                <RouterLink to="/admin/account" class="sidebar-link" active-class="sidebar-link-active">帳號管理</RouterLink>
-                <RouterLink to="/admin/post" class="sidebar-link" active-class="sidebar-link-active">貼文管理</RouterLink>
+                <RouterLink to="/admin/stores/manage" class="sidebar-link" active-class="sidebar-link-active">店家帳號審核及管理</RouterLink>
+                <RouterLink to="/admin/accounts" class="sidebar-link" active-class="sidebar-link-active">帳號管理</RouterLink>
+                <RouterLink to="/admin/posts" class="sidebar-link" active-class="sidebar-link-active">貼文管理</RouterLink>
             </div>
         </div>
     </div>

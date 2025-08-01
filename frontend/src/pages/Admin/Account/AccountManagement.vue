@@ -33,13 +33,13 @@ const paginatedAccounts = computed(() => {
 
 const handlePageChange = (page) => {
     currentPage.value = page
-    router.push(`/Admin/Account/${page}`)
+    router.push(`/admin/accounts/${page}`)
 }
 
 // 當篩選條件變更時，重置到第一頁
 watch([selectedDate, selectedType], () => {
     currentPage.value = 1
-    router.push('/Admin/Account/1')
+    router.push('/admin/accounts/1')
 })
 
 const accounts = [
