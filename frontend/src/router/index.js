@@ -1,17 +1,18 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../pages/Home.vue";
-import Login from "../pages/Login.vue";
-import Register from "../pages/Register.vue";
+import Home from "../auth/WelcomePage.vue";
+import Login from "../auth/Login.vue";
+import Register from "../auth/Register/Register.vue";
 // 使用者註冊畫面Router
-import UserRegister from "../pages/Users/Register.vue"
+import UserRegister from "../pages/Customers/Index.vue"
 // 商家註冊畫面Router
-import ShopRegister from "../pages/Shops/Register.vue"
+import ShopRegister from "../pages/Stores/StoresDashboard.vue"
 // 管理者頁面Router
-import Admin from "../pages/Admin/Index.vue"
-import StoreManagement from "../pages/Admin/StoreManagement.vue"
-import StoreReview from "../pages/Admin/StoreReview.vue"
-import AccountManagement from "../pages/Admin/AccountManagement.vue"
-import PostManagement from "../pages/Admin/PostManagement.vue"
+import Admin from "../pages/Admin/AdminDashboard.vue"
+import StoreManagement from "../pages/Admin/Stores/StoreManagement.vue"
+import StoreReview from "../pages/Admin/Stores/StoreReview.vue"
+import AccountManagement from "../pages/Admin/Account/AccountManagement.vue"
+import PostManagement from "../pages/Admin/Posts/PostManagement.vue"
+import PostReview from "../pages/Admin/Posts/PostReview.vue";
 
 
 
@@ -67,6 +68,11 @@ const routes = [
         path: "/admin/post",
         component: PostManagement,
         meta: { sidebar: true }
+    },
+    {
+        path: "/admin/post/:status",
+        component: PostReview,
+        meta: { sidebar: false }
     },
 ];
 
