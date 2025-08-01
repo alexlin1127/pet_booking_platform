@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================= Store Review ================= */
+@layer components {
+
+    /* 版面外框 ------------------------------ */
+    .storereview-container {
+        @apply p-4;
+    }
+
+    .storereview-title {
+        @apply text-4xl font-bold mb-6 text-center;
+    }
+
+    /* 表單控制項 ---------------------------- */
+    .storereview-label {
+        @apply block text-sm font-medium text-gray-700 mb-1;
+    }
+
+    .storereview-input {
+        @apply w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-800 focus:border-gray-800;
+    }
+
+    .storereview-textarea {
+        @apply w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-800 focus:border-gray-800;
+    }
+
+    .storereview-checkbox {
+        @apply h-4 w-4 rounded border-gray-300 text-gray-900;
+    }
+}

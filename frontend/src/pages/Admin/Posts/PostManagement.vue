@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed } from 'vue'
-import Table from "../../components/Table.vue"
-import PostCard from "./Card/PostCard.vue";
-import Pagination from "../../components/Pagination.vue"
+import Table from "../../../components/UI/Table.vue"
+import PostCard from "./PostCard.vue";
+import Pagination from "../../../components/common/Pagination.vue"
 
 const pageSize = 5 // 每頁顯示5個
 

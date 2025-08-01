@@ -2,7 +2,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { stores } from "../../data/storeData.js";
+import { stores } from "../../../data/storeData.js";
 
 const route = useRoute();
 const router = useRouter();

@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import Table from "../../components/Table.vue"
-import AccountCard from "../Admin/Card/AccountCard.vue"
-import Pagination from "../../components/Pagination.vue"
+import Table from "../../../components/UI/Table.vue"
+import AccountCard from "./AccountCard.vue"
+import Pagination from "../../../components/common/Pagination.vue"
 
 const route = useRoute()
 const router = useRouter()

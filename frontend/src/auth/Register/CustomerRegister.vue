@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import FormTemplate from '../../components/FormTemplate.vue'
+import FormTemplate from '../../components/UI/FormTemplate.vue'
 
 const route = useRoute()
 

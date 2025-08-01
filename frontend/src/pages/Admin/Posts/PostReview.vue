@@ -2,7 +2,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import ModalBox from '../../components/ModalBox.vue'
+import ModalBox from '../../../components/UI/ModalBox.vue'
 // import axios from 'axios' // 若未來要打真 API
 
 const route = useRoute()

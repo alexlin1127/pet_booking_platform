@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue'
-import Table from "../../components/Table.vue"
-import StoreCard from "./Card/StoreCard.vue";
-import Pagination from "../../components/Pagination.vue"
-import { stores } from "../../data/storeData.js"
+import Table from "../../../components/UI/Table.vue"
+import StoreCard from "./StoreCard.vue";
+import Pagination from "../../../components/common/Pagination.vue"
+import { stores } from "../../../data/storeData.js"
 
 const pageSize = 5 // 每頁顯示5個
 
