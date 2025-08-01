@@ -2,7 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ================= StoreReview ================= */
+/* ============ Store-Review 共用樣式 ============ */
 @layer components {
-    
+  /* 容器與標題 */
+  .sr-container {
+    @apply px-4 lg:px-8 py-8;
+  }
+  .sr-title {
+    @apply text-2xl font-bold mb-6;
+  }
+
+  /* 資料列 */
+  .sr-row {
+    @apply flex items-start gap-4 mb-4;
+  }
+  .sr-label {
+    @apply w-44 shrink-0 font-medium text-gray-900;
+  }
+  .sr-value {
+    @apply text-gray-900 break-all;
+  }
+
+  /* 區段標題 */
+  .sr-subttl {
+    @apply mt-12 mb-3 text-lg font-semibold;
+  }
+
+  /* 圖片灰框 */
+  .sr-box {
+    @apply w-full h-28 bg-gray-200 rounded-md;
+  }
+
+  /* 不同欄數的網格 */
+  .sr-grid-3 {
+    @apply grid grid-cols-3 gap-6;
+  }
+  .sr-grid-2 {
+    @apply grid grid-cols-2 gap-6;
+  }
+
+  /* 按鈕 */
+  .sr-btn {
+    @apply inline-flex items-center justify-center px-6 py-2 rounded-md text-white bg-gray-900 hover:bg-black transition;
+  }
+  .sr-btn-outline {
+    @apply inline-flex items-center justify-center px-6 py-2 rounded-md border border-gray-900 text-gray-900 hover:bg-gray-100 transition;
+  }
 }
