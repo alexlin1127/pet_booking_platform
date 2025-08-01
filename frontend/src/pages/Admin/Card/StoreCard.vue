@@ -5,6 +5,7 @@ defineProps({
   store: Object
 });
 
+
 </script>
 
 <template>
