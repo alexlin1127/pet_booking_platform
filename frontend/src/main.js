@@ -25,7 +25,7 @@ import './styles/components/UI/table.css'
 import './styles/components/UI/tablecard.css'
 
 // 管理員頁面樣式
-import './styles/pages/Admin/index.css'
+import './styles/pages/Admin/admindashboard.css'
 import './styles/pages/Admin/Accounts/accmanage.css'
 import './styles/pages/Admin/Stores/storemanage.css'
 import './styles/pages/Admin/Stores/storereview.css'
