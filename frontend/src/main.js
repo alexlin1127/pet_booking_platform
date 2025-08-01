@@ -9,27 +9,33 @@ import { faPlay, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-i
 import './style.css'
 
 import './styles/main.css'
-import './styles/button.css'
 
-import './styles/components/navbar.css'
-import './styles/components/footer.css'
-import './styles/components/form.css'
-import './styles/components/table.css'
-import './styles/components/sidebar.css'
-import './styles/components/modalbox.css'
-import './styles/components/pagination.css'
+// 通用組件樣式
+import './styles/components/common/navbar.css'
+import './styles/components/common/footer.css'
+import './styles/components/common/sidebar.css'
+import './styles/components/common/pagination.css'
 
-import './styles/Admin/index.css'
-import './styles/Admin/card.css'
-import './styles/Admin/accmanage.css'
-import './styles/Admin/storemanage.css'
-import './styles/Admin/storereview.css'
-import './styles/Admin/postmanage.css'
-import './styles/Admin/postreview.css'
+// UI組件樣式
+import './styles/components/UI/form.css'
+import './styles/components/UI/table.css'
+import './styles/components/UI/modalbox.css'
+import './styles/components/UI/button.css'
+import './styles/components/UI/card.css'
 
-import './styles/Shops/register.css'
+// 管理員頁面樣式
+import './styles/pages/Admin/index.css'
+import './styles/pages/Admin/Accounts/accmanage.css'
+import './styles/pages/Admin/Stores/storemanage.css'
+import './styles/pages/Admin/Stores/storereview.css'
+import './styles/pages/Admin/Posts/postmanage.css'
+import './styles/pages/Admin/Posts/postreview.css'
 
-import './styles/Users/register.css'
+// 商家註冊樣式
+import './styles/auth/register/storesregister.css'
+
+// 客戶註冊樣式
+import './styles/auth/register/customersregister.css'
 
 library.add(faPlay, faAngleLeft, faAngleRight)
 
