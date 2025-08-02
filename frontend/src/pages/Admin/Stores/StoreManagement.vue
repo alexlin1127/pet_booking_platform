@@ -38,16 +38,15 @@ const paginatedPendingStores = computed(() => {
     return pendingStores.value.slice(start, start + pageSize)
 })
 
-// 第二個表格的分頁邏輯（營運中的店家）
-const totalPages2 = computed(() => Math.ceil(operatingStores.value.length / pageSize))
-const paginatedOperatingStores = computed(() => {
+// 第二個表格的分頁邏輯（營運中的店家，已結合搜尋）
+const totalPages2 = computed(() => Math.ceil(filteredStores.value.length / pageSize))
+const paginatedFilteredStores = computed(() => {
     const start = (currentPage2.value - 1) * pageSize
-    return operatingStores.value.slice(start, start + pageSize)
+    return filteredStores.value.slice(start, start + pageSize)
 })
 
-// 搜尋店家
+// 搜尋店家（即時搜尋）
 const searchText = ref('')
-const searchedStores = ref([])
 const filteredStores = computed(() => {
     const keyword = searchText.value.trim().toLowerCase()
     if (!keyword) return operatingStores.value
@@ -55,20 +54,6 @@ const filteredStores = computed(() => {
         store.storeName.toLowerCase().includes(keyword)
     )
 })
-
-
-const handleSearch = () => {
-    const keyword = searchText.value.trim().toLowerCase()
-    if (!keyword) {
-        searchedStores.value = operatingStores.value
-    } else {
-        searchedStores.value = operatingStores.value.filter(store =>
-            store.storeName.toLowerCase().includes(keyword)
-        )
-    }
-}
-// 預設顯示全部
-searchedStores.value = operatingStores.value
 
 // 分頁處理函數
 const handlePageChange1 = (page) => {
@@ -159,7 +144,7 @@ const handlePageChange2 = (page) => {
                     <th>操作</th>
                 </template>
                 <template #body>
-                    <tr v-for="store in filteredStores" :key="store.id" class="card-row">
+                    <tr v-for="store in paginatedFilteredStores" :key="store.id" class="card-row">
                         <StoreCard :store="store" />
                     </tr>
                 </template>
