@@ -1,17 +1,19 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../pages/Home.vue";
-import Login from "../pages/Login.vue";
-import Register from "../pages/Register.vue";
+import Home from "../auth/WelcomePage.vue";
+import Login from "../auth/Login.vue";
+import Register from "../auth/Register/Register.vue";
 // 使用者註冊畫面Router
-import UserRegister from "../pages/Users/Register.vue"
+import CustomerRegister from "../auth/Register/CustomerRegister.vue"
 // 商家註冊畫面Router
-import ShopRegister from "../pages/Shops/Register.vue"
+import StoreRegister from "../auth/Register/StoreRegister.vue"
+
 // 管理者頁面Router
-import Admin from "../pages/Admin/Index.vue"
-import StoreManagement from "../pages/Admin/StoreManagement.vue"
-import StoreReview from "../pages/Admin/StoreReview.vue"
-import AccountManagement from "../pages/Admin/AccountManagement.vue"
-import PostManagement from "../pages/Admin/PostManagement.vue"
+import Admin from "../pages/Admin/AdminDashboard.vue"
+import StoreManagement from "../pages/Admin/Stores/StoreManagement.vue"
+import StoreReview from "../pages/Admin/Stores/StoreReview.vue"
+import AccountManagement from "../pages/Admin/Account/AccountManagement.vue"
+import PostManagement from "../pages/Admin/Posts/PostManagement.vue"
+import PostReview from "../pages/Admin/Posts/PostReview.vue";
 
 
 
@@ -22,51 +24,56 @@ const routes = [
         meta: { sidebar: true }
     },
     {
-        path: "/Login",
+        path: "/login",
         component: Login,
         meta: { sidebar: false }
     },
     {
-        path: "/Register",
+        path: "/register",
         component: Register,
         meta: { sidebar: false }
     },
     {
-        path: "/Register/Users",
-        component: UserRegister,
+        path: "/register/customers",
+        component: CustomerRegister,
         meta: { sidebar: false }
     },
     {
-        path: "/Register/Shops/:step",
-        component: ShopRegister,
+        path: "/register/stores/:step",
+        component: StoreRegister,
         meta: { sidebar: false }
     },
 
     // // 管理者頁面Router
     {
-        path: "/Admin",
+        path: "/admin",
         component: Admin,
         meta: { sidebar: true }
     },
     {
-        path: "/Admin/Store/Manage",
+        path: "/admin/stores/manage",
         component: StoreManagement,
         meta: { sidebar: true }
     },
     {
-        path: "/Admin/Store/:status",
+        path: "/admin/stores/:status",
         component: StoreReview,
         meta: { sidebar: false }
     },
     {
-        path: "/Admin/Account/:page?",
+        path: "/admin/accounts/:page?",
         component: AccountManagement,
         meta: { sidebar: true }
     },
     {
-        path: "/Admin/Post",
+        path: "/admin/posts",
         component: PostManagement,
         meta: { sidebar: true }
+    },
+    {
+        path: "/admin/posts/:status",
+        component: PostReview,
+        meta: { sidebar: false }
     },
 ];
 

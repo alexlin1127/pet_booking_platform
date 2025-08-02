@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================= Store Management ================= */
+@layer components {
+    .storemanage-container {
+        @apply p-4;
+    }
+
+    .storemanage-title {
+        @apply text-4xl font-bold mb-4;
+    }
+
+    .filter-buttons {
+        @apply flex items-center gap-4 pl-1 mb-6;
+    }
+
+    .storemanage-list {
+        @apply text-xl font-bold mb-0 flex justify-center items-center h-10;
+    }
+
+    .storemanage-filter-label {
+        @apply flex items-center gap-2 pl-1;
+    }
+
+    .storemanage-filter-input {
+        @apply border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer;
+    }
+
+    .storemanage-table-container {
+        @apply mb-4;
+    }
+
+    .storemanage-search-input {
+        @apply border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-40;
+    }
+}
