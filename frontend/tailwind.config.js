@@ -2,7 +2,7 @@
 export default {
   content: ['./index.html', 
     './src/**/*.{vue,js,ts,jsx,tsx}',
-    "./src/styles/components/modalbox.css"
+    "./src/styles/**/*.css"
   ],
   
   theme: {

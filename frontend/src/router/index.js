@@ -6,6 +6,7 @@ import Register from "../auth/Register/Register.vue";
 import CustomerRegister from "../auth/Register/CustomerRegister.vue"
 // 商家註冊畫面Router
 import StoreRegister from "../auth/Register/StoreRegister.vue"
+import SpostManagement from "../pages/Stores/SpostManagement.vue";
 
 // 管理者頁面Router
 import Admin from "../pages/Admin/AdminDashboard.vue"
@@ -14,6 +15,8 @@ import StoreReview from "../pages/Admin/Stores/StoreReview.vue"
 import AccountManagement from "../pages/Admin/Account/AccountManagement.vue"
 import PostManagement from "../pages/Admin/Posts/PostManagement.vue"
 import PostReview from "../pages/Admin/Posts/PostReview.vue";
+import AdminDashboard from "../pages/Admin/AdminDashboard.vue";
+import NewPost from "../pages/Stores/NewPost.vue";
 
 
 
@@ -75,6 +78,23 @@ const routes = [
         component: PostReview,
         meta: { sidebar: false }
     },
+    
+    // // 店家頁面Router
+    {
+        path: "/stores",
+        component: AdminDashboard,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores/store-management",
+        component: SpostManagement,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores/newpost",
+        component: NewPost,
+        meta: { sidebar: false }
+    }
 ];
 
 const router = createRouter({

@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .postmanage-wrapper {
+    @apply w-full px-4 md:px-8 lg:px-16 py-6 max-w-screen-xl mx-auto;
+  }
+
+  .postmanage-header {
+    @apply flex justify-between items-center mb-6;
+  }
+
+  .postmanage-title {
+    @apply text-2xl md:text-3xl font-bold;
+  }
+
+  /* .postmanage-header-actions {
+     @apply flex flex-col gap-2 md:ml-4 md:mt-0 mt-4 md:items-start;
+  } */
+  .postmanage-filter-toggle {
+    @apply flex items-center mb-6;
+  }
+
+  .postmanage-filter-label {
+    @apply text-sm mr-2 md:text-base;
+  }
+
+  .postmanage-switch {
+    @apply inline-flex items-center cursor-pointer;
+  }
+
+  .postmanage-switch-bar {
+    @apply w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-black transition;
+  }
+
+  .post-card-list {
+    @apply mt-4;
+  }
+
+  .post-card {
+    @apply flex flex-col md:flex-row items-start md:items-center bg-white p-4 rounded-lg shadow;
+  }
+
+  .post-thumb {
+    @apply w-full md:w-24 h-24 bg-gray-200 mb-4 md:mb-0 md:mr-4 rounded;
+  }
+
+  .post-content {
+    @apply flex-1 text-sm;
+  }
+
+  .post-status {
+    @apply flex items-center gap-1 text-sm text-gray-600;
+  }
+
+  .post-button {
+    @apply px-4 py-2 bg-black text-white text-sm rounded w-32;
+  }
+
+  .post-actions {
+   @apply ml-auto flex gap-2 flex-col md:items-end;
+  }
+   .post-header-actions {
+    @apply ml-auto flex gap-2 flex-col md:items-end pr-4;
+  }
+}
