@@ -5,7 +5,7 @@
 /* ================= 使用者註冊畫面 ================= */
 @layer components {
   .users-page .users-label {
-    @apply block text-sm font-medium text-gray-700 mb-2;
+    @apply block text-sm font-medium text-gray-700 mb-2 font-bold;
   }
 
   .users-page .users-input {
