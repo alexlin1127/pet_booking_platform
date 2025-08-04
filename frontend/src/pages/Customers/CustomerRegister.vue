@@ -4,9 +4,11 @@ import { ref, computed } from 'vue'
 import FormTemplate from '../../components/UI/FormTemplate.vue'
 
 // 表單資料
+const name = ref('')
 const account = ref('')
 const password = ref('')
 const confirmPassword = ref('')
+const email = ref('')
 const agreePrivacy = ref(false)
 
 // 帳號驗證：不可有特殊符號、不可中文，可純英文或英文+數字，4字元以上
@@ -32,9 +34,13 @@ const isConfirmPasswordValid = computed(() => {
   return password.value === confirmPassword.value && password.value !== ''
 })
 
+// 必填欄位驗證
+const isNameValid = computed(() => name.value.trim().length > 0)
+const isEmailValid = computed(() => email.value.trim().length > 0)
+
 // 按鈕是否可點選
 const isDisabled = computed(() => {
-  return !agreePrivacy.value || !isAccountValid.value || !isPasswordValid.value || !isConfirmPasswordValid.value
+  return !isNameValid.value || !isAccountValid.value || !isPasswordValid.value || !isConfirmPasswordValid.value || !isEmailValid.value || !agreePrivacy.value
 })
 
 const handleSubmit = () => {
@@ -51,30 +57,35 @@ const handleSubmit = () => {
             <div>
                 <div class="mb-4">
                     <label class="customers-register-label">姓名 *</label>
-                    <input type="text" class="customers-register-input" placeholder="請輸入您的姓名">
+                    <input type="text" class="customers-register-input" v-model="name" placeholder="請輸入您的姓名">
+                    <p v-if="!isNameValid && name !== ''" class="customers-register-error">姓名為必填</p>
                 </div>
                 <div class="mb-4">
                     <label class="customers-register-label">帳號 *</label>
                     <input type="text" class="customers-register-input" v-model="account" placeholder="請輸入帳號名稱（至少4字元）">
                     <p v-if="account && !isAccountValid" class="customers-register-error">帳號僅能為英文或英文+數字，且不可有特殊符號或中文，至少4字元</p>
+                    <p v-if="!isAccountValid && account === ''" class="customers-register-error">帳號為必填</p>
                 </div>
                 <div class="mb-4">
                     <label class="customers-register-label">密碼 *</label>
                     <input type="password" class="customers-register-input" v-model="password" placeholder="請輸入密碼（至少8字元）">
                     <p v-if="password && !isPasswordValid" class="customers-register-error">密碼必須至少8字元，僅限英文或數字，不可有特殊符號或中文</p>
+                    <p v-if="!isPasswordValid && password === ''" class="customers-register-error">密碼為必填</p>
                 </div>
                 <div class="mb-4">
                     <label class="customers-register-label">確認密碼 *</label>
                     <input type="password" class="customers-register-input" v-model="confirmPassword" placeholder="請重新輸入密碼">
                     <p v-if="confirmPassword && !isConfirmPasswordValid" class="customers-register-error">密碼不一致</p>
+                    <p v-if="!isConfirmPasswordValid && confirmPassword === ''" class="customers-register-error">確認密碼為必填</p>
                 </div>
                 <div class="mb-4">
                     <label class="customers-register-label">Email *</label>
-                    <input type="text" class="customers-register-input" placeholder="請輸入您的Email　">
+                    <input type="text" class="customers-register-input" v-model="email" placeholder="請輸入您的Email">
+                    <p v-if="!isEmailValid && email === ''" class="customers-register-error">Email為必填</p>
                 </div>
                 <div class="mb-4">
                     <label class="customers-register-label">聯絡電話 </label>
-                    <input type="tel" class="customers-register-input" placeholder="（非必填）　請輸入您的電話">
+                    <input type="tel" class="customers-register-input" placeholder="請輸入您的電話">
                 </div>
             </div>
             <div class="mb-4 text-center">
