@@ -1,11 +1,15 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../auth/WelcomePage.vue";
 import Login from "../auth/Login.vue";
-import Register from "../auth/Register/Register.vue";
+import Register from "../auth/Register.vue";
 // 使用者註冊畫面Router
-import CustomerRegister from "../auth/Register/CustomerRegister.vue"
-// 商家註冊畫面Router
-import StoreRegister from "../auth/Register/StoreRegister.vue"
+import CustomerRegister from "../pages/Customers/CustomerRegister.vue"
+// 商家畫面Router
+// 商家註冊
+import StoreRegister from "../pages/Stores/StoreRegister.vue"
+// 商家新增貼文
+import StoreAddPost from "../pages/Stores/Posts/AddPosts.vue"
+
 
 // 管理者頁面Router
 import Admin from "../pages/Admin/AdminDashboard.vue"
@@ -38,11 +42,18 @@ const routes = [
         component: CustomerRegister,
         meta: { sidebar: false }
     },
+    // 商家
     {
         path: "/register/stores/:step",
         component: StoreRegister,
         meta: { sidebar: false }
     },
+    {
+        path: "/stores/posts/add",
+        component: StoreAddPost,
+        meta: { sidebar: false }
+    },
+
 
     // // 管理者頁面Router
     {
