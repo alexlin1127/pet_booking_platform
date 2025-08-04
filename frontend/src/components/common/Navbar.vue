@@ -27,7 +27,7 @@
             <p  v-if="role == 'admin'"> Hi,管理者</p>
             <RouterLink to="/login">
                 <button class="btn login-btn" v-if="!login">
-                    註冊/登入
+                    登入
                 </button>
                 <button class="btn logout-btn" v-else>
                     登出
