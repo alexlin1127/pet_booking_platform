@@ -1,59 +1,110 @@
 <script setup>
+
 import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
 import FormTemplate from '../../components/UI/FormTemplate.vue'
 
-const route = useRoute()
-
+// 表單資料
+const account = ref('')
+const password = ref('')
+const confirmPassword = ref('')
 const agreePrivacy = ref(false)
-const isDisabled = computed(() => {
-    return !agreePrivacy.value
+
+// 帳號驗證：不可有特殊符號、不可中文，可純英文或英文+數字，4字元以上
+const isAccountValid = computed(() => {
+  // 僅允許英文或英文+數字，長度4以上
+  const accountRegex = /^[A-Za-z][A-Za-z0-9]{3,}$/
+  // 不可有中文
+  const hasChinese = /[\u4e00-\u9fa5]/.test(account.value)
+  return accountRegex.test(account.value) && !hasChinese
 })
 
-const submitForm = () => {
-    console.log('確認註冊')
+// 密碼驗證：8字元以上，可純英文、純數字或英文+數字，不可有中文或特殊符號
+const isPasswordValid = computed(() => {
+  // 僅允許英文或數字，至少8字元
+  const passwordRegex = /^[A-Za-z\d]{8,}$/
+  // 不可有中文
+  const hasChinese = /[\u4e00-\u9fa5]/.test(password.value)
+  return passwordRegex.test(password.value) && !hasChinese
+})
+
+// 確認密碼是否相同
+const isConfirmPasswordValid = computed(() => {
+  return password.value === confirmPassword.value && password.value !== ''
+})
+
+// 按鈕是否可點選
+const isDisabled = computed(() => {
+  return !agreePrivacy.value || !isAccountValid.value || !isPasswordValid.value || !isConfirmPasswordValid.value
+})
+
+const handleSubmit = () => {
+  // 這裡可加上後端帳號重複驗證的 API 呼叫
+  console.log('註冊成功')
 }
 
-// 動態計算標題和按鈕文字
-const formTitle = ref("毛主人註冊")
-const buttonText = ref("確認註冊")
-const handleSubmit = () => submitForm()
 </script>
 
 <template>
-    <div class="users-page min-h-screen bg-gray-50 py-8">
-        <FormTemplate :title="formTitle" @submit="handleSubmit">
-            <div class="mb-4">
-                <label class="users-label name">姓名 *</label>
-                <input type="text" class="users-input" placeholder="請填上您的姓名" required>
-            </div>
-            <div class="mb-4">
-                <label class="users-label account">帳號 *</label>
-                <input type="tel" class="users-input" placeholder="請輸入您的電話" required>
-            </div>
-            <div class="mb-4">
-                <label class="users-label password">密碼 *</label>
-                <input type="text" class="users-input" placeholder="請輸入密碼" required>
-            </div>
-            <div class="mb-4">
-                <label class="users-label checkpassword">確認密碼 *</label>
-                <input type="text" class="users-input" placeholder="請再次輸入密碼" required>
-            </div>
-            <div class="mb-4">
-                <label class="users-label localcall">聯絡市話（選填）</label>
-                <input type="text" class="users-input">
+    <div class="customers-register-page">
+        <FormTemplate @submit="handleSubmit">
+            <h1 class="text-4xl text-center font-bold">毛主人註冊</h1>
+            <div>
+                <div class="mb-4">
+                    <label class="customers-register-label">姓名 *</label>
+                    <input type="text" class="customers-register-input" placeholder="請輸入您的姓名">
+                </div>
+                <div class="mb-4">
+                    <label class="customers-register-label">帳號 *</label>
+                    <input type="text" class="customers-register-input" v-model="account" placeholder="請輸入帳號名稱（至少4字元，英文或英文+數字）">
+                    <p v-if="account && !isAccountValid" class="customers-register-error">帳號僅能為英文或英文+數字，且不可有特殊符號或中文，至少4字元</p>
+                </div>
+                <div class="mb-4">
+                    <label class="customers-register-label">密碼 *</label>
+                    <input type="password" class="customers-register-input" v-model="password" placeholder="請輸入密碼（至少8字元，僅限英文或數字，不可特殊符號或中文）">
+                    <p v-if="password && !isPasswordValid" class="customers-register-error">密碼必須至少8字元，僅限英文或數字，不可有特殊符號或中文</p>
+                </div>
+                <div class="mb-4">
+                    <label class="customers-register-label">確認密碼 *</label>
+                    <input type="password" class="customers-register-input" v-model="confirmPassword" placeholder="請重新輸入密碼">
+                    <p v-if="confirmPassword && !isConfirmPasswordValid" class="customers-register-error">密碼不一致</p>
+                </div>
+                <div class="mb-4">
+                    <label class="customers-register-label">Email *</label>
+                    <input type="text" class="customers-register-input" placeholder="請輸入您的Email　">
+                </div>
+                <div class="mb-4">
+                    <label class="customers-register-label">聯絡電話 </label>
+                    <input type="tel" class="customers-register-input" placeholder="（非必填）　請輸入您的電話">
+                </div>
             </div>
             <div class="mb-4 text-center">
                 <label>
                     <input type="checkbox" class="cursor-pointer" v-model="agreePrivacy" />
-                    我同意隱私政策
+                    我同意隱私政策相關規範
                 </label>
             </div>
             <template #actions>
-                <button type="submit" class="form-regist-btn" :disabled="isDisabled">
-                    {{ buttonText }}
-                </button>
+                <div class="flex justify-center w-full">
+                  <button type="submit" class="form-customers-register-btn md:w-auto w-full" :disabled="isDisabled">
+                      同意註冊
+                  </button>
+                </div>
             </template>
         </FormTemplate>
+        <!-- 社群登入卡片 -->
+        <div class="flex flex-col gap-4 mt-8 items-center w-full max-w-xs mx-auto">
+            <button class="customers-register-social-card bg-green-500 text-white font-bold flex items-center px-6 py-3 rounded-lg shadow hover:bg-green-600 transition w-full">
+                <FontAwesomeIcon icon="fa-brands fa-line" class="w-5 h-5" />
+                <span class="flex-1 text-center">Line 登入</span>
+            </button>
+            <button class="customers-register-social-card bg-white text-gray-800 font-bold flex items-center px-6 py-3 rounded-lg shadow border hover:bg-gray-100 transition w-full">
+                <FontAwesomeIcon icon="fa-brands fa-google" class="w-5 h-5" />
+                <span class="flex-1 text-center">Google 登入</span>
+            </button>
+            <button class="customers-register-social-card bg-blue-600 text-white font-bold flex items-center px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition w-full">
+                <FontAwesomeIcon icon="fa-brands fa-facebook-f" class="w-5 h-5" />
+                <span class="flex-1 text-center">Facebook 登入</span>
+            </button>
+        </div>
     </div>
 </template>
