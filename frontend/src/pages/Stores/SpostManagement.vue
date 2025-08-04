@@ -151,7 +151,7 @@ function handleButtonClick({ action, data, button }) {
   :total-pages="totalPages"
   @page-change="handlePageChange"
 />
-<ModalBox
+<ModalBox class="store-page"
     :visible="showModal"
     :title=" `確定刪除此貼文?`"
     :infoRows="infoRows"
