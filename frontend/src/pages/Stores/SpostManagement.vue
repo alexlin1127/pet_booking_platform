@@ -2,6 +2,9 @@
 import { ref, computed, watch } from 'vue'
 import { posts as rawPosts } from '@/data/postsfakedata.js'
 import Pagination from '@/components/common/Pagination.vue'
+import { useRouter } from 'vue-router' // 引入路由
+
+const router = useRouter()
 
 const allPosts = ref(rawPosts)  // rawPosts 就是從檔案 import 的資料
 
@@ -39,6 +42,23 @@ watch(isGrooming, () => {
 function handlePageChange(page) {
   currentPage.value = page
 }
+// 查看文章
+function viewPost(id) {
+  router.push(`/admin/posts/${id}`)  // 根據實際路由設計修改
+}
+
+// 刪除文章
+function deletePost(id) {
+  if (confirm('確定要刪除這篇文章嗎？')) {
+    // 模擬刪除動作（實際會發 API）
+    console.log('刪除文章 id:', id)
+    allPosts.value = allPosts.value.filter(allPosts => allPosts.id !== id)
+  }
+}
+//按鈕-新增貼文跳轉
+function goToNewPost() {
+  router.push('/stores/newpost')
+}
 </script>
 <template>
 <!-- 外層容器 -->
@@ -49,7 +69,7 @@ function handlePageChange(page) {
       <h1 class="postmanage-title">貼文管理</h1>
     </div>
       <div class="post-header-actions">
-      <button class="post-button">新增貼文</button>
+      <button class="post-button" @click="goToNewPost">新增貼文</button>
       <button class="post-button">送出審核</button>
       </div>
     </div>
@@ -80,8 +100,8 @@ function handlePageChange(page) {
           <i class="i-bi-check2-all text-lg"></i>
           <span>{{ post.status }}</span>
         </div>
-        <button class="post-button">查看全文</button>
-        <button class="post-button">刪除文章</button>
+        <button class="post-button" @click="viewPost(post.id)">查看完整文章</button>
+        <button class="post-button" @click="deletePost(post.id)">刪除文章</button>
       </div>
     </div>
   </div>
