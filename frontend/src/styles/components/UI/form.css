@@ -4,23 +4,74 @@
 
 /* ================= FormTemplate 元件 ================= */
 @layer components {
+  /* 外層容器 */
   .form-template-container {
-    @apply max-w-md mx-auto p-6 bg-white rounded-lg shadow-md;
+    @apply w-full px-4 md:px-8 lg:px-16 py-6 max-w-screen-xl mx-auto;
   }
 
+  /* 標題 */
   .form-template-title {
-    @apply text-2xl font-bold text-center mb-6 text-gray-800;
+    @apply text-xl md:text-3xl font-bold text-gray-800 mb-6;
   }
 
-  .form-template-content {
-    @apply space-y-4;
+
+  /* 每個欄位群組 */
+  .form-group {
+    @apply flex flex-col gap-2;
   }
 
+  /* 表單標籤 */
+  .form-group label {
+    @apply text-sm font-medium text-gray-700;
+  }
+
+  /* 輸入欄位 */
+  .form-group input[type='text'],
+  .form-group textarea {
+    @apply w-full border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400;
+  }
+
+  .form-group textarea {
+    @apply resize-none h-28;
+  }
+
+  /* 按鈕列：送出 / 取消 */
   .form-template-actions {
-    @apply pt-4;
+    @apply col-span-1 md:col-span-2 flex justify-end gap-4 mt-6;
   }
 
-  .form-regist-btn {
-    @apply w-full bg-black text-white hover:bg-gray-800 py-3 px-4 rounded-lg font-medium transition disabled:bg-gray-400 disabled:cursor-not-allowed;
+  /* 單選、複選區塊（服務／標籤） */
+  .form-radio-group,
+  .form-checkbox-group {
+    @apply flex flex-wrap gap-4;
+  }
+
+  .form-radio-group label,
+  .form-checkbox-group label {
+    @apply flex items-center gap-2 text-sm text-gray-700;
+  }
+
+  /* 上傳圖片按鈕 */
+  .upload-btn {
+    @apply bg-black text-white text-sm px-4 py-2 text-center whitespace-nowrap rounded-md hover:bg-gray-800;
+  }
+
+  /* 按鈕 */
+  .btn-outline {
+    @apply border border-gray-400 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100;
+  }
+
+  .btn-primary {
+    @apply bg-black text-white px-5 py-2 rounded-md hover:bg-gray-800;
+  }
+
+
+
+  /* 桌機加寬時 input 欄寬限制 */
+  @media (min-width: 1024px) {
+    .form-input,
+    .form-textarea {
+      @apply max-w-2xl;
+    }
   }
 }
