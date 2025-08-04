@@ -16,7 +16,7 @@
 
     /* 表單控制項 ---------------------------- */
     .storereview-label {
-        @apply block text-sm font-medium text-gray-700 mb-1;
+        @apply block text-sm font-medium text-gray-700 mb-1 font-bold;
     }
 
     .storereview-input {
