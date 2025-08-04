@@ -55,12 +55,12 @@ const handleSubmit = () => {
                 </div>
                 <div class="mb-4">
                     <label class="customers-register-label">帳號 *</label>
-                    <input type="text" class="customers-register-input" v-model="account" placeholder="請輸入帳號名稱（至少4字元，英文或英文+數字）">
+                    <input type="text" class="customers-register-input" v-model="account" placeholder="請輸入帳號名稱（至少4字元）">
                     <p v-if="account && !isAccountValid" class="customers-register-error">帳號僅能為英文或英文+數字，且不可有特殊符號或中文，至少4字元</p>
                 </div>
                 <div class="mb-4">
                     <label class="customers-register-label">密碼 *</label>
-                    <input type="password" class="customers-register-input" v-model="password" placeholder="請輸入密碼（至少8字元，僅限英文或數字，不可特殊符號或中文）">
+                    <input type="password" class="customers-register-input" v-model="password" placeholder="請輸入密碼（至少8字元）">
                     <p v-if="password && !isPasswordValid" class="customers-register-error">密碼必須至少8字元，僅限英文或數字，不可有特殊符號或中文</p>
                 </div>
                 <div class="mb-4">
@@ -93,15 +93,15 @@ const handleSubmit = () => {
         </FormTemplate>
         <!-- 社群登入卡片 -->
         <div class="flex flex-col gap-4 mt-8 items-center w-full max-w-xs mx-auto">
-            <button class="customers-register-social-card bg-green-500 text-white font-bold flex items-center px-6 py-3 rounded-lg shadow hover:bg-green-600 transition w-full">
+            <button class="customers-register-social-card customers-register-social-card--line">
                 <FontAwesomeIcon icon="fa-brands fa-line" class="w-5 h-5" />
                 <span class="flex-1 text-center">Line 登入</span>
             </button>
-            <button class="customers-register-social-card bg-white text-gray-800 font-bold flex items-center px-6 py-3 rounded-lg shadow border hover:bg-gray-100 transition w-full">
+            <button class="customers-register-social-card customers-register-social-card--google">
                 <FontAwesomeIcon icon="fa-brands fa-google" class="w-5 h-5" />
                 <span class="flex-1 text-center">Google 登入</span>
             </button>
-            <button class="customers-register-social-card bg-blue-600 text-white font-bold flex items-center px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition w-full">
+            <button class="customers-register-social-card customers-register-social-card--facebook">
                 <FontAwesomeIcon icon="fa-brands fa-facebook-f" class="w-5 h-5" />
                 <span class="flex-1 text-center">Facebook 登入</span>
             </button>
