@@ -6,6 +6,7 @@
 @layer components {
   .form-template-container {
     @apply max-w-md mx-auto p-6 bg-white rounded-lg shadow-md;
+    @apply md:max-w-xl md:p-10;
   }
 
   .form-template-title {
