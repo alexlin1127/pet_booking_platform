@@ -95,15 +95,15 @@ const handleSubmit = () => {
         <div class="flex flex-col gap-4 mt-8 items-center w-full max-w-xs mx-auto">
             <button class="customers-register-social-card customers-register-social-card--line">
                 <FontAwesomeIcon icon="fa-brands fa-line" class="w-5 h-5" />
-                <span class="flex-1 text-center">Line 登入</span>
+                <span class="flex-1 text-center">Line 註冊</span>
             </button>
             <button class="customers-register-social-card customers-register-social-card--google">
                 <FontAwesomeIcon icon="fa-brands fa-google" class="w-5 h-5" />
-                <span class="flex-1 text-center">Google 登入</span>
+                <span class="flex-1 text-center">Google 註冊</span>
             </button>
             <button class="customers-register-social-card customers-register-social-card--facebook">
                 <FontAwesomeIcon icon="fa-brands fa-facebook-f" class="w-5 h-5" />
-                <span class="flex-1 text-center">Facebook 登入</span>
+                <span class="flex-1 text-center">Facebook 註冊</span>
             </button>
         </div>
     </div>
