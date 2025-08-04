@@ -3,10 +3,11 @@ import { ref, computed, watch } from 'vue'
 import { posts as rawPosts } from '@/data/postsfakedata.js'
 import Pagination from '@/components/common/Pagination.vue'
 import { useRouter } from 'vue-router' // 引入路由
+import ModalBox from '@/components/UI/ModalBox.vue'
 
 const router = useRouter()
 
-const allPosts = ref(rawPosts)  // rawPosts 就是從檔案 import 的資料
+const allPosts = ref([...rawPosts])  // rawPosts 就是從檔案 import 的資料
 
 // 篩選類別
 const isGrooming = ref(true) // 初始為「美容」
@@ -46,19 +47,58 @@ function handlePageChange(page) {
 function viewPost(id) {
   router.push(`/admin/posts/${id}`)  // 根據實際路由設計修改
 }
+const showModal = ref(false)
+const selectedPost = ref(null)
+const infoRows = ref([])
+// 點擊刪除按鈕：觸發開啟 Modal 並帶入該篇文章
+function openDeleteModal(post) {
+  console.log('🔍 傳進來的 post:', post)
+  if (!post) {
+    console.warn('⚠️ post 是 undefined，請檢查按鈕綁定位置！')
+    return
+  }
+  selectedPost.value = post
+  infoRows.value = [
+    [`「${post.title}」`, post.content ]
+  ]
+  showModal.value = true
+}
+
 
 // 刪除文章
-function deletePost(id) {
-  if (confirm('確定要刪除這篇文章嗎？')) {
-    // 模擬刪除動作（實際會發 API）
-    console.log('刪除文章 id:', id)
-    allPosts.value = allPosts.value.filter(allPosts => allPosts.id !== id)
-  }
+function deletePost() {
+  if (!selectedPost.value) return
+  console.log('🧪 刪除這筆：', selectedPost.value)
+// ✅ 實際刪除
+ const before = allPosts.value.length  
+allPosts.value = allPosts.value.filter(p => String(p.id) !== String(selectedPost.value.id))
+
+const after = allPosts.value.length
+
+  console.log(`📉 刪除前 ${before} 筆，刪除後 ${after} 筆`)
+  // ✅ 關閉 modal
+  showModal.value = false
+  selectedPost.value = null
 }
 //按鈕-新增貼文跳轉
 function goToNewPost() {
   router.push('/stores/newpost')
 }
+function debug(post) {
+  console.log('🔥 debug post:', post)
+}
+//modelbox按鈕點擊處理
+function handleButtonClick({ action, data, button }) {
+  console.log('🔥 收到 Modal 回傳:', action, data)
+
+  if (action === 'cancel') {
+    showModal.value = false
+    selectedPost.value = null
+  } else if (action === 'confirm') {
+    deletePost()
+  }
+}
+
 </script>
 <template>
 <!-- 外層容器 -->
@@ -101,7 +141,7 @@ function goToNewPost() {
           <span>{{ post.status }}</span>
         </div>
         <button class="post-button" @click="viewPost(post.id)">查看完整文章</button>
-        <button class="post-button" @click="deletePost(post.id)">刪除文章</button>
+        <button class="post-button"@click="() => { console.log(post); openDeleteModal(post) }">刪除文章</button>
       </div>
     </div>
   </div>
@@ -111,5 +151,24 @@ function goToNewPost() {
   :total-pages="totalPages"
   @page-change="handlePageChange"
 />
+<ModalBox
+    :visible="showModal"
+    :title=" `確定刪除此貼文?`"
+    :infoRows="infoRows"
+    :buttons="[
+      {
+        text: '取消並返回',
+        action: 'cancel',
+        class: 'modal-btn-cancel'
+      },
+      {
+        text: '刪除',
+        action: 'confirm',
+        class: 'modal-btn-danger'
+      }
+    ]"
+    @close="showModal = false"
+    @button-click="handleButtonClick"
+  />
 </template>
 <style src="@/styles/pages/admin/Stores/storemanagement.css"></style>
