@@ -4,11 +4,12 @@ import Login from "../auth/Login.vue";
 import Register from "../auth/Register.vue";
 // 使用者註冊畫面Router
 import CustomerRegister from "../pages/Customers/CustomerRegister.vue"
+
 // 商家畫面Router
-// 商家註冊
 import StoreRegister from "../pages/Stores/StoreRegister.vue"
-// 商家新增貼文
+import StoreManage from "../pages/Stores/Posts/Postsmanage.vue"
 import StoreAddPost from "../pages/Stores/Posts/AddPosts.vue"
+import StorePostView from "../pages/Stores/Posts/PostsView.vue"
 
 
 // 管理者頁面Router
@@ -42,10 +43,16 @@ const routes = [
         component: CustomerRegister,
         meta: { sidebar: false }
     },
-    // 商家
+
+    // 商家頁面路由
     {
         path: "/register/stores/:step",
         component: StoreRegister,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores/posts/manage",
+        component: StoreManage,
         meta: { sidebar: false }
     },
     {
@@ -53,7 +60,11 @@ const routes = [
         component: StoreAddPost,
         meta: { sidebar: false }
     },
-
+    {
+        path: "/stores/posts/view/:id",
+        component: StorePostView,
+        meta: { sidebar: false }
+    },
 
     // // 管理者頁面Router
     {
