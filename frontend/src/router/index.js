@@ -61,6 +61,11 @@ const routes = [
         meta: { sidebar: false }
     },
     {
+        path: "/stores/posts/edit/:id",
+        component: StoreAddPost,
+        meta: { sidebar: false }
+    },
+    {
         path: "/stores/posts/view/:id",
         component: StorePostView,
         meta: { sidebar: false }
