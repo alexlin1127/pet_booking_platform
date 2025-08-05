@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import FormTemplate from '../../../components/UI/FormTemplate.vue'
+
+const router = useRouter()
 
 function handleSubmit() {
     console.log('提交貼文！')
@@ -12,6 +15,10 @@ const otherText = ref("")
 
 // 圖片預覽假資料
 const images = ref([]) // 之後可改為圖片檔案陣列
+
+function goToManage() {
+  router.push('/stores/posts/manage')
+}
 </script>
 
 <template>
@@ -68,7 +75,7 @@ const images = ref([]) // 之後可改為圖片檔案陣列
                 </div>
             </div>
             <div class="addposts-button-group">
-                <button type="button" class="addposts-cancel-btn">取消</button>
+                <button type="button" class="addposts-cancel-btn" @click="goToManage">取消</button>  
                 <button type="submit" class="addposts-submit-btn">送出審核</button>
             </div>
         </FormTemplate>
