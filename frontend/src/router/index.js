@@ -5,10 +5,6 @@ import Register from "../auth/Register.vue";
 
 // 使用者畫面Router
 import CustomerRegister from "../pages/Customers/CustomerRegister.vue"
-import NewsPage from "../pages/Customers/News.vue"
-import StoresPage from "../pages/Customers/StoresView.vue"
-import BookingGroomingPage from "../pages/Customers/Booking/Grooming.vue"
-import BookingLodgingPage from "../pages/Customers/Booking/Lodging.vue"
 
 // 商家畫面Router
 import StoreRegister from "../pages/Stores/StoreRegister.vue"
@@ -23,6 +19,12 @@ import StoreReview from "../pages/Admin/Stores/StoreReview.vue"
 import AccountManagement from "../pages/Admin/Account/AccountManagement.vue"
 import PostManagement from "../pages/Admin/Posts/PostManagement.vue"
 import PostReview from "../pages/Admin/Posts/PostReview.vue";
+
+// 前台頁面Router - 使用正確的路徑
+import NewsPage from "../pages/Customers/News.vue";
+import StoresPage from "../pages/Customers/StoresView.vue";
+import BookingGroomingPage from "../pages/Customers/Booking/Grooming.vue";
+import BookingLodgingPage from "../pages/Customers/Booking/Lodging.vue";
 
 
 
