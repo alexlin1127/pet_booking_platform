@@ -32,7 +32,9 @@ import './styles/pages/Customers/Register/customersregister.css'
 
 // 商家頁面樣式
 import './styles/pages/Stores/Register/storesregister.css'
+import './styles/pages/Stores/Posts/postsmanage.css'
 import './styles/pages/Stores/Posts/addposts.css'
+import './styles/pages/Stores/Posts/postsview.css'
 
 // 管理員頁面樣式
 import './styles/pages/Admin/admindashboard.css'
