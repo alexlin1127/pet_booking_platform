@@ -8,7 +8,7 @@ import CustomerRegister from "../pages/Customers/CustomerRegister.vue"
 // 商家畫面Router
 import StoreRegister from "../pages/Stores/StoreRegister.vue"
 import StoreManage from "../pages/Stores/Posts/Postsmanage.vue"
-import StoreAddPost from "../pages/Stores/Posts/AddPosts.vue"
+import StoreAddPost from "../pages/Stores/Posts/PostsProcess.vue"
 import StorePostView from "../pages/Stores/Posts/PostsView.vue"
 
 
