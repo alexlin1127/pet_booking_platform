@@ -3,8 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* AddPosts.vue 專用 Tailwind utility class */
-
 @layer components {
   /* 最外層容器 */
   .addposts-container {
@@ -13,6 +11,11 @@
 
   /* 頁面標題 */
   .addposts-title {
+    @apply text-4xl font-bold mb-6 text-gray-800;
+  }
+
+  /* 編輯模式標題 */
+  .editposts-title {
     @apply text-4xl font-bold mb-6 text-gray-800;
   }
 
@@ -49,7 +52,7 @@
     @apply w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500;
   }
 
-    /* 其他標籤輸入框 */
+  /* 其他標籤輸入框 */
   .addposts-other-input {
     @apply ml-2 border-b border-gray-400 focus:border-blue-500 outline-none w-24 bg-transparent text-sm;
   }
@@ -89,21 +92,26 @@
   .addposts-submit-btn {
     @apply bg-black text-white py-2 rounded-lg font-medium hover:bg-gray-800 transition;
   }
-}@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
-@layer components {
+  /* 編輯模式提交按鈕 */
+  .editposts-submit-btn {
+    @apply bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition;
+  }
+
   /* 外層容器 */
   .form-template-container {
     @apply w-full px-4 md:px-8 lg:px-16 py-6 max-w-screen-xl mx-auto;
+  }
+
+  /* 表單內容 */
+  .form-template-content {
+    @apply space-y-6;
   }
 
   /* 標題 */
   .form-template-title {
     @apply text-xl md:text-3xl font-bold text-gray-800 mb-6;
   }
-
 
   /* 每個欄位群組 */
   .form-group {
@@ -154,8 +162,6 @@
   .btn-primary {
     @apply bg-black text-white px-5 py-2 rounded-md hover:bg-gray-800;
   }
-
-
 
   /* 桌機加寬時 input 欄寬限制 */
   @media (min-width: 1024px) {
