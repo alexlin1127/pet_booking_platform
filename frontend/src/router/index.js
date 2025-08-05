@@ -8,7 +8,7 @@ import CustomerRegister from "../pages/Customers/CustomerRegister.vue"
 // 商家畫面Router
 import StoreRegister from "../pages/Stores/StoreRegister.vue"
 import StoreManage from "../pages/Stores/Posts/Postsmanage.vue"
-import StoreAddPost from "../pages/Stores/Posts/PostsProcess.vue"
+import StorePostProcess from "../pages/Stores/Posts/PostsProcess.vue"
 import StorePostView from "../pages/Stores/Posts/PostsView.vue"
 
 
@@ -26,7 +26,7 @@ const routes = [
     {
         path: "/",
         component: Home,
-        meta: { sidebar: true }
+        meta: { sidebar: false }
     },
     {
         path: "/login",
@@ -57,12 +57,12 @@ const routes = [
     },
     {
         path: "/stores/posts/add",
-        component: StoreAddPost,
+        component: StorePostProcess,
         meta: { sidebar: false }
     },
     {
         path: "/stores/posts/edit/:id",
-        component: StoreAddPost,
+        component: StorePostProcess,
         meta: { sidebar: false }
     },
     {
