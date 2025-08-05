@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================= 側邊欄 ================= */
+@layer components {
+  .sidebar {
+    @apply flex flex-col items-start w-[200px] min-w-[60px] overflow-hidden z-40 bg-white min-h-full;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-right: 2px solid #a3a9b7;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-collapsed {
+    @apply w-[60px];
+  }
+
+  .sidebar-open {
+    @apply w-[200px];
+  }
+
+  .functionmenu {
+    @apply cursor-pointer w-full flex items-center justify-center select-none;
+    background-color: #1f2937;
+  }
+
+  .functionmenu-open {
+    @apply h-16;
+  }
+
+  .functionmenu-collapsed {
+    @apply min-h-full flex flex-col items-center justify-center;
+  }
+
+  .sidebar-menu-text {
+    @apply text-white flex items-center gap-2;
+  }
+
+  .sidebar-menu-icon {
+    @apply text-white ml-1;
+  }
+
+  .sidebar-menu-text-collapsed {
+    @apply flex flex-col items-center pt-8 gap-4 text-xl text-white w-full min-h-full leading-tight;
+  }
+
+  /* ================= 側邊欄連結樣式 ================= */
+  .sidebar-links {
+    @apply w-full bg-gray-50 flex-1;
+  }
+
+  .sidebar-menu-section {
+    @apply w-full;
+  }
+
+  .sidebar-submenu-group {
+    @apply w-full;
+  }
+
+  .sidebar-link {
+    @apply block w-full px-4 py-3 text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition-colors duration-200 no-underline;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .sidebar-link:hover {
+    @apply bg-gray-200 text-gray-900;
+  }
+
+  .sidebar-link-active {
+    @apply bg-blue-100 text-blue-700 border-l-4 border-blue-500;
+  }
+
+  .sidebar-submenu {
+    @apply pl-8 text-sm bg-white;
+  }
+
+  .sidebar-submenu.sidebar-link-active {
+    @apply bg-blue-50 text-blue-600;
+  }
+}

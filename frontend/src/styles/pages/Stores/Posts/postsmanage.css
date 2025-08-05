@@ -1,0 +1,259 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* 主容器 */
+  .postmanage-wrapper {
+    @apply w-full px-4 py-6 max-w-screen-xl mx-auto;
+  }
+
+  /* 頁面標頭 */
+  .postmanage-header {
+    @apply flex justify-between items-center mb-6;
+  }
+
+  .postmanage-title {
+    @apply text-2xl font-bold;
+  }
+
+  /* 篩選切換容器 */
+  .postmanage-filter-toggle {
+    @apply flex items-center justify-start gap-4 mb-6;
+  }
+
+  /* 篩選標籤基礎樣式 */
+  .postmanage-filter-label {
+    @apply text-lg font-medium text-gray-700 transition-all duration-300;
+  }
+
+  /* 美容標籤選中樣式 */
+  .postmanage-filter-label.grooming-active {
+    @apply text-pink-600 font-semibold;
+  }
+
+  /* 住宿標籤選中樣式 */
+  .postmanage-filter-label.lodging-active {
+    @apply text-blue-600 font-semibold;
+  }
+
+  /* 主要內容區域 */
+  .postmanage-main-content {
+    @apply flex flex-col items-start gap-4;
+  }
+
+  /* 滑軌 switch 核心樣式 */
+  .postmanage-switch {
+    @apply relative cursor-pointer;
+    width: 70px;
+    height: 30px;   
+  }
+
+  .postmanage-switch-bar {
+    @apply absolute inset-0 transition-all duration-300;
+    background: linear-gradient(to right, #ec4899 50%, #3b82f6 50%);
+    border-radius: 15px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .postmanage-switch-bar::before {
+    content: '';
+    @apply absolute bg-white rounded-full;
+    top: 3px;
+    left: 3px;
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+  }
+
+  .postmanage-switch input:checked + .postmanage-switch-bar::before {
+    transform: translateX(0px);
+  }
+
+  .postmanage-switch input:not(:checked) + .postmanage-switch-bar::before {
+    transform: translateX(37px);
+  }
+
+  .postmanage-switch input:checked + .postmanage-switch-bar {
+  background: linear-gradient(to right, #ec4899 40%, #f9a8d4 60%, #e5e7eb 70%);
+}
+
+  .postmanage-switch input:not(:checked) + .postmanage-switch-bar {
+    background: linear-gradient(to right, #e5e7eb 40%, #3b82f6 60%);
+  }
+
+  .postmanage-switch:hover .postmanage-switch-bar {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
+
+  .postmanage-switch:hover .postmanage-switch-bar::before {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+
+  /* 貼文卡片列表 */
+  .post-card-list {
+    @apply mt-4;
+  }
+
+  /* 貼文卡片 */
+  .post-card {
+    @apply flex flex-col items-start bg-white p-4 rounded-lg shadow mb-4;
+  }
+
+  /* 貼文縮圖 */
+  .post-thumb {
+    @apply w-full h-24 bg-gray-200 mb-4 rounded;
+  }
+
+  /* 貼文內容區 */
+  .post-content {
+    @apply flex-1 text-sm;
+  }
+
+  /* 貼文標題 */
+  .post-title {
+    @apply font-semibold;
+  }
+
+  /* 貼文日期 */
+  .post-date {
+    @apply text-xs text-gray-500;
+  }
+
+  /* 貼文內容摘要 */
+  .post-excerpt {
+    @apply text-xs text-gray-400 truncate;
+  }
+
+  /* 貼文標籤 */
+  .post-tag {
+    @apply inline-block mt-2 text-xs border px-2 py-0.5 rounded;
+  }
+
+  /* 貼文狀態 */
+  .post-status {
+    @apply flex items-center gap-1 text-sm text-gray-600;
+  }
+
+  /* 貼文按鈕 */
+  .post-button {
+    @apply px-4 py-2 bg-black text-white text-sm rounded w-32 mb-2;
+  }
+
+  /* 貼文操作區 */
+  .post-actions {
+    @apply ml-auto flex gap-2 flex-col;
+  }
+
+  /* 頁頭操作區 */
+  .post-header-actions {
+    @apply ml-auto flex gap-2 flex-col pr-4;
+  }
+
+  /* Modal 樣式 */
+  .store-page .modal-row {
+    @apply flex flex-col text-center mb-6;
+  }
+
+  .store-page .modal-label {
+    @apply text-xl font-semibold mb-2 text-gray-800;
+  }
+
+  .store-page .modal-value {
+    @apply text-base whitespace-pre-wrap leading-relaxed text-gray-600;
+  }
+
+  .store-page .modal-buttons {
+    @apply flex flex-col gap-3 mt-8 w-full items-stretch;
+  }
+
+  /* Modal 樣式強化 for Postsmanage.vue */
+  .store-page .modal-title {
+    @apply text-3xl text-center font-bold mb-4;
+  }
+
+  /* Modal 標題正確 class for Postsmanage.vue */
+  .store-page .modal-title-text {
+    @apply text-3xl text-center font-bold mb-4;
+  }
+
+  @media (min-width: 768px) {
+    .store-page .modal-buttons {
+      @apply flex-row gap-4 justify-center items-center;
+    }
+    .store-page .modal-btn {
+      @apply w-auto;
+    }
+  }
+  .store-page .modal-btn {
+    @apply px-5 py-3 text-base rounded-md w-full;
+  }
+
+  /* =========================== */
+  /* 平板樣式 (768px ~ 1024px)   */
+  /* =========================== */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .postmanage-wrapper {
+      @apply px-8 py-8;
+    }
+
+    .postmanage-title {
+      @apply text-3xl;
+    }
+
+    .postmanage-main-content {
+      @apply flex-row items-center;
+    }
+
+    .post-card {
+      @apply flex-row items-center;
+    }
+
+    .post-thumb {
+      @apply w-24 mb-0 mr-4;
+    }
+
+    .post-actions {
+      @apply items-end;
+    }
+
+    .post-header-actions {
+      @apply items-end;
+    }
+  }
+
+  /* =========================== */
+  /* 桌機樣式 (1024px+)          */
+  /* =========================== */
+  @media (min-width: 1024px) {
+    .postmanage-wrapper {
+      @apply px-16 py-8;
+    }
+
+    .postmanage-title {
+      @apply text-4xl;
+    }
+
+    .postmanage-main-content {
+      @apply flex-row items-center;
+    }
+
+    .post-card {
+      @apply flex-row items-center;
+    }
+
+    .post-thumb {
+      @apply w-28 mb-0 mr-6;
+    }
+
+    .post-actions {
+      @apply items-end;
+    }
+
+    .post-header-actions {
+      @apply items-end;
+    }
+  }
+}
