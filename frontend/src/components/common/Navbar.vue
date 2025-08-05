@@ -147,7 +147,7 @@ const toggleMemberSection = () => {
                 <RouterLink to="/news" class="mobile-link" @click="isMobileMenuOpen = false">最新消息</RouterLink>
                 <RouterLink to="/stores" class="mobile-link" @click="isMobileMenuOpen = false">查看店家</RouterLink>
                 <RouterLink to="/booking/grooming" class="mobile-link" @click="isMobileMenuOpen = false">預約美容</RouterLink>
-                <RouterLink to="/booking/hotel" class="mobile-link" @click="isMobileMenuOpen = false">預約住宿</RouterLink>
+                <RouterLink to="/booking/lodging" class="mobile-link" @click="isMobileMenuOpen = false">預約住宿</RouterLink>
             </div>
         </div>
     </nav>
