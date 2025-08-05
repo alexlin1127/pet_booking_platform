@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../auth/WelcomePage.vue";
 import Login from "../auth/Login.vue";
 import Register from "../auth/Register.vue";
+
 // 使用者註冊畫面Router
 import CustomerRegister from "../pages/Customers/CustomerRegister.vue"
 
@@ -10,7 +11,6 @@ import StoreRegister from "../pages/Stores/StoreRegister.vue"
 import StoreManage from "../pages/Stores/Posts/Postsmanage.vue"
 import StorePostProcess from "../pages/Stores/Posts/PostsProcess.vue"
 import StorePostView from "../pages/Stores/Posts/PostsView.vue"
-
 
 // 管理者頁面Router
 import Admin from "../pages/Admin/AdminDashboard.vue"
@@ -53,7 +53,7 @@ const routes = [
     {
         path: "/stores/posts/manage",
         component: StoreManage,
-        meta: { sidebar: false }
+        meta: { sidebar: true }
     },
     {
         path: "/stores/posts/add",
