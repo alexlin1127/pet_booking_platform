@@ -2,43 +2,181 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ================= 導航欄 ================= */
 @layer components {
+  /* ================= 導航欄主體 ================= */
   .nav {
-    @apply fixed top-0 left-0 right-0 w-full h-20 z-50 flex justify-between items-center px-4 md:px-12 bg-white shadow-md;
+    @apply fixed top-0 left-0 right-0 w-full h-20 z-50;
+    @apply flex justify-between items-center px-4 md:px-8 lg:px-12;
+    @apply bg-white shadow-md border-b border-gray-200;
   }
 
+  /* ================= Logo 區域 ================= */
   .navtitle {
-    @apply flex gap-3;
+    @apply flex items-center gap-3 flex-shrink-0;
   }
 
-  .nav img {
-    @apply w-7 h-7 rounded-full border-2 border-gray-400 object-cover bg-gray-100;
+  .navtitle img {
+    @apply w-10 h-10 rounded-full border-2 border-gray-300 object-cover bg-gray-100;
   }
 
-  .nav p {
-    @apply text-base sm:text-2xl;
-  }
-}
-
-/* ================= Router Link ================= */
-@layer components {
-  .router {
-    @apply flex gap-4 items-center;
+  .brand-link {
+    @apply text-lg md:text-xl lg:text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors;
+    @apply no-underline;
   }
 
-  .router a {
-    @apply text-gray-700 hover:text-blue-600 transition;
+  /* ================= 中間導航選單 ================= */
+  .nav-menu {
+    @apply flex items-center gap-4;
   }
-} 
 
-/* ================= 按鈕 ================= */
-@layer components {
-  /* .btn {
-    @apply px-4 py-2 rounded-md font-medium transition;
-  } */
+  .nav-link {
+    @apply text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200;
+    @apply py-2 rounded-md hover:bg-blue-50;
+    @apply no-underline;
+  }
 
-  .login-btn , .logout-btn{
-    @apply bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md font-medium transition;
+  .nav-link.router-link-active {
+    @apply text-blue-600 bg-blue-50;
+  }
+
+  /* ================= 右側用戶區域 ================= */
+  .user-area {
+    @apply flex items-center gap-4 flex-shrink-0;
+  }
+
+  .user-greeting {
+    @apply text-gray-600 font-medium;
+  }
+
+  .greeting-text {
+    @apply font-medium;
+  }
+
+  /* ================= 前後台切換按鈕 ================= */
+  .backend-toggle {
+    @apply hidden lg:block;
+  }
+
+  .toggle-btn {
+    @apply bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-md;
+    @apply font-medium transition-colors duration-200 text-sm;
+  }
+
+  /* ================= 會員中心下拉選單 ================= */
+  .member-center {
+    @apply relative;
+  }
+
+  .dropdown {
+    @apply relative;
+  }
+
+  .dropdown-btn {
+    @apply bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md;
+    @apply font-medium transition-colors duration-200 text-sm;
+  }
+
+  .dropdown-menu {
+    @apply absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg;
+    @apply border border-gray-200 py-2 opacity-0 invisible;
+    @apply transition-all duration-200 transform translate-y-2;
+  }
+
+  .dropdown:hover .dropdown-menu {
+    @apply opacity-100 visible translate-y-0;
+  }
+
+  .dropdown-item {
+    @apply block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-blue-600;
+    @apply transition-colors duration-200 no-underline;
+  }
+
+  /* ================= 登入/登出按鈕 ================= */
+  .auth-buttons {
+    @apply flex items-center;
+  }
+
+  .login-btn,
+  .logout-btn {
+    @apply bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md;
+    @apply font-medium transition-colors duration-200 text-sm;
+  }
+
+  .logout-btn {
+    @apply bg-red-600 hover:bg-red-700;
+  }
+
+  /* ================= 手機版選單 ================= */
+  .mobile-menu-btn {
+    @apply flex items-center;
+  }
+
+  .hamburger-btn {
+    @apply text-2xl text-gray-700 hover:text-blue-600 transition-colors;
+    @apply p-2 rounded-md hover:bg-gray-100;
+  }
+
+  .mobile-sidebar {
+    @apply fixed top-20 left-0 right-0 bg-white shadow-lg border-t border-gray-200;
+    @apply p-4 space-y-4 max-h-screen overflow-y-auto;
+  }
+
+  /* 平板模式下側邊選單寬度為30% */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .mobile-sidebar {
+      @apply left-0 right-auto;
+      width: 30%;
+    }
+  }
+
+  .mobile-section-title {
+    @apply font-bold text-gray-800 text-lg border-b border-gray-200 pb-2 mb-3;
+    @apply hover:text-blue-600 transition-colors duration-200 cursor-pointer;
+  }
+
+  .mobile-member-links {
+    @apply pl-4;
+  }
+
+  .mobile-member {
+    @apply space-y-2;
+  }
+
+  .mobile-nav {
+    @apply space-y-2;
+  }
+
+  .mobile-link {
+    @apply block text-gray-700 hover:text-blue-600 hover:bg-blue-50;
+    @apply px-3 py-3 rounded-md transition-colors duration-200 no-underline;
+  }
+
+  .mobile-link.router-link-active {
+    @apply text-blue-600 bg-blue-50;
+  }
+
+  /* ================= 手機版登入/登出按鈕 ================= */
+  .mobile-auth {
+    @apply flex flex-col;
+  }
+
+  .mobile-auth-btn {
+    @apply bg-black text-white hover:bg-gray-800 px-4 py-3 rounded-md;
+    @apply font-medium transition-colors duration-200 text-sm text-center;
+  }
+
+  /* ================= 響應式調整 ================= */
+  @media (max-width: 1024px) {
+    .nav {
+      @apply px-4;
+    }
+    
+    .navtitle p {
+      @apply text-base;
+    }
+    
+    .navtitle img {
+      @apply w-8 h-8;
+    }
   }
 }
