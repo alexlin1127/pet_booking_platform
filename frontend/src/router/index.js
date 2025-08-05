@@ -3,8 +3,12 @@ import Home from "../auth/WelcomePage.vue";
 import Login from "../auth/Login.vue";
 import Register from "../auth/Register.vue";
 
-// 使用者註冊畫面Router
+// 使用者畫面Router
 import CustomerRegister from "../pages/Customers/CustomerRegister.vue"
+import NewsPage from "../pages/Customers/News.vue"
+import StoresPage from "../pages/Customers/StoresView.vue"
+import BookingGroomingPage from "../pages/Customers/Booking/Grooming.vue"
+import BookingLodgingPage from "../pages/Customers/Booking/Lodging.vue"
 
 // 商家畫面Router
 import StoreRegister from "../pages/Stores/StoreRegister.vue"
@@ -26,6 +30,26 @@ const routes = [
     {
         path: "/",
         component: Home,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/news",
+        component: NewsPage,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores",
+        component: StoresPage,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/booking/grooming",
+        component: BookingGroomingPage,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/booking/lodging",
+        component: BookingLodgingPage,
         meta: { sidebar: false }
     },
     {
