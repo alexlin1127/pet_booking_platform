@@ -19,9 +19,23 @@
         @apply text-2xl md:text-3xl font-bold text-center mb-6;
     }
 
+    /* ================= 按鈕區域（圖片上方） ================= */
+    .article-header {
+        @apply mb-4;
+    }
+
+    .article-buttons-fixed {
+        @apply flex items-center justify-end gap-3;
+    }
+
+    /* ================= 圖片容器 ================= */
+    .img-container {
+        @apply mb-6;
+    }
+
     /* ================= 文章圖片 ================= */
     .article-img {
-        @apply w-full h-64 object-cover rounded-lg mb-6;
+        @apply w-full h-64 object-cover rounded-lg;
     }
 
     /* ================= 文章內容 ================= */
@@ -29,23 +43,52 @@
         @apply text-base leading-relaxed space-y-4 mb-8;
     }
 
-    /* ================= 按鈕區 ================= */
-    .article-buttons {
-        @apply flex justify-center gap-4;
+    /* ================= 按鈕樣式 ================= */
+    .postsview-btn-back,
+    .postsview-btn-edit {
+        @apply bg-black text-white hover:bg-gray-800 font-medium transition-colors;
+        @apply flex items-center justify-center rounded text-sm whitespace-nowrap;
+        @apply w-16 h-8 flex-shrink-0;
+        min-width: 4rem; /* 64px */
     }
 
-    /* 按鈕 有問題*/
-    .btn-back {
-        @apply bg-black w-1/4 mt-8 text-center text-white hover:bg-gray-800 px-14 py-2 rounded-md font-medium transition;
+    /* ================= 響應式設計 ================= */
+    /* 手機版 */
+    @media (max-width: 768px) {
+        .article-buttons-fixed {
+            @apply gap-2;
+        }
+        
+        .postsview-btn-back,
+        .postsview-btn-edit {
+            @apply w-14 h-7 text-xs;
+            min-width: 3.5rem; /* 56px */
+        }
     }
 
-    /* 按鈕 有問題*/
-    .btn-addQ {
-        @apply bg-black w-1/4 mt-8 text-white hover:bg-gray-800 px-14 py-2 rounded-md font-medium transition;
+    /* 平板版 */
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .article-buttons-fixed {
+            gap: 0.625rem; /* 10px */
+        }
+        
+        .postsview-btn-back,
+        .postsview-btn-edit {
+            @apply w-16 h-8 text-sm;
+            min-width: 4rem; /* 64px */
+        }
     }
 
-    /* 按鈕 確認審核 */
-    .btn-check {
-        @apply bg-black w-1/4 mt-8 text-white hover:bg-gray-800 px-14 py-2 rounded-md font-medium transition;
+    /* 桌面版 */
+    @media (min-width: 1025px) {
+        .article-buttons-fixed {
+            @apply gap-3;
+        }
+        
+        .postsview-btn-back,
+        .postsview-btn-edit {
+            @apply w-20 h-9 text-base;
+            min-width: 5rem; /* 80px */
+        }
     }
 }
