@@ -50,11 +50,13 @@ const handleCardClick = (event) => {
     <!-- Title 區域 -->
     <div class="card-title">
       <slot name="title"></slot>
+      <slot name="title2"></slot>
     </div>
     
     <!-- 內容區域 -->
     <div class="card-content">
       <slot name="content"></slot>
+      <slot name="content2"></slot>
       <slot name="count"></slot>
     </div>
     
