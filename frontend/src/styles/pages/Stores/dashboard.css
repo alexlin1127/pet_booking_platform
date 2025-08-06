@@ -148,19 +148,18 @@
 
   /* ===== 房間狀況網格 ===== */
   .rooms-grid {
-    @apply flex flex-col gap-3 w-full;
+    @apply w-full gap-3;
+    display: flex;
+    flex-direction: column;
   }
 
   .room-card {
-    @apply p-3 rounded-lg border-2 transition-all duration-200;
-    min-width: 0;
-    max-width: 100%;
-    width: 100%;
+    @apply p-3 rounded-lg border-2 transition-all duration-200 min-w-0 max-w-full w-full;
   }
   @media (min-width: 768px) {
     .room-card {
       width: auto !important;
-      max-width: 100%;
+      @apply max-w-full;
     }
   }
 
