@@ -61,6 +61,21 @@
         margin-bottom: clamp(0.5rem, 2vw, 0.75rem);
     }
 
+    /* Title2 區域 - 響應式文字大小 */
+    .vertical-card .card-title2 {
+        @apply font-semibold text-gray-900 text-center;
+        font-size: clamp(1.25rem, 3vw, 1.5rem);
+        margin-bottom: clamp(0.5rem, 2vw, 0.75rem);
+    }
+
+    /* Anno 區域 */
+    .vertical-card .card-anno {
+        @apply text-gray-600 text-center;
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
+        margin-bottom: clamp(0.25rem, 1vw, 0.5rem);
+        padding: 0 clamp(0.25rem, 1vw, 0.5rem);
+    }
+
     /* 內容區域 */
     .vertical-card .card-content {
         @apply flex-1;
@@ -70,10 +85,20 @@
         gap: clamp(0.25rem, 1vw, 0.5rem);
     }
 
-    .vertical-card .card-content .countshop,
-    .countpost {
+    /* Content2 區域 */
+    .vertical-card .card-content2 {
+        @apply flex-1;
+        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.25rem, 1vw, 0.5rem);
+    }
+
+    /* Count 區域 */
+    .vertical-card .card-count {
         @apply text-center;
         font-size: clamp(1rem, 2.5vw, 1.25rem);
+        margin-bottom: clamp(0.75rem, 2vw, 1rem);
     }
 
     /* 按鈕區域 - 響應式寬度 */
