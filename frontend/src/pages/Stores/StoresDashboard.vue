@@ -176,7 +176,7 @@ const handlePendingClick = (type) => {
 
       <Card type="vertical" :clickable="true" :hasButton="true" class="pending-card posts"
         @click="handlePendingClick('posts')">
-        <template #title>待審核貼文</template>
+        <template #title>待審核貼文<br class="hidden md:inline">（美容、住宿）</template>
         <template #content>{{ pendingData.posts }} 則</template>
         <template #button>
           <button class="pending-btn">前往審核</button>
