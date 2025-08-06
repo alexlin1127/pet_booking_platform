@@ -7,7 +7,7 @@ const router = useRouter();
 
 // 定義登入狀態
 const login = ref(true); // 改為 true 方便測試
-const role = ref('customers'); // 可以是 'admin', 'stores', 'customers'
+const role = ref('stores'); // 可以是 'admin', 'stores', 'customers'
 
 // 手機版選單狀態
 const isMobileMenuOpen = ref(false);
