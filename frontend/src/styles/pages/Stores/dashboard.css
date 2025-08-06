@@ -255,6 +255,12 @@
     @apply text-center w-full block;
   }
 
-  /* ===== 桌機樣式預留區 ===== */
-  /*@media (min-width: 1024px) { // 桌機樣式預留 } */
+  /* ===== 桌機樣式 (lg: 1024px↑) ===== */
+  @media (min-width: 1024px) {
+    .rooms-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+  }
 }
