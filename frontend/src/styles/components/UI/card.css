@@ -218,33 +218,43 @@
         .vertical-card {
             margin: 0 auto;
         }
-        
+
         .horizontal-card {
             flex-direction: column;
             text-align: center;
         }
-        
+
         .horizontal-card .card-image {
             margin-right: 0;
             margin-bottom: clamp(0.5rem, 2vw, 0.75rem);
         }
-        
+
         .horizontal-card .card-button {
             margin-left: 0;
             margin-top: clamp(0.5rem, 2vw, 0.75rem);
         }
     }
-}
-        @apply flex items-center text-sm text-gray-600;
+
+    /* 額外的資訊項目樣式 */
+    .card-info-item {
+        @apply flex items-center text-gray-600;
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
     }
 
     .card-info-item svg {
-        @apply w-4 h-4 mr-2 text-gray-400;
+        @apply text-gray-400;
+        width: clamp(1rem, 2.5vw, 1.25rem);
+        height: clamp(1rem, 2.5vw, 1.25rem);
+        margin-right: clamp(0.25rem, 1vw, 0.5rem);
     }
 
     /* 標示按鈕樣式 */
     .card-badge {
-        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-2 mb-1;
+        @apply inline-flex items-center rounded-full font-medium bg-blue-100 text-blue-800;
+        padding: clamp(0.125rem, 0.5vw, 0.25rem) clamp(0.5rem, 1.5vw, 0.75rem);
+        font-size: clamp(0.625rem, 1.5vw, 0.75rem);
+        margin-right: clamp(0.25rem, 1vw, 0.5rem);
+        margin-bottom: clamp(0.125rem, 0.5vw, 0.25rem);
     }
 
     /* 圖片樣式 */
@@ -255,6 +265,8 @@
     /* Icon 樣式 */
     .card-icon svg,
     .card-icon img {
-        @apply w-full h-full max-w-20 max-h-20 object-contain;
+        @apply w-full h-full object-contain;
+        max-width: clamp(4rem, 10vw, 5rem);
+        max-height: clamp(4rem, 10vw, 5rem);
     }
 }
