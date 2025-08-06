@@ -53,7 +53,7 @@ class Post(models.Model):
 class CustomerNote(models.Model):
     store_id = models.ForeignKey(Store, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    order_id = models.ForeignKey('Order', on_delete=models.SET_NULL, null=True)
+    order_id = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
     notes = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
