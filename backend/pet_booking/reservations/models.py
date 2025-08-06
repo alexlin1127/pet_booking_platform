@@ -18,7 +18,7 @@ class Reservation_grooming(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 class Grooming_schedules(models.Model):
-    reservation_grooming = models.ForeignKey(
+    reservation_grooming_id = models.ForeignKey(
         Reservation_grooming,
         on_delete = models.CASCADE,
         db_column = 'reservation_grooming_id'
@@ -42,7 +42,7 @@ class Reservation_boarding(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 class Boarding_schedules(models.Model):
-    reservation_boarding = models.ForeignKey(
+    reservation_boarding_id = models.ForeignKey(
         Reservation_boarding,
         on_delete = models.CASCADE,
         db_column = 'reservation_boarding_id'
