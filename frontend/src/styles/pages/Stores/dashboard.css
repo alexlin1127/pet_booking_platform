@@ -19,13 +19,13 @@
     .pending-section {
       width: 100%;
     }
-    .vertical-card,
-    .ranking-card,
-    .pending-card {
+    .stores-dashboard .vertical-card,
+    .stores-dashboard .ranking-card,
+    .stores-dashboard .pending-card {
       width: 33.333333% !important;
       font-size: 1.125rem;
     }
-    .space-card {
+    .stores-dashboard .space-card {
       width: 66.666667% !important;
       font-size: 1.125rem;
     }
@@ -96,11 +96,11 @@
   }
 
   /* ===== 統計卡片區域 ===== */
-  .stats-section {
+  .stores-dashboard .stats-section {
     @apply flex flex-col gap-4 w-full mb-6;
   }
 
-  .stats-section .vertical-card {
+  .stores-dashboard .stats-section .vertical-card {
     @apply w-full bg-white p-4 rounded-xl shadow-sm border border-gray-200;
   }
 
@@ -121,12 +121,12 @@
   }
 
   /* ===== 服務排行與空間狀況區域 ===== */
-  .service-space-section {
+  .stores-dashboard .service-space-section {
     @apply flex flex-col gap-4 w-full mb-6;
   }
 
-  .ranking-card,
-  .space-card {
+  .stores-dashboard .ranking-card,
+  .stores-dashboard .space-card {
     @apply w-full bg-white p-4 rounded-xl shadow-sm border border-gray-200;
   }
 
@@ -181,11 +181,11 @@
   }
 
   /* ===== 待審核區域 ===== */
-  .pending-section {
+  .stores-dashboard .pending-section {
     @apply flex flex-col gap-4 w-full;
   }
 
-  .pending-card {
+  .stores-dashboard .pending-card {
     @apply w-full bg-gray-700 text-white p-4 rounded-xl shadow-lg transition-all duration-200;
     min-width: 0;
     max-width: 100%;
