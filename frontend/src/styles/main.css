@@ -2,18 +2,101 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ================= 響應式根設定 ================= */
+@layer base {
+  html {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+  
+  /* 定義響應式間距變量 */
+  :root {
+    --navbar-height: 4rem; /* 64px at base size */
+    --container-padding: 1rem;
+    --content-gap: 1rem;
+    --border-radius: 0.5rem;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --navbar-height: 5rem; /* 80px */
+      --container-padding: 1.5rem;
+      --content-gap: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --navbar-height: 5rem; /* 80px */
+      --container-padding: 2rem;
+      --content-gap: 2rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    :root {
+      --container-padding: 3rem;
+      --content-gap: 2.5rem;
+    }
+  }
+}
 
 /* ================= Main 區塊 ================= */
 @layer components {
   .main-container {
-    @apply pt-20 min-h-[calc(100vh-10rem)];
+    @apply min-h-screen;
+    padding-top: var(--navbar-height);
+    min-height: calc(100vh - var(--navbar-height));
   }
 
   .main-content {
-    @apply w-full flex min-h-[calc(100vh-10rem)] bg-gray-50;
+    @apply w-full flex bg-gray-50;
+    min-height: calc(100vh - var(--navbar-height));
   }
 
   .content-area {
-    @apply flex-1 p-4 overflow-y-auto;
+    @apply flex-1 overflow-y-auto;
+    padding: var(--container-padding);
+  }
+
+  /* 響應式容器 */
+  .responsive-container {
+    @apply w-full max-w-7xl mx-auto;
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+  }
+
+  .responsive-grid {
+    @apply grid gap-4 sm:gap-6 lg:gap-8;
+  }
+
+  .responsive-grid-1 {
+    @apply grid-cols-1;
+  }
+
+  .responsive-grid-2 {
+    @apply grid-cols-1 md:grid-cols-2;
+  }
+
+  .responsive-grid-3 {
+    @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+  }
+
+  .responsive-grid-4 {
+    @apply grid-cols-1 sm:grid-cols-2 lg:grid-cols-4;
+  }
+
+  /* 響應式間距 */
+  .responsive-spacing {
+    gap: var(--content-gap);
+  }
+
+  .responsive-padding {
+    padding: var(--container-padding);
+  }
+
+  .responsive-margin {
+    margin: var(--container-padding);
   }
 }
