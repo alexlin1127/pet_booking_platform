@@ -8,6 +8,7 @@ import CustomerRegister from "../pages/Customers/CustomerRegister.vue"
 
 // 商家畫面Router
 import StoreRegister from "../pages/Stores/StoreRegister.vue"
+import StoreDashboard from "../pages/Stores/StoresDashboard.vue"
 import StoreManage from "../pages/Stores/Posts/Postsmanage.vue"
 import StorePostProcess from "../pages/Stores/Posts/PostsProcess.vue"
 import StorePostView from "../pages/Stores/Posts/PostsView.vue"
@@ -54,6 +55,7 @@ const routes = [
         component: BookingLodgingPage,
         meta: { sidebar: false }
     },
+    // 登入註冊路由
     {
         path: "/login",
         component: Login,
@@ -69,12 +71,22 @@ const routes = [
         component: CustomerRegister,
         meta: { sidebar: false }
     },
+    {
+        path: "/register/stores/:step",
+        component: StoreRegister,
+        meta: { sidebar: false }
+    },
 
     // 商家頁面路由
     {
         path: "/register/stores/:step",
         component: StoreRegister,
         meta: { sidebar: false }
+    },
+    {
+        path: "/stores/dashboard",
+        component: StoreDashboard,
+        meta: { sidebar: true }
     },
     {
         path: "/stores/posts/manage",
@@ -97,7 +109,7 @@ const routes = [
         meta: { sidebar: false }
     },
 
-    // // 管理者頁面Router
+    // 管理者頁面Router
     {
         path: "/admin",
         component: Admin,
