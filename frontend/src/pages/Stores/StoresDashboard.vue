@@ -1,6 +1,9 @@
 <script setup>
 import Card from '../../components/UI/Card.vue';
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 // 時間週期選擇
 const selectedPeriod = ref('week');
@@ -56,7 +59,19 @@ const periodText = computed(() => selectedPeriod.value === 'week' ? '本週' : '
 // 方法
 const handlePendingClick = (type) => {
   // 導航到對應的審核頁面
-  console.log(`前往${type}審核頁面`);
+  switch(type) {
+    case 'grooming':
+      router.push('/stores/grooming-booking/manage');
+      break;
+    case 'boarding':
+      router.push('/stores/boarding-booking/manage');
+      break;
+    case 'posts':
+      router.push('/stores/posts/manage');
+      break;
+    default:
+      console.log(`前往${type}審核頁面`);
+  }
 };
 </script>
 <template>
@@ -152,34 +167,31 @@ const handlePendingClick = (type) => {
 
     <!-- 待審核項目 -->
     <div class="pending-section">
-      <Card type="vertical" :clickable="true" :hasButton="true" class="pending-card grooming"
-        @click="handlePendingClick('grooming')">
+      <Card type="vertical" :clickable="false" :hasButton="true" class="pending-card grooming">
         <template #title>
           <span>待審核預約<br class="hidden md:inline">（美容）</span>
         </template>
         <template #content>{{ pendingData.grooming }} 筆</template>
         <template #button>
-          <button class="pending-btn">前往審核</button>
+          <button class="pending-btn" @click="handlePendingClick('grooming')">前往審核</button>
         </template>
       </Card>
 
-      <Card type="vertical" :clickable="true" :hasButton="true" class="pending-card boarding"
-        @click="handlePendingClick('boarding')">
+      <Card type="vertical" :clickable="false" :hasButton="true" class="pending-card boarding">
         <template #title>
           <span>待審核預約<br class="hidden md:inline">（住宿）</span>
         </template>
         <template #content>{{ pendingData.boarding }} 筆</template>
         <template #button>
-          <button class="pending-btn">前往審核</button>
+          <button class="pending-btn" @click="handlePendingClick('boarding')">前往審核</button>
         </template>
       </Card>
 
-      <Card type="vertical" :clickable="true" :hasButton="true" class="pending-card posts"
-        @click="handlePendingClick('posts')">
+      <Card type="vertical" :clickable="false" :hasButton="true" class="pending-card posts">
         <template #title>待審核貼文<br class="hidden md:inline">（美容、住宿）</template>
         <template #content>{{ pendingData.posts }} 則</template>
         <template #button>
-          <button class="pending-btn">前往審核</button>
+          <button class="pending-btn" @click="handlePendingClick('posts')">前往審核</button>
         </template>
       </Card>
     </div>
