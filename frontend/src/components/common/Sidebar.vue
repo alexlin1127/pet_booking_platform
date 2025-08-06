@@ -1,17 +1,30 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
 const role = ref("admin")
 
 const isOpen = ref(true)
+const isDesktop = ref(window.matchMedia('(min-width: 1024px)').matches)
+
 const toggleSidebar = () => {
     isOpen.value = !isOpen.value
 }
+
+function handleResize() {
+    isDesktop.value = window.matchMedia('(min-width: 1024px)').matches
+}
+
+onMounted(() => {
+    window.addEventListener('resize', handleResize)
+})
+onUnmounted(() => {
+    window.removeEventListener('resize', handleResize)
+})
 </script>
 
 <template>
-    <div :class="['sidebar', isOpen ? 'sidebar-open' : 'sidebar-collapsed']">
+    <div v-if="isDesktop" :class="['sidebar', isOpen ? 'sidebar-open' : 'sidebar-collapsed']">
         <div :class="['functionmenu', isOpen ? 'functionmenu-open' : 'functionmenu-collapsed']" @click="toggleSidebar">
             <p v-if="isOpen" class="sidebar-menu-text">
                 <span>功</span><span>能</span><span>選</span><span>單</span>
