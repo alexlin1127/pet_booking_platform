@@ -29,6 +29,10 @@
       width: 66.666667% !important;
       font-size: 1.125rem;
     }
+    /* room-card 不受寬度限制影響 */
+    .stores-dashboard .room-card {
+      width: auto !important;
+    }
     .card-title,
     .card-title2,
     .card-content,
@@ -153,21 +157,26 @@
     flex-direction: column;
   }
 
-  .room-card {
-    @apply p-3 rounded-lg border-2 transition-all duration-200 min-w-0 max-w-full w-full;
+  .stores-dashboard .room-card {
+    @apply p-3 rounded-lg border-2 transition-all duration-200;
+    width: 100% !important;
+    min-width: 0;
+    max-width: 100%;
   }
+  
   @media (min-width: 768px) {
-    .room-card {
+    .stores-dashboard .room-card {
       width: auto !important;
-      @apply max-w-full;
+      min-width: 0;
+      max-width: 100%;
     }
   }
 
-  .room-card.occupied {
+  .stores-dashboard .room-card.occupied {
     @apply bg-blue-50 border-blue-500;
   }
 
-  .room-card.vacant {
+  .stores-dashboard .room-card.vacant {
     @apply bg-gray-50 border-gray-300;
   }
 
