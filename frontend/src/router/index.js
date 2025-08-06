@@ -1,14 +1,19 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../auth/WelcomePage.vue";
+
+// 註冊登入
 import Login from "../auth/Login.vue";
 import Register from "../auth/Register.vue";
+import CustomerRegister from "../pages/Customers/CustomerRegister.vue"
+import StoreRegister from "../pages/Stores/StoreRegister.vue"
 
 // 使用者畫面Router
-import CustomerRegister from "../pages/Customers/CustomerRegister.vue"
+
 
 // 商家畫面Router
-import StoreRegister from "../pages/Stores/StoreRegister.vue"
 import StoreDashboard from "../pages/Stores/StoresDashboard.vue"
+import StoreGroomingBookingManage from "../pages/Stores/Management/GroomingBooking.vue"
+import StoreBoardingBookingManage from "../pages/Stores/Management/BoardingBooking.vue"
 import StoreManage from "../pages/Stores/Posts/Postsmanage.vue"
 import StorePostProcess from "../pages/Stores/Posts/PostsProcess.vue"
 import StorePostView from "../pages/Stores/Posts/PostsView.vue"
@@ -83,9 +88,21 @@ const routes = [
         component: StoreRegister,
         meta: { sidebar: false }
     },
+    // 儀表板
     {
         path: "/stores/dashboard",
         component: StoreDashboard,
+        meta: { sidebar: true }
+    },
+    // 預約管理
+    {
+        path: "/stores/grooming-booking/manage",
+        component: StoreGroomingBookingManage,
+        meta: { sidebar: true }
+    },
+    {
+        path: "/stores/boarding-booking/manage",
+        component: StoreBoardingBookingManage,
         meta: { sidebar: true }
     },
     {
