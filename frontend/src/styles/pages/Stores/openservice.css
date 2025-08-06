@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .boarding-type-block {
+    @apply border p-4 rounded;
+  }
+
+  .boarding-type-label {
+    @apply block font-medium mb-2;
+  }
+
+  .boarding-type-checkboxes {
+    @apply flex gap-4;
+  }
+
+  .boarding-type-option {
+    @apply inline-flex items-center;
+  }
+
+  .license-upload-block {
+    @apply border p-4 rounded flex items-center gap-2;
+  }
+
+  .license-label {
+    @apply block font-medium;
+  }
+
+  .upload-btn {
+    @apply bg-black text-white px-4 py-2 rounded hover:bg-gray-800;
+  }
+
+  .form-actions {
+    @apply flex flex-col items-center gap-4 mt-6;
+  }
+
+  .btn-secondary {
+    @apply w-full bg-gray-200 text-black py-2 rounded hover:bg-gray-300;
+  }
+
+  .btn-primary {
+    @apply w-full bg-black text-white py-2 rounded hover:bg-gray-800;
+  }
+}

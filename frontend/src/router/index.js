@@ -11,6 +11,8 @@ import StoreRegister from "../pages/Stores/StoreRegister.vue"
 import StoreManage from "../pages/Stores/Posts/Postsmanage.vue"
 import StorePostProcess from "../pages/Stores/Posts/PostsProcess.vue"
 import StorePostView from "../pages/Stores/Posts/PostsView.vue"
+import SpostManagement from '../pages/Stores/SpostManagement.vue'
+
 
 // 管理者頁面Router
 import Admin from "../pages/Admin/AdminDashboard.vue"
@@ -27,6 +29,9 @@ import NewsPage from "../pages/Customers/News.vue";
 import StoresPage from "../pages/Customers/StoresView.vue";
 import BookingGroomingPage from "../pages/Customers/Booking/Grooming.vue";
 import BookingLodgingPage from "../pages/Customers/Booking/Lodging.vue";
+import StoresInfo from "../pages/Stores/StoresInfo.vue";
+import EditStoresInfo from "../pages/Stores/EditStoresInfo.vue";
+import OpenService from "../pages/Stores/OpenService.vue";
 
 
 
@@ -145,6 +150,21 @@ const routes = [
     {
         path: "/stores/newpost",
         component: NewPost,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores/info",
+        component: StoresInfo,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores/info/edit",
+        component: EditStoresInfo,
+        meta: { sidebar: false }
+    },    
+    {
+        path: "/stores/serviceactivate",
+        component: OpenService,
         meta: { sidebar: false }
     }
 ];
