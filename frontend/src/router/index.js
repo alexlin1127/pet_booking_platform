@@ -1,12 +1,16 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../auth/WelcomePage.vue";
 import Login from "../auth/Login.vue";
-import Register from "../auth/Register/Register.vue";
-// 使用者註冊畫面Router
-import CustomerRegister from "../auth/Register/CustomerRegister.vue"
-// 商家註冊畫面Router
-import StoreRegister from "../auth/Register/StoreRegister.vue"
-import SpostManagement from "../pages/Stores/SpostManagement.vue";
+import Register from "../auth/Register.vue";
+
+// 使用者畫面Router
+import CustomerRegister from "../pages/Customers/CustomerRegister.vue"
+
+// 商家畫面Router
+import StoreRegister from "../pages/Stores/StoreRegister.vue"
+import StoreManage from "../pages/Stores/Posts/Postsmanage.vue"
+import StorePostProcess from "../pages/Stores/Posts/PostsProcess.vue"
+import StorePostView from "../pages/Stores/Posts/PostsView.vue"
 
 // 管理者頁面Router
 import Admin from "../pages/Admin/AdminDashboard.vue"
@@ -18,13 +22,39 @@ import PostReview from "../pages/Admin/Posts/PostReview.vue";
 import AdminDashboard from "../pages/Admin/AdminDashboard.vue";
 import NewPost from "../pages/Stores/NewPost.vue";
 
+// 前台頁面Router - 使用正確的路徑
+import NewsPage from "../pages/Customers/News.vue";
+import StoresPage from "../pages/Customers/StoresView.vue";
+import BookingGroomingPage from "../pages/Customers/Booking/Grooming.vue";
+import BookingLodgingPage from "../pages/Customers/Booking/Lodging.vue";
+
 
 
 const routes = [
     {
         path: "/",
         component: Home,
-        meta: { sidebar: true }
+        meta: { sidebar: false }
+    },
+    {
+        path: "/news",
+        component: NewsPage,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores",
+        component: StoresPage,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/booking/grooming",
+        component: BookingGroomingPage,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/booking/lodging",
+        component: BookingLodgingPage,
+        meta: { sidebar: false }
     },
     {
         path: "/login",
@@ -41,9 +71,31 @@ const routes = [
         component: CustomerRegister,
         meta: { sidebar: false }
     },
+
+    // 商家頁面路由
     {
         path: "/register/stores/:step",
         component: StoreRegister,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores/posts/manage",
+        component: StoreManage,
+        meta: { sidebar: true }
+    },
+    {
+        path: "/stores/posts/add",
+        component: StorePostProcess,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores/posts/edit/:id",
+        component: StorePostProcess,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores/posts/view/:id",
+        component: StorePostView,
         meta: { sidebar: false }
     },
 

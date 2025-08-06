@@ -1,0 +1,173 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* 最外層容器 */
+  .addposts-container {
+    @apply w-[70%] mx-auto;
+  }
+
+  /* 頁面標題 */
+  .addposts-title {
+    @apply text-4xl font-bold mb-6 text-gray-800;
+  }
+
+  /* 編輯模式標題 */
+  .editposts-title {
+    @apply text-4xl font-bold mb-6 text-gray-800;
+  }
+
+  /* 表單內容區塊 */
+  .addposts-form-content {
+    @apply space-y-6;
+  }
+
+  /* 表單標籤 */
+  .addposts-label {
+    @apply block font-bold text-lg mb-2;
+  }
+
+  /* 單選按鈕群組 */
+  .addposts-radio-group {
+    @apply flex gap-6;
+  }
+
+  .addposts-radio-item {
+    @apply font-medium text-base;
+  }
+
+  /* 多選按鈕網格 */
+  .addposts-checkbox-grid {
+    @apply grid grid-cols-3 gap-2;
+  }
+
+  .addposts-checkbox-item {
+    @apply font-medium text-base flex items-center;
+  }
+
+  /* 輸入框 */
+  .addposts-input {
+    @apply w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+
+  /* 其他標籤輸入框 */
+  .addposts-other-input {
+    @apply ml-2 border-b border-gray-400 focus:border-blue-500 outline-none w-24 bg-transparent text-sm;
+  }
+
+  /* 文字區域 */
+  .addposts-textarea {
+    @apply w-full border border-gray-300 rounded-md px-3 py-2 h-40 focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+
+  /* 上傳區塊 */
+  .addposts-upload-area {
+    @apply w-[70%] bg-gray-100 rounded-lg mx-auto flex flex-col items-center py-8 relative;
+  }
+
+  .addposts-upload-btn {
+    @apply bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 mx-auto;
+  }
+
+  /* 圖片預覽區塊 */
+  .addposts-image-preview {
+    @apply mt-6 grid grid-cols-2 gap-4 w-[70%] mx-auto;
+  }
+
+  .addposts-image-placeholder {
+    @apply aspect-square bg-white border border-gray-300 rounded flex items-center justify-center text-gray-400;
+  }
+
+  /* 按鈕群組 */
+  .addposts-button-group {
+    @apply grid grid-cols-2 gap-6 mt-8 w-2/3 mx-auto;
+  }
+
+  .addposts-cancel-btn {
+    @apply border border-gray-400 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-100 transition;
+  }
+
+  .addposts-submit-btn {
+    @apply bg-black text-white py-2 rounded-lg font-medium hover:bg-gray-800 transition;
+  }
+
+  /* 編輯模式提交按鈕 */
+  .editposts-submit-btn {
+    @apply bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition;
+  }
+
+  /* 外層容器 */
+  .form-template-container {
+    @apply w-full px-4 md:px-8 lg:px-16 py-6 max-w-screen-xl mx-auto;
+  }
+
+  /* 表單內容 */
+  .form-template-content {
+    @apply space-y-6;
+  }
+
+  /* 標題 */
+  .form-template-title {
+    @apply text-xl md:text-3xl font-bold text-gray-800 mb-6;
+  }
+
+  /* 每個欄位群組 */
+  .form-group {
+    @apply flex flex-col gap-2;
+  }
+
+  /* 表單標籤 */
+  .form-group label {
+    @apply text-sm font-medium text-gray-700;
+  }
+
+  /* 輸入欄位 */
+  .form-group input[type='text'],
+  .form-group textarea {
+    @apply w-full border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400;
+  }
+
+  .form-group textarea {
+    @apply resize-none h-28;
+  }
+
+  /* 按鈕列：送出 / 取消 */
+  .form-template-actions {
+    @apply col-span-1 md:col-span-2 flex justify-end gap-4 mt-6;
+  }
+
+  /* 單選、複選區塊（服務／標籤） */
+  .form-radio-group,
+  .form-checkbox-group {
+    @apply flex flex-wrap gap-4;
+  }
+
+  .form-radio-group label,
+  .form-checkbox-group label {
+    @apply flex items-center gap-2 text-sm text-gray-700;
+  }
+
+  /* 上傳圖片按鈕 */
+  .upload-btn {
+    @apply bg-black text-white text-sm px-4 py-2 text-center whitespace-nowrap rounded-md hover:bg-gray-800;
+  }
+
+  /* 按鈕 */
+  .btn-outline {
+    @apply border border-gray-400 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100;
+  }
+
+  .btn-primary {
+    @apply bg-black text-white px-5 py-2 rounded-md hover:bg-gray-800;
+  }
+
+  /* 桌機加寬時 input 欄寬限制 */
+  @media (min-width: 1024px) {
+    .form-input,
+    .form-textarea {
+      @apply max-w-2xl;
+    }
+  }
+}

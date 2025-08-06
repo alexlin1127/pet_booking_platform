@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .login-page {
+        @apply mx-auto md:w-1/2 w-[92%] max-w-2xl;
+    }
+
+    .login-label {
+        @apply font-bold block mb-1;
+    }
+
+    .login-input {
+        @apply w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500;
+    }
+
+    .form-login-btn {
+        @apply bg-black text-white font-bold py-3 px-8 rounded-lg transition hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed w-full md:w-[180px];
+    }
+
+    .login-social-card {
+        @apply flex items-center gap-2 px-6 py-3 rounded-lg shadow font-bold text-lg cursor-pointer transition;
+    }
+
+    /* 社群登入卡片 icon 與文字對齊 */
+    .login-social-card {
+        @apply flex items-center px-6 py-3 rounded-lg shadow font-bold w-full max-w-xs transition;
+    }
+
+    .login-social-card .fa-line,
+    .login-social-card .fa-google,
+    .login-social-card .fa-facebook-f {
+        @apply w-5 h-5 text-xl flex-shrink-0;
+    }
+
+    .login-social-card span {
+        @apply flex-1 text-center;
+    }
+
+    /* form-login-btn 水平置中 */
+    .form-login-btn {
+        @apply block mx-auto;
+    }
+
+    /* actions button 間距統一 */
+    .login-actions {
+        @apply flex flex-col w-full gap-4;
+    }
+    @screen md {
+        .login-actions {
+            @apply flex-row justify-center w-full;
+        }
+    }
+
+    /* 社群登入卡片直向排列、寬度一致 */
+    .login-social-card {
+        @apply w-full max-w-xs justify-center;
+    }
+}

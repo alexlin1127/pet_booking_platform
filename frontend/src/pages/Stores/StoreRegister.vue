@@ -2,7 +2,6 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import FormTemplate from '../../components/UI/FormTemplate.vue'
-// import ModalBox from '../../components/UI/ModalBox.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -121,19 +120,16 @@ function submit() {
       <!-- 第一步表單內容 -->
       <div v-if="currentStep == '1'">
         <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-2">帳號 *</label>
-          <input type="text"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <label class="storereview-label">帳號 *</label>
+          <input type="tel" class="storereview-input">
         </div>
         <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-2">密碼 *</label>
-          <input type="tel"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <label class="storereview-label">密碼 *</label>
+          <input type="password" class="storereview-input">
         </div>
         <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-2">確認密碼 *</label>
-          <input type="tel"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <label class="storereview-label">確認密碼 *</label>
+          <input type="password" class="storereview-input">
         </div>
       </div>
 
@@ -184,6 +180,22 @@ function submit() {
                 required />
             </div>
 
+
+
+            <div>
+              <p class="storereview-label mb-2">服務項目（可複選） *</p>
+              <div class="flex items-center gap-6">
+                <label class="inline-flex items-center gap-2">
+                  <input v-model="form.provideOnsite" type="checkbox" value="yes" class="storereview-radio" />
+                  <span>美容</span>
+                </label>
+                <label class="inline-flex items-center gap-2">
+                  <input v-model="form.provideOnsite" type="checkbox" value="no" class="storereview-radio" />
+                  <span>住宿</span>
+                </label>
+              </div>
+            </div>
+
             <!-- 4. 是否到府 -->
             <div>
               <p class="storereview-label mb-2">是否提供到府服務 *</p>
@@ -198,21 +210,6 @@ function submit() {
                 </label>
               </div>
             </div>
-
-            <div>
-              <p class="storereview-label mb-2">服務項目（可複選） *</p>
-              <div class="flex items-center gap-6">
-                <label class="inline-flex items-center gap-2">
-                  <input v-model="form.provideOnsite" type="radio" value="yes" class="storereview-radio" />
-                  <span>美容</span>
-                </label>
-                <label class="inline-flex items-center gap-2">
-                  <input v-model="form.provideOnsite" type="radio" value="no" class="storereview-radio" />
-                  <span>住宿</span>
-                </label>
-              </div>
-            </div>
-
 
 
 
@@ -314,9 +311,13 @@ function submit() {
           </label>
         </div>
       </div>
+
       <template #actions>
+        <button type="button" class="form-regist-btn mb-2 w-full">
+          快速註冊帳號
+        </button>
         <button type="submit" class="form-regist-btn" :disabled="isDisabled">
-          {{ buttonText }}
+          繼續填寫基本資訊
         </button>
       </template>
     </FormTemplate>
