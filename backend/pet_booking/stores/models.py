@@ -26,9 +26,16 @@ class Store(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.store_name
+
+
 class StoreImage(models.Model):
     store_id = models.ForeignKey(Store, on_delete=models.CASCADE)
     image_url = models.ImageField(upload_to='stores/', blank=True, null=True)
+
+    def __str__(self):
+        return f"Image for {self.store_id.store_name}"
 
 class Post(models.Model):
     store_id = models.ForeignKey(Store, on_delete=models.CASCADE)
@@ -40,6 +47,9 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"{self.store_id.store_name} - {self.title}"
+
 class CustomerNote(models.Model):
     store_id = models.ForeignKey(Store, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -47,3 +57,6 @@ class CustomerNote(models.Model):
     notes = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Note for {self.user_id.username} by {self.store_id.store_name}"
