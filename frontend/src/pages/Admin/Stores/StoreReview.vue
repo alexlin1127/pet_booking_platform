@@ -18,26 +18,26 @@ const currentStore = computed(() => {
 });
 
 // 取得服務種類
-const type = computed(() => route.query.service === "lodging" ? "lodging" : "grooming");
+const type = computed(() => route.query.service === "boarding" ? "boarding" : "grooming");
 
 // 依據目前店家服務類型
 const hasGrooming = computed(() => currentStore.value?.hasGrooming || false);
-const hasLodging = computed(() => currentStore.value?.hasLodging || false);
+const hasBoarding = computed(() => currentStore.value?.hasBoarding || false);
 
 // 標題
-const title = computed(() => type.value === "lodging" ? "店家資料審查" : "店家資料詳情");
+const title = computed(() => type.value === "boarding" ? "店家資料審查" : "店家資料詳情");
 
 // 切換鈕：只有同時有美容和住宿才顯示
-const showSwitchBtn = computed(() => hasGrooming.value && hasLodging.value);
+const showSwitchBtn = computed(() => hasGrooming.value && hasBoarding.value);
 
 // 美容專屬欄位
 const showGrooming = computed(() => hasGrooming.value);
 // 住宿專屬欄位
-const showLodging = computed(() => hasLodging.value);
-const showSafety = computed(() => type.value === "lodging" && hasLodging.value);
+const showBoarding = computed(() => hasBoarding.value);
+const showSafety = computed(() => type.value === "boarding" && hasBoarding.value);
 
 const imageList = computed(() =>
-    type.value === "lodging"
+    type.value === "boarding"
         ? [
             "營業登記資料",
             "特定寵物登記許可證",
@@ -49,7 +49,7 @@ const imageList = computed(() =>
         : ["服務環境/相關證照", "營業登記資料"]
 );
 const gridClass = computed(() =>
-    type.value === "lodging" ? "sr-grid-3" : "sr-grid-2"
+    type.value === "boarding" ? "sr-grid-3" : "sr-grid-2"
 );
 
 const bullet = (val) => (val ? "● 是   ○ 否" : "○ 是   ● 否");
@@ -80,7 +80,7 @@ function setService(svc) {
                 <button class="sr-btn-outline" @click="setService('grooming')">
                     寵物美容預覽
                 </button>
-                <button class="sr-btn-outline" @click="setService('lodging')">
+                <button class="sr-btn-outline" @click="setService('boarding')">
                     寵物住宿預覽
                 </button>
             </div>
@@ -114,7 +114,7 @@ function setService(svc) {
                     <span class="sr-label">提供美容服務</span><span class="sr-value">{{ bullet(currentStore.hasGrooming) }}</span>
                 </div>
                 <div class="sr-row">
-                    <span class="sr-label">提供住宿服務</span><span class="sr-value">{{ bullet(currentStore.hasLodging) }}</span>
+                    <span class="sr-label">提供住宿服務</span><span class="sr-value">{{ bullet(currentStore.hasBoarding) }}</span>
                 </div>
 
                 <!-- 美容專屬欄位 -->
@@ -137,7 +137,7 @@ function setService(svc) {
             <template v-if="showSafety">
                 <div class="sr-row">
                     <span class="sr-label">服務細項</span>
-                    <span class="sr-value">{{ currentStore.lodgingdetails }}</span>
+                    <span class="sr-value">{{ currentStore.boardingdetails }}</span>
                 </div>
                 <h2 class="sr-subttl">消防安全設備說明(必填)</h2>
                 <p class="whitespace-pre-line">{{ currentStore.safetyInstructions }}</p>

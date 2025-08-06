@@ -195,7 +195,7 @@
     @apply bg-gradient-to-br from-purple-600 to-purple-700;
   }
 
-  .pending-card.lodging {
+  .pending-card.boarding {
     @apply bg-gradient-to-br from-cyan-600 to-cyan-700;
   }
 

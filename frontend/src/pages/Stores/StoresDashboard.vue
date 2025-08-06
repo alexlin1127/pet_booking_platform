@@ -26,7 +26,7 @@ const stats = ref({
 // 待審核數據
 const pendingData = ref({
   grooming: 12,
-  lodging: 8,
+  boarding: 8,
   posts: 5
 });
 
@@ -163,12 +163,12 @@ const handlePendingClick = (type) => {
         </template>
       </Card>
 
-      <Card type="vertical" :clickable="true" :hasButton="true" class="pending-card lodging"
-        @click="handlePendingClick('lodging')">
+      <Card type="vertical" :clickable="true" :hasButton="true" class="pending-card boarding"
+        @click="handlePendingClick('boarding')">
         <template #title>
           <span>待審核預約<br class="hidden md:inline">（住宿）</span>
         </template>
-        <template #content>{{ pendingData.lodging }} 筆</template>
+        <template #content>{{ pendingData.boarding }} 筆</template>
         <template #button>
           <button class="pending-btn">前往審核</button>
         </template>

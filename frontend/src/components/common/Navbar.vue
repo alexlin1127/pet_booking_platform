@@ -81,7 +81,7 @@ const toggleMemberSection = () => {
             <RouterLink to="/news" class="nav-link">最新消息</RouterLink>
             <RouterLink to="/stores" class="nav-link">查看店家</RouterLink>
             <RouterLink to="/booking/grooming" class="nav-link">預約美容</RouterLink>
-            <RouterLink to="/booking/lodging" class="nav-link">預約住宿</RouterLink>
+            <RouterLink to="/booking/boarding" class="nav-link">預約住宿</RouterLink>
         </div>
 
         <!-- 右側用戶區域 -->
@@ -147,7 +147,7 @@ const toggleMemberSection = () => {
                 <RouterLink to="/news" class="mobile-link" @click="isMobileMenuOpen = false">最新消息</RouterLink>
                 <RouterLink to="/stores" class="mobile-link" @click="isMobileMenuOpen = false">查看店家</RouterLink>
                 <RouterLink to="/booking/grooming" class="mobile-link" @click="isMobileMenuOpen = false">預約美容</RouterLink>
-                <RouterLink to="/booking/lodging" class="mobile-link" @click="isMobileMenuOpen = false">預約住宿</RouterLink>
+                <RouterLink to="/booking/boarding" class="mobile-link" @click="isMobileMenuOpen = false">預約住宿</RouterLink>
             </div>
         </div>
     </nav>
