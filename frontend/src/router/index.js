@@ -30,7 +30,7 @@ import PostReview from "../pages/Admin/Posts/PostReview.vue";
 import NewsPage from "../pages/Customers/News.vue";
 import StoresPage from "../pages/Customers/StoresView.vue";
 import BookingGroomingPage from "../pages/Customers/Booking/Grooming.vue";
-import BookingBoardingPage from "../pages/Customers/Booking/Lodging.vue";
+import BookingBoardingPage from "../pages/Customers/Booking/Boarding.vue";
 
 
 
