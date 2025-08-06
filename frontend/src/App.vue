@@ -1,9 +1,9 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import Navbar from './components/Navbar.vue'
-import Footer from './components/Footer.vue'
-import Sidebar from './components/Sidebar.vue'
+import Navbar from './components/common/Navbar.vue'
+import Footer from './components/common/Footer.vue'
+import Sidebar from './components/common/Sidebar.vue'
 
 const route = useRoute()
 const showSidebar = computed(() => route.meta.sidebar !== false)

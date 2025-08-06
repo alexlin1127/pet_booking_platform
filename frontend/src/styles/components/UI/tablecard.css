@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================= Card ================= */
+@layer components {
+    table {
+        border-spacing: 0 12px;
+    }
+
+    .card-row {
+        @apply border-2 border-gray-200 rounded-xl bg-white shadow transition-shadow duration-200;
+        /* box-shadow 需自訂顏色與透明度時仍用原生寫法 */
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .card-row:hover {
+        box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .card-row td {
+        @apply p-4 border-0;
+    }
+
+    .card-row .btn-td {
+        @apply flex gap-2 justify-center;   
+    }
+}

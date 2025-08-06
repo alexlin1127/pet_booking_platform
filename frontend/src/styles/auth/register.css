@@ -1,0 +1,74 @@
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+
+        /* ================= 註冊頁面樣式 ================= */
+        .register-page {
+            @apply min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4;
+        }
+
+        .register-title {
+            @apply text-4xl text-center font-bold mb-12 text-gray-800;
+        }
+
+        .register-cards-container {
+            @apply flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 w-full max-w-4xl mb-12;
+        }
+
+        .register-card-link {
+            @apply w-full max-w-sm;
+        }
+
+        .register-card {
+            @apply bg-white rounded-xl p-8 shadow-md border border-gray-100 cursor-pointer;
+            @apply text-center min-h-[300px] flex flex-col items-center justify-center;
+            @apply hover:shadow-lg transition-all duration-300;
+        }
+
+        .register-card:hover {
+            @apply border-blue-200;
+        }
+
+        .register-icon {
+            @apply text-6xl mb-4 transition-transform duration-300;
+        }
+
+        .register-icon-blue {
+            @apply text-blue-500;
+        }
+
+        .register-icon-green {
+            @apply text-green-500;
+        }
+
+        .register-card:hover .register-icon {
+            @apply scale-110;
+        }
+
+        .register-caption {
+            @apply text-gray-600 text-lg mb-3;
+        }
+
+        .register-card-title {
+            @apply text-2xl font-bold text-gray-800 transition-colors duration-300;
+        }
+
+        /* ================= Group hover 效果 ================= */
+        .register-group:hover .register-icon {
+            @apply scale-110;
+        }
+
+        .register-group:hover .register-title-blue {
+            @apply text-blue-600;
+        }
+
+        .register-group:hover .register-title-green {
+            @apply text-green-600;
+        }
+
+        .register-back-btn {
+            @apply w-[250px] bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-8 rounded-lg transition-colors duration-300;
+        }
+    }

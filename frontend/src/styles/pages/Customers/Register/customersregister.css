@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .customers-register-page {
+    @apply mx-auto md:w-3/5 w-[90%] max-w-2xl;
+  }
+
+  .customers-register-label {
+    @apply font-bold block mb-1;
+  }
+
+  .customers-register-input {
+    @apply w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+
+  .form-customers-register-btn {
+    @apply bg-black text-white font-bold py-3 px-8 rounded-lg transition hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed md:w-auto w-full;
+  }
+
+  .customers-register-social-card {
+    @apply flex items-center gap-2 px-6 py-3 rounded-lg shadow font-bold text-lg cursor-pointer transition;
+  }
+
+  /* 錯誤訊息樣式 */
+  .customers-register-error {
+    @apply text-red-500 text-sm mt-1;
+  }
+
+  /* 社群登入卡片 icon 與文字對齊 */
+  .customers-register-social-card {
+    @apply flex items-center px-6 py-3 rounded-lg shadow font-bold w-full max-w-xs transition;
+  }
+
+  .customers-register-social-card .fa-line,
+  .customers-register-social-card .fa-google,
+  .customers-register-social-card .fa-facebook-f {
+    @apply w-5 h-5 text-xl flex-shrink-0;
+  }
+
+  .customers-register-social-card span {
+    @apply flex-1 text-center;
+  }
+
+  /* form-customers-register-btn 水平置中 */
+  .form-customers-register-btn {
+    @apply block mx-auto;
+  }
+
+  /* 社群登入卡片直向排列、寬度一致 */
+  .customers-register-social-card {
+    @apply w-full max-w-xs justify-center;
+  }
+
+  /* 社群登入卡片專屬色彩樣式 */
+  .customers-register-social-card--line {
+    @apply bg-green-500 text-white font-bold flex items-center px-6 py-3 rounded-lg shadow hover:bg-green-600 transition w-full;
+  }
+
+  .customers-register-social-card--google {
+    @apply bg-white text-gray-800 font-bold flex items-center px-6 py-3 rounded-lg shadow border hover:bg-gray-100 transition w-full;
+  }
+
+  .customers-register-social-card--facebook {
+    @apply bg-blue-600 text-white font-bold flex items-center px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition w-full;
+  }
+
+}
