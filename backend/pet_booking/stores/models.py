@@ -24,6 +24,7 @@ class Store(models.Model):
     traffic_info = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(max_length=500, blank=True, null=True)
     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('repending', 'Repending'), ('rechecked', 'Rechecked'), ('confirmed', 'Confirmed')])
+    reject_content = models.CharField(max_length=1024, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     line_link = models.URLField(blank=True, null=True, max_length=200)
@@ -49,6 +50,7 @@ class Post(models.Model):
     image_url = models.ImageField(upload_to='posts/', blank=True, null=True, max_length=200)
     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('repending', 'Repending'), ('rechecked', 'Rechecked'), ('confirmed', 'Confirmed')])
     tags = models.JSONField(null=True, blank=True)
+    reject_content = models.CharField(max_length=1024, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
