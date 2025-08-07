@@ -16,8 +16,18 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from pet_booking.stores.views import StoreProfileViewSet, StoreAdminViewSet, StorePostViewSet, AdminPostViewSet
+
+router = DefaultRouter(trailing_slash=False)
+router.register(r'store/profile', StoreProfileViewSet, basename='store-profile')
+router.register(r'admin/stores', StoreAdminViewSet, basename='admin-stores')
+router.register(r'store/posts', StorePostViewSet, basename='store-posts')
+router.register(r'admin/posts', AdminPostViewSet, basename='admin-posts')
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('api/', include(router.urls))
 ]
