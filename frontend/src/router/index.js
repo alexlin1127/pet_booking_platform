@@ -12,8 +12,8 @@ import StoreRegister from "../pages/Stores/StoreRegister.vue"
 
 // 商家畫面Router
 import StoreDashboard from "../pages/Stores/StoresDashboard.vue"
-import StoreGroomingBookingManage from "../pages/Stores/Management/GroomingBooking.vue"
-import StoreBoardingBookingManage from "../pages/Stores/Management/BoardingBooking.vue"
+import StoreGroomingManage from "../pages/Stores/Booking/Management/Grooming.vue"
+import StoreBoardingManage from "../pages/Stores/Booking/Management/Boarding.vue"
 import StoreManage from "../pages/Stores/Posts/Postsmanage.vue"
 import StorePostProcess from "../pages/Stores/Posts/PostsProcess.vue"
 import StorePostView from "../pages/Stores/Posts/PostsView.vue"
@@ -97,12 +97,12 @@ const routes = [
     // 預約管理
     {
         path: "/stores/grooming-booking/manage",
-        component: StoreGroomingBookingManage,
+        component: StoreGroomingManage,
         meta: { sidebar: true }
     },
     {
         path: "/stores/boarding-booking/manage",
-        component: StoreBoardingBookingManage,
+        component: StoreBoardingManage,
         meta: { sidebar: true }
     },
     {
