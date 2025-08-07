@@ -36,6 +36,7 @@ import './styles/pages/Stores/Register/storesregister.css'
 import './styles/pages/Stores/Posts/postsmanage.css'
 import './styles/pages/Stores/Posts/postsprocess.css'
 import './styles/pages/Stores/Posts/postsview.css'
+import './styles/pages/Stores/storesinfo.css'
 
 // 管理員頁面樣式
 import './styles/pages/Admin/admindashboard.css'

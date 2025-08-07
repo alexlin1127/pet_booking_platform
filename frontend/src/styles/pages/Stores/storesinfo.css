@@ -1,0 +1,102 @@
+/* store.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .store-section {
+    @apply max-w-3xl mx-auto px-4 py-6 md:px-6;
+  }
+
+  .store-header {
+    @apply flex justify-between items-center mb-4;
+  }
+
+  .store-title {
+    @apply text-xl font-bold;
+  }
+
+  .store-actions {
+    @apply flex space-x-4;
+  }
+
+  .btn-black {
+    @apply bg-black text-white px-4 py-2 rounded;
+  }
+
+  .btn-outline {
+    @apply border border-black px-4 py-2 rounded;
+  }
+
+  .store-info {
+    @apply mb-4;
+  }
+
+  .store-name {
+    @apply font-bold text-lg;
+  }
+
+  .store-address {
+    @apply text-sm text-gray-500;
+  }
+
+  .store-carousel {
+    @apply bg-gray-300 h-40 rounded relative mb-6;
+  }
+
+  .carousel-image {
+    @apply w-full h-full;
+  }
+
+  .carousel-dots {
+    @apply flex justify-center space-x-2 mt-2 absolute bottom-2 left-0 right-0;
+  }
+
+  .dot {
+    @apply w-2 h-2 bg-gray-500 rounded-full;
+  }
+
+  .store-quick-info {
+    @apply grid grid-cols-2 md:grid-cols-4 gap-4 mb-6;
+  }
+
+  .info-card {
+    @apply border rounded p-4 text-center;
+  }
+
+  .store-services {
+    @apply mb-6;
+  }
+
+  .section-subtitle {
+    @apply font-bold text-center mb-4;
+  }
+
+  .service-tags {
+    @apply flex flex-wrap justify-center gap-3;
+  }
+
+  .tag {
+    @apply bg-gray-100 px-4 py-1 rounded-full;
+  }
+
+  .store-description {
+    @apply mb-6 text-sm space-y-3;
+  }
+
+  .features-list {
+    @apply list-disc list-inside space-y-1;
+  }
+
+  .store-alert {
+    @apply bg-yellow-100 text-yellow-800 text-sm px-4 py-3 rounded mb-6 text-center;
+  }
+
+  .store-social-icons {
+    @apply flex justify-center space-x-6 text-xl;
+  }
+
+  .icon {
+    @apply cursor-pointer;
+  }
+}

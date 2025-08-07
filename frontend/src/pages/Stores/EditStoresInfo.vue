@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-// import ServiceToggleSection from './ServiceToggleSection.vue'
 
 const form = ref({
   name: '',
@@ -15,11 +14,11 @@ const form = ref({
   fb: '',
   line: ''
 })
-const pickup = ref(true)
-const grooming = ref(true)
-const boarding = ref(false)
-const boardingTypes = ref([])
-const imageNote = ref('')
+const pickup = ref(true) //接送服務
+const grooming = ref(true) //美容服務
+const boarding = ref(false) //住宿服務
+const boardingTypes = ref([]) // 住宿類型
+const imageNote = ref('') // 圖片說明
 
 const submitForm = () => {
   console.log({
@@ -37,13 +36,15 @@ const submitForm = () => {
 <form @submit.prevent="submitForm" class="space-y-6">
     <!-- 店家照片 -->
     
-        <div>
+      <div class="flex flex-col mb-6">
       <label class="block font-semibold mb-2">店家照片</label>
+      <button class="mt-2 px-4 py-1 bg-black text-white text-sm rounded">新增圖片</button>
+      </div>
       <div class="grid grid-cols-4 gap-2">
         <div v-for="n in 8" :key="n" class="aspect-[4/3] bg-gray-200"></div>
       </div>
-      <button class="mt-2 px-4 py-1 bg-black text-white text-sm rounded">新增圖片</button>
-    </div>
+      <!-- <button class="mt-2 px-4 py-1 bg-black text-white text-sm rounded">新增圖片</button> -->
+    
 
     <!-- 店家名稱 -->
     <div>
@@ -176,9 +177,9 @@ const submitForm = () => {
     </div>
 
     <!-- 按鈕列 -->
-    <div class="flex justify-between pt-6">
-      <button class="px-6 py-2 bg-gray-200 rounded">取消並返回</button>
-      <button class="px-6 py-2 bg-black text-white rounded">確認修改</button>
+    <div class="flex justify-center pt-6 space-x-8">
+      <button class="px-6 py-4 bg-black text-white rounded">取消並返回</button>
+      <button class="px-6 py-4 bg-black text-white rounded">確認修改</button>
     </div>
     </form>
   </section>
