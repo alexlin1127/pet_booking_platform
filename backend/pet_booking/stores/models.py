@@ -37,7 +37,7 @@ class Store(models.Model):
 
 
 class StoreImage(models.Model):
-    store_id = models.ForeignKey(Store, on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE , related_name='images')
     image_url = models.ImageField(upload_to='stores/', blank=True, null=True)
 
     def __str__(self):

@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Store, Post
-from .serializers import StoreSerializer, PostSerializer
+from .models import Store, Post, StoreImage
+from .serializers import StoreSerializer, PostSerializer, StoreImageSerializer
 from django_filters import rest_framework as filter
 from rest_framework.permissions import IsAuthenticated
 # Create your views here.
@@ -38,6 +38,18 @@ class StorePostViewSet(viewsets.ModelViewSet):
         serializer.save(store_id=store)
 
     def perform_update(self, serializer):
+        store = Store.objects.get(user_id=self.request.user)
+        serializer.save(store_id=store)
+
+# 店家圖片
+class StoreImageViewSet(viewsets.ModelViewSet):
+    serializer_class = StoreImageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return StoreImage.objects.filter(store_id__user_id=self.request.user)
+
+    def perform_create(self, serializer):
         store = Store.objects.get(user_id=self.request.user)
         serializer.save(store_id=store)
 
