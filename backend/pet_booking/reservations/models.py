@@ -1,5 +1,4 @@
 from django.db import models
-from users.models import Users
 
 class Reservation_grooming(models.Model):
     reservation_id = models.CharField(max_length=20, unique=True)
@@ -91,7 +90,8 @@ class Orders(models.Model):
     )
 
     user_id = models.ForeignKey(
-        Users,
+        'users.User',
+        to_field='user_id',
         on_delete = models.CASCADE,
         db_column = 'user_id'
     )
