@@ -39,7 +39,7 @@ class LikeStore(models.Model):
         unique_together = ('user_id', 'store_id')
 
     def __str__(self):
-        return f"User {self.user_id} likes Store {self.stores.store_name}"
+        return f"User {self.user_id} likes Store {self.store_id.store_name}"
 
 class TernaryAnswer(models.TextChoices):
     YES = 'yes', '是'
@@ -53,7 +53,7 @@ class Pet(models.Model):
     gender = models.CharField(max_length=6, choices=Gender.choices, null=False, blank=False)
     breed = models.CharField(max_length=255, null=True, blank=True)
     # birthday = models.DateField(null=True, blank=True)
-    age = models.IntegerField(null=True, blank=True)
+    age = models.PositiveIntegerField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
     spayed_or_neutered = models.CharField(max_length=10,
         choices=TernaryAnswer.choices,
