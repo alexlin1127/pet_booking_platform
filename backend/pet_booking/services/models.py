@@ -1,9 +1,9 @@
 from django.db import models
-from stores.models import Store
+
 
 # Create your models here.
 class BoardingService(models.Model):
-    store_id = models.ForeignKey(Store, on_delete=models.CASCADE)
+    store_id = models.ForeignKey('stores.Store', on_delete=models.CASCADE)
     cleaning_frequency = models.CharField(max_length=32)
     introduction = models.TextField(max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -32,15 +32,12 @@ class BoardingServicePricing(models.Model):
 
 
 class GroomingService(models.Model):
-    store_id = models.ForeignKey(Store, on_delete=models.CASCADE)
+    store_id = models.ForeignKey('stores.Store', on_delete=models.CASCADE)
     service_title = models.CharField(max_length=64)
     introduction = models.TextField(max_length=500)
     notice = models.TextField()
-    duration_minutes_min = models.IntegerField()
-    duration_minutes_max = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return f"Grooming Service: {self.service_title} at {self.store_id.store_name}"
 
@@ -48,7 +45,7 @@ class GroomingServicePricing(models.Model):
     grooming_service_id = models.ForeignKey(GroomingService, on_delete=models.CASCADE)
     species = models.CharField(max_length=10, choices=[('cat', 'Cat'), ('dog', 'Dog')])
     pet_size = models.CharField(max_length=10, choices=[('small', 'Small'), ('medium', 'Medium'), ('large', 'Large'), ('other', 'Other')])
-    fur_amount = models.CharField(max_length=16)
+    fur_amount = models.CharField(max_length=16, choices = [('none', '無毛'),('short', '短毛'),('medium', '中毛'),('long', '長毛'),('other', '其他'),])
     pricing = models.IntegerField()
     grooming_duration = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -56,3 +53,5 @@ class GroomingServicePricing(models.Model):
 
     def __str__(self):
         return f"{self.species} - {self.pet_size}"
+    
+
