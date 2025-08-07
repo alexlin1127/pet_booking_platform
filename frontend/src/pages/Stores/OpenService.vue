@@ -98,5 +98,5 @@ const submitForm = () => {
   </form>
   </section>
 </template>
-<style scoped src="@/styles/Stores/openservice.css"></style>
+<style scoped src="@/styles/pages/Stores/openservice.css"></style>
 
