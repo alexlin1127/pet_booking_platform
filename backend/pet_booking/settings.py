@@ -10,12 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import os
+import datetime, os
+from datetime import timedelta
 
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from pathlib import Path
 
-load_dotenv()
+# load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +44,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'rest_framework',
+    'corsheaders'
+    'django_filters',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+    'oauth2_provider',
     'pet_booking.customers',
     'pet_booking.reservations',
     'pet_booking.services',
@@ -51,6 +57,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -79,6 +86,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "pet_booking.wsgi.application"
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -133,3 +152,26 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'users.User'
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=30),  # Access Token 有效時間
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),     # Refresh Token 有效時間
+    'ROTATE_REFRESH_TOKENS': True,          # 是否在 refresh 時換新 token（配合黑名單用）
+    'BLACKLIST_AFTER_ROTATION': True,       # 將舊 refresh token 加入黑名單（需token_blacklist app）
+}
+
+
+OAUTH2_PROVIDER = {
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 3600,  # Access Token 過期時間（秒）
+    'REFRESH_TOKEN_EXPIRE_SECONDS': 86400,  # Refresh Token 過期時間（秒）
+    'AUTHORIZATION_CODE_EXPIRE_SECONDS': 300,  # 授權碼過期時間
+}
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL= '/media/'
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
