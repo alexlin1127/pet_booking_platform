@@ -9,7 +9,8 @@ export const groomingbookings = [
         booking_time: '09:00-11:00',
         status: '待審核',
         note: '需要特別照顧',
-        create_at: '2025-07-20 10:00:00'
+        create_at: '2025-07-20 10:00:00',
+        service_type: '美容'
     },
     {
         id: 2,
@@ -21,7 +22,8 @@ export const groomingbookings = [
         booking_time: '10:30-12:00',
         status: '已審核',
         note: '',
-        create_at: '2025-07-21 10:00:00'
+        create_at: '2025-07-21 10:00:00',
+        service_type: '美容'
     },
     {
         id: 3,
@@ -33,7 +35,8 @@ export const groomingbookings = [
         booking_time: '11:00-12:30',
         status: '已完成',
         note: '',
-        create_at: '2025-07-22 10:00:00'
+        create_at: '2025-07-22 10:00:00',
+        service_type: '美容'
     },
     {
         id: 4,
@@ -45,7 +48,8 @@ export const groomingbookings = [
         booking_time: '12:30-14:00',
         status: '已審核',
         note: '怕生',
-        create_at: '2025-07-23 10:00:00'
+        create_at: '2025-07-23 10:00:00',
+        service_type: '美容'
     },
     {
         id: 5,
@@ -57,7 +61,8 @@ export const groomingbookings = [
         booking_time: '13:00-15:00',
         status: '待審核',
         note: '易緊張',
-        create_at: '2025-07-24 10:00:00'
+        create_at: '2025-07-24 10:00:00',
+        service_type: '美容'
     },
     {
         id: 6,
@@ -69,7 +74,8 @@ export const groomingbookings = [
         booking_time: '14:00-15:30',
         status: '已完成',
         note: '有過敏史',
-        create_at: '2025-07-25 10:00:00'
+        create_at: '2025-07-25 10:00:00',
+        service_type: '美容'
     },
     {
         id: 7,
@@ -81,7 +87,8 @@ export const groomingbookings = [
         booking_time: '15:00-16:30',
         status: '待審核',
         note: '',
-        create_at: '2025-07-26 10:00:00'
+        create_at: '2025-07-26 10:00:00',
+        service_type: '美容'
     },
     {
         id: 8,
@@ -93,7 +100,8 @@ export const groomingbookings = [
         booking_time: '16:30-18:00',
         status: '已完成',
         note: '',
-        create_at: '2025-07-27 10:00:00'
+        create_at: '2025-07-27 10:00:00',
+        service_type: '美容'
     },
     {
         id: 9,
@@ -105,7 +113,8 @@ export const groomingbookings = [
         booking_time: '17:00-18:30',
         status: '已審核',
         note: '',
-        create_at: '2025-07-28 10:00:00'
+        create_at: '2025-07-28 10:00:00',
+        service_type: '美容'
     },
     {
         id: 10,
@@ -117,7 +126,8 @@ export const groomingbookings = [
         booking_time: '18:00-19:30',
         status: '待審核',
         note: '請提前聯絡',
-        create_at: '2025-07-29 10:00:00'
+        create_at: '2025-07-29 10:00:00',
+        service_type: '美容'
     },
     {
         id: 11,
@@ -129,7 +139,8 @@ export const groomingbookings = [
         booking_time: '19:00-20:00',
         status: '已完成',
         note: '',
-        create_at: '2025-07-30 10:00:00'
+        create_at: '2025-07-30 10:00:00',
+        service_type: '美容'
     },
     {
         id: 12,
@@ -141,7 +152,8 @@ export const groomingbookings = [
         booking_time: '18:30-20:00',
         status: '待審核',
         note: '不喜歡洗澡',
-        create_at: '2025-07-31 10:00:00'
+        create_at: '2025-07-31 10:00:00',
+        service_type: '美容'
     },
     {
         id: 13,
@@ -153,7 +165,8 @@ export const groomingbookings = [
         booking_time: '09:30-11:00',
         status: '已審核',
         note: '',
-        create_at: '2025-08-01 10:00:00'
+        create_at: '2025-08-01 10:00:00',
+        service_type: '美容'
     },
     {
         id: 14,
@@ -165,7 +178,8 @@ export const groomingbookings = [
         booking_time: '10:00-12:00',
         status: '已完成',
         note: '需陪伴',
-        create_at: '2025-08-02 10:00:00'
+        create_at: '2025-08-02 10:00:00',
+        service_type: '美容'
     },
     {
         id: 15,
@@ -177,7 +191,8 @@ export const groomingbookings = [
         booking_time: '11:30-13:00',
         status: '待審核',
         note: '',
-        create_at: '2025-08-03 10:00:00'
+        create_at: '2025-08-03 10:00:00',
+        service_type: '美容'
     },
     {
         id: 16,
@@ -189,7 +204,8 @@ export const groomingbookings = [
         booking_time: '12:00-13:30',
         status: '已完成',
         note: '需剪指甲',
-        create_at: '2025-08-04 10:00:00'
+        create_at: '2025-08-04 10:00:00',
+        service_type: '美容'
     },
     {
         id: 17,
@@ -201,7 +217,8 @@ export const groomingbookings = [
         booking_time: '13:30-15:00',
         status: '已審核',
         note: '',
-        create_at: '2025-08-05 10:00:00'
+        create_at: '2025-08-05 10:00:00',
+        service_type: '美容'
     },
     {
         id: 18,
@@ -213,7 +230,8 @@ export const groomingbookings = [
         booking_time: '14:00-16:00',
         status: '待審核',
         note: '討厭洗澡',
-        create_at: '2025-08-06 10:00:00'
+        create_at: '2025-08-06 10:00:00',
+        service_type: '美容'
     },
     {
         id: 19,
@@ -225,7 +243,8 @@ export const groomingbookings = [
         booking_time: '15:30-17:00',
         status: '已完成',
         note: '',
-        create_at: '2025-08-07 10:00:00'
+        create_at: '2025-08-07 10:00:00',
+        service_type: '美容'
     },
     {
         id: 20,
@@ -237,7 +256,8 @@ export const groomingbookings = [
         booking_time: '16:00-18:00',
         status: '已審核',
         note: '請小心',
-        create_at: '2025-08-08 10:00:00'
+        create_at: '2025-08-08 10:00:00',
+        service_type: '美容'
     },
     {
         id: 21,
@@ -249,7 +269,8 @@ export const groomingbookings = [
         booking_time: '17:30-19:00',
         status: '待審核',
         note: '怕陌生人',
-        create_at: '2025-08-09 10:00:00'
+        create_at: '2025-08-09 10:00:00',
+        service_type: '美容'
     },
     {
         id: 22,
@@ -261,7 +282,8 @@ export const groomingbookings = [
         booking_time: '18:00-20:00',
         status: '已完成',
         note: '',
-        create_at: '2025-08-10 10:00:00'
+        create_at: '2025-08-10 10:00:00',
+        service_type: '美容'
     },
     {
         id: 23,
@@ -273,7 +295,8 @@ export const groomingbookings = [
         booking_time: '09:00-10:30',
         status: '已審核',
         note: '有特殊飲食',
-        create_at: '2025-08-11 10:00:00'
+        create_at: '2025-08-11 10:00:00',
+        service_type: '美容'
     },
     {
         id: 24,
@@ -285,7 +308,8 @@ export const groomingbookings = [
         booking_time: '10:30-12:30',
         status: '待審核',
         note: '',
-        create_at: '2025-08-12 10:00:00'
+        create_at: '2025-08-12 10:00:00',
+        service_type: '美容'
     },
     {
         id: 25,
@@ -297,7 +321,8 @@ export const groomingbookings = [
         booking_time: '12:00-14:00',
         status: '已完成',
         note: '怕生',
-        create_at: '2025-08-13 10:00:00'
+        create_at: '2025-08-13 10:00:00',
+        service_type: '美容'
     }
 ]
 
@@ -313,7 +338,8 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '待審核',
         note: '',
-        create_at: '2025-07-15 09:00:00'
+        create_at: '2025-07-15 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 2,
@@ -326,7 +352,8 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '已完成',
         note: '需餵藥',
-        create_at: '2025-07-16 09:00:00'
+        create_at: '2025-07-16 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 3,
@@ -339,7 +366,8 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '已審核',
         note: '請多關心',
-        create_at: '2025-07-17 09:00:00'
+        create_at: '2025-07-17 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 4,
@@ -352,7 +380,8 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '已完成',
         note: '',
-        create_at: '2025-07-18 09:00:00'
+        create_at: '2025-07-18 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 5,
@@ -365,7 +394,8 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '待審核',
         note: '',
-        create_at: '2025-07-19 09:00:00'
+        create_at: '2025-07-19 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 6,
@@ -378,7 +408,8 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '已完成',
         note: '有過敏',
-        create_at: '2025-07-20 09:00:00'
+        create_at: '2025-07-20 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 7,
@@ -391,7 +422,8 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '已審核',
         note: '',
-        create_at: '2025-07-21 09:00:00'
+        create_at: '2025-07-21 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 8,
@@ -404,7 +436,8 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '待審核',
         note: '請提前通知',
-        create_at: '2025-07-22 09:00:00'
+        create_at: '2025-07-22 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 9,
@@ -417,7 +450,8 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '已完成',
         note: '怕吵',
-        create_at: '2025-07-23 09:00:00'
+        create_at: '2025-07-23 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 10,
@@ -430,7 +464,8 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '已審核',
         note: '',
-        create_at: '2025-07-24 09:00:00'
+        create_at: '2025-07-24 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 11,
@@ -443,7 +478,8 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '已完成',
         note: '怕生',
-        create_at: '2025-07-25 09:00:00'
+        create_at: '2025-07-25 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 12,
@@ -456,7 +492,8 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '待審核',
         note: '',
-        create_at: '2025-07-26 09:00:00'
+        create_at: '2025-07-26 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 13,
@@ -469,7 +506,8 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '已審核',
         note: '不吃乾飼料',
-        create_at: '2025-07-27 09:00:00'
+        create_at: '2025-07-27 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 14,
@@ -482,7 +520,8 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '已完成',
         note: '',
-        create_at: '2025-07-28 09:00:00'
+        create_at: '2025-07-28 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 15,
@@ -495,7 +534,8 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '待審核',
         note: '請小心',
-        create_at: '2025-07-29 09:00:00'
+        create_at: '2025-07-29 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 16,
@@ -508,7 +548,8 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '已完成',
         note: '',
-        create_at: '2025-07-30 09:00:00'
+        create_at: '2025-07-30 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 17,
@@ -521,7 +562,8 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '已審核',
         note: '需定時餵食',
-        create_at: '2025-07-31 09:00:00'
+        create_at: '2025-07-31 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 18,
@@ -534,7 +576,8 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '待審核',
         note: '',
-        create_at: '2025-08-01 09:00:00'
+        create_at: '2025-08-01 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 19,
@@ -547,7 +590,8 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '已完成',
         note: true,
-        create_at: '2025-08-02 09:00:00'
+        create_at: '2025-08-02 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 20,
@@ -560,7 +604,8 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '已審核',
         note: '',
-        create_at: '2025-08-03 09:00:00'
+        create_at: '2025-08-03 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 21,
@@ -573,7 +618,8 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '待審核',
         note: '',
-        create_at: '2025-08-04 09:00:00'
+        create_at: '2025-08-04 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 22,
@@ -586,7 +632,8 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '已完成',
         note: '需注意飲食',
-        create_at: '2025-08-05 09:00:00'
+        create_at: '2025-08-05 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 23,
@@ -599,7 +646,8 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '已審核',
         note: '',
-        create_at: '2025-08-06 09:00:00'
+        create_at: '2025-08-06 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 24,
@@ -612,7 +660,8 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '待審核',
         note: '怕吵雜',
-        create_at: '2025-08-07 09:00:00'
+        create_at: '2025-08-07 09:00:00',
+        service_type: '住宿'
     },
     {
         id: 25,
@@ -625,6 +674,7 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '已完成',
         note: '',
-        create_at: '2025-08-08 09:00:00'
+        create_at: '2025-08-08 09:00:00',
+        service_type: '住宿'
     }
 ]
