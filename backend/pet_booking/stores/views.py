@@ -1,20 +1,24 @@
 from rest_framework import viewsets
 from .models import Store, Post, StoreImage
-from .serializers import StoreSerializer, PostSerializer, StoreImageSerializer
-from django_filters import rest_framework as filter
+from .serializers import StoreSerializer, PostSerializer, StoreImageSerializer, StoreListSerializer, StoreDetailSerializer
+import django_filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 
-class StautusFilter(filter.FilterSet):
+class Filter(django_filters.FilterSet):
+    created_at_after = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='gte')
+    created_at_before = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='lte')
     class Meta:
         model = Store
-        fields = ['status']
+        fields = ['status', 'created_at_after', 'created_at_before']
 
 
-# 店家
+# 店家詳情
 class StoreProfileViewSet(viewsets.ModelViewSet):
     serializer_class = StoreSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Store.objects.filter(user_id=self.request.user)
@@ -28,10 +32,10 @@ class StoreProfileViewSet(viewsets.ModelViewSet):
 # 店家文章
 class StorePostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Post.objects.filter(store_id__user_id=self.request.user)
+        return Post.objects.filter(store__user_id=self.request.user)
 
     def perform_create(self, serializer):
         store = Store.objects.get(user_id=self.request.user)
@@ -47,7 +51,7 @@ class StoreImageViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return StoreImage.objects.filter(store_id__user_id=self.request.user)
+        return StoreImage.objects.filter(store__user_id=self.request.user)
 
     def perform_create(self, serializer):
         store = Store.objects.get(user_id=self.request.user)
@@ -55,17 +59,34 @@ class StoreImageViewSet(viewsets.ModelViewSet):
 
 
 # 管理者
+# 分頁
+
+class StorePagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 50
+
+# 管理者店家頁
 class StoreAdminViewSet(viewsets.ModelViewSet):
-    queryset = Store.objects.all()
-    serializer_class = StoreSerializer
-    filterset_class= StautusFilter
-    permission_classes = [IsAuthenticated]
+    queryset = Store.objects.all().order_by('-created_at')
+    filter_backends = [DjangoFilterBackend]
+    filterset_class= Filter
+    pagination_class = StorePagination
+    # permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return StoreListSerializer
+        elif self.action == 'retrieve':
+            return StoreDetailSerializer
 
 
 # 管理者文章
 class AdminPostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by('created_at')
     serializer_class = PostSerializer
-    filterset_fields = ['status']
-    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class= Filter
+    pagination_class = StorePagination
+    # permission_classes = [IsAuthenticated]
 

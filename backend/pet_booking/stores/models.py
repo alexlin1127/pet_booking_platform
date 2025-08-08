@@ -41,13 +41,13 @@ class StoreImage(models.Model):
     image_url = models.ImageField(upload_to='stores/', blank=True, null=True)
 
     def __str__(self):
-        return f"Image for {self.store_id.store_name}"
+        return f"Image for {self.store.store_name}"
 
 class Post(models.Model):
-    store_id = models.ForeignKey(Store, on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField(max_length=500)
-    image_url = models.ImageField(upload_to='posts/', blank=True, null=True, max_length=200)
+    image_url = models.ImageField(upload_to='posts/', blank=True, null=True)
     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('repending', 'Repending'), ('rechecked', 'Rechecked'), ('confirmed', 'Confirmed')])
     tags = models.JSONField(null=True, blank=True)
     reject_content = models.CharField(max_length=1024, blank=True, null=True)
