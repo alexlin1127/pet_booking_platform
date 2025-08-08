@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { groomingbookings } from '../../../../data/bookingfakedata'
+import { bookings } from '../../../../data/bookingfakedata'
 import Table from '../../../../components/UI/Table.vue'
 import Pagination from '../../../../components/common/Pagination.vue'
 import GroomingCard from '../Card/GroomingCard.vue'
@@ -13,11 +13,11 @@ const selectedDateStart = ref('')
 
 // 待審核預約
 const pendingGroomingbookings = computed(() =>
-    groomingbookings.filter(item => item.status === '待審核')
+    bookings.filter(item => item.status === '待審核' && item.service_type === '美容')
 )
 // 已審核預約
 const reviewedGroomingbookings = computed(() =>
-    groomingbookings.filter(item => item.status === '已審核')
+    bookings.filter(item => item.status === '已審核' && item.service_type === '美容')
 )
 
 // 搜尋與日期篩選（僅針對已審核）

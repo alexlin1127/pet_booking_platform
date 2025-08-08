@@ -25,6 +25,20 @@ defineProps({
         </RouterLink>
         <button class="grooming-btn">取消</button>
     </td>
+    <td v-else-if="grooming.status === '已審核'">
+        <RouterLink :to="`/stores/grooming-booking/review?id=${grooming.id}`">
+            <button class="grooming-btn">詳情</button>
+        </RouterLink>
+        <button class="grooming-btn">取消</button>
+        <button class="grooming-btn">已完成</button>
+    </td>
+    <td v-else>
+        <RouterLink :to="`/stores/grooming-booking/details?id=${grooming.id}`">
+            <button class="grooming-btn">訂單詳情</button>
+        </RouterLink>
+        <button class="grooming-btn">備註</button>
+        <button class="grooming-btn">列入觀察</button>
+    </td>
 </template>
 
 <style></style>
