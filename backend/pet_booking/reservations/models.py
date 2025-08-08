@@ -7,6 +7,7 @@ class ReservationGrooming(models.Model):
     user_phone = models.CharField(max_length=15)
     grooming_services_name = models.JSONField(default=list)
     pet_name = models.CharField(max_length=10)
+    pet_type = models.CharField(max_length=10)
     pet_breed = models.CharField(max_length=10)
     pick_up_service = models.BooleanField()
     reservation_time = models.DateTimeField()
@@ -71,6 +72,12 @@ class BoardingSchedules(models.Model):
 
     room_type = models.CharField(max_length=20)
     unavailable_time = models.DateTimeField()  # 移除 auto_now_add=True
+
+    class Meta:
+        db_table = 'boarding_schedules'
+
+    def __str__(self):
+        return f'boarding schedule for {self.reservation_boarding_id}'
 
 
 class Orders(models.Model):
