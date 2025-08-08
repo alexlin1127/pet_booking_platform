@@ -96,12 +96,12 @@ const routes = [
     },
     // 預約管理
     {
-        path: "/stores/grooming-booking/manage",
+        path: "/stores/grooming-bookings/manage",
         component: StoreGroomingManage,
         meta: { sidebar: true }
     },
     {
-        path: "/stores/boarding-booking/manage",
+        path: "/stores/boarding-bookings/manage",
         component: StoreBoardingManage,
         meta: { sidebar: true }
     },
