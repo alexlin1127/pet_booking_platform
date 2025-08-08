@@ -11,7 +11,7 @@ class UserRole(models.TextChoices):
     ADMIN = 'admin', '系統管理者'
 
 class User(AbstractUser):
-    user_id = models.CharField(max_length=64, blank=True, null=True, unique=True)
+    user_id = models.CharField(max_length=64, unique=True)
     role = models.CharField(max_length=64, choices=UserRole.choices, default=UserRole.MEMBER, blank=False, verbose_name="用戶角色")
     is_store_owner = models.BooleanField(default=False, blank=False, null=False, verbose_name="是否為寵物業者")
     is_admin = models.BooleanField(default=False, blank=False, null=False, verbose_name="是否為系統管理者")
