@@ -12,7 +12,8 @@ const form = ref({
   traffic: '',
   description: '',
   fb: '',
-  line: ''
+  line: '',
+  google:''
 })
 const pickup = ref(true) //接送服務
 const grooming = ref(true) //美容服務
@@ -31,6 +32,7 @@ const submitForm = () => {
 }
 </script>
 <template>
+  <h1 class="text-2xl md:text-3xl font-bold">修改本店資訊</h1>
   <section class="max-w-4xl mx-auto p-6 bg-white shadow rounded space-y-6">
     <h1 class="text-2xl font-bold">修改本店資訊</h1>
 <form @submit.prevent="submitForm" class="space-y-6">
@@ -164,22 +166,28 @@ const submitForm = () => {
       <textarea v-model="form.description" rows="8" placeholder="請輸入店家簡介內容" class="form-textarea w-full"></textarea>
     </div>
 
-    <!-- FB連結 -->
-    <div>
-      <label class="block font-semibold mb-1">FB連結</label>
-      <input type="text" v-model="form.fb" class="form-input w-full" placeholder="請提供官方FB網址" />
-    </div>
-
     <!-- LINE連結 -->
     <div>
       <label class="block font-semibold mb-1">LINE連結</label>
-      <input type="text" v-model="form.line" class="form-input w-full" placeholder="請提供官方LINE網址" />
+      <input type="url" v-model.trim="form.line" class="form-input w-full" placeholder="請提供官方LINE網址" />
+    </div>
+    
+    <!-- FB連結 -->
+    <div>
+      <label class="block font-semibold mb-1">FB連結</label>
+      <input type="url" v-model.trim="form.fb" class="form-input w-full" placeholder="請提供官方FB網址" />
     </div>
 
+    <!-- google連結 -->
+    <div>
+      <label class="block font-semibold mb-1">Google地圖連結</label>
+      <input type="url" v-model.trim="form.google" class="form-input w-full" placeholder="請提供官方Google地圖網址" />
+    </div>    
     <!-- 按鈕列 -->
     <div class="flex justify-center pt-6 space-x-8">
-      <button class="px-6 py-4 bg-black text-white rounded">取消並返回</button>
-      <button class="px-6 py-4 bg-black text-white rounded">確認修改</button>
+      <button class="btn">取消並返回</button>
+      <button class="btn">確認修改</button>
+      <!-- <button class="px-6 py-4 bg-black text-white rounded">確認修改</button> -->
     </div>
     </form>
   </section>
