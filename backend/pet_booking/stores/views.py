@@ -59,15 +59,15 @@ class StoreImageViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return StoreImage.objects.filter(store__user_id=self.request.user)
+        return StoreImage.objects.filter(user_id=self.request.user)
 
     def perform_create(self, serializer):
-        store = Store.objects.get(store__user_id=self.request.user)
+        store = Store.objects.get(user_id=self.request.user)
         serializer.save(store=store)
 
 
     def perform_update(self, serializer):
-        store = Store.objects.get(store__user_id=self.request.user)
+        store = Store.objects.get(user_id=self.request.user)
         serializer.save(store=store)
 
     def perform_destroy(self, instance):
