@@ -14,6 +14,7 @@ import StoreRegister from "../pages/Stores/StoreRegister.vue"
 import StoreDashboard from "../pages/Stores/StoresDashboard.vue"
 import StoreGroomingManage from "../pages/Stores/Booking/Management/Grooming.vue"
 import StoreBoardingManage from "../pages/Stores/Booking/Management/Boarding.vue"
+import StoreBookingHistory from "../pages/Stores/Booking/BookingHistory.vue"
 import StoreManage from "../pages/Stores/Posts/Postsmanage.vue"
 import StorePostProcess from "../pages/Stores/Posts/PostsProcess.vue"
 import StorePostView from "../pages/Stores/Posts/PostsView.vue"
@@ -103,6 +104,11 @@ const routes = [
     {
         path: "/stores/boarding-bookings/manage",
         component: StoreBoardingManage,
+        meta: { sidebar: true }
+    },
+    {
+        path: "/stores/bookings/history",
+        component: StoreBookingHistory,
         meta: { sidebar: true }
     },
     {
