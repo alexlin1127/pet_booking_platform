@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { boardingbookings } from '../../../../data/bookingfakedata'
+import { bookings } from '../../../../data/bookingfakedata'
 import Table from '../../../../components/UI/Table.vue'
 import Pagination from '../../../../components/common/Pagination.vue'
 import BoardingCard from '../Card/BoardingCard.vue'
@@ -13,11 +13,11 @@ const selectedDateStart = ref('')
 
 // 待審核預約
 const pendingBoardingbookings = computed(() =>
-    boardingbookings.filter(item => item.status === '待審核')
+    bookings.filter(item => item.status === '待審核' && item.service_type === '住宿')
 )
 // 已審核/已完成預約
 const reviewedBoardingbookings = computed(() =>
-    boardingbookings.filter(item => item.status === '已審核')
+    bookings.filter(item => item.status === '已審核' && item.service_type === '住宿')
 )
 
 // 搜尋與日期篩選
