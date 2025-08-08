@@ -28,7 +28,7 @@ import './styles/components/UI/button.css'
 import './styles/components/UI/table.css'
 import './styles/components/UI/tablecard.css'
 
-// 客戶頁面樣式
+// 使用者頁面樣式
 import './styles/pages/Customers/customersregister.css'
 
 // 商家頁面樣式
