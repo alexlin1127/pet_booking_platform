@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faPlay, faAngleLeft, faAngleRight, faCalendar, faHandshake } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faAngleLeft, faAngleRight, faCalendar, faHandshake, faMapMarkerAlt, faCircle, faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 import { faLine, faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons'
 
 // 引入css套件
@@ -50,7 +50,7 @@ import './styles/pages/Admin/Posts/postreview.css'
 
 
 
-library.add(faPlay, faAngleLeft, faAngleRight, faCalendar, faHandshake, faLine, faGoogle, faFacebookF)
+library.add(faPlay, faAngleLeft, faAngleRight, faCalendar, faHandshake, faLine, faGoogle, faFacebookF, faMapMarkerAlt, faCircle, faSyncAlt)
 
 const app = createApp(App)
 app.component('FontAwesomeIcon', FontAwesomeIcon)
