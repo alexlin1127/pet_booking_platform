@@ -28,6 +28,10 @@ class StoreProfileViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         serializer.save(user_id=self.request.user)
+
+    def perform_destroy(self, instance):
+        if instance.user_id == self.request.user:
+            instance.delete()
     
 # 店家文章
 class StorePostViewSet(viewsets.ModelViewSet):
@@ -45,18 +49,30 @@ class StorePostViewSet(viewsets.ModelViewSet):
         store = Store.objects.get(user_id=self.request.user)
         serializer.save(store_id=store)
 
+    def perform_destroy(self, instance):
+        if instance.store.user_id == self.request.user:
+            instance.delete()
+
 # 店家圖片
 class StoreImageViewSet(viewsets.ModelViewSet):
     serializer_class = StoreImageSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return StoreImage.objects.filter(store__user_id=self.request.user)
 
     def perform_create(self, serializer):
-        store = Store.objects.get(user_id=self.request.user)
-        serializer.save(store_id=store)
+        store = Store.objects.get(store__user_id=self.request.user)
+        serializer.save(store=store)
 
+
+    def perform_update(self, serializer):
+        store = Store.objects.get(store__user_id=self.request.user)
+        serializer.save(store=store)
+
+    def perform_destroy(self, instance):
+        if instance.store.user_id == self.request.user:
+            instance.delete()
 
 # 管理者
 # 分頁

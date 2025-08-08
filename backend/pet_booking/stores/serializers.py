@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Store, StoreImage, Post
 from users.models import User
 
-# 店家詳細頁圖片
+# 店家資訊圖片集
 class StoreImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = StoreImage
@@ -40,7 +40,7 @@ class StoreDetailSerializer(serializers.ModelSerializer):
 
 # 店家貼文頁
 class PostSerializer(serializers.ModelSerializer):
-    store_name = serializers.CharField(source='store_id.store_name', read_only=True)
+    store_name = serializers.CharField(source='store.store_name', read_only=True)
 
     class Meta:
         model = Post
