@@ -13,13 +13,16 @@
   }
 
   .store-title {
-    @apply text-xl font-bold;
+    @apply text-4xl font-bold mb-4;
   }
 
   .store-actions {
     @apply flex space-x-4;
   }
 
+  .store-status {
+    @apply text-xl font-bold flex items-center gap-2 mb-4;
+  }
   .btn-black {
     @apply bg-black text-white px-4 py-2 rounded;
   }
@@ -29,15 +32,15 @@
   }
 
   .store-info {
-    @apply mb-4;
+    @apply mb-4 ;
   }
 
   .store-name {
-    @apply font-bold text-lg;
+    @apply font-bold text-lg flex items-center;
   }
 
   .store-address {
-    @apply text-sm text-gray-500;
+    @apply text-sm text-gray-500 flex items-center;
   }
 
   .store-carousel {
@@ -61,7 +64,7 @@
   }
 
   .info-card {
-    @apply border rounded p-4 text-center;
+    @apply border border-amber-300 rounded p-4 text-center;
   }
 
   .store-services {
@@ -73,15 +76,15 @@
   }
 
   .service-tags {
-    @apply flex flex-wrap justify-center gap-3;
+    @apply flex flex-wrap justify-center gap-3 ;
   }
 
   .tag {
-    @apply bg-gray-100 px-4 py-1 rounded-full;
+    @apply bg-gray-100 px-4 py-1 rounded border border-amber-300;
   }
 
   .store-description {
-    @apply mb-6 text-sm space-y-3;
+    @apply mb-6 text-sm space-y-3 mb-60;
   }
 
   .features-list {
