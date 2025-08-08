@@ -61,10 +61,10 @@ const handlePendingClick = (type) => {
   // 導航到對應的審核頁面
   switch(type) {
     case 'grooming':
-      router.push('/stores/grooming-booking/manage');
+      router.push('/stores/grooming-bookings/manage');
       break;
     case 'boarding':
-      router.push('/stores/boarding-booking/manage');
+      router.push('/stores/boarding-bookings/manage');
       break;
     case 'posts':
       router.push('/stores/posts/manage');
