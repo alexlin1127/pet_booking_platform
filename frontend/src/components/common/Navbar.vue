@@ -42,7 +42,7 @@ const toggleBackend = () => {
     if (isStorePage.value) {
       router.push('/');
     } else {
-      router.push('/stores/posts/manage');
+      router.push('/stores/dashboard');
     }
   }
 };
