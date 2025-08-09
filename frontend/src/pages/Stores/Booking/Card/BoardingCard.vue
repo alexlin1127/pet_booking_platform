@@ -7,7 +7,7 @@ defineProps({
 </script>
 
 <template>
-     <td>
+    <td>
       <FontAwesomeIcon v-if="boarding.note && boarding.note.trim() !== ''" icon="fa-solid fa-bookmark" />
     </td>
     <td>{{ boarding.id }}</td>
