@@ -1,17 +1,18 @@
 from django.db import models
 
-class Reservation_grooming(models.Model):
+class ReservationGrooming(models.Model):
     reservation_id = models.CharField(max_length=20, unique=True)
     store_name = models.CharField(max_length=50)
     user_name = models.CharField(max_length=20)
     user_phone = models.CharField(max_length=15)
-    grooming_services_name = models.IntegerField()
+    grooming_services_name = models.JSONField(default=list)
     pet_name = models.CharField(max_length=10)
+    pet_type = models.CharField(max_length=10)
     pet_breed = models.CharField(max_length=10)
     pick_up_service = models.BooleanField()
     reservation_time = models.DateTimeField()
-    customer_note = models.TextField(blank=True, default='')
-    store_note = models.TextField(blank=True, default='')
+    customer_note = models.TextField(blank=True)
+    store_note = models.TextField(blank=True)
     status = models.CharField(max_length=20, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -23,11 +24,12 @@ class Reservation_grooming(models.Model):
         return self.reservation_id
 
 
-class Grooming_schedules(models.Model):
+class GroomingSchedules(models.Model):
     reservation_grooming_id = models.ForeignKey(
-        Reservation_grooming,
+        ReservationGrooming,
         on_delete = models.CASCADE,
-        db_column = 'reservation_grooming_id'
+        db_column = 'reservation_grooming_id',
+        
     )
 
     date = models.DateField()
@@ -40,17 +42,17 @@ class Grooming_schedules(models.Model):
         return f'booking record for {self.reservation_grooming_id}'
 
 
-class Reservation_boarding(models.Model):
+class ReservationBoarding(models.Model):
     reservation_id = models.CharField(max_length=20, unique=True)
-    store_name = models.CharField(max_length=50)
-    user_name = models.CharField(max_length=20)
-    user_phone = models.CharField(max_length=15)
-    pet_name = models.CharField(max_length=10)
-    room_type = models.CharField(max_length=20)
+    store_name = models.CharField(max_length=50, )
+    user_name = models.CharField(max_length=20, )
+    user_phone = models.CharField(max_length=15, )
+    pet_name = models.CharField(max_length=10, )
+    room_type = models.CharField(max_length=20, )
     checkin_date = models.DateTimeField()
     checkout_date = models.DateTimeField()
-    customer_note = models.TextField(blank=True, default='')
-    store_note = models.TextField(blank=True, default='')
+    customer_note = models.TextField(blank=True)
+    store_note = models.TextField(blank=True)
     status = models.CharField(max_length=20, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -61,39 +63,46 @@ class Reservation_boarding(models.Model):
     def __str__(self):
         return self.reservation_id
 
-class Boarding_schedules(models.Model):
+class BoardingSchedules(models.Model):
     reservation_boarding_id = models.ForeignKey(
-        Reservation_boarding,
-        on_delete = models.CASCADE,
-        db_column = 'reservation_boarding_id'
+        ReservationBoarding,
+        on_delete=models.CASCADE,
+        db_column='reservation_boarding_id'
     )
 
     room_type = models.CharField(max_length=20)
-    unavailable_time = models.DateTimeField(auto_now_add=True)
+    unavailable_time = models.DateTimeField()  # 移除 auto_now_add=True
+
+    class Meta:
+        db_table = 'boarding_schedules'
+
+    def __str__(self):
+        return f'boarding schedule for {self.reservation_boarding_id}'
 
 
 class Orders(models.Model):
     reservation_grooming = models.ForeignKey(
-        Reservation_grooming,
-        on_delete = models.CASCADE,
-        db_column = 'reservation_grooming_id',
-        null = True,
-        blank = True
+        ReservationGrooming,
+        on_delete=models.CASCADE,
+        db_column='reservation_grooming_id',
+        null=True,
+        blank=True
     )
 
     reservation_boarding = models.ForeignKey(
-        Reservation_boarding,
-        on_delete = models.CASCADE,
-        db_column = 'reservation_boarding_id',
-        null = True,
-        blank = True
+        ReservationBoarding,
+        on_delete=models.CASCADE,
+        db_column='reservation_boarding_id',
+        null=True,
+        blank=True
     )
 
     user_id = models.ForeignKey(
         'users.User',
         to_field='user_id',
-        on_delete = models.CASCADE,
-        db_column = 'user_id'
+        on_delete=models.CASCADE,
+        db_column='user_id',
+        related_name='orders'  # 添加 related_name
     )
 
     total_price = models.IntegerField()
