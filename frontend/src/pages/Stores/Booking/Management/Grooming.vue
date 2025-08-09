@@ -96,18 +96,22 @@ function handleSearch() {
             <h1>近期預約</h1>
             <p>{{ reviewedCount }} 筆</p>
         </div>
-        <div class="grooming-filter-buttons">
+        <div class="grooming-filter-container">
             <p><FontAwesomeIcon icon="fa-solid fa-bookmark" /> 此圖表示有備註</p>
-            <label class="grooming-filter-label">
-                <span>可搜尋顧客姓名：</span>
-                <input type="text" v-model="searchText" @keyup.enter="handleSearch" placeholder="請輸入姓名"
-                    class="grooming-search-input" />
-            </label>
-            <label class="grooming-filter-label">
-                <span>預約日期：</span>
-                <input type="date" v-model="selectedDateStart" class="grooming-filter-input" />
-            </label>
-            <button class="grooming-search-btn" @click="handleSearch">搜尋</button>
+            <div class="grooming-filter-row">
+                <label class="grooming-filter-label">
+                    <span>可搜尋顧客姓名：</span>
+                    <input type="text" v-model="searchText" @keyup.enter="handleSearch" placeholder="請輸入姓名"
+                        class="grooming-search-input" />
+                </label>
+                <div class="grooming-date-search-row">
+                    <label class="grooming-filter-label">
+                        <span>預約日期：</span>
+                        <input type="date" v-model="selectedDateStart" class="grooming-filter-input" />
+                    </label>
+                    <button class="grooming-search-btn" @click="handleSearch">搜尋</button>
+                </div>
+            </div>
         </div>
         <div class="grooming-table-container">
             <Table>
