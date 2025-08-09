@@ -5,87 +5,159 @@
 /* AddPosts.vue 專用 Tailwind utility class */
 
 @layer components {
+
   /* 最外層容器 */
+  /* ---- 外層容器與頁面標題（框線外） ---- */
   .addposts-container {
-    @apply w-[70%] mx-auto bg-white;
+    @apply w-full px-4 md:px-8 lg:px-16 py-6 max-w-screen-xl mx-auto bg-transparent;
   }
 
-  /* 頁面標題 */
   .addposts-title {
-    @apply text-4xl font-bold mb-6 text-gray-800;
+    @apply text-2xl font-bold mb-4;
+    max-width: var(--post-card-w);
+    margin-left: auto;
+    margin-right: auto;
   }
-
-  /* 表單內容區塊 */
   .addposts-form-content {
-    @apply space-y-6 bg-white p-6 rounded-lg shadow-md;
+    @apply w-full p-8 bg-white rounded border shadow;
   }
 
-  /* 表單標籤 */
-  .addposts-label {
-    @apply block font-bold text-lg mb-2;
+  /* 與卡片距離 */
+
+  /* ---- 隱藏空的 FormTemplate 內建標題/按鈕區 ---- */
+  .form-template-title:empty {
+    display: none;
   }
 
-  /* 單選按鈕群組 */
+  .form-template-actions:empty {
+    display: none;
+  }
+
+  /* ---- 讓 Template 的卡片樣式更像截圖 ---- */
+  .form-template-content {
+    @apply bg-white shadow rounded p-6 border;
+  }
+
+  /* ---- 區塊間距（避免「否」貼到下一組） ---- */
+  .form-group {
+    @apply mb-6;
+  }
+
+  .form-group-label {
+    @apply block font-semibold mb-3;
+  }
+
+  /* ---- Radio / Checkbox ---- */
   .addposts-radio-group {
-    @apply flex gap-6;
+    @apply flex items-center gap-8;
   }
 
   .addposts-radio-item {
-    @apply font-medium text-base;
+    @apply inline-flex items-center;
   }
 
-  /* 多選按鈕網格 */
   .addposts-checkbox-grid {
-    @apply grid grid-cols-3 gap-2;
+    @apply grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-2;
   }
 
   .addposts-checkbox-item {
-    @apply font-medium text-base flex items-center;
+    @apply inline-flex items-center mb-4;
   }
 
-  /* 輸入框 */
+  /* ---- 輸入/文字區（滿版） ---- */
   .addposts-input {
-    @apply w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500;
+    @apply w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300;
   }
 
-    /* 其他標籤輸入框 */
-  .addposts-other-input {
-    @apply ml-2 border-b border-gray-400 focus:border-blue-500 outline-none w-24 bg-transparent text-sm;
-  }
-
-  /* 文字區域 */
   .addposts-textarea {
-    @apply w-full border border-gray-300 rounded-md px-3 py-2 h-40 focus:outline-none focus:ring-2 focus:ring-blue-500;
+    @apply w-full h-40 border rounded px-3 py-2 resize-y focus:outline-none focus:ring-2 focus:ring-gray-300;
   }
 
-  /* 上傳區塊 */
+  /* ---- 圖片上傳 ---- */
   .addposts-upload-area {
-    @apply w-[70%] bg-gray-100 rounded-lg mx-auto flex flex-col items-center py-8 relative;
+    @apply flex justify-center;
   }
 
   .addposts-upload-btn {
-    @apply bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 mx-auto;
+    @apply bg-black text-white px-4 py-2 rounded hover:bg-gray-800;
   }
 
-  /* 圖片預覽區塊 */
   .addposts-image-preview {
-    @apply mt-6 grid grid-cols-2 gap-4 w-[70%] mx-auto;
+    @apply mt-4 grid grid-cols-2 md:grid-cols-3 gap-3;
   }
 
   .addposts-image-placeholder {
-    @apply aspect-square bg-white border border-gray-300 rounded flex items-center justify-center text-gray-400;
+    @apply aspect-video bg-gray-100 border rounded flex items-center justify-center text-sm text-gray-500;
   }
 
-  /* 按鈕群組 */
+  /* ---- 框線外的按鈕列 ---- */
   .addposts-button-group {
-    @apply grid grid-cols-2 gap-6 mt-8 w-2/3 mx-auto;
+    @apply flex justify-center gap-8 mt-8;
   }
 
   .addposts-cancel-btn {
-    @apply border border-gray-400 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-100 transition;
+    @apply px-6 py-2 bg-black text-white rounded hover:bg-gray-800;
   }
 
+  /* 依照你的截圖是黑底 */
   .addposts-submit-btn {
-    @apply bg-black text-white py-2 rounded-lg font-medium hover:bg-gray-800 transition;
+    @apply px-6 py-2 bg-black text-white rounded hover:bg-gray-800;
   }
+
+  /* ✅ 格線保持水平排列、每格內容垂直置中 */
+  .addposts-checkbox-grid {
+    @apply grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-2 items-center;
+  }
+
+  /* ✅ 文字與輸入框與勾選框維持同一行、不換行、不被擠開 */
+  .addposts-checkbox-item {
+    @apply inline-flex items-center gap-2 whitespace-nowrap leading-none;
+  }
+
+  /* ✅ 統一 checkbox 與文字間距，避免打勾時寬度視覺上改變 */
+  .addposts-checkbox-item>input[type="checkbox"] {
+    @apply mr-2 align-middle;
+  }
+
+  /* ✅ 「其他」的輸入框固定寬度並與文字同一行 */
+  .addposts-checkbox-item input[type="text"] {
+    @apply ml-2 w-28 align-middle;
+  }
+  :root { --post-card-w: 920px; }
+  @media (min-width: 1280px) { :root { --post-card-w: 1000px; } }
+
+  /* 外層頁面容器（保留你原本的） */
+  .addposts-container { @apply w-full px-4 md:px-8 lg:px-16 py-6 max-w-screen-xl mx-auto bg-white; }
+
+  /* ✅ 標題：與卡片「外邊」對齊 */
+  .addposts-title {
+    @apply text-2xl font-bold mb-4;
+    max-width: var(--post-card-w);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ✅ FormTemplate 外層：只負責寬度置中，不要卡片外觀 */
+  .form-template-container {
+    max-width: var(--post-card-w);
+    margin-left: auto;
+    margin-right: auto;
+
+    /* 把你原先加在這裡的卡片樣式全部拿掉／覆蓋 */
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* ✅ 卡片外觀移到 content（FormTemplate 裡的 <form>） */
+  .form-template-content {
+    @apply w-full p-8 bg-white rounded border shadow;
+  }
+
+  /* 手機時縮小內距，放寬寬度 */
+  @media (max-width: 639px) {
+    .form-template-content { @apply p-4; }
+  }
+
 }
