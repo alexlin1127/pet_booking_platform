@@ -1,11 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 
-const pickup = ref(true)
-const grooming = ref(true)
-const boarding = ref(false)
-const boardingTypes = ref([])
-const imageNote = ref('')
+const pickup = ref(true) //接送服務
+const grooming = ref(true) //美容服務
+const boarding = ref(false) //住宿服務
+const boardingTypes = ref([]) // 住宿類型
+const imageNote = ref('') // 圖片說明
 
 const submitForm = () => {
   console.log({
@@ -19,84 +19,101 @@ const submitForm = () => {
 </script>
 
 <template>
-  <section class="max-w-2xl mx-auto p-6 bg-white shadow rounded">
-    <h1 class="text-2xl font-bold mb-6">服務開通</h1>
+  <div class="w-full px-4 md:px-8 lg:px-16 py-6 max-w-screen-xl mx-auto">
+    <!-- 頁面標題 -->
+    <h1 class="page-title">服務開通</h1>
 
-    <!-- 基本服務開關 -->
+    <!-- 表單：只包基本服務開關 -->
     <form @submit.prevent="submitForm" class="space-y-6">
-      <!-- 接送服務 -->
-      <fieldset class="space-y-2">
-        <legend class="font-semibold">接送服務</legend>
-        <label class="inline-flex items-center mr-4">
-          <input type="radio" v-model="pickup" :value="true" class="form-radio" />
-          <span class="ml-2">是</span>
-        </label>
-        <label class="inline-flex items-center">
-          <input type="radio" v-model="pickup" :value="false" class="form-radio" />
-          <span class="ml-2">否</span>
-        </label>
-      </fieldset>
+      <section class="card">
+        <!-- 接送服務 -->
+        <fieldset class="form-group">
+          <legend class="form-group-label mb-1">接送服務</legend>
+          <div class="form-radio-group">
+            <label class="form-radio">
+              <input type="radio" v-model="pickup" :value="true" />
+              <span>是</span>
+            </label>
+            <label class="form-radio">
+              <input type="radio" v-model="pickup" :value="false" />
+              <span>否</span>
+            </label>
+          </div>
+        </fieldset>
 
-      <!-- 美容服務 -->
-      <fieldset class="space-y-2">
-        <legend class="font-semibold">美容服務</legend>
-        <label class="inline-flex items-center mr-4">
-          <input type="radio" v-model="grooming" :value="true" class="form-radio" />
-          <span class="ml-2">是</span>
-        </label>
-        <label class="inline-flex items-center">
-          <input type="radio" v-model="grooming" :value="false" class="form-radio" />
-          <span class="ml-2">否</span>
-        </label>
-      </fieldset>
+        <!-- 美容服務 -->
+        <fieldset class="form-group">
+          <legend class="form-group-label">美容服務</legend>
+          <div class="form-radio-group">
+            <label class="form-radio">
+              <input type="radio" v-model="grooming" :value="true" />
+              <span>是</span>
+            </label>
+            <label class="form-radio">
+              <input type="radio" v-model="grooming" :value="false" />
+              <span>否</span>
+            </label>
+          </div>
+        </fieldset>
 
-      <!-- 住宿服務 -->
-      <fieldset class="space-y-2">
-        <legend class="font-semibold">住宿服務</legend>
-        <label class="inline-flex items-center mr-4">
-          <input type="radio" v-model="boarding" :value="true" class="form-radio" />
-          <span class="ml-2">是</span>
-        </label>
-        <label class="inline-flex items-center">
-          <input type="radio" v-model="boarding" :value="false" class="form-radio" />
-          <span class="ml-2">否</span>
-        </label>
-      </fieldset>
+        <!-- 住宿服務 -->
+        <fieldset class="form-group">
+          <legend class="form-group-label">住宿服務</legend>
+          <div class="form-radio-group">
+            <label class="form-radio">
+              <input type="radio" v-model="boarding" :value="true" />
+              <span>是</span>
+            </label>
+            <label class="form-radio">
+              <input type="radio" v-model="boarding" :value="false" />
+              <span>否</span>
+            </label>
+          </div>
+        </fieldset>
 
-     <!-- 住宿類型 -->
-    <div v-if="boarding" class="boarding-type-block">
-      <label class="boarding-type-label">寵物住宿類型</label>
-      <div class="boarding-type-checkboxes">
-        <label class="boarding-type-option">
-          <input type="checkbox" v-model="boardingTypes" value="狗狗" />
-          <span>狗狗</span>
-        </label>
-        <label class="boarding-type-option">
-          <input type="checkbox" v-model="boardingTypes" value="貓咪" />
-          <span>貓咪</span>
-        </label>
+        <!-- 住宿類型 -->
+        <div v-if="boarding" class="boarding-type-block">
+          <label class="field-label">寵物住宿類型</label>
+          <div class="boarding-type-checkboxes">
+            <label class="boarding-type-option">
+              <input type="checkbox" v-model="boardingTypes" value="狗狗" />
+              <span>狗狗</span>
+            </label>
+            <label class="boarding-type-option">
+              <input type="checkbox" v-model="boardingTypes" value="貓咪" />
+              <span>貓咪</span>
+            </label>
+          </div>
+        </div>
+      </section>
+    </form>
+
+    <!-- 登記證上傳：獨立卡片 -->
+    <section
+      v-if="boardingTypes.includes('狗狗') || boardingTypes.includes('貓咪')"
+      class="card mt-6"
+    >
+      <h2 class="section-subtitle">特定寵物業登記許可證 <span class="required">*</span></h2>
+
+      <div v-if="boardingTypes.includes('狗狗')" class="license-upload-block">
+        <label class="license-label">狗狗特定寵物業登記許可證</label>
+        <button type="button" class="btn">上傳狗狗證明</button>
       </div>
-    </div>
 
-    <!-- 狗狗登記證 -->
-    <div v-if="boardingTypes.includes('狗狗')" class="license-upload-block">
-      <label class="license-label">狗狗特定寵物業登記許可證</label>
-      <button type="button" class="upload-btn">上傳狗狗證明</button>
-    </div>
+      <div v-if="boardingTypes.includes('貓咪')" class="license-upload-block">
+        <label class="license-label">貓咪特定寵物業登記許可證</label>
+        <button type="button" class="btn">上傳貓咪證明</button>
+      </div>
+    </section>
 
-    <!-- 貓咪登記證 -->
-    <div v-if="boardingTypes.includes('貓咪')" class="license-upload-block">
-      <label class="license-label">貓咪特定寵物業登記許可證</label>
-      <button type="button" class="upload-btn">上傳貓咪證明</button>
+    <!-- 按鈕列（在最底、容器內） -->
+    <div class="btn-row">
+      <button type="button" class="btn btn-secondary">取消並返回</button>
+      <button type="button" class="btn btn-primary">送出審核</button>
+      <!-- 若要真的 submit，請把第二顆改成 type="submit" 並移回 form 中 -->
     </div>
-
-    <!-- 按鈕區 -->
-    <div class="form-actions">
-      <button type="button" class="btn-secondary">取消並返回</button>
-      <button type="submit" class="btn-primary">送出並儲存</button>
-    </div>
-  </form>
-  </section>
+  </div>
 </template>
-<style scoped src="@/styles/pages/Stores/openservice.css"></style>
+
+<!-- <style scoped src="@/styles/pages/Stores/openservice.css"></style> -->
 

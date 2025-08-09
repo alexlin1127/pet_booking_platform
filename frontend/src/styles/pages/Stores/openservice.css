@@ -3,43 +3,35 @@
 @tailwind utilities;
 
 @layer components {
-  .boarding-type-block {
-    @apply border p-4 rounded;
-  }
+  /* ---- 標題語意化 ---- */
+  .section-subtitle { @apply text-lg font-semibold mb-4; }
+  .required { @apply text-red-600; }
 
-  .boarding-type-label {
-    @apply block font-medium mb-2;
-  }
+  /* ---- 卡片 ---- */
+  .card { @apply max-w-2xl mx-auto p-6 bg-white shadow rounded; }
 
-  .boarding-type-checkboxes {
-    @apply flex gap-4;
-  }
+  /* ---- 表單群組 ---- */
+  .form-group { @apply space-y-2 mb-6; }            /* 群組本身與下一塊距離 */
+  .form-group-label { @apply block font-semibold mb-3; } /* 標題與內容間距拉大 */
+  .field-label { @apply block font-medium; }
 
-  .boarding-type-option {
-    @apply inline-flex items-center;
-  }
+  .form-radio-group { @apply flex items-center gap-6; }
+  .form-radio { @apply inline-flex items-center gap-2; }
 
-  .license-upload-block {
-    @apply border p-4 rounded flex items-center gap-2;
-  }
+  /* ---- 住宿類型 ---- */
+  .boarding-type-block { @apply border p-4 rounded mt-2; }
+  .boarding-type-checkboxes { @apply flex gap-6; }
+  .boarding-type-option { @apply inline-flex items-center gap-2; }
 
-  .license-label {
-    @apply block font-medium;
-  }
+  /* ---- 登記證上傳 ---- */
+  .license-upload-block { @apply border p-4 rounded flex items-center justify-between gap-3 mb-4; }
+  .license-label { @apply font-medium; }
 
-  .upload-btn {
-    @apply bg-black text-white px-4 py-2 rounded hover:bg-gray-800;
-  }
+  /* ---- 按鈕 ---- */
+  .btn { @apply px-4 py-2 rounded transition; }
+  .btn-primary { @apply bg-black text-white hover:bg-gray-800; }
+  .btn-secondary { @apply bg-gray-200 text-black hover:bg-gray-300; }
 
-  .form-actions {
-    @apply flex flex-col items-center gap-4 mt-6;
-  }
-
-  .btn-secondary {
-    @apply w-full bg-gray-200 text-black py-2 rounded hover:bg-gray-300;
-  }
-
-  .btn-primary {
-    @apply w-full bg-black text-white py-2 rounded hover:bg-gray-800;
-  }
+  /* ---- 底部按鈕列：與上方內容留更大間距 ---- */
+  .btn-row { @apply flex justify-center gap-8 mt-8 pt-6; }
 }
