@@ -18,6 +18,10 @@
         box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
     }
 
+    td{
+        @apply py-3;
+    }
+
     .card-row td {
         @apply p-4 border-0;
     }
