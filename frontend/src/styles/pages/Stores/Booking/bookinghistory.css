@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================= Boarding Management ================= */
+@layer components {
+    .history-container {
+        @apply p-4;
+    }
+
+    .history-title {
+        @apply text-2xl font-bold flex items-center justify-between bg-gray-200 px-4 py-2 rounded-t-xl mb-2 border-b border-gray-300;
+    }
+
+
+    .history-table-container {
+        @apply mb-4;
+    }
+
+    .history-btn {
+        @apply bg-black text-white px-3 py-1 rounded transition-all text-sm h-9 mx-1;
+    }
+    
+}
