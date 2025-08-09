@@ -26,7 +26,7 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/token/blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-
+]
 
 router = DefaultRouter(trailing_slash=False)
 router.register(r'store/profile', StoreProfileViewSet, basename='store-profile')
@@ -34,7 +34,10 @@ router.register(r'admin/stores', StoreAdminViewSet, basename='admin-stores')
 router.register(r'store/posts', StorePostViewSet, basename='store-posts')
 router.register(r'admin/posts', AdminPostViewSet, basename='admin-posts')
 router.register(r'store/images', StoreImageViewSet, basename='store-images')
-
+router.register(r'store/boarding-services', BoardingServiceViewSet, basename='boarding-services')
+router.register(r'store/grooming-services', GroomingServiceViewSet, basename='grooming-services')
+router.register(r'store/boarding-pricings', BoardingServicePricingViewset, basename='boarding-pricings')
+router.register(r'store/grooming-pricings', GroomingServicePricingViewset, basename='grooming-pricings')
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
