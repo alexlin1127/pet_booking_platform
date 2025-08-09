@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import FormTemplate from '@/components/UI/FormTemplate.vue'
+
+const route = useRoute()
+const router = useRouter()
 
 function handleSubmit() {
     console.log('提交貼文！')
@@ -11,7 +15,39 @@ const otherChecked = ref(false)
 const otherText = ref("")
 
 // 圖片預覽假資料
-const images = ref([]) // 之後可改為圖片檔案陣列
+/** 單張圖片：以 Object URL 預覽 */
+const image = ref(null)      // string | null
+const fileInput = ref(null)  // <input type="file">
+
+const triggerFileInput = () => {
+  fileInput.value?.click()
+}
+
+const handleFileChange = (e) => {
+  const file = e.target.files?.[0]
+  if (file) {
+    // 釋放舊的 URL，避免記憶體累積
+    if (image.value) URL.revokeObjectURL(image.value)
+    image.value = URL.createObjectURL(file)
+  }
+  // 讓選同一張圖也能再次觸發 change
+  e.target.value = ''
+}
+
+const removeImage = () => {
+  if (image.value) URL.revokeObjectURL(image.value)
+  image.value = null
+}
+
+const submitForm = () => {
+  console.log({
+    service: service.value,
+    tags: tags.value,
+    hasImage: !!image.value,
+  })
+}
+// 回到上一頁
+const goBack = () => router.push('/stores/store-management')
 </script>
 
 <template>
@@ -83,23 +119,28 @@ const images = ref([]) // 之後可改為圖片檔案陣列
         <div class="form-group">
           <label class="form-group-label">圖片</label>
           <div class="addposts-upload-area">
-            <button type="button" class="addposts-upload-btn">新增圖片</button>
+            <button type="button" class="addposts-upload-btn" @click="triggerFileInput">新增圖片</button>
+            <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="handleFileChange"/>
           </div>
+        
 
           <!-- 圖片預覽（可選） -->
-          <div v-if="images && images.length" class="addposts-image-preview">
-            <div v-for="img in images" :key="img" class="addposts-image-placeholder">{{ img }}</div>
+          <div v-if="image" class="addposts-image-preview">
+             <div class="addposts-image-placeholder">
+              <img :src="image" alt="預覽圖片" class="w-full h-full object-cover rounded" />
+               <button type="button" class="addposts-remove-btn" @click="removeImage">移除</button>
+              </div>
           </div>
         </div>
-      </div>
 
       <!-- 不放 actions，讓 Template 的 actions 區保持空的（下面有自訂的按鈕列） -->
-      <template #actions></template>
+      
+      </div>
     </FormTemplate>
 
     <!-- ✅ 框線外的按鈕列（跟你的截圖同位置） -->
     <div class="addposts-button-group">
-      <button type="button" class="addposts-cancel-btn">取消</button>
+      <button type="button" class="addposts-cancel-btn" @click="goBack">取消</button>
       <button type="button" class="addposts-submit-btn" @click="handleSubmit">新增</button>
     </div>
   </div>
