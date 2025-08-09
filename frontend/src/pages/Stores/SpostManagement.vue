@@ -45,7 +45,7 @@ function handlePageChange(page) {
 }
 // 查看文章
 function viewPost(id) {
-  router.push(`/admin/posts/${id}`)  // 根據實際路由設計修改
+  router.push(`/stores/posts/${id}`)  // 根據實際路由設計修改
 }
 const showModal = ref(false)
 const selectedPost = ref(null)
@@ -110,7 +110,6 @@ function handleButtonClick({ action, data, button }) {
     </div>
       <div class="post-header-actions">
       <button class="post-button" @click="goToNewPost">新增貼文</button>
-      <button class="post-button">送出審核</button>
       </div>
     </div>
 
