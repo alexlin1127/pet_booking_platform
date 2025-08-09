@@ -30,61 +30,258 @@ const submitForm = () => {
     imageNote: imageNote.value
   })
 }
+//圖片管理區
+const fileInput = ref(null) //綁定 HTML <input type="file"> 的 DOM可以用 fileInput.value.click() 來程式化開啟檔案選擇視窗
+// 先放幾張示意圖；實務上可從後端讀取
+const images = ref([
+  'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?q=80&w=600',
+  'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=400',
+  'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=400'
+])
+const handleFiles = (e) => {
+  const files = Array.from(e.target.files || []) //e.target.files檔案選擇視窗中選的檔案列表（FileList）
+  if (!files.length) return
+  const remain = 9 - images.value.length //圖片上限是 9 張，計算能放幾張
+  const toAdd = files.slice(0, remain) //選了很多張，只取可用的數量
+
+  // 轉成本地 URL 預覽；實務上改成上傳後拿回 URL
+  toAdd.forEach(f => {
+    const url = URL.createObjectURL(f)
+    images.value.push(url) //即時渲染
+  })
+  e.target.value = '' // 允許重選同一批
+}
+// 刪除圖片
+const remove = (index) => {
+  images.value.splice(index, 1)
+}
+
+//營業時間
+/* 時間下拉：每 30 分一格（可改） */
+// length: 48 → 代表一天要切成 48 格（因為 24 小時 × 每小時 2 格 = 48）
+// i / 2 → 因為每小時有兩格（:00 和 :30），除以 2 就能得到小時數
+// Math.floor() → 去掉小數
+// String(...).padStart(2, '0') → 小時補 0，讓 9 變成 09
+const timeOptions = Array.from({ length: 48 }, (_, i) => {
+  const h = String(Math.floor(i / 2)).padStart(2, '0')
+  const m = i % 2 ? '30' : '00'
+  return `${h} : ${m}`
+})
+
+const openTime = ref('09 : 00')
+const closeTime = ref('17 : 00')
+
+/* 公休 */
+const weekdays = [
+  { value: 1, label: '星期一' },
+  { value: 2, label: '星期二' },
+  { value: 3, label: '星期三' },
+  { value: 4, label: '星期四' },
+  { value: 5, label: '星期五' },
+  { value: 6, label: '星期六' },
+  { value: 7, label: '星期日' }
+]
+const offDays = ref([]) // 例： [1,3,7]
+
+/* 服務項目（標籤）固定清單，用來顯示建議按鈕 */
+const serviceOptions = [
+  '寵物美容', '美容剪毛', 'SPA護理', '寵物洗澡', '貓咪專區', '造型美容'
+]
+// 已選中的服務項目（初始值先選 3 個）
+const selectedServices = ref(['寵物美容', '美容剪毛', 'SPA護理'])
+// 輸入框的文字（用於自訂新增服務項目）
+const tagInput = ref('')
+
+const addService = (name) => {
+  if (!name) return //名稱是空的，就直接跳出（不新增）
+  if (selectedServices.value.length >= 20) return //  如果已達 20 個上限，就不新增
+  if (!selectedServices.value.includes(name)) {  // 如果目前還沒有這個項目
+    selectedServices.value.push(name)  // 加到已選清單中
+  }
+}
+
+const addFromInput = () => {
+  const val = tagInput.value.trim() // 去掉輸入前後的空白
+  if (!val) return // 如果輸入是空的，就不新增
+  addService(val) // 新增到已選清單selectedServices
+  tagInput.value = ''  // 新增後清空輸入框
+}
+// 移除指定索引的服務項目
+const removeService = (idx) => selectedServices.value.splice(idx, 1)
 </script>
 <template>
-  <h1 class="text-2xl md:text-3xl font-bold">修改本店資訊</h1>
-  <section class="max-w-4xl mx-auto p-6 bg-white shadow rounded space-y-6">
-    <h1 class="text-2xl font-bold">修改本店資訊</h1>
-<form @submit.prevent="submitForm" class="space-y-6">
+  <div class="w-full px-4 md:px-8 lg:px-16 py-6 max-w-screen-xl mx-auto">
+ <!-- ✅ 標題在外面 -->
+    <h1 class="page-title">修改本店資訊</h1>
+   <!-- ✅ 表單卡片（框線在這裡） -->
+    <section class="form-card">
+      <form @submit.prevent="submitForm" class="space-y-6">
     <!-- 店家照片 -->
-    
-      <div class="flex flex-col mb-6">
-      <label class="block font-semibold mb-2">店家照片</label>
-      <button class="mt-2 px-4 py-1 bg-black text-white text-sm rounded">新增圖片</button>
-      </div>
-      <div class="grid grid-cols-4 gap-2">
-        <div v-for="n in 8" :key="n" class="aspect-[4/3] bg-gray-200"></div>
-      </div>
-      <!-- <button class="mt-2 px-4 py-1 bg-black text-white text-sm rounded">新增圖片</button> -->
-    
+      <section class="photos-section">
+        <div class="photos-header">
+          <label class="photos-title block font-semibold mb-1">店家照片</label>
+          <!-- 上傳按鈕（隱藏 input） -->
+          <input
+            ref="fileInput"
+            type="file"
+            accept="image/*"
+            multiple
+            class="hidden"
+            @change="handleFiles"
+          />
+          <button type="button" class="upload-btn"  @click="fileInput.click()">
+            新增圖片
+          </button>
+        </div>
 
-    <!-- 店家名稱 -->
-    <div>
-      <label class="block font-semibold mb-1">店家名稱</label>
-      <input type="text" v-model="form.name" placeholder="請輸入店家名稱" class="form-input w-full" />
-    </div>
+        
 
-    <!-- 地址 -->
-    <div>
-      <label class="block font-semibold mb-1">地址</label>
-      <div class="flex gap-2">
-        <select v-model="form.city" class="form-select w-1/4">
-          <option disabled selected>市</option>
-        </select>
-        <select v-model="form.district" class="form-select w-1/4">
-          <option disabled selected>區</option>
-        </select>
-        <input type="text" v-model="form.detailAddress" class="form-input flex-1" placeholder="請輸入詳細地址" />
-      </div>
-    </div>
+        <!-- 圖片格子 -->
+        <ul class="photo-grid">
+          <!-- 封面（第一張） -->
+          <li v-if="images.length" class="photo-card cover-card">
+            <img :src="images[0]" alt="封面" class="photo-img" />
+            <span class="cover-badge">封面</span>
+            <span class="cover-tip">此張將作為店家頁面的封面圖</span>
+            <button type="button" class="photo-delete" @click="remove(0)">×</button>
+          </li>
 
-    <!-- 電話 -->
-    <div>
-      <label class="block font-semibold mb-1">電話</label>
-      <input type="text" v-model="form.phone" placeholder="請輸入店家電話" class="form-input w-full" />
-    </div>
+          <!-- 其餘縮圖 -->
+          <li
+            v-for="(src, idx) in images.slice(1)"
+            :key="src + idx"
+            class="photo-card"
+          >
+            <img :src="src" class="photo-img" />
+            <button
+              type="button"
+              class="photo-delete"
+              @click="remove(idx + 1)"
+              aria-label="刪除圖片"
+            >
+              ×
+            </button>
+          </li>
+
+          <!-- 佔位上傳卡（未達上限時顯示） -->
+          <li
+            v-if="images.length < 9"
+            class="photo-card placeholder-card"
+            @click="fileInput.click()"
+          >
+            <span class="placeholder-plus">＋</span>
+            <span class="placeholder-text">新增圖片</span>
+          </li>
+        </ul>
+      </section>
+        
+
+        <!-- 店家名稱 -->
+        <div>
+          <label class="block font-semibold mb-1">店家名稱</label>
+          <input type="text" v-model="form.name" placeholder="請輸入店家名稱" class="form-input w-full" />
+        </div>
+
+        <!-- 地址 -->
+        <div>
+          <label class="block font-semibold mb-1">地址</label>
+          <div class="flex gap-2">
+            <select v-model="form.city" class="form-select w-1/4">
+              <option disabled selected>市</option>
+            </select>
+            <select v-model="form.district" class="form-select w-1/4">
+              <option disabled selected>區</option>
+            </select>
+            <input type="text" v-model="form.detailAddress" class="form-input flex-1" placeholder="請輸入詳細地址" />
+          </div>
+        </div>
+
+        <!-- 電話 -->
+        <div>
+          <label class="block font-semibold mb-1">電話</label>
+          <input type="text" v-model="form.phone" placeholder="請輸入店家電話" class="form-input w-full" />
+        </div>
 
     <!-- 營業時間 -->
-    <div>
-      <label class="block font-semibold mb-1">營業時間</label>
-      <input type="text" v-model="form.hours" placeholder="例：週一～週日 10:00~19:00（週日休息）" class="form-input w-full" />
-    </div>
+      <section class="space-y-4">
+        <div class="form-row">
+          <label class="field-label">營業時間</label>
+          <div class="time-row">
+            <span class="time-label">開始營業時間：</span>
+            <select v-model="openTime" class="time-select">
+              <option v-for="t in timeOptions" :key="'open-'+t" :value="t">{{ t }}</option>
+            </select>
 
-    <!-- 服務項目 -->
-    <div>
-      <label class="block font-semibold mb-1">服務項目</label>
-      <input type="text" v-model="form.services" placeholder="例：寵物洗澡、美容剪毛、SPA護理、貓咪專區" class="form-input w-full" />
-    </div>
+            <span class="mx-2">~</span>
+
+            <span class="time-label">結束營業時間：</span>
+            <select v-model="closeTime" class="time-select">
+              <option v-for="t in timeOptions" :key="'close-'+t" :value="t">{{ t }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 公休時間 -->
+        <div class="form-row">
+          <label class="field-label">公休時間</label>
+          <div class="days-row">
+            <label v-for="d in weekdays" :key="d.value" class="day-item">
+              <input
+                type="checkbox"
+                class="day-checkbox"
+                :value="d.value"
+                v-model="offDays"
+              />
+              <span>{{ d.label }}</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 服務項目 -->
+        <div class="form-row">
+          <label class="field-label">服務項目</label>
+
+          <!-- 已選標籤 + 輸入框 -->
+          <div class="service-wrap">
+            <div class="service-input">
+              <!-- 已選標籤 -->
+              <span
+                v-for="(tag, i) in selectedServices"
+                :key="tag + i"
+                class="tag-chip"
+              >
+                {{ tag }}
+                <button type="button" class="tag-x" @click="removeService(i)">×</button>
+              </span>
+
+              <!-- 文字輸入（Enter 新增） -->
+              <input
+                v-model.trim="tagInput"
+                class="tag-text"
+                type="text"
+                placeholder="輸入服務並按 Enter"
+                @keydown.enter.prevent="addFromInput"
+              />
+            </div>
+          </div>
+
+          <!-- 建議清單（點一下加入） -->
+          <div class="service-suggest">
+            <button
+              v-for="s in serviceOptions"
+              :key="s"
+              type="button"
+              class="suggest-chip"
+              @click="addService(s)"
+              :disabled="selectedServices.includes(s)"
+            >
+              {{ s }}
+            </button>
+          </div>
+        </div>
+  </section>
+    
+  
 
     <!-- 交通 -->
     <div>
@@ -184,64 +381,12 @@ const submitForm = () => {
       <input type="url" v-model.trim="form.google" class="form-input w-full" placeholder="請提供官方Google地圖網址" />
     </div>    
     <!-- 按鈕列 -->
+    </form>
+  </section>
     <div class="flex justify-center pt-6 space-x-8">
       <button class="btn">取消並返回</button>
       <button class="btn">確認修改</button>
       <!-- <button class="px-6 py-4 bg-black text-white rounded">確認修改</button> -->
     </div>
-    </form>
-  </section>
+  </div>
 </template>
-
-
-<style scoped>
-.form-input, .form-select, .form-textarea {
-  @apply border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400;
-}
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer components {
-  .boarding-type-block {
-    @apply border p-4 rounded;
-  }
-
-  .boarding-type-label {
-    @apply block font-medium mb-2;
-  }
-
-  .boarding-type-checkboxes {
-    @apply flex gap-4;
-  }
-
-  .boarding-type-option {
-    @apply inline-flex items-center;
-  }
-
-  .license-upload-block {
-    @apply border p-4 rounded flex items-center gap-2;
-  }
-
-  .license-label {
-    @apply block font-medium;
-  }
-
-  .upload-btn {
-    @apply bg-black text-white px-4 py-2 rounded hover:bg-gray-800;
-  }
-
-  .form-actions {
-    @apply flex flex-col items-center gap-4 mt-6;
-  }
-
-  /* .btn-secondary {
-    @apply w-full bg-gray-200 text-black py-2 rounded hover:bg-gray-300;
-  }
-
-  .btn-primary {
-    @apply w-full bg-black text-white py-2 rounded hover:bg-gray-800;
-  } */
-}
-
-</style>
