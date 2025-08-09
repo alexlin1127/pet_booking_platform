@@ -35,6 +35,7 @@
     .boarding-search-btn {
         @apply bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-all text-sm h-8 mx-1;
     }
+    
     .boarding-btn {
         @apply bg-black text-white px-3 py-1 rounded transition-all text-sm h-9 mx-1;
     }
