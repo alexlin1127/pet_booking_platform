@@ -10,8 +10,9 @@ import CustomerRegister from "../pages/Customers/CustomerRegister.vue"
 import StoreRegister from "../pages/Stores/StoreRegister.vue"
 import StoreManage from "../pages/Stores/Posts/Postsmanage.vue"
 import StorePostProcess from "../pages/Stores/Posts/PostsProcess.vue"
-import StorePostView from "../pages/Stores/Posts/PostsView.vue"
+import StorePostReview from "../pages/Stores/Posts/StorePostReview.vue"
 import SpostManagement from '../pages/Stores/SpostManagement.vue'
+
 
 
 // 管理者頁面Router
@@ -22,7 +23,7 @@ import AccountManagement from "../pages/Admin/Account/AccountManagement.vue"
 import PostManagement from "../pages/Admin/Posts/PostManagement.vue"
 import PostReview from "../pages/Admin/Posts/PostReview.vue";
 import AdminDashboard from "../pages/Admin/AdminDashboard.vue";
-import NewPost from "../pages/Stores/NewPost.vue";
+import NewPost from "../pages/Stores/NewPost.vue"
 
 // 前台頁面Router - 使用正確的路徑
 import NewsPage from "../pages/Customers/News.vue";
@@ -32,6 +33,7 @@ import BookingLodgingPage from "../pages/Customers/Booking/Lodging.vue";
 import StoresInfo from "../pages/Stores/StoresInfo.vue";
 import EditStoresInfo from "../pages/Stores/EditStoresInfo.vue";
 import OpenService from "../pages/Stores/OpenService.vue";
+
 
 
 
@@ -100,7 +102,7 @@ const routes = [
     },
     {
         path: "/stores/posts/view/:id",
-        component: StorePostView,
+        component: StorePostReview,
         meta: { sidebar: false }
     },
 
@@ -145,6 +147,11 @@ const routes = [
     {
         path: "/stores/store-management",
         component: SpostManagement,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores/posts/:status",
+        component: StorePostReview,
         meta: { sidebar: false }
     },
     {
