@@ -3,7 +3,6 @@ import time
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
 
 class UserRole(models.TextChoices):
     MEMBER = 'member', '一般會員'   
@@ -11,7 +10,7 @@ class UserRole(models.TextChoices):
     ADMIN = 'admin', '系統管理者'
 
 class User(AbstractUser):
-    user_id = models.CharField(max_length=64, blank=False, unique=True, db_index=True)
+    user_id = models.CharField(max_length=64, unique=True)
     role = models.CharField(max_length=64, choices=UserRole.choices, default=UserRole.MEMBER, blank=False, verbose_name="用戶角色")
     is_store_owner = models.BooleanField(default=False, blank=False, verbose_name="是否為寵物業者")
     is_admin = models.BooleanField(default=False, blank=False, verbose_name="是否為系統管理者")
