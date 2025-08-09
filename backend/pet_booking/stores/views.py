@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 
-class Filter(django_filters.FilterSet):
+class AdminFilter(django_filters.FilterSet):
     created_at_after = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='gte')
     created_at_before = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='lte')
     class Meta:
@@ -86,7 +86,7 @@ class StorePagination(PageNumberPagination):
 class StoreAdminViewSet(viewsets.ModelViewSet):
     queryset = Store.objects.all().order_by('-created_at')
     filter_backends = [DjangoFilterBackend]
-    filterset_class= Filter
+    filterset_class= AdminFilter
     pagination_class = StorePagination
     # permission_classes = [IsAuthenticated]
 
@@ -102,7 +102,51 @@ class AdminPostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all().order_by('created_at')
     serializer_class = PostSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_class= Filter
+    filterset_class= AdminFilter
     pagination_class = StorePagination
     # permission_classes = [IsAuthenticated]
+
+
+# 使用者
+# 使用者-店家清單
+
+class CustomerStoreFilter(django_filters.FilterSet):
+    county = django_filters.CharFilter(method='filter_county')
+    district = django_filters.CharFilter(method='filter_district')
+
+    class Meta:
+        model = Store
+        fields = ['service_item', 'county', 'district']  # 注意這裡不用直接寫 address
+
+    def filter_county(self, queryset, name, value):
+        return queryset.filter(address__county=value)
+
+    def filter_district(self, queryset, name, value):
+        return queryset.filter(address__district=value)
+
+
+class CustomerStorePagination(PageNumberPagination):
+    page_size = 9
+    page_size_query_param = 'page_size'
+    max_page_size = 50
+
+class CustomerStoreListViewSet(viewsets.ModelViewSet):
+    http_method_names = ['get']
+    serializer_class = StoreListSerializer
+    pagination_class = CustomerStorePagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = CustomerStoreFilter
+
+    queryset = Store.objects.filter(status='confirmed').order_by('-created_at')
+
+
+
+# 使用者-店家詳細
+class CustomerStoreDetailViewSet(viewsets.ModelViewSet):
+    http_method_names = ['get']
+    serializer_class = StoreDetailSerializer
+    queryset = Store.objects.all().order_by('-created_at')
+
+
+# 使用者-貼文清單
 

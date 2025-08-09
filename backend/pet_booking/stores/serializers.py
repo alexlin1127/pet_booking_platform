@@ -25,7 +25,7 @@ class StoreListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Store
-        fields = ['user_id', 'store_name', 'owner_name', 'address', 'phone', 'created_at', 'status', 'grooming_service', 'boarding_service']
+        fields = ['user_id', 'store_name', 'owner_name', 'address', 'phone', 'created_at', 'status', 'grooming_service', 'boarding_service', 'service_item', 'hero_image']
         
 
 # 管理者-店家詳細
