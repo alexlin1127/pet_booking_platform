@@ -50,6 +50,7 @@ class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField(max_length=500)
     image_url = models.ImageField(upload_to='posts/', blank=True, null=True)
+    type = models.CharField(max_length=20, choices=[('news', 'News'), ('grooming', 'Grooming'), ('boarding', 'Boarding')])
     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('repending', 'Repending'), ('rechecked', 'Rechecked'), ('confirmed', 'Confirmed')])
     tags = models.JSONField(null=True, blank=True)
     reject_content = models.CharField(max_length=1024, blank=True, null=True)

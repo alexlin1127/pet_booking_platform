@@ -18,7 +18,7 @@ class AdminFilter(django_filters.FilterSet):
 # 店家詳情
 class StoreProfileViewSet(viewsets.ModelViewSet):
     serializer_class = StoreSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Store.objects.filter(user_id=self.request.user)
@@ -36,7 +36,7 @@ class StoreProfileViewSet(viewsets.ModelViewSet):
 # 店家文章
 class StorePostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Post.objects.filter(store__user_id=self.request.user)
@@ -56,7 +56,7 @@ class StorePostViewSet(viewsets.ModelViewSet):
 # 店家圖片
 class StoreImageViewSet(viewsets.ModelViewSet):
     serializer_class = StoreImageSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return StoreImage.objects.filter(user_id=self.request.user)
@@ -88,7 +88,7 @@ class StoreAdminViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class= AdminFilter
     pagination_class = StorePagination
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -104,7 +104,7 @@ class AdminPostViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class= AdminFilter
     pagination_class = StorePagination
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 # 使用者
@@ -130,23 +130,58 @@ class CustomerStorePagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 50
 
-class CustomerStoreListViewSet(viewsets.ModelViewSet):
+class CustomerStoreViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
     serializer_class = StoreListSerializer
     pagination_class = CustomerStorePagination
     filter_backends = [DjangoFilterBackend]
     filterset_class = CustomerStoreFilter
-
     queryset = Store.objects.filter(status='confirmed').order_by('-created_at')
 
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return StoreSerializer
+        return StoreListSerializer
 
 
-# 使用者-店家詳細
-class CustomerStoreDetailViewSet(viewsets.ModelViewSet):
+# class GroomingStoreViewSet(viewsets.ModelViewSet):
+#     http_method_names = ['get']
+#     serializer_class = StoreListSerializer
+#     pagination_class = CustomerStorePagination
+#     filter_backends = [DjangoFilterBackend]
+#     filterset_class = CustomerStoreFilter
+#     queryset = Store.objects.filter(grooming_service=True, status='confirmed').order_by('-created_at')
+    
+
+# class BoardingStoreViewSet(viewsets.ModelViewSet):
+#     http_method_names = ['get']
+#     serializer_class = StoreListSerializer
+#     pagination_class = CustomerStorePagination
+#     filter_backends = [DjangoFilterBackend]
+#     filterset_class = CustomerStoreFilter
+#     queryset = Store.objects.filter(boarding_service=True, status='confirmed').order_by('-created_at')
+    
+
+
+# 使用者-貼文
+class CustomerPostFilter(django_filters.FilterSet):
+    class Meta:
+        model = Post
+        fields = ['type']
+    
+
+class CustomerPostPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 50
+
+class CustomerPostViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
-    serializer_class = StoreDetailSerializer
-    queryset = Store.objects.all().order_by('-created_at')
+    serializer_class = PostSerializer
+    pagination_class = CustomerPostPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = CustomerPostFilter
+    queryset = Post.objects.filter(status='confirmed').order_by('-created_at')
 
 
-# 使用者-貼文清單
 
