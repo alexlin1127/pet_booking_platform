@@ -22,12 +22,10 @@ router.register(r'store/posts', StorePostViewSet, basename='store-posts')
 router.register(r'admin/posts', AdminPostViewSet, basename='admin-posts')
 router.register(r'store', CustomerStoreViewSet, basename='customer-store')
 router.register(r'post', CustomerPostViewSet, basename='customer-post')
-router.register(r'store/images', StoreImageViewSet, basename='store-images')
 router.register(r'store/boarding_services', BoardingServiceViewSet, basename='boarding_services')
 router.register(r'store/grooming_services', GroomingServiceViewSet, basename='grooming_services')
-router.register(r'store/boarding_pricings', BoardingServicePricingViewset, basename='boarding_pricings')
-router.register(r'store/grooming_pricings', GroomingServicePricingViewset, basename='grooming_pricings')
-
+router.register(r'boarding_services', CustomerBoardingViewSet, basename='customer_boarding')
+router.register(r'grooming_services', CustomerGroomingViewset, basename='customer_grooming')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
