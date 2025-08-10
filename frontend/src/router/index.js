@@ -33,6 +33,7 @@ import BookingLodgingPage from "../pages/Customers/Booking/Lodging.vue";
 import StoresInfo from "../pages/Stores/StoresInfo.vue";
 import EditStoresInfo from "../pages/Stores/EditStoresInfo.vue";
 import OpenService from "../pages/Stores/OpenService.vue";
+import ServicesManage from "../pages/Stores/ServicesManage.vue";
 
 
 
@@ -172,6 +173,11 @@ const routes = [
     {
         path: "/stores/serviceactivate",
         component: OpenService,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores/service",
+        component: ServicesManage,
         meta: { sidebar: false }
     }
 ];

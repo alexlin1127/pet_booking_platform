@@ -39,7 +39,7 @@ import './styles/pages/Stores/Posts/postsview.css'
 import './styles/pages/Stores/storesinfo.css'
 import './styles/pages/Stores/editstoresinfo.css'
 import './styles/pages/Stores/openservice.css'
-
+import './styles/pages/Stores/service.css'
 
 // 管理員頁面樣式
 import './styles/pages/Admin/admindashboard.css'
