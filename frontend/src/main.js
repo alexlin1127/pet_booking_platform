@@ -27,6 +27,7 @@ import './styles/components/UI/modalbox.css'
 import './styles/components/UI/button.css'
 import './styles/components/UI/table.css'
 import './styles/components/UI/tablecard.css'
+import './styles/components/UI/switch.css'
 
 // 客戶頁面樣式
 import './styles/pages/Customers/Register/customersregister.css'
