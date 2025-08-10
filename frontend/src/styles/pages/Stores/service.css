@@ -51,4 +51,20 @@
   @apply flex flex-wrap justify-start;
 
 }
+.vertical-card.service-card .card-icon {
+    display: none !important;
+  }
+/* select {
+  text-align: left;
+  text-align-last: left; 
+} */
+.select-filter {
+    @apply border border-[#d8c9b8] rounded pl-3 pr-20 py-1 text-sm text-gray-800 bg-white appearance-none;
+    text-align: left;
+    text-align-last: left;       /* Chrome/Edge */
+    -moz-text-align-last: left;  /* Firefox */
+  }
+  .select-filter option {
+    text-align: left;
+  }
 }

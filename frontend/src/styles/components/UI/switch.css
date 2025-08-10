@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* ================= Switch Component ================= */
+
+@layer components {
+  .svc-switch {
+    @apply inline-flex items-center rounded-full transition-colors outline-none
+           border border-[#c9b6a1] bg-white relative align-middle;
+  }
+  .svc-switch.is-on  { @apply bg-[#5f4b3a] border-[#5f4b3a]; }
+  .svc-switch.is-off { @apply bg-[#5f4b3a]; }
+  .svc-switch.is-disabled { @apply opacity-50 cursor-not-allowed; }
+
+  .svc-switch__dot {
+    @apply bg-white rounded-full absolute left-0.5 top-1/2 -translate-y-1/2
+           transition-transform;
+  }
+  /* 不同寬度下的圓點位移（預設 md，sm/lg 用比例會對得很準） */
+  .svc-switch.is-on .svc-switch__dot { transform: translate(calc(100% - .125rem), -50%); }
+}
