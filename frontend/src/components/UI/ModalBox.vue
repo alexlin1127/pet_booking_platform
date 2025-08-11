@@ -123,6 +123,11 @@ const handleButtonClick = (button) => {
         </div>
       </div>
 
+       <!-- ⬇⬇⬇ 在這裡插入 default slot ⬇⬇⬇ -->
+      <div v-if="$slots.default" class="modal-custom-section">
+        <slot></slot>
+      </div>
+
       <!-- ✅ 按鈕區域 -->
       <div v-if="buttons && buttons.length" class="modal-buttons">
         <button
