@@ -19,8 +19,11 @@ from pet_booking.customers.models import CustomersProfile, Pet
 
 class StoreInfoViewSet(viewsets.ModelViewSet):
     """
-    ViewSet 1: 根據URL參數獲取店家基本資訊和服務選項
-    GET /api/store-info/get_store_data/?store_id=1&user_id=5
+    ViewSet: 根據URL參數獲取店家基本資訊和服務選項
+    
+    API Methods and Routes:
+    - GET /api/store-info/get_store_data/ - 獲取店家資訊和服務選項
+      Query Parameters: store_id, user_id, service_type
     """
     permission_classes = [IsAuthenticated]
 
@@ -185,6 +188,17 @@ class StoreInfoViewSet(viewsets.ModelViewSet):
 
 
 class PetInfoViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet: 寵物資訊管理
+    
+    API Methods and Routes:
+    - GET /api/pet-info/get_pet_info/ - 獲取寵物資訊
+      Query Parameters: user_id
+      Request Body: pet_name
+    - POST /api/pet-info/save_pet_info/ - 保存寵物資訊
+      Query Parameters: user_id
+      Request Body: 寵物完整資訊
+    """
     permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get'], url_path='get_pet_info')
@@ -311,15 +325,19 @@ class PetInfoViewSet(viewsets.ModelViewSet):
 
 class GroomingCalculationViewSet(viewsets.ModelViewSet):
     """
-    ViewSet 2: 根據寵物資料和選擇的服務項目計算總時間和總價格
-    POST /api/grooming-calculation/calculate_grooming_cost/?store_id=1&user_id=5
+    ViewSet: 根據寵物資料和選擇的服務項目計算總時間和總價格
+    
+    API Methods and Routes:
+    - POST /api/grooming/calculation/ - 計算美容服務費用
+      Query Parameters: store_id, user_id
+      Request Body: pet_data, selected_services
     """
     permission_classes = [IsAuthenticated]
-    @action(detail=False, methods=['post'], url_path='calculate_grooming_cost')
+    @action(detail=False, methods=['post'], url_path='calculation')
     def calculate_grooming_cost(self, request):
         """
         計算美容服務的總時間和總價格
-        POST /api/grooming-calculation/calculate_grooming_cost/?store_id=1&user_id=5
+        POST /api/grooming/calculation/?store_id=1&user_id=5
         
         Request Body:
         {
@@ -386,16 +404,17 @@ class GroomingCalculationViewSet(viewsets.ModelViewSet):
                     # 根據寵物資料找到對應的定價
                     result = GroomingServicePricing.objects.filter(
                         grooming_service_id=grooming_service,
-                        species=pet_species,
                         pet_size=pet_size,
                         fur_amount=pet_fur_amount
                     ).first()
 
                     if result:
                         total_price += int(result.pricing)
-
                     else:
-                        Response({'error': f'找不到對應店家的服務'}, status=status.HTTP_404_NOT_FOUND)
+                        return Response(
+                            {'error': f'找不到服務 "{service_title}" 對應此寵物類型的定價資訊'}, 
+                            status=status.HTTP_404_NOT_FOUND
+                        )
 
                 except GroomingService.DoesNotExist:
                     return Response(
@@ -421,7 +440,12 @@ class GroomingCalculationViewSet(viewsets.ModelViewSet):
 class GroomingReservationViewSet(viewsets.ModelViewSet):
     """
     ViewSet: 處理美容預約表單提交
-    POST /api/reservation/grooming/?user_id=<user_id>
+    
+    API Methods and Routes:
+    - POST /api/grooming/create_reservation/ - 建立美容預約
+      Query Parameters: user_id, store_id, service_type
+      Request Body: store_name, pet_name, selected_services, pick_up_service, 
+                   reservation_date, reservation_time, customer_note
     """
     permission_classes = [IsAuthenticated]
     @action(detail=False, methods=['post'], url_path='create_reservation')
@@ -466,19 +490,37 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
                 )
                 
             # customer info
-            customer_profile = get_customer_profile(user_id, "用戶不存在")
-            user_name = customer_profile.full_name
-            user_phone = customer_profile.phone or ''
+            try:
+                customer_profile = CustomersProfile.objects.get(user_id=user_id)
+                user_name = customer_profile.full_name
+                user_phone = customer_profile.phone or ''
+            except CustomersProfile.DoesNotExist:
+                return Response(
+                    {'error': '用戶不存在'}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
 
             # store info
-            store = get_store(store_name, "店家不存在")
-            store_phone = store.phone
+            try:
+                store = Store.objects.get(store_name=store_name)
+                store_phone = store.phone
+            except Store.DoesNotExist:
+                return Response(
+                    {'error': '店家不存在'}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
 
             # pet info
-            pet = get_pet(user_id, pet_name)
-            pet_type = pet.species
-            pet_size = pet.size
-            pet_fur_amount = pet.fur_amount
+            try:
+                pet = Pet.objects.get(user_id=user_id, name=pet_name)
+                pet_type = pet.species
+                pet_size = pet.size
+                pet_fur_amount = pet.fur_amount
+            except Pet.DoesNotExist:
+                return Response(
+                    {'error': f'找不到名為 "{pet_name}" 的寵物'}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
 
             # 計算總美容時間
             total_grooming_duration = 0
@@ -494,7 +536,6 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
                     # 根據寵物資料找到對應的定價和時間
                     grooming_result = GroomingServicePricing.objects.filter(
                         grooming_service_id=grooming_service,
-                        species=pet_type,
                         pet_size=pet_size,
                         fur_amount=pet_fur_amount
                     ).first()
@@ -606,15 +647,19 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
 class BoardingRoomInfoViewSet(viewsets.ModelViewSet):
     """
     ViewSet: 根據店家ID和寵物類別獲取住宿房間類型資訊
-    POST /api/boarding-room-info/get_room_types/?store_id=1&pet_species=cat
+    
+    API Methods and Routes:
+    - POST /api/boarding/room-info/ - 獲取房間類型資訊
+      Query Parameters: store_id, pet_species
+      Request Body: pet_species (可選，如果在 query 中已提供)
     """
     permission_classes = [IsAuthenticated]
 
-    @action(detail=False, methods=['post'], url_path='get_room_types')
+    @action(detail=False, methods=['post'], url_path='room-info')
     def get_room_types(self, request):
         """
         根據店家ID和寵物類別獲取對應的房間類型
-        POST /api/boarding-room-info/get_room_types/?store_id=1
+        POST /api/boarding/room-info/?store_id=1
         
         Request Body:
         {
@@ -715,15 +760,19 @@ class BoardingRoomInfoViewSet(viewsets.ModelViewSet):
 class BoardingCalculationViewSet(viewsets.ModelViewSet):
     """
     ViewSet: 根據到店離店時間和房型計算住宿費用
-    POST /api/boarding-calculation/calculate_boarding_cost/?store_id=1
+    
+    API Methods and Routes:
+    - POST /api/boarding/calculation/ - 計算住宿費用
+      Query Parameters: store_id, pet_species
+      Request Body: room_type, check_in_date, check_in_time, check_out_date, check_out_time
     """
     permission_classes = [IsAuthenticated]
     
-    @action(detail=False, methods=['post'], url_path='calculate_boarding_cost')
+    @action(detail=False, methods=['post'], url_path='calculation')
     def calculate_boarding_cost(self, request):
         """
         計算住宿服務的總晚數和總價格
-        POST /api/boarding-calculation/calculate_boarding_cost/?store_id=1&pet_species=cat
+        POST /api/boarding/calculation/?store_id=1&pet_species=cat
         
         Request Body:
         {   
@@ -959,14 +1008,19 @@ class BoardingCalculationViewSet(viewsets.ModelViewSet):
 class BoardingReservationViewSet(viewsets.ModelViewSet):
     """
     ViewSet: 處理住宿預約表單提交
-    POST /api/reservation/boarding/?user_id=123
+    
+    API Methods and Routes:
+    - POST /api/boarding/reservation/ - 建立住宿預約
+      Query Parameters: user_id, store_id, service_type
+      Request Body: store_name, pet_name, room_type, pick_up_service,
+                   check_in_date, check_in_time, check_out_date, check_out_time, customer_note
     """
     permission_classes = [IsAuthenticated]
-    @action(detail=False, methods=['post'], url_path='boarding')
+    @action(detail=False, methods=['post'], url_path='reservation')
     def create_reservation(self, request):
         """
         建立美容預約
-        POST /api/reservation/boarding/?user_id=123&store_id=12
+        POST /api/boarding/reservation/?user_id=123&store_id=12
         
         Request Body:
         {
@@ -1000,20 +1054,32 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
             customer_note = request.data.get('customer_note', '')
 
             # verify input data
-            if not all([store_name, store_id, user_id, room_type, pick_up_service, check_in_date, check_in_time, check_out_date, check_out_time]):
+            if not all([store_name, store_id, user_id, pet_name, pick_up_service, room_type, check_in_date, check_in_time, check_out_date, check_out_time]):
                 return Response(
                     {'error': '缺少必要的預約資訊'}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
             
             # customer info
-            customer_profile = get_customer_profile(user_id, "用戶不存在")
-            user_name = customer_profile.full_name
-            user_phone = customer_profile.phone or ''
+            try:
+                customer_profile = CustomersProfile.objects.get(user_id=user_id)
+                user_name = customer_profile.full_name
+                user_phone = customer_profile.phone or ''
+            except CustomersProfile.DoesNotExist:
+                return Response(
+                    {'error': '用戶不存在'}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
 
             # store info
-            store = get_store(store_name, "店家不存在")
-            store_phone = store.phone
+            try:
+                store = Store.objects.get(store_name=store_name)
+                store_phone = store.phone
+            except Store.DoesNotExist:
+                return Response(
+                    {'error': '店家不存在'}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
 
             # 生成預約ID
             reservation_id = create_reservation_id(service_type)
@@ -1137,25 +1203,6 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             ) 
         
-def get_customer_profile(user_id, message):
-    try:
-        return CustomersProfile.objects.get(user_id=user_id)
-    except CustomersProfile.DoesNotExist:
-        return Response({'error': message}, status=status.HTTP_404_NOT_FOUND)
-
-
-def get_store(store_name, message):
-    try:
-        return Store.objects.get(store_name=store_name)
-    except Store.DoesNotExist:
-        return Response({'error': message}, status=status.HTTP_404_NOT_FOUND)
-
-def get_pet(user_id, pet_name):
-    try:
-        return Pet.objects.get(user_id=user_id, name=pet_name)
-    except Pet.DoesNotExist:
-        return Response({'error': f'找不到名為 "{pet_name}" 的寵物'}, status=status.HTTP_404_NOT_FOUND)
-
 def create_reservation_id(service_type):
     if service_type == 'grooming':
         now = datetime.now()
