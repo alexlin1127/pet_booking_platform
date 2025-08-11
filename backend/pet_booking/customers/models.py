@@ -16,7 +16,6 @@ class CustomersProfile(models.Model):
     user_id = models.ForeignKey('users.User', to_field='user_id', on_delete=models.CASCADE, db_index=True, related_name='customersProfiles')
     full_name = models.CharField(max_length=255, null=False, blank=False)
     gender = models.CharField(max_length=6, choices=Gender.choices, null=True, blank=True)
-    # birthday = models.DateField(null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField(null=False, blank=False)
     address = models.CharField(max_length=512, null=True, blank=True)
@@ -35,11 +34,10 @@ class LikeStore(models.Model):
 
     class Meta:
         db_table = 'like_store'
-        # 為 user_id + store_id 組合建立唯一約束，避免重複喜愛同一家店（如需要）
         unique_together = ('user_id', 'store_id')
 
     def __str__(self):
-        return f"User {self.user_id} likes Store {self.stores.store_name}"
+        return f"User {self.user_id} likes Store {self.store_id.store_name}"
 
 class TernaryAnswer(models.TextChoices):
     YES = 'yes', '是'
@@ -47,24 +45,21 @@ class TernaryAnswer(models.TextChoices):
     UNCERTAIN = 'uncertain', '不確定'
 
 class Pet(models.Model):
-    user_id = models.ForeignKey('users.User', to_field='user_id', on_delete=models.CASCADE, db_index=True, related_name='pets')
-    species = models.CharField(max_length=4, choices=Species.choices, null=False, blank=False)
+    user_id = models.ForeignKey('users.User', to_field='user_id', on_delete=models.CASCADE, blank=False, db_index=True, related_name='pets')
+    species = models.CharField(max_length=4, choices=Species.choices, blank=False)
     name = models.CharField(max_length=255, null=False, blank=False)
-    gender = models.CharField(max_length=6, choices=Gender.choices, null=False, blank=False)
+    gender = models.CharField(max_length=6, choices=Gender.choices, blank=False)
     breed = models.CharField(max_length=255, null=True, blank=True)
-    # birthday = models.DateField(null=True, blank=True)
-    age = models.IntegerField(null=True, blank=True)
+    age = models.PositiveIntegerField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
+    size = models.CharField(max_length=10, blank=True, null=True)
+    fur_amount = models.CharField(max_length=10)
     spayed_or_neutered = models.CharField(max_length=10,
         choices=TernaryAnswer.choices,
-        default=TernaryAnswer.UNCERTAIN,
-        null=True,
-        blank=True)
+        default=TernaryAnswer.UNCERTAIN)
     microchip = models.CharField(max_length=10,
         choices=TernaryAnswer.choices,
-        default=TernaryAnswer.UNCERTAIN,
-        null=True,
-        blank=True)
+        default=TernaryAnswer.UNCERTAIN)
     last_deworming_date = models.DateField(null=True, blank=True)
     last_vaccine_date = models.DateField(null=True, blank=True)
     notes = models.TextField(null=True, blank=True)

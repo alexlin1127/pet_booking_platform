@@ -2,49 +2,49 @@
 from rest_framework import serializers
 
 # app
-from .models import Reservation_boarding, Reservation_grooming, Orders, Grooming_schedules, Boarding_schedules
+from .models import ReservationBoarding, ReservationGrooming, Orders, GroomingSchedules, BoardingSchedules
 
-class Reservation_grooming_Serializer(serializers.ModelSerializer):
+class ReservationGroomingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Reservation_grooming
+        model = ReservationGrooming
         fields = '__all__'
 
-class Reservation_boarding_Serializer(serializers.ModelSerializer):
+class ReservationBoardingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Reservation_boarding
+        model = ReservationBoarding
         fields = '__all__'
 
-class Grooming_schedules_Serializer(serializers.ModelSerializer):
-    Reservation_grooming_detail = Reservation_grooming_Serializer(
-        source = 'reservation_grooming',
-        read_only = True
+class GroomingSchedulesSerializer(serializers.ModelSerializer):
+    reservation_grooming_detail = ReservationGroomingSerializer(
+        source='reservation_grooming_id',
+        read_only=True
     )
 
     class Meta:
-        model = Grooming_schedules
+        model = GroomingSchedules
         fields = '__all__'
 
-class Boarding_schedules_Serializer(serializers.ModelSerializer):
-    reservation_boarding_detail = Reservation_boarding_Serializer(
-        source = 'reservation_boarding',
-        read_only = True
+class BoardingSchedulesSerializer(serializers.ModelSerializer):
+    reservation_boarding_detail = ReservationBoardingSerializer(
+        source='reservation_boarding_id',
+        read_only=True
     )
 
     class Meta:
-        model = Boarding_schedules
+        model = BoardingSchedules
         fields = '__all__'
 
-class Orders_Serializer(serializers.ModelSerializer):
-    reservation_grooming_detail = Reservation_grooming_Serializer(
-        source = 'reservation_grooming_id',
-        read_only = True
+class OrdersSerializer(serializers.ModelSerializer):
+    reservation_grooming_detail = ReservationGroomingSerializer(
+        source='reservation_grooming',
+        read_only=True
     )
 
-    reservation_boarding_detail = Reservation_boarding_Serializer(
-        source = 'reservation_boarding_id',
-        read_only = True
+    reservation_boarding_detail = ReservationBoardingSerializer(
+        source='reservation_boarding',
+        read_only=True
     )
-    
+
     class Meta:
         model = Orders
         fields = '__all__'
