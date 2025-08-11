@@ -57,6 +57,8 @@ class PetSerializer(serializers.ModelSerializer):
             'breed',
             'age',
             'weight',
+            'size',
+            'fur_amount',
             'spayed_or_neutered',
             'microchip',
             'last_deworming_date',
