@@ -21,21 +21,18 @@ class AdminFilter(django_filters.FilterSet):
 # 店家詳情
 class StoreProfileViewSet(viewsets.ModelViewSet):
     serializer_class = StoreSerializer
-    permission_classes = [IsAuthenticated]
+    http_method_names = ['get', 'post', 'put', 'patch', 'delete']
 
     def get_queryset(self):
         return Store.objects.filter(user_id=self.request.user)
 
+    def get_object(self):
+        # 只允許編輯自己的 store
+        return Store.objects.get(user_id=self.request.user)
+
     def perform_create(self, serializer):
         serializer.save(user_id=self.request.user)
-
-    def perform_update(self, serializer):
-        serializer.save(user_id=self.request.user)
-
-    def perform_destroy(self, instance):
-        if instance.user_id == self.request.user:
-            instance.delete()
-    
+        
 # 店家文章
 class StorePostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
@@ -46,11 +43,11 @@ class StorePostViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         store = Store.objects.get(user_id=self.request.user)
-        serializer.save(store_id=store)
+        serializer.save(store=store)
 
     def perform_update(self, serializer):
         store = Store.objects.get(user_id=self.request.user)
-        serializer.save(store_id=store)
+        serializer.save(store=store)
 
     def perform_destroy(self, instance):
         if instance.store.user_id == self.request.user:
@@ -62,7 +59,7 @@ class StoreImageViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return StoreImage.objects.filter(user_id=self.request.user)
+        return StoreImage.objects.filter(store__user_id=self.request.user)
 
     def perform_create(self, serializer):
         store = Store.objects.get(user_id=self.request.user)
