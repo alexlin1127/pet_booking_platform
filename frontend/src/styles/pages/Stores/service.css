@@ -77,6 +77,15 @@
 .modal-title-text {
   @apply text-center w-full text-3xl font-bold text-gray-800;
 }
+.modal-overlay .modal-content .modal-buttons {
+    @apply flex justify-center gap-6;
+  }
 
+  /* 只影響 Modal 內的按鈕尺寸，不改動全域 .svc-btn 樣式 */
+  .modal-overlay .modal-content .modal-buttons .svc-btn {
+    @apply !w-auto flex-none inline-flex items-center justify-center px-14;
+    /* !w-auto 覆蓋別處的固定寬 (e.g. w-40)
+       flex-none 防止被撐滿；px-14 = 左右各 3.5rem */
+  }
 
 }
