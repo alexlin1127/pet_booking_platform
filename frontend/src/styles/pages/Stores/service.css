@@ -67,4 +67,16 @@
   .select-filter option {
     text-align: left;
   }
+  /* 讓包含 \n 的字串能換行顯示（例如 bullets） */
+.modal-value { white-space: pre-line; }
+
+.modal-header {
+  @apply flex justify-center;
+}
+
+.modal-title-text {
+  @apply text-center w-full text-3xl font-bold text-gray-800;
+}
+
+
 }

@@ -1,5 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
+import '@/styles/pages/Stores/service.css'
+
 import Card from '@/components/UI/Card.vue'
 import ModalBox from '@/components/UI/ModalBox.vue'
 import Switch from '@/components/UI/Switch.vue'
@@ -46,6 +48,23 @@ const filteredServices = computed(() => {
     .filter(s => s.type === type)
     .filter(s => selectedTag.value === '全部' ? true : s.tags?.includes(selectedTag.value))
 })
+
+/* ⬇⬇⬇ 新增：把服務物件轉成 ModalBox 需要的 infoRows 二維陣列 ⬇⬇⬇ */
+const buildInfoRows = (svc) => {
+  if (!svc) return []
+  const bullets = (svc.bullets ?? []).map(b => `• ${b}`).join('\n') // 用換行與項目符號
+  const tags    = (svc.tags ?? []).join('、')
+  return [
+    ['項目', svc.title],
+    ['價格', `NT$ ${svc.price}`],
+    ['說明', svc.description],
+    ['注意事項', bullets],
+    ['服務時間', svc.duration],
+    ['標籤', tags],
+  ]
+}
+/* ⬆⬆⬆ 新增：把服務物件轉成 ModalBox 需要的 infoRows 二維陣列 ⬆⬆⬆ */
+
 </script>
 
 <template>
@@ -129,27 +148,38 @@ const filteredServices = computed(() => {
       ]"
       @close="() => (showDelete = false)"
       @button-click="onModalAction"
-      width="max-w-lg"
+      width="max-w-2xl"
     >
     
-      <template #default>
-        <div class="space-y-4">
-          <div class="modal-info-section">
-            <div class="modal-row">
-              <div class="modal-label">項目</div>
-              <div class="modal-value">{{ pending?.title }}</div>
-            </div>
-            <div class="modal-row">
-              <div class="modal-label">價格</div>
-              <div class="modal-value">NT$ {{ pending?.price }}</div>
-            </div>
-          </div>
-
-          <p class="text-sm text-gray-700">
-            刪除後將無法在前台被預約或看到。你確定要刪除此服務嗎？
-          </p>
+ <!-- ⬇⬇⬇ 這段是新的 slot：照圖示排版 ⬇⬇⬇ -->
+  <template #default>
+    <div v-if="pending" class="del-preview">
+      <!-- 服務名稱 ＆ 價格（左右對齊） -->
+      <div class="flex items-center justify-between">
+        <div class="service-item-title">{{ pending.title }}<span class="service-price">NT${{ pending.price }}</span>
         </div>
-      </template>
+      </div>
+
+      <!-- 服務描述 -->
+      <div class="svc-desc">
+        <p>{{ pending.description }}</p>
+      </div>
+
+      <!-- 注意事項：黑色圓點 -->
+      <ul class="service-bullets">
+        <li v-for="(b, i) in pending.bullets" :key="b">{{ b }}</li>
+      </ul>
+
+
+      <!-- 服務時間（灰字） -->
+      <div class="service-duration">服務時間：約 {{ pending.duration }}</div>
+
+      <!-- 標籤（膠囊） -->
+      <div class="service-tags justify-start">
+        <span v-for="(t, i) in pending.tags" :key="i" class="service-tag">{{ t }}</span>
+      </div>
+    </div>
+  </template>
     </ModalBox>
   </div>
 </template>
