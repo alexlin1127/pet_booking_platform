@@ -17,18 +17,10 @@ from pet_booking.services.views import *
 from pet_booking.reservations.views import *
 
 router = DefaultRouter(trailing_slash=False)
-
-urlpatterns = [
-    path("admin/", admin.site.urls),
-    path('api/', include(router.urls)),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path('api/token/blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
-    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-]
-
-router = DefaultRouter(trailing_slash=False)
+router.register(r'users', UserViewSet, basename='users')
+router.register(r'customer/profiles', CustomersProfileViewSet, basename='customer-profile')
+router.register(r'customer/likestores', LikeStoreViewSet, basename='likestores')
+router.register(r'customer/pets', PetViewSet, basename='pets')
 router.register(r'store/profile', StoreProfileViewSet, basename='store-profile')
 router.register(r'admin/stores', StoreAdminViewSet, basename='admin-stores')
 router.register(r'store/posts', StorePostViewSet, basename='store-posts')
@@ -38,6 +30,16 @@ router.register(r'store/boarding-services', BoardingServiceViewSet, basename='bo
 router.register(r'store/grooming-services', GroomingServiceViewSet, basename='grooming-services')
 router.register(r'store/boarding-pricings', BoardingServicePricingViewset, basename='boarding-pricings')
 router.register(r'store/grooming-pricings', GroomingServicePricingViewset, basename='grooming-pricings')
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path('api/', include(router.urls)),
+    path('api/token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify', TokenVerifyView.as_view(), name='token_verify'),
+    path('api/token/blacklist', TokenBlacklistView.as_view(), name='token_blacklist'),
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
