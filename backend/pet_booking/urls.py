@@ -33,8 +33,6 @@ router.register(r'store/grooming_services', GroomingServiceViewSet, basename='gr
 router.register(r'boarding_services', CustomerBoardingViewSet, basename='customer_boarding')
 router.register(r'grooming_services', CustomerGroomingViewset, basename='customer_grooming')
 router.register(r'store/images', StoreImageViewSet, basename='store-images')
-router.register(r'store/boarding-pricings', BoardingServicePricingViewset, basename='boarding-pricings')
-router.register(r'store/grooming-pricings', GroomingServicePricingViewset, basename='grooming-pricings')
 
 urlpatterns = [
     path("admin/", admin.site.urls),

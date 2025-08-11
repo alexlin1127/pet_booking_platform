@@ -10,11 +10,11 @@ from django.shortcuts import get_object_or_404
 
 # app
 from .models import GroomingSchedules
-from services.models import GroomingService, GroomingServicePricing
-from stores.models import Store
+from pet_booking.services.models import GroomingService, GroomingServicePricing
+from pet_booking.stores.models import Store
 from .serializers import ReservationGroomingSerializer
-from customers.serializers import PetSerializer
-from customers.models import CustomersProfile, Pet
+from pet_booking.customers.serializers import PetSerializer
+from pet_booking.customers.models import CustomersProfile, Pet
 
 
 class StoreInfoViewSet(viewsets.ModelViewSet):
