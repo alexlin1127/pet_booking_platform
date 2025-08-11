@@ -143,8 +143,8 @@ const buildInfoRows = (svc) => {
       :visible="showDelete"
       :title="'確認刪除該服務'"
       :buttons="[
-        { text: '取消', action: 'cancel', variant: 'cancel' },
-        { text: '確認', action: 'confirm', variant: 'danger' }
+        { text: '取消', action: 'cancel', variant: 'cancel', class: 'svc-btn svc-btn-outline w-20'},
+        { text: '確認', action: 'confirm', variant: 'danger', class: 'svc-btn svc-btn-solid gap-6' }
       ]"
       @close="() => (showDelete = false)"
       @button-click="onModalAction"
@@ -172,7 +172,7 @@ const buildInfoRows = (svc) => {
 
 
       <!-- 服務時間（灰字） -->
-      <div class="service-duration">服務時間：約 {{ pending.duration }}</div>
+      <div class="service-duration mt-2 mb-2">服務時間：約 {{ pending.duration }}</div>
 
       <!-- 標籤（膠囊） -->
       <div class="service-tags justify-start">
