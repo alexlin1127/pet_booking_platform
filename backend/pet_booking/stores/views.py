@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from django.db import models
 from .models import Store, Post, StoreImage
 from .serializers import StoreSerializer, PostSerializer, StoreImageSerializer, StoreListSerializer, StoreDetailSerializer
 import django_filters
@@ -130,6 +131,11 @@ class CustomerStoreFilter(django_filters.FilterSet):
     class Meta:
         model = Store
         fields = ['service_item', 'county', 'district']
+        filter_overrides = {
+            models.JSONField: {
+                'filter_class': django_filters.CharFilter,
+            },
+        }
 
     def filter_county(self, queryset, name, value):
         return queryset.filter(address__county=value)
