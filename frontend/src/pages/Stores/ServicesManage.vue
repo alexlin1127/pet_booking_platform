@@ -1,8 +1,16 @@
 <script setup>
 import { ref, computed } from 'vue'
 import Card from '@/components/UI/Card.vue'
+import ModalBox from '@/components/UI/ModalBox.vue'
 import Switch from '@/components/UI/Switch.vue'
-import { services } from '@/data/service.js'
+import { services as staticServices } from '@/data/service.js' //避免和響應式變數撞名
+
+// 響應式服務清單（用假資料做副本，刪除時不會影響原檔）
+const services = ref([...staticServices]) // ⬅️ 新增
+
+// Modal 狀態
+const showDelete = ref(false) // ⬅️ 新增
+const pending = ref(null)     // ⬅️ 暫存要刪除的服務資料
 
 // 頁首：true=美容, false=住宿
 const isGrooming = ref(true)
@@ -13,12 +21,28 @@ const selectedTag = ref('全部')
 
 // 操作事件
 const onEdit   = id => console.log('edit', id)
-const onDelete = id => console.log('delete', id)
+const onDelete = svc => {           // ⬅️ 改成接收整個物件，不是 id
+  pending.value = svc               // ⬅️ 存起要刪除的項目
+  showDelete.value = true           // ⬅️ 打開 Modal
+}
+
+// Modal 按鈕事件
+const onModalAction = action => {   // ⬅️ 新增
+  if (action === 'cancel') {
+    showDelete.value = false
+    pending.value = null
+  }
+  if (action === 'confirm' && pending.value) {
+    services.value = services.value.filter(s => s.id !== pending.value.id)
+    showDelete.value = false
+    pending.value = null
+  }
+}
 
 // 過濾服務清單
 const filteredServices = computed(() => {
   const type = isGrooming.value ? 'boarding' : 'grooming' // 依資料實際欄位修改
-  return services
+  return (services.value ?? [])  //修正：要用 services.value
     .filter(s => s.type === type)
     .filter(s => selectedTag.value === '全部' ? true : s.tags?.includes(selectedTag.value))
 })
@@ -89,11 +113,43 @@ const filteredServices = computed(() => {
 
         <template #button>
           <div class="service-actions">
-            <button class="svc-btn svc-btn-outline" @click="onDelete(s.id)">刪除服務</button>
+            <button class="svc-btn svc-btn-outline" @click="onDelete(s)">刪除服務</button>
             <button class="svc-btn svc-btn-solid" @click="onEdit(s.id)">修改內容</button>
           </div>
         </template>
       </Card>
     </section>
+     <!-- 刪除確認 Modal -->
+    <ModalBox
+      :visible="showDelete"
+      :title="'確認刪除該服務'"
+      :buttons="[
+        { text: '取消', action: 'cancel', variant: 'cancel' },
+        { text: '確認', action: 'confirm', variant: 'danger' }
+      ]"
+      @close="() => (showDelete = false)"
+      @button-click="onModalAction"
+      width="max-w-lg"
+    >
+    
+      <template #default>
+        <div class="space-y-4">
+          <div class="modal-info-section">
+            <div class="modal-row">
+              <div class="modal-label">項目</div>
+              <div class="modal-value">{{ pending?.title }}</div>
+            </div>
+            <div class="modal-row">
+              <div class="modal-label">價格</div>
+              <div class="modal-value">NT$ {{ pending?.price }}</div>
+            </div>
+          </div>
+
+          <p class="text-sm text-gray-700">
+            刪除後將無法在前台被預約或看到。你確定要刪除此服務嗎？
+          </p>
+        </div>
+      </template>
+    </ModalBox>
   </div>
 </template>
