@@ -3,36 +3,45 @@
 @tailwind utilities;
 
 @layer components {
+
   /* ================= 導航欄主體 ================= */
   .nav {
-    @apply fixed top-0 left-0 right-0 w-full h-20 z-50;
-    @apply flex justify-between items-center px-4 md:px-8 lg:px-12;
+    @apply fixed top-0 left-0 right-0 w-full z-50;
+    @apply flex justify-between items-center;
     @apply bg-white shadow-md border-b border-gray-200;
+    height: var(--navbar-height, 4rem);
+    padding-left: var(--container-padding, 1rem);
+    padding-right: var(--container-padding, 1rem);
   }
 
   /* ================= Logo 區域 ================= */
   .navtitle {
-    @apply flex items-center gap-3 flex-shrink-0;
+    @apply flex items-center flex-shrink-0;
+    gap: clamp(0.5rem, 2vw, 1rem);
   }
 
   .navtitle img {
-    @apply w-10 h-10 rounded-full border-2 border-gray-300 object-cover bg-gray-100;
+    @apply rounded-full border-2 border-gray-300 object-cover bg-gray-100;
+    width: clamp(2rem, 4vw, 2.5rem);
+    height: clamp(2rem, 4vw, 2.5rem);
   }
 
   .brand-link {
-    @apply text-lg md:text-xl lg:text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors;
-    @apply no-underline;
+    @apply font-bold text-gray-800 hover:text-blue-600 transition-colors no-underline;
+    font-size: clamp(1rem, 3vw, 1.5rem);
   }
 
   /* ================= 中間導航選單 ================= */
   .nav-menu {
-    @apply flex items-center gap-4;
+    @apply flex items-center;
+    gap: clamp(0.75rem, 2vw, 1.5rem);
   }
 
   .nav-link {
     @apply text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200;
-    @apply py-2 rounded-md hover:bg-blue-50;
-    @apply no-underline;
+    @apply rounded-md hover:bg-blue-50 no-underline;
+    padding: clamp(0.25rem, 1vw, 0.5rem) clamp(0.5rem, 1.5vw, 1rem);
+    font-size: clamp(0.875rem, 2vw, 1rem);
   }
 
   .nav-link.router-link-active {
@@ -41,11 +50,13 @@
 
   /* ================= 右側用戶區域 ================= */
   .user-area {
-    @apply flex items-center gap-4 flex-shrink-0;
+    @apply flex items-center flex-shrink-0;
+    gap: clamp(0.5rem, 1.5vw, 1rem);
   }
 
   .user-greeting {
     @apply text-gray-600 font-medium;
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
   }
 
   .greeting-text {
@@ -58,8 +69,10 @@
   }
 
   .toggle-btn {
-    @apply bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-md;
-    @apply font-medium transition-colors duration-200 text-sm;
+    @apply bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md;
+    @apply font-medium transition-colors duration-200;
+    padding: clamp(0.25rem, 1vw, 0.5rem) clamp(0.5rem, 1.5vw, 0.75rem);
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
   }
 
   /* ================= 會員中心下拉選單 ================= */
@@ -72,14 +85,19 @@
   }
 
   .dropdown-btn {
-    @apply bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md;
-    @apply font-medium transition-colors duration-200 text-sm;
+    @apply bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md;
+    @apply font-medium transition-colors duration-200;
+    padding: clamp(0.25rem, 1vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
   }
 
   .dropdown-menu {
-    @apply absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg;
-    @apply border border-gray-200 py-2 opacity-0 invisible;
+    @apply absolute top-full right-0 bg-white rounded-md shadow-lg;
+    @apply border border-gray-200 opacity-0 invisible;
     @apply transition-all duration-200 transform translate-y-2;
+    margin-top: clamp(0.25rem, 1vw, 0.5rem);
+    width: clamp(10rem, 20vw, 12rem);
+    padding: clamp(0.25rem, 1vw, 0.5rem) 0;
   }
 
   .dropdown:hover .dropdown-menu {
@@ -87,8 +105,10 @@
   }
 
   .dropdown-item {
-    @apply block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-blue-600;
+    @apply block text-gray-700 hover:bg-gray-50 hover:text-blue-600;
     @apply transition-colors duration-200 no-underline;
+    padding: clamp(0.25rem, 1vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
   }
 
   /* ================= 登入/登出按鈕 ================= */
@@ -98,8 +118,10 @@
 
   .login-btn,
   .logout-btn {
-    @apply bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md;
-    @apply font-medium transition-colors duration-200 text-sm;
+    @apply bg-black text-white hover:bg-gray-800 rounded-md;
+    @apply font-medium transition-colors duration-200;
+    padding: clamp(0.25rem, 1vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
   }
 
   .logout-btn {
@@ -112,43 +134,62 @@
   }
 
   .hamburger-btn {
-    @apply text-2xl text-gray-700 hover:text-blue-600 transition-colors;
-    @apply p-2 rounded-md hover:bg-gray-100;
+    @apply text-gray-700 hover:text-blue-600 transition-colors;
+    @apply rounded-md hover:bg-gray-100;
+    font-size: clamp(1.25rem, 4vw, 1.5rem);
+    padding: clamp(0.25rem, 1vw, 0.5rem);
   }
 
   .mobile-sidebar {
-    @apply fixed top-20 left-0 right-0 bg-white shadow-lg border-t border-gray-200;
-    @apply p-4 space-y-4 max-h-screen overflow-y-auto;
+    @apply fixed bg-white shadow-lg border-t border-gray-200;
+    @apply overflow-y-auto;
+    top: var(--navbar-height, 4rem);
+    left: 0;
+    right: 0;
+    max-height: calc(100vh - var(--navbar-height, 4rem));
+    padding: var(--container-padding, 1rem);
+    gap: var(--content-gap, 1rem);
+    display: flex;
+    flex-direction: column;
   }
 
   /* 平板模式下側邊選單寬度為30% */
   @media (min-width: 768px) and (max-width: 1023px) {
     .mobile-sidebar {
-      @apply left-0 right-auto;
+      right: auto;
       width: 30%;
     }
   }
 
   .mobile-section-title {
-    @apply font-bold text-gray-800 text-lg border-b border-gray-200 pb-2 mb-3;
+    @apply font-bold text-gray-800 border-b border-gray-200;
     @apply hover:text-blue-600 transition-colors duration-200 cursor-pointer;
+    font-size: clamp(1rem, 2.5vw, 1.125rem);
+    padding-bottom: clamp(0.25rem, 1vw, 0.5rem);
+    margin-bottom: clamp(0.5rem, 1.5vw, 0.75rem);
   }
 
   .mobile-member-links {
-    @apply pl-4;
+    padding-left: clamp(0.5rem, 2vw, 1rem);
   }
 
   .mobile-member {
-    @apply space-y-2;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.25rem, 1vw, 0.5rem);
   }
 
   .mobile-nav {
-    @apply space-y-2;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.25rem, 1vw, 0.5rem);
   }
 
   .mobile-link {
     @apply block text-gray-700 hover:text-blue-600 hover:bg-blue-50;
-    @apply px-3 py-3 rounded-md transition-colors duration-200 no-underline;
+    @apply rounded-md transition-colors duration-200 no-underline;
+    padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem);
+    font-size: clamp(0.875rem, 2vw, 1rem);
   }
 
   .mobile-link.router-link-active {
@@ -161,22 +202,149 @@
   }
 
   .mobile-auth-btn {
-    @apply bg-black text-white hover:bg-gray-800 px-4 py-3 rounded-md;
-    @apply font-medium transition-colors duration-200 text-sm text-center;
+    @apply bg-black text-white hover:bg-gray-800 rounded-md;
+    @apply font-medium transition-colors duration-200 text-center;
+    padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem);
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
   }
 
   /* ================= 響應式調整 ================= */
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     .nav {
-      @apply px-4;
+      padding-left: var(--container-padding, 1rem);
+      padding-right: var(--container-padding, 1rem);
     }
-    
-    .navtitle p {
-      @apply text-base;
-    }
-    
-    .navtitle img {
-      @apply w-8 h-8;
-    }
+  }
+}
+
+.greeting-text {
+  @apply font-medium;
+}
+
+/* ================= 前後台切換按鈕 ================= */
+.backend-toggle {
+  @apply hidden lg:block;
+}
+
+.toggle-btn {
+  @apply bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-md;
+  @apply font-medium transition-colors duration-200 text-sm;
+}
+
+/* ================= 會員中心下拉選單 ================= */
+.member-center {
+  @apply relative;
+}
+
+.dropdown {
+  @apply relative;
+}
+
+.dropdown-btn {
+  @apply bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md;
+  @apply font-medium transition-colors duration-200 text-sm;
+}
+
+.dropdown-menu {
+  @apply absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg;
+  @apply border border-gray-200 py-2 opacity-0 invisible;
+  @apply transition-all duration-200 transform translate-y-2;
+}
+
+.dropdown:hover .dropdown-menu {
+  @apply opacity-100 visible translate-y-0;
+}
+
+.dropdown-item {
+  @apply block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-blue-600;
+  @apply transition-colors duration-200 no-underline;
+}
+
+/* ================= 登入/登出按鈕 ================= */
+.auth-buttons {
+  @apply flex items-center;
+}
+
+.login-btn,
+.logout-btn {
+  @apply bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md;
+  @apply font-medium transition-colors duration-200 text-sm;
+}
+
+.logout-btn {
+  @apply bg-red-600 hover:bg-red-700;
+}
+
+/* ================= 手機版選單 ================= */
+.mobile-menu-btn {
+  @apply flex items-center;
+}
+
+.hamburger-btn {
+  @apply text-2xl text-gray-700 hover:text-blue-600 transition-colors;
+  @apply p-2 rounded-md hover:bg-gray-100;
+}
+
+.mobile-sidebar {
+  @apply fixed top-20 left-0 right-0 bg-white shadow-lg border-t border-gray-200;
+  @apply p-4 space-y-4 max-h-screen overflow-y-auto;
+}
+
+/* 平板模式下側邊選單寬度為30% */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .mobile-sidebar {
+    @apply left-0 right-auto;
+    width: 30%;
+  }
+}
+
+.mobile-section-title {
+  @apply font-bold text-gray-800 text-lg border-b border-gray-200 pb-2 mb-3;
+  @apply hover:text-blue-600 transition-colors duration-200 cursor-pointer;
+}
+
+.mobile-member-links {
+  @apply pl-4;
+}
+
+.mobile-member {
+  @apply space-y-2;
+}
+
+.mobile-nav {
+  @apply space-y-2;
+}
+
+.mobile-link {
+  @apply block text-gray-700 hover:text-blue-600 hover:bg-blue-50;
+  @apply px-3 py-3 rounded-md transition-colors duration-200 no-underline;
+}
+
+.mobile-link.router-link-active {
+  @apply text-blue-600 bg-blue-50;
+}
+
+/* ================= 手機版登入/登出按鈕 ================= */
+.mobile-auth {
+  @apply flex flex-col;
+}
+
+.mobile-auth-btn {
+  @apply bg-black text-white hover:bg-gray-800 px-4 py-3 rounded-md;
+  @apply font-medium transition-colors duration-200 text-sm text-center;
+}
+
+/* ================= 響應式調整 ================= */
+@media (max-width: 1024px) {
+  .nav {
+    @apply px-4;
+  }
+
+  .navtitle p {
+    @apply text-base;
+  }
+
+  .navtitle img {
+    @apply w-8 h-8;
   }
 }

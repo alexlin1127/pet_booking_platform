@@ -5,43 +5,53 @@
 /* ================= 側邊欄 ================= */
 @layer components {
   .sidebar {
-    @apply flex flex-col items-start w-[200px] min-w-[60px] overflow-hidden z-40 bg-white min-h-full;
+    @apply flex flex-col items-start overflow-hidden z-40 bg-white min-h-full;
+    width: clamp(3.75rem, 15vw, 12.5rem);
+    min-width: clamp(3.75rem, 10vw, 3.75rem);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     border-right: 2px solid #a3a9b7;
     transition: all 0.3s ease;
   }
 
   .sidebar-collapsed {
-    @apply w-[60px];
+    width: clamp(3.75rem, 8vw, 3.75rem);
   }
 
   .sidebar-open {
-    @apply w-[200px];
+    width: clamp(12.5rem, 20vw, 12.5rem);
   }
 
   .functionmenu {
     @apply cursor-pointer w-full flex items-center justify-center select-none;
     background-color: #1f2937;
+    height: clamp(3rem, 8vh, 4rem);
   }
 
   .functionmenu-open {
-    @apply h-16;
+    height: clamp(3rem, 8vh, 4rem);
   }
 
   .functionmenu-collapsed {
     @apply min-h-full flex flex-col items-center justify-center;
+    padding: clamp(1rem, 3vw, 2rem) 0;
   }
 
   .sidebar-menu-text {
-    @apply text-white flex items-center gap-2;
+    @apply text-white flex items-center;
+    gap: clamp(0.25rem, 1vw, 0.5rem);
+    font-size: clamp(0.875rem, 2vw, 1rem);
   }
 
   .sidebar-menu-icon {
-    @apply text-white ml-1;
+    @apply text-white;
+    margin-left: clamp(0.25rem, 0.5vw, 0.25rem);
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
   }
 
   .sidebar-menu-text-collapsed {
-    @apply flex flex-col items-center pt-8 gap-4 text-xl text-white w-full min-h-full leading-tight;
+    @apply flex flex-col items-center gap-4 text-white w-full min-h-full leading-tight;
+    padding-top: clamp(1rem, 3vw, 2rem);
+    font-size: clamp(0.875rem, 2vw, 1.25rem);
   }
 
   /* ================= 側邊欄連結樣式 ================= */
@@ -58,7 +68,9 @@
   }
 
   .sidebar-link {
-    @apply block w-full px-4 py-3 text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition-colors duration-200 no-underline;
+    @apply block w-full text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition-colors duration-200 no-underline cursor-pointer;
+    padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem);
+    font-size: clamp(0.875rem, 1.8vw, 1rem);
     border-bottom: 1px solid #e5e7eb;
   }
 
@@ -71,10 +83,50 @@
   }
 
   .sidebar-submenu {
-    @apply pl-8 text-sm bg-white;
+    @apply bg-white;
+    padding-left: clamp(1.5rem, 4vw, 2rem);
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
   }
 
   .sidebar-submenu.sidebar-link-active {
     @apply bg-blue-50 text-blue-600;
+  }
+
+  /* 響應式調整 */
+  @media (max-width: 768px) {
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 50;
+      width: 100vw;
+      max-width: 16rem;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .sidebar-open {
+      transform: translateX(0);
+    }
+    
+    .sidebar-collapsed {
+      transform: translateX(-100%);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .sidebar {
+      max-width: 14rem;
+    }
+    
+    .sidebar-link {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+    }
+    
+    .sidebar-submenu {
+      padding-left: 1.5rem;
+      font-size: 0.75rem;
+    }
   }
 }
