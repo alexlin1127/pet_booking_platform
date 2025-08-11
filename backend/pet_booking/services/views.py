@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import BoardingService, GroomingService, GroomingServicePricing
-from .serializers import BoardingServiceSerializer, GroomingServiceSerializer, BoardingServicePricingSerializer, GroomingServicePricingSerializer
+from .models import BoardingService, GroomingService
+from .serializers import BoardingServiceSerializer, GroomingServiceSerializer
 from rest_framework.permissions import IsAuthenticated
 import django_filters
 from django_filters.rest_framework import DjangoFilterBackend

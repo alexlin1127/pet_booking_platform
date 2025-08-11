@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Store, StoreImage, Post
-from users.models import User
+from pet_booking.users.models import User
 
 # 店家資訊圖片集
 class StoreImageSerializer(serializers.ModelSerializer):
@@ -11,12 +11,29 @@ class StoreImageSerializer(serializers.ModelSerializer):
 # 店家詳細頁
 class StoreSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user_id.username', read_only=True)
-    images = StoreImageSerializer(source='images', many=True, read_only=True)
+    images = StoreImageSerializer(source='images', many=True)
 
     class Meta:
         model = Store
         fields = '__all__'
         read_only_fields = ['created_at', 'updated_at']
+
+    def create(self, validated_data):
+        images_data = validated_data.pop('images', [])
+        store = Store.objects.create(**validated_data)
+        for image_data in images_data:
+            StoreImage.objects.create(store=store, **image_data)
+        return store
+
+    def update(self, instance, validated_data):
+        images_data = validated_data.pop('images', [])
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        instance.images.all().delete()
+        for image_data in images_data:
+            StoreImage.objects.create(store=instance, **image_data)
+        return instance
 
 
 # 管理者-店家清單

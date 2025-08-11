@@ -5,6 +5,8 @@ import django_filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.decorators import action
+from rest_framework.response import Response
 # Create your views here.
 
 class AdminFilter(django_filters.FilterSet):
@@ -97,6 +99,17 @@ class StoreAdminViewSet(viewsets.ModelViewSet):
             return StoreDetailSerializer
 
 
+    @action(detail=False, methods=['get'])
+    def statistics(self, request):
+        pending_store_count = Store.objects.filter(status='pending').count()
+        pending_post_count = Post.objects.filter(status='pending').count()
+        total_store_count = Store.objects.filter(status='confirmed').count()
+        return Response({
+            'pending_store_count': pending_store_count,
+            'pending_post_count': pending_post_count,
+            'total_store_count': total_store_count
+        })
+
 # 管理者文章
 class AdminPostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all().order_by('created_at')
@@ -116,7 +129,7 @@ class CustomerStoreFilter(django_filters.FilterSet):
 
     class Meta:
         model = Store
-        fields = ['service_item', 'county', 'district']  # 注意這裡不用直接寫 address
+        fields = ['service_item', 'county', 'district']
 
     def filter_county(self, queryset, name, value):
         return queryset.filter(address__county=value)

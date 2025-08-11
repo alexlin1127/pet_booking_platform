@@ -68,17 +68,17 @@ class GroomingServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GroomingService
-        fields = ['id', 'store_id', 'service_title', 'introduction', 'notice', 'duration_minutes_min', 'duration_minutes_max', 'created_at', 'updated_at', 'pricings']
+        fields = ['id', 'store_id', 'service_title', 'introduction', 'notice', 'duration_min', 'duration_max', 'created_at', 'updated_at', 'pricings']
 
     def create(self, validated_data):
-        pricings_data = validated_data.pop('pricings')
+        pricings_data = validated_data.pop('pricings', [])
         service = GroomingService.objects.create(**validated_data)
         for pricing_data in pricings_data:
             GroomingServicePricing.objects.create(grooming_service_id=service, **pricing_data)
         return service
     
     def update(self, instance, validated_data):
-        pricings_data = validated_data.pop('pricings')
+        pricings_data = validated_data.pop('pricings', [])
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()

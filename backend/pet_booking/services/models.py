@@ -51,6 +51,6 @@ class GroomingServicePricing(models.Model):
 
 
     def __str__(self):
-        return f"{self.species} - {self.pet_size}"
+        return f"{self.grooming_service_id.species}-{self.grooming_service_id.service_title} - {self.pet_size} - {self.fur_amount}"
     
 
