@@ -10,13 +10,19 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 # Create your views here.
 
-class AdminFilter(django_filters.FilterSet):
+class StoreFilter(django_filters.FilterSet):
     created_at_after = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='gte')
     created_at_before = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='lte')
     class Meta:
         model = Store
         fields = ['status', 'created_at_after', 'created_at_before']
 
+class PostFilter(django_filters.FilterSet):
+    created_at_after = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='gte')
+    created_at_before = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='lte')
+    class Meta:
+        model = Post
+        fields = ['status', 'created_at_after', 'created_at_before']
 
 # 店家詳情
 class StoreProfileViewSet(viewsets.ModelViewSet):
@@ -86,7 +92,7 @@ class StorePagination(PageNumberPagination):
 class StoreAdminViewSet(viewsets.ModelViewSet):
     queryset = Store.objects.all().order_by('-created_at')
     filter_backends = [DjangoFilterBackend]
-    filterset_class= AdminFilter
+    filterset_class= StoreFilter
     pagination_class = StorePagination
     permission_classes = [IsAuthenticated]
 
@@ -95,12 +101,13 @@ class StoreAdminViewSet(viewsets.ModelViewSet):
             return StoreListSerializer
         elif self.action == 'retrieve':
             return StoreDetailSerializer
+        return StoreDetailSerializer  # Default serializer for other actions
 
 
     @action(detail=False, methods=['get'])
     def statistics(self, request):
-        pending_store_count = Store.objects.filter(status='pending').count()
-        pending_post_count = Post.objects.filter(status='pending').count()
+        pending_store_count = Store.objects.filter(status__in=['pending', 'repending']).count()
+        pending_post_count = Post.objects.filter(status__in=['pending', 'repending']).count()
         total_store_count = Store.objects.filter(status='confirmed').count()
         return Response({
             'pending_store_count': pending_store_count,
@@ -113,7 +120,7 @@ class AdminPostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all().order_by('created_at')
     serializer_class = PostSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_class= AdminFilter
+    filterset_class= PostFilter
     pagination_class = StorePagination
     permission_classes = [IsAuthenticated]
 
