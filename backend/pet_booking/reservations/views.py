@@ -1,23 +1,19 @@
 # origin
-import uuid
 from datetime import datetime, timedelta, date
-import re
 
 # third-party
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import ValidationError
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 
-
 # app
-from .models import GroomingSchedules, ReservationGrooming
+from .models import GroomingSchedules
 from services.models import GroomingService, GroomingServicePricing
 from stores.models import Store
-from users.models import User
-from .serializers import ReservationBoardingSerializer, ReservationGroomingSerializer
+from .serializers import ReservationGroomingSerializer
+from customers.serializers import PetSerializer
 from customers.models import CustomersProfile, Pet
 
 
@@ -26,6 +22,7 @@ class StoreInfoViewSet(viewsets.ModelViewSet):
     ViewSet 1: 根據URL參數獲取店家基本資訊和服務選項
     GET /api/store-info/get_store_data/?store_id=1&user_id=5
     """
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get'], url_path='get_store_data')
     def get_store_data(self, request):
@@ -70,7 +67,7 @@ class StoreInfoViewSet(viewsets.ModelViewSet):
                         'microchip': pet.microchip,
                         'notes': pet.notes,
                     }
-
+            
             # 取得該店當天不可預約的時間
             today = date.today()
             grooming_schedules = GroomingSchedules.objects.filter(
@@ -83,7 +80,6 @@ class StoreInfoViewSet(viewsets.ModelViewSet):
                 if schedule.unavailable_time:
                     unavailable_times.append(schedule.unavailable_time)
 
-            
             response_data = {
                 'store': {
                     'id': store.id,
@@ -111,11 +107,137 @@ class StoreInfoViewSet(viewsets.ModelViewSet):
             )
 
 
+class PetInfoViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+    @action(detail=False, methods=['get'], url_path='get_pet_info')
+    def get_pet_info(self, request):
+        try:
+            user_id = request.query_params.get('user_id')
+            pet_name = request.data.get('pet_name')
+
+            if not user_id:
+                return Response(
+                    {'error': '缺少顧客ID參數'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            if not pet_name:
+                return Response(
+                    {'error': '缺少寵物姓名參數'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            try:
+                pet = Pet.objects.get(user_id=user_id, name=pet_name)
+
+                pet_info = {
+                    'name': pet.name,
+                    'species': pet.species,
+                    'gender': pet.gender,
+                    'breed': pet.breed,
+                    'age': pet.age,
+                    'fur_amount': pet.fur_amount,
+                    'size': pet.size,
+                    'weight': pet.weight,
+                    'spayed_or_neutered': pet.spayed_or_neutered,
+                    'microchip': pet.microchip,
+                    'notes': pet.notes,
+                }
+
+                return Response({
+                    'success': True,
+                    'pet_info': pet_info
+                }, status=status.HTTP_200_OK)
+            
+            except Pet.DoesNotExist:
+                return Response(
+                    {'error': f'找不到用戶ID {user_id} 名為 "{pet_name}" 的寵物'}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
+                
+        except Exception as e:
+            return Response(
+                {'error': f'獲取寵物資訊時出現錯誤: {str(e)}'}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+    @action(detail=False, methods=['post'], url_path='save_pet_info')
+    def save_pet_info(self, request):
+        try:
+            user_id = request.query_params.get('user_id')
+
+            if not user_id:
+                return Response(
+                    {'error': '缺少顧客ID參數'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            pet_data = request.data.copy()
+            pet_name = pet_data.get('name')
+
+            if not pet_name:
+                return Response(
+                    {'error': '寵物姓名為必填欄位'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            pet_data['user_id'] = user_id
+
+            try:
+                # 如果寵物已存在，進行更新
+                pet = Pet.objects.get(user_id=user_id, name=pet_name)
+                
+                # 使用PetSerializer進行驗證和更新
+                serializer = PetSerializer(pet, data=pet_data, partial=True)
+                
+                if serializer.is_valid():
+                    serializer.save()
+                    
+                    return Response({
+                        'success': True,
+                        'message': f'寵物 "{pet_name}" 資訊覆寫更新成功',
+                        'action': 'updated',
+                        'pet_info': serializer.data
+                    }, status=status.HTTP_204_NO_CONTENT)
+                else:
+                    return Response({
+                        'error': '寵物資料驗證失敗',
+                        'details': serializer.errors
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                
+            except Pet.DoesNotExist:
+                # 如果寵物不存在，建立新的寵物資料
+                serializer = PetSerializer(data=pet_data)
+                
+                if serializer.is_valid():
+                    serializer.save()
+                    
+                    return Response({
+                        'success': True,
+                        'message': f'寵物 "{pet_name}" 新增成功',
+                        'action': 'created',
+                        'pet_info': serializer.data
+                    }, status=status.HTTP_201_CREATED)
+                else:
+                    return Response({
+                        'error': '寵物資料驗證失敗',
+                        'details': serializer.errors
+                    }, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Exception as e:
+            return Response(
+                {'error': f'保存寵物資訊時出現錯誤: {str(e)}'}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
 class GroomingCalculationViewSet(viewsets.ModelViewSet):
     """
     ViewSet 2: 根據寵物資料和選擇的服務項目計算總時間和總價格
-    POST /api/grooming-calculation/calculate_grooming_cost/?store_id=1
+    POST /api/grooming-calculation/calculate_grooming_cost/?store_id=1&user_id=5
     """
+    permission_classes = [IsAuthenticated]
     @action(detail=False, methods=['post'], url_path='calculate_grooming_cost')
     def calculate_grooming_cost(self, request):
         """
@@ -214,7 +336,7 @@ class GroomingCalculationViewSet(viewsets.ModelViewSet):
 
         except Exception as e:
             return Response(
-                {'error': f'計算顧客總花費時出現錯誤: {str(e)}'}, 
+                {'error': f'顧客總花費計算出現錯誤: {str(e)}'}, 
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
@@ -224,6 +346,7 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
     ViewSet 3: 處理美容預約表單提交
     POST /api/grooming-reservation/create_reservation/?user_id=<user_id>
     """
+    permission_classes = [IsAuthenticated]
     @action(detail=False, methods=['post'], url_path='create_reservation')
     def create_reservation(self, request):
         """
@@ -258,7 +381,7 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
             customer_note = request.data.get('customer_note', '')
 
             # 驗證必要欄位
-            if not all([store_name, user_id, pet_name, selected_services, reservation_date, reservation_time]):
+            if not all([store_name, store_id, user_id, pet_name, selected_services, reservation_date, reservation_time]):
                 return Response(
                     {'error': '缺少必要的預約資訊'}, 
                     status=status.HTTP_400_BAD_REQUEST
@@ -306,7 +429,7 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
                     # 獲取美容服務
                     grooming_service = GroomingService.objects.get(
                         service_title=service_title,
-                        store_id=store.id
+                        store_id=store_id
                     )
 
                     # 根據寵物資料找到對應的定價和時間
@@ -369,7 +492,10 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
                     )
 
             # 生成預約ID
-            reservation_id = f"GR{uuid.uuid4().hex[:8].upper()}"
+            now = datetime.now()
+            timestamp = now.strftime("%Y%m%d%H%M%S")
+            microsecond_part = f"{now.microsecond:06d}"[-4:]  
+            reservation_id = f"GR{timestamp}{microsecond_part}"
 
             # 準備預約資料
             reservation_data = {
