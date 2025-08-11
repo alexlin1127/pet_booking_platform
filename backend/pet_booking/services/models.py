@@ -27,7 +27,7 @@ class BoardingRoomPricing(models.Model):
     duration = models.IntegerField()
     duration_unit = models.CharField(max_length=10, choices=[('day', 'Day'), ('month', 'Month')])
     pricing = models.IntegerField()
-    overtime_rate = models.IntegerField()
+    overtime_rate = models.IntegerField(blank=True, null=True)
     overtime_charging = models.BooleanField(default=False)
 
 # 美容
