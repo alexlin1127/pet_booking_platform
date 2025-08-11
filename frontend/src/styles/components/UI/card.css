@@ -14,7 +14,12 @@
     /* 可點擊的卡片 */
     .vertical-card.clickable,
     .horizontal-card.clickable {
-        @apply cursor-pointer hover:shadow-lg hover:scale-105;
+        @apply cursor-pointer hover:shadow-lg;
+    }
+
+    .vertical-card.clickable:hover,
+    .horizontal-card.clickable:hover {
+        transform: scale(1.02);
     }
 
     /* 有按鈕的直向卡片不要整體可點擊效果 */
@@ -23,56 +28,104 @@
     }
 
     .vertical-card.has-button:hover {
-        @apply shadow-md scale-100;
+        @apply shadow-md;
+        transform: none;
     }
 
     /* ================= 直向卡片樣式 ================= */
     .vertical-card {
-        @apply flex flex-col px-12 py-4 mx-auto md:mx-0;
+        @apply flex flex-col mx-auto md:mx-0;
+        padding: clamp(1rem, 3vw, 2rem) clamp(1.5rem, 4vw, 3rem);
     }
 
-    /* Icon 區域 - 佔卡片至少一半高度 */
+    /* Icon 區域 - 響應式高度 */
     .vertical-card .card-icon {
-        @apply flex items-center justify-center h-32 min-h-32 mb-3;
+        @apply flex items-center justify-center;
+        height: clamp(6rem, 15vw, 8rem);
+        min-height: clamp(6rem, 15vw, 8rem);
+        margin-bottom: clamp(0.5rem, 2vw, 0.75rem);
     }
 
     /* Caption 區域 */
     .vertical-card .card-caption {
-        @apply text-sm text-gray-600 text-center mb-2 px-2;
+        @apply text-gray-600 text-center;
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
+        margin-bottom: clamp(0.25rem, 1vw, 0.5rem);
+        padding: 0 clamp(0.25rem, 1vw, 0.5rem);
     }
 
-    /* Title 區域 - 水平置中 */
+    /* Title 區域 - 響應式文字大小 */
     .vertical-card .card-title {
-        @apply text-2xl font-semibold text-gray-900 text-center mb-3;
+        @apply font-semibold text-gray-900 text-center;
+        font-size: clamp(1.25rem, 3vw, 1.5rem);
+        margin-bottom: clamp(0.5rem, 2vw, 0.75rem);
+    }
+
+    /* Title2 區域 - 響應式文字大小 */
+    .vertical-card .card-title2 {
+        @apply font-semibold text-gray-900 text-center;
+        font-size: clamp(1.25rem, 3vw, 1.5rem);
+        margin-bottom: clamp(0.5rem, 2vw, 0.75rem);
+    }
+
+    /* Anno 區域 */
+    .vertical-card .card-anno {
+        @apply text-gray-600 text-center;
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
+        margin-bottom: clamp(0.25rem, 1vw, 0.5rem);
+        padding: 0 clamp(0.25rem, 1vw, 0.5rem);
     }
 
     /* 內容區域 */
     .vertical-card .card-content {
-        @apply flex-1 space-y-2 mb-4;
+        @apply flex-1;
+        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.25rem, 1vw, 0.5rem);
     }
 
-    .vertical-card .card-content .countshop,
-    .countpost {
-        @apply text-xl text-center;
+    /* Content2 區域 */
+    .vertical-card .card-content2 {
+        @apply flex-1;
+        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.25rem, 1vw, 0.5rem);
     }
 
-    /* 按鈕區域 - 滿版寬度 */
+    /* Count 區域 */
+    .vertical-card .card-count {
+        @apply text-center;
+        font-size: clamp(1rem, 2.5vw, 1.25rem);
+        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+    }
+
+    /* 按鈕區域 - 響應式寬度 */
     .vertical-card .card-button {
         @apply w-full mt-auto flex justify-center;
     }
 
     .vertical-card .card-button .button {
-        @apply w-[70%] bg-black text-center text-lg text-white rounded-lg px-2 py-2;
+        @apply bg-black text-center text-white rounded-lg;
+        width: clamp(60%, 70%, 80%);
+        padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem);
+        font-size: clamp(0.875rem, 2vw, 1.125rem);
     }
 
     /* ================= 橫向卡片樣式 ================= */
     .horizontal-card {
-        @apply flex items-center p-4 min-h-24;
+        @apply flex items-center;
+        padding: clamp(0.75rem, 2vw, 1rem);
+        min-height: clamp(5rem, 12vw, 6rem);
     }
 
-    /* 左側圖片區域 - 正方形 */
+    /* 左側圖片區域 - 響應式正方形 */
     .horizontal-card .card-image {
-        @apply w-16 h-16 flex-shrink-0 mr-4 rounded-md overflow-hidden bg-gray-100;
+        @apply flex-shrink-0 rounded-md overflow-hidden bg-gray-100;
+        width: clamp(3rem, 8vw, 4rem);
+        height: clamp(3rem, 8vw, 4rem);
+        margin-right: clamp(0.75rem, 2vw, 1rem);
     }
 
     /* 右側資訊區域 */
@@ -80,34 +133,153 @@
         @apply flex-1 min-w-0;
     }
 
-    /* 橫向卡片的 Title - 左上角 */
+    /* 橫向卡片的 Title - 響應式大小 */
     .horizontal-card .card-title {
-        @apply text-lg font-semibold text-gray-900 mb-1 truncate;
+        @apply font-semibold text-gray-900 truncate;
+        font-size: clamp(1rem, 2.5vw, 1.125rem);
+        margin-bottom: clamp(0.125rem, 0.5vw, 0.25rem);
     }
 
     /* 橫向卡片的內容 */
     .horizontal-card .card-content {
-        @apply text-sm text-gray-600 space-y-1;
+        @apply text-gray-600;
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.125rem, 0.5vw, 0.25rem);
     }
 
     /* 橫向卡片的按鈕區域 - 最右側 */
     .horizontal-card .card-button {
-        @apply ml-4 flex-shrink-0;
+        @apply flex-shrink-0;
+        margin-left: clamp(0.75rem, 2vw, 1rem);
     }
 
     /* ================= 內容區域的常用樣式 ================= */
     /* 地址、電話、營業時間等資訊項目 */
     .card-info-item {
-        @apply flex items-center text-sm text-gray-600;
+        @apply flex items-start;
+        gap: clamp(0.25rem, 1vw, 0.5rem);
+        margin-bottom: clamp(0.25rem, 1vw, 0.5rem);
+    }
+
+    .card-info-item .icon {
+        @apply flex-shrink-0 text-gray-400;
+        width: clamp(1rem, 2.5vw, 1.25rem);
+        height: clamp(1rem, 2.5vw, 1.25rem);
+        margin-top: clamp(0.125rem, 0.5vw, 0.25rem);
+    }
+
+    .card-info-item .text {
+        @apply text-gray-600;
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
+        line-height: 1.4;
+    }
+
+    /* 評分星級樣式 */
+    .card-rating {
+        @apply flex items-center;
+        gap: clamp(0.125rem, 0.5vw, 0.25rem);
+        margin: clamp(0.25rem, 1vw, 0.5rem) 0;
+    }
+
+    .card-rating .stars {
+        @apply flex;
+        gap: clamp(0.0625rem, 0.25vw, 0.125rem);
+    }
+
+    .card-rating .star {
+        @apply text-yellow-400;
+        width: clamp(0.75rem, 2vw, 1rem);
+        height: clamp(0.75rem, 2vw, 1rem);
+    }
+
+    .card-rating .rating-text {
+        @apply text-gray-600;
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
+        margin-left: clamp(0.25rem, 1vw, 0.5rem);
+    }
+
+    /* 標籤樣式 */
+    .card-tags {
+        @apply flex flex-wrap;
+        gap: clamp(0.25rem, 1vw, 0.5rem);
+        margin: clamp(0.25rem, 1vw, 0.5rem) 0;
+    }
+
+    .card-tag {
+        @apply bg-gray-100 text-gray-700 rounded-full;
+        padding: clamp(0.125rem, 0.5vw, 0.25rem) clamp(0.5rem, 1.5vw, 0.75rem);
+        font-size: clamp(0.625rem, 1.5vw, 0.75rem);
+        font-weight: 500;
+    }
+
+    /* 狀態指示器 */
+    .card-status {
+        @apply inline-flex items-center rounded-full;
+        padding: clamp(0.125rem, 0.5vw, 0.25rem) clamp(0.5rem, 1.5vw, 0.75rem);
+        font-size: clamp(0.625rem, 1.5vw, 0.75rem);
+        font-weight: 500;
+    }
+
+    .card-status.success {
+        @apply bg-green-100 text-green-800;
+    }
+
+    .card-status.warning {
+        @apply bg-yellow-100 text-yellow-800;
+    }
+
+    .card-status.error {
+        @apply bg-red-100 text-red-800;
+    }
+
+    .card-status.info {
+        @apply bg-blue-100 text-blue-800;
+    }
+
+    /* 響應式間距調整 */
+    @media (max-width: 640px) {
+        .vertical-card {
+            margin: 0 auto;
+        }
+
+        .horizontal-card {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .horizontal-card .card-image {
+            margin-right: 0;
+            margin-bottom: clamp(0.5rem, 2vw, 0.75rem);
+        }
+
+        .horizontal-card .card-button {
+            margin-left: 0;
+            margin-top: clamp(0.5rem, 2vw, 0.75rem);
+        }
+    }
+
+    /* 額外的資訊項目樣式 */
+    .card-info-item {
+        @apply flex items-center text-gray-600;
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
     }
 
     .card-info-item svg {
-        @apply w-4 h-4 mr-2 text-gray-400;
+        @apply text-gray-400;
+        width: clamp(1rem, 2.5vw, 1.25rem);
+        height: clamp(1rem, 2.5vw, 1.25rem);
+        margin-right: clamp(0.25rem, 1vw, 0.5rem);
     }
 
     /* 標示按鈕樣式 */
     .card-badge {
-        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-2 mb-1;
+        @apply inline-flex items-center rounded-full font-medium bg-blue-100 text-blue-800;
+        padding: clamp(0.125rem, 0.5vw, 0.25rem) clamp(0.5rem, 1.5vw, 0.75rem);
+        font-size: clamp(0.625rem, 1.5vw, 0.75rem);
+        margin-right: clamp(0.25rem, 1vw, 0.5rem);
+        margin-bottom: clamp(0.125rem, 0.5vw, 0.25rem);
     }
 
     /* 圖片樣式 */
@@ -118,6 +290,8 @@
     /* Icon 樣式 */
     .card-icon svg,
     .card-icon img {
-        @apply w-full h-full max-w-20 max-h-20 object-contain;
+        @apply w-full h-full object-contain;
+        max-width: clamp(4rem, 10vw, 5rem);
+        max-height: clamp(4rem, 10vw, 5rem);
     }
 }
