@@ -4,14 +4,16 @@ from pet_booking.users.models import User
 
 # 店家資訊圖片集
 class StoreImageSerializer(serializers.ModelSerializer):
+    store = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = StoreImage
         fields = '__all__'
 
 # 店家詳細頁
 class StoreSerializer(serializers.ModelSerializer):
+    user_id = serializers.PrimaryKeyRelatedField(read_only=True)
     username = serializers.CharField(source='user_id.username', read_only=True)
-    images = StoreImageSerializer(source='images', many=True)
+    images = StoreImageSerializer(many=True)
 
     class Meta:
         model = Store
