@@ -31,7 +31,7 @@ class GroomingSchedules(models.Model):
         db_column = 'reservation_grooming_id',
         
     )
-
+    store_name = models.CharField(max_length=50)
     date = models.DateField()
     unavailable_time = models.TimeField()
 
