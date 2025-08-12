@@ -34,6 +34,8 @@ import StoresInfo from "../pages/Stores/StoresInfo.vue";
 import EditStoresInfo from "../pages/Stores/EditStoresInfo.vue";
 import OpenService from "../pages/Stores/OpenService.vue";
 import ServicesManage from "../pages/Stores/ServicesManage.vue";
+import { newsreview } from "../data/postreview";
+import NewsView from "../pages/Customers/NewsView.vue";
 
 
 
@@ -47,6 +49,11 @@ const routes = [
     {
         path: "/news",
         component: NewsPage,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/news/view/:id",
+        component: NewsView,
         meta: { sidebar: false }
     },
     {

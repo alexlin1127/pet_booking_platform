@@ -31,6 +31,7 @@ import './styles/components/UI/switch.css'
 
 // 客戶頁面樣式
 import './styles/pages/Customers/Register/customersregister.css'
+import './styles/pages/Customers/Posts/news.css'
 
 // 商家頁面樣式
 import './styles/pages/Stores/Register/storesregister.css'
