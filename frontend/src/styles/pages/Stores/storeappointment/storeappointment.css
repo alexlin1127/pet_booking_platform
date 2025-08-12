@@ -1,0 +1,279 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 色票（依你的稿） */
+:root {
+  --bg: #fbf1e6; /* 全頁米色底 */
+  --panel: #fffaf4; /* 次卡片底 */
+  --ink: #3d2b1f; /* 主要字色咖 */
+  --muted: #8b6f57; /* 次文字 */
+  --accent: #cda27a; /* 主色 焦糖 */
+  --accent-strong: #b48556; /* 主色深 */
+  --line: #eadfce; /* 邊線 */
+  --danger: #d05e3b; /* 完成勾勾紅橘 */
+}
+
+/* 背景與預設字色 */
+body,
+.storeappointment-page {
+  @apply min-h-screen;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* ===== 基本版面 ===== */
+@layer components {
+  .storeappointment-container {
+    @apply max-w-4xl mx-auto px-6 md:px-8 py-10;
+  }
+  .storeappointment-title {
+    @apply text-3xl md:text-[38px] font-extrabold text-center tracking-wide mb-8;
+    color: var(--ink);
+  }
+
+  .sa-card {
+    @apply rounded-2xl border shadow-sm;
+    border-color: var(--line);
+    background: #fff;
+  }
+  .sa-card-inner {
+    @apply p-6 md:p-8;
+  }
+
+  /* Tabs */
+  .storeappointment-tab-wrap {
+    @apply flex justify-center gap-3 mb-8;
+  }
+  .storeappointment-tab {
+    @apply w-20 md:w-28 py-2 rounded-full font-semibold text-center border transition;
+    color: var(--muted);
+    border-color: var(--line);
+    background: #fff;
+  }
+  .storeappointment-tab-active {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+
+  /* 表單欄位 */
+  .storeappointment-label {
+    @apply block text-sm font-semibold mb-1;
+    color: var(--ink);
+  }
+  .storeappointment-input {
+    @apply w-full rounded-xl px-3 py-2 outline-none;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .storeappointment-select {
+    @apply w-full rounded-xl px-3 py-2 outline-none;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .storeappointment-textarea {
+    @apply w-full rounded-xl px-3 py-2 outline-none min-h-[120px];
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .storeappointment-radio {
+    accent-color: var(--ink);
+  }
+
+  /* 次標題 */
+  .block-title {
+    @apply font-bold text-base mb-2;
+    color: var(--ink);
+  }
+
+  /* 主要按鈕 */
+  .btn-primary {
+    @apply rounded-full font-semibold transition;
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--accent-strong);
+  }
+
+  /* 次要按鈕 */
+  .btn-ghost {
+    @apply rounded-full font-semibold border transition;
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+  .btn-ghost:hover {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  /* 完成頁 */
+  .success-icon {
+    @apply flex items-center justify-center rounded-full;
+    background: var(--danger);
+    color: #fff;
+  }
+  .success-title {
+    @apply font-bold text-center;
+    color: var(--ink);
+  }
+  .success-row {
+    @apply flex justify-between border-b;
+    border-color: var(--line);
+  }
+  .success-label {
+    color: var(--muted);
+  }
+  .success-value {
+    color: var(--ink);
+  }
+}
+
+/* ========== Tablet (768–1023px) 追加樣式：保留原設定，只放大間距與字級 ========== */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  /* 版面與標題 */
+  .storeappointment-container {
+    max-width: 940px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .storeappointment-title {
+    font-size: 34px;
+    margin-bottom: 28px;
+  }
+
+  /* 卡片內距 */
+  .sa-card-inner {
+    padding: 28px;
+  }
+
+  /* Tabs */
+  .storeappointment-tab-wrap {
+    gap: 12px;
+  }
+  .storeappointment-tab {
+    width: 112px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 15px;
+  }
+
+  /* 表單欄位（高度與字級） */
+  .storeappointment-label {
+    font-size: 15px;
+  }
+  .storeappointment-input,
+  .storeappointment-select {
+    height: 42px;
+    font-size: 15px;
+  }
+  .storeappointment-textarea {
+    font-size: 15px;
+  }
+
+  /* 日曆 */
+  .timepicker-summary {
+    padding: 14px 18px;
+    font-size: 15px;
+  }
+  .timepicker-calendar {
+    padding: 18px;
+  }
+  .calendar-title {
+    font-size: 16px;
+  }
+  .calendar-grid {
+    gap: 10px;
+  }
+  .calendar-cell {
+    height: 46px;
+    font-size: 15px;
+  }
+
+  /* 上午/下午切換 */
+  .time-period-row {
+    margin-top: 10px;
+    margin-bottom: 16px;
+    gap: 10px;
+  }
+  .time-period,
+  .time-period-active {
+    width: 88px;
+    padding: 6px 0;
+    font-size: 15px;
+  }
+
+  /* 時段按鈕：平板用 4 欄 */
+  .time-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .time-slot {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+
+  /* 按鈕與小計 */
+  .btn-row {
+    gap: 14px;
+  }
+  .btn-primary,
+  .btn-ghost {
+    padding: 10px 22px;
+    font-size: 15px;
+  }
+  .subtotal {
+    font-size: 14px;
+  }
+
+  /* 完成頁 */
+  .success-icon {
+    width: 68px;
+    height: 68px;
+    font-size: 28px;
+  }
+  .success-title {
+    font-size: 30px;
+    margin-bottom: 22px;
+  }
+  .success-row {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .success-label {
+    font-size: 14px;
+  }
+  .success-value {
+    font-size: 18px;
+  }
+  .contact-body {
+    padding: 26px;
+  }
+  .contact-phone {
+    font-size: 24px;
+  }
+  .btn-back {
+    padding: 10px 28px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+}
+
+/* （可選）Desktop ≥1024px 微調：維持 4 欄時段、放大些微間距 */
+@media (min-width: 1024px) {
+  .storeappointment-container {
+    max-width: 1040px;
+  }
+  .sa-card-inner {
+    padding: 32px;
+  }
+  .calendar-cell {
+    height: 48px;
+  }
+  .time-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
