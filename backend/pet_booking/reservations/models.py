@@ -69,7 +69,8 @@ class BoardingSchedules(models.Model):
         on_delete=models.CASCADE,
         db_column='reservation_boarding_id'
     )
-
+    
+    store_name = models.CharField(max_length=50)
     room_type = models.CharField(max_length=20)
     unavailable_time = models.DateTimeField()  # 移除 auto_now_add=True
 
