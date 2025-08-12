@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { bookings } from '../../../data/bookingfakedata'
+import { bookings } from '../../../../data/bookingfakedata'
 import Card from '../../../components/UI/Card.vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
