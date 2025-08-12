@@ -55,20 +55,22 @@ class StoreSerializer(serializers.ModelSerializer):
 
 # 管理者-店家清單
 class StoreListSerializer(serializers.ModelSerializer):
+    user_id = serializers.PrimaryKeyRelatedField(read_only=True)
     username = serializers.CharField(source='user_id.username', read_only=True)
     
     class Meta:
         model = Store
-        fields = ['user_id','username', 'store_name', 'owner_name', 'address', 'phone', 'created_at', 'status', 'grooming_service', 'boarding_service', 'service_item', 'hero_image']
+        fields = ['id','user_id','username', 'store_name', 'owner_name', 'address', 'phone', 'created_at', 'status', 'grooming_service', 'boarding_service', 'service_item', 'hero_image']
         
 
 # 管理者-店家詳細
 class StoreDetailSerializer(serializers.ModelSerializer):
+    user_id = serializers.PrimaryKeyRelatedField(read_only=True)
     username = serializers.CharField(source='user_id.username', read_only=True)
 
     class Meta:
         model = Store
-        fields = ['user_id','username', 'store_name', 'owner_name', 'address', 'phone', 'email','pick_up_service', 'created_at', 'status', 'grooming_service', 'boarding_service', 'staff_number', 'business_licences_url', 'boarding_license_dog_url', 'boarding_license_cat_url', 'grooming_single_appointment', 'reject_content']
+        fields = ['id','user_id','username', 'store_name', 'owner_name', 'address', 'phone', 'email','pick_up_service', 'created_at', 'status', 'grooming_service', 'boarding_service', 'staff_number', 'business_licences_url', 'boarding_license_dog_url', 'boarding_license_cat_url', 'grooming_single_appointment', 'reject_content']
 
 
 

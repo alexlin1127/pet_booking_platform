@@ -37,6 +37,9 @@ class StoreProfileViewSet(viewsets.ModelViewSet):
         return Store.objects.get(user_id=self.request.user)
 
     def perform_create(self, serializer):
+        if Store.objects.filter(user_id=self.request.user).exists():
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError("每個使用者只能新增一筆店家資訊")
         serializer.save(user_id=self.request.user)
         
 # 店家文章
@@ -155,6 +158,7 @@ class CustomerStorePagination(PageNumberPagination):
 
 class CustomerStoreViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
+    permission_classes = []
     serializer_class = StoreListSerializer
     pagination_class = CustomerStorePagination
     filter_backends = [DjangoFilterBackend]
@@ -199,6 +203,7 @@ class CustomerPostPagination(PageNumberPagination):
     max_page_size = 50
 
 class CustomerPostViewSet(viewsets.ModelViewSet):
+    permission_classes = []
     http_method_names = ['get']
     serializer_class = PostSerializer
     pagination_class = CustomerPostPagination
