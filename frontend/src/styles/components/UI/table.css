@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .table {
+    @apply w-full border-separate;
+    border-spacing: 0 clamp(0.25rem, 1vw, 1rem);
+  }
+  
+  .table-header {
+    @apply text-center font-semibold bg-gray-50;
+    padding: clamp(0.5rem, 1.5vw, 0.75rem);
+    font-size: clamp(0.875rem, 1.8vw, 1rem);
+  }
+  
+  .table-body {
+    @apply text-center bg-white;
+    padding: clamp(0.5rem, 1.5vw, 0.75rem);
+    font-size: clamp(0.875rem, 1.8vw, 1rem);
+  }
+
+  .table-row {
+    @apply transition-colors hover:bg-gray-50;
+  }
+
+  .table-cell {
+    @apply border-b border-gray-200;
+    padding: clamp(0.5rem, 1.5vw, 0.75rem);
+    font-size: clamp(0.875rem, 1.8vw, 1rem);
+  }
+
+  /* 響應式表格 */
+  .table-responsive {
+    @apply overflow-x-auto;
+    min-width: 100%;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* 小螢幕調整 */
+  @media (max-width: 640px) {
+    .table {
+      font-size: 0.75rem;
+    }
+    
+    .table-header,
+    .table-body,
+    .table-cell {
+      padding: 0.5rem 0.25rem;
+      font-size: 0.75rem;
+    }
+    
+    .table-wrapper {
+      margin: 0 -1rem;
+      padding: 0 1rem;
+    }
+  }
+
+  /* 表格條紋效果 */
+  .table-striped .table-row:nth-child(even) {
+    @apply bg-gray-50;
+  }
+
+  /* 表格邊框 */
+  .table-bordered {
+    @apply border border-gray-200 rounded-lg overflow-hidden;
+  }
+
+  .table-bordered .table-cell {
+    @apply border-r border-gray-200;
+  }
+
+  .table-bordered .table-cell:last-child {
+    @apply border-r-0;
+  }
+}

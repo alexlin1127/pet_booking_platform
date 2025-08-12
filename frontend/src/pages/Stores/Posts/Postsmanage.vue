@@ -1,0 +1,144 @@
+<script setup>
+import { ref, computed, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { posts as rawPosts } from '../../../data/postsfakedata'
+import Pagination from '../../../components/common/Pagination.vue'
+import ModalBox from '../../../components/UI/ModalBox.vue'
+
+const router = useRouter()
+
+const allPosts = ref([...rawPosts])  // rawPosts 就是從檔案 import 的資料
+
+// 篩選類別
+const isGrooming = ref(true) // 初始為「美容」
+const groomingPosts = computed(() => allPosts.value.filter(post => post.tag === '寵物美容'))
+const boardingPosts = computed(() => allPosts.value.filter(post => post.tag === '寵物住宿'))
+const currentPosts = computed(() => (isGrooming.value ? groomingPosts.value : boardingPosts.value))
+
+// 分頁
+const currentPage = ref(1)
+const pageSize = 3 // 每頁顯示3個貼文
+
+const paginatedPosts = computed(() => {
+    const start = (currentPage.value - 1) * pageSize
+    return currentPosts.value.slice(start, start + pageSize)
+})
+
+const totalPages = computed(() => Math.ceil(currentPosts.value.length / pageSize))
+
+watch(isGrooming, () => {
+    currentPage.value = 1
+})  
+//頁碼
+function handlePageChange(page) {
+    currentPage.value = page
+}
+// 查看文章
+function viewPost(id) {
+    router.push(`/stores/posts/view/${id}`)
+}
+const showModal = ref(false)
+const selectedPost = ref(null)
+const infoRows = ref([])
+// 點擊刪除按鈕：觸發開啟 Modal 並帶入該篇文章  
+function openDeleteModal(post) {
+    if (!post) {
+        //警告，方便偵錯
+        // console.warn('post 是 undefined，請檢查按鈕綁定位置！')
+        return
+    }
+    selectedPost.value = post
+    infoRows.value = [
+        [`「${post.title}」`, post.content]
+    ]
+    showModal.value = true
+}
+
+//modelbox按鈕點擊處理
+function handleButtonClick({ action, data }) {
+    if (action === 'cancel') {
+        showModal.value = false
+        selectedPost.value = null
+    } else if (action === 'confirm') {
+        deletePost()
+    }
+}
+
+// 刪除文章
+function deletePost() {
+    if (!selectedPost.value) return
+    console.log('🧪 刪除這筆：', selectedPost.value)
+    // ✅ 實際刪除
+    const before = allPosts.value.length
+    allPosts.value = allPosts.value.filter(p => String(p.id) !== String(selectedPost.value.id))
+    const after = allPosts.value.length
+    console.log(`📉 刪除前 ${before} 筆，刪除後 ${after} 筆`)
+    // ✅ 關閉 modal
+    showModal.value = false
+    selectedPost.value = null
+}
+//按鈕-新增貼文跳轉
+function goToNewPost() {
+    router.push('/stores/posts/add')
+}
+</script>
+<template>
+    <!-- 外層容器 -->
+    <div class="postmanage-wrapper">
+        <div class="postmanage-header">
+            <div class="postmanage-main-content">
+                <!-- 左側：撐開寬度 -->
+                <h1 class="postmanage-title">貼文管理</h1>
+            </div>
+            <div class="post-header-actions">
+                <button class="post-button" @click="goToNewPost">新增貼文</button>
+            </div>
+        </div>
+
+        <!-- 篩選切換 -->
+        <div class="postmanage-filter-toggle">
+            <label class="postmanage-filter-label" :class="{ 'grooming-active': isGrooming }">美容</label>
+            <label class="postmanage-switch">
+                <input type="checkbox" class="sr-only peer" v-model="isGrooming" />
+                <div class="postmanage-switch-bar"></div>
+            </label>
+            <span class="postmanage-filter-label" :class="{ 'boarding-active': !isGrooming }">住宿</span>
+        </div>
+
+        <div class="post-card-list">
+            <div v-for="post in paginatedPosts" :key="post.id" class="post-card">
+                <div class="post-thumb"></div>
+
+                <div class="post-content">
+                    <h2 class="post-title">{{ post.title }}</h2>
+                    <p class="post-date">日期 {{ post.date }}</p>
+                    <p class="post-excerpt">{{ post.content }}</p>
+                    <span class="post-tag">{{ post.tag }}</span>
+                </div>
+
+                <div class="post-actions">
+                    <div class="post-status">
+                        <i class="i-bi-check2-all text-lg"></i>
+                        <span>{{ post.status }}</span>
+                    </div>
+                    <button class="post-button" @click="viewPost(post.id)">查看完整文章</button>
+                    <button class="post-button"
+                        @click="() => { console.log(post); openDeleteModal(post) }">刪除文章</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <Pagination :current-page="currentPage" :total-pages="totalPages" @page-change="handlePageChange" />
+    <ModalBox class="store-page" :visible="showModal" :title="`確定刪除此貼文?`" :infoRows="infoRows" :buttons="[
+        {
+            text: '取消並返回',
+            action: 'cancel',
+            class: 'modal-btn-cancel'
+        },
+        {
+            text: '刪除',
+            action: 'confirm',
+            class: 'modal-btn-danger'
+        }
+    ]" @close="showModal = false" @button-click="handleButtonClick" />
+</template>

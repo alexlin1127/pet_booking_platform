@@ -56,47 +56,117 @@ const routes = [
     {
         path: "/",
         component: Home,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/news",
+        component: NewsPage,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores",
+        component: StoresPage,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/booking/grooming",
+        component: BookingGroomingPage,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/booking/boarding",
+        component: BookingBoardingPage,
+        meta: { sidebar: false }
+    },
+    // 登入註冊路由
+    {
+        path: "/login",
+        component: Login,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/register",
+        component: Register,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/register/customers",
+        component: CustomerRegister,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/register/stores/:step",
+        component: StoreRegister,
+        meta: { sidebar: false }
+    },
+
+    // 商家頁面路由
+    {
+        path: "/register/stores/:step",
+        component: StoreRegister,
+        meta: { sidebar: false }
+    },
+    // 儀表板
+    {
+        path: "/stores/dashboard",
+        component: StoreDashboard,
+        meta: { sidebar: true }
+    },
+    // 預約管理
+    {
+        path: "/stores/grooming-bookings/manage",
+        component: StoreGroomingManage,
         meta: { sidebar: true }
     },
     {
-        path: "/Login",
-        component: Login,
+        path: "/stores/boarding-bookings/manage",
+        component: StoreBoardingManage,
+        meta: { sidebar: true }
     },
     {
-        path: "/Register",
-        component: Register,
+        path: "/stores/posts/manage",
+        component: StoreManage,
+        meta: { sidebar: true }
     },
     {
-        path: "/Register/Users",
-        component: UserRegister,
+        path: "/stores/posts/add",
+        component: StorePostProcess,
+        meta: { sidebar: false }
     },
     {
-        path: "/Register/Shops/:step",
-        component: ShopRegister,
+        path: "/stores/posts/edit/:id",
+        component: StorePostProcess,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores/posts/view/:id",
+        component: StorePostView,
+        meta: { sidebar: false }
     },
 
-    // // 管理者頁面Router
+    // 管理者頁面Router
     {
-        path: "/Admin",
+        path: "/admin",
         component: Admin,
         meta: { sidebar: true }
     },
     {
-        path: "/Admin/Store/Manage",
+        path: "/admin/stores/manage",
         component: StoreManagement,
         meta: { sidebar: true }
     },
     {
-        path: "/Admin/Store/Review",
+        path: "/admin/stores/:status",
         component: StoreReview,
+        meta: { sidebar: false }
     },
     {
-        path: "/Admin/Account",
+        path: "/admin/accounts/:page?",
         component: AccountManagement,
         meta: { sidebar: true }
     },
     {
-        path: "/Admin/Post",
+        path: "/admin/posts",
         component: PostManagement,
         meta: { sidebar: true }
     },
