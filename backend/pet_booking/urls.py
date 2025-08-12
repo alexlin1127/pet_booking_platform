@@ -29,14 +29,13 @@ router.register(r'store/profile', StoreProfileViewSet, basename='store-profile')
 # Post
 router.register(r'store/posts', StorePostViewSet, basename='store-posts')
 router.register(r'admin/posts', AdminPostViewSet, basename='admin-posts')
-router.register(r'post', CustomerPostViewSet, basename='customer-post')
+router.register(r'customer/store', CustomerStoreViewSet, basename='customer-store')
+router.register(r'customer/post', CustomerPostViewSet, basename='customer-post')
 
-# Store and Service
-router.register(r'store', CustomerStoreViewSet, basename='customer-store')
 router.register(r'store/boarding_services', BoardingServiceViewSet, basename='boarding_services')
 router.register(r'store/grooming_services', GroomingServiceViewSet, basename='grooming_services')
-router.register(r'boarding_services', CustomerBoardingViewSet, basename='customer_boarding')
-router.register(r'grooming_services', CustomerGroomingViewset, basename='customer_grooming')
+router.register(r'customer/boarding_services', CustomerBoardingViewSet, basename='customer_boarding')
+router.register(r'customer/grooming_services', CustomerGroomingViewset, basename='customer_grooming')
 router.register(r'store/images', StoreImageViewSet, basename='store-images')
 
 # Reservation related endpoints

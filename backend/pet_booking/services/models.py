@@ -5,8 +5,13 @@ from django.db import models
 # 住宿
 class BoardingService(models.Model):
     store_id = models.ForeignKey('stores.Store', on_delete=models.CASCADE)
+    species = models.CharField(max_length=10, choices=[('cat', 'Cat'), ('dog', 'Dog')], default='dog')
     cleaning_frequency = models.CharField(max_length=32)
-    introduction = models.TextField(max_length=500)
+    room_type = models.CharField(max_length=100, default='Standard')
+    room_count = models.IntegerField(default=0)
+    pet_available_amount = models.IntegerField(default=0)
+    introduction = models.TextField(max_length=500, default='')
+    notice = models.TextField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -14,21 +19,15 @@ class BoardingService(models.Model):
         return f"Boarding Service at {self.store_id.store_name}"
 
 
-class BoardingRoomType(models.Model):
+class BoardingServicePricing(models.Model):
     boarding_service = models.ForeignKey(BoardingService, on_delete=models.CASCADE)
-    species = models.CharField(max_length=10, choices=[('cat', 'Cat'), ('dog', 'Dog')])
-    room_type = models.CharField(max_length=100)
-    room_count = models.IntegerField()
-    pet_available_amount = models.IntegerField()
-
-
-class BoardingRoomPricing(models.Model):
-    room_type = models.ForeignKey(BoardingRoomType, on_delete=models.CASCADE)
     duration = models.IntegerField()
     duration_unit = models.CharField(max_length=10, choices=[('day', 'Day'), ('month', 'Month')])
     pricing = models.IntegerField()
     overtime_rate = models.IntegerField(blank=True, null=True)
     overtime_charging = models.BooleanField(default=False)
+   
+
 
 # 美容
 class GroomingService(models.Model):
@@ -36,7 +35,7 @@ class GroomingService(models.Model):
     species = models.CharField(max_length=10, choices=[('cat', 'Cat'), ('dog', 'Dog')])
     service_title = models.CharField(max_length=64)
     introduction = models.TextField(max_length=500)
-    notice = models.TextField()
+    notice = models.TextField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):

@@ -51,21 +51,43 @@ class BaseOwnerViewSet(viewsets.ModelViewSet):
         # 強制綁定當前登入使用者
         serializer.save(user_id=self.request.user)
 
+# ------------------------filter------------------------------
 class CustomersProfileFilter(filters.FilterSet):
     class Meta:
         model = CustomersProfile
-        fields = []  # 先不開任何欄位
+        fields = []  # 預設沒有過濾欄位
 
-    @property
-    def filters(self):
-        # 取得原本所有欄位型別
-        filters_dict = super().filters.copy()
-        # 根據 request.user 權限動態調整
-        user = getattr(getattr(self, 'request', None), 'user', None)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        user = getattr(self.request, 'user', None)
         if user and user.is_authenticated and user.role == UserRole.ADMIN:
             # 只有 admin 能用 user_id 過濾
-            filters_dict['user_id'] = filters.ModelChoiceFilter(queryset=User.objects.all())
-        return filters_dict
+            self.filters['user_id'] = filters.ModelChoiceFilter(queryset=User.objects.all())
+
+
+class LikeStoreFilter(filters.FilterSet):
+    class Meta:
+        model = LikeStore
+        fields = []  # 預設沒有過濾欄位
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        user = getattr(self.request, 'user', None)
+        if user and user.is_authenticated and user.role == UserRole.ADMIN:
+            self.filters['user_id'] = filters.ModelChoiceFilter(queryset=User.objects.all())
+
+
+class PetFilter(filters.FilterSet):
+    class Meta:
+        model = Pet
+        fields = []  # 預設沒有過濾欄位
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        user = getattr(self.request, 'user', None)
+        if user and user.is_authenticated and user.role == UserRole.ADMIN:
+            self.filters['user_id'] = filters.ModelChoiceFilter(queryset=User.objects.all())
+
 
 class CustomersProfileViewSet(BaseOwnerViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
@@ -97,21 +119,7 @@ class CustomersProfileViewSet(BaseOwnerViewSet):
             profile.delete()
             return Response({"detail": "已刪除"}, status=status.HTTP_204_NO_CONTENT)
 
-class LikeStoreFilter(filters.FilterSet):
-    class Meta:
-        model = LikeStore
-        fields = []  # 先不開任何欄位
 
-    @property
-    def filters(self):
-        # 取得原本所有欄位型別
-        filters_dict = super().filters.copy()
-        # 根據 request.user 權限動態調整
-        user = getattr(getattr(self, 'request', None), 'user', None)
-        if user and user.is_authenticated and user.role == UserRole.ADMIN:
-            # 只有 admin 能用 user_id 過濾
-            filters_dict['user_id'] = filters.ModelChoiceFilter(queryset=User.objects.all())
-        return filters_dict
 
 class LikeStoreViewSet(BaseOwnerViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
@@ -128,22 +136,6 @@ class LikeStoreViewSet(BaseOwnerViewSet):
         likestores = LikeStore.objects.filter(user_id=request.user).order_by('-id')
         serializer = self.get_serializer(likestores, many=True)
         return Response(serializer.data)
-
-class PetFilter(filters.FilterSet):
-    class Meta:
-        model = Pet
-        fields = []  # 先不開任何欄位
-
-    @property
-    def filters(self):
-        # 取得原本所有欄位型別
-        filters_dict = super().filters.copy()
-        # 根據 request.user 權限動態調整
-        user = getattr(getattr(self, 'request', None), 'user', None)
-        if user and user.is_authenticated and user.role == UserRole.ADMIN:
-            # 只有 admin 能用 user_id 過濾
-            filters_dict['user_id'] = filters.ModelChoiceFilter(queryset=User.objects.all())
-        return filters_dict
 
 class PetViewSet(BaseOwnerViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
