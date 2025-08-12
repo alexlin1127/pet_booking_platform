@@ -1,0 +1,28 @@
+/* src/styles/pages/news.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .news-page { @apply bg-[#fbf2ea]; } /* 與範例圖相近的米杏底色 */
+
+  /* Tabs */
+  .news-filter .tab {
+    @apply px-6 py-2 rounded-full border border-[#d2a671] bg-[#d2a671]
+           text-sm md:text-base text-white shadow-sm;
+  }
+  .news-filter .tab.is-active {
+    @apply bg-[#e8dccf] border-[#c9b7a6] font-semibold;
+  }
+
+  /* Grid spacing 微調 */
+  .news-grid { @apply md:gap-y-6; }
+
+  /* 覆蓋卡片內的 badge（若需要更像設計圖的膠囊） */
+  .card-badge {
+    @apply bg-[#efe6db] text-gray-700 border border-[#e0d6c9];
+  }
+  .news-badge {
+    @apply inline-block rounded border border-[#d8c9b8] bg-[#f9f3ed] gap-4 px-2 py-0.5 text-xs leading-4 text-[#5f4b3a];
+  }
+}
