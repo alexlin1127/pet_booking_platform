@@ -1,402 +1,167 @@
-<template>
-    <div class="storeservices-page">
-        <div class="ss-container">
-            <h1 class="block-title">{{ pageTitle }}</h1>
+<script setup>
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import Card from '../../../components/UI/Card.vue'
+import ModalBox from '../../../components/UI/ModalBox.vue'
+import Switch from '../../../components/UI/Switch.vue'
+import { services as staticServices } from '../../../data/services' //避免和響應式變數撞名
 
-            <!-- 基本：毛孩類別、服務項目 -->
-            <section class="ss-card">
-                <div class="ss-card-inner">
-                    <!-- 毛孩類別 -->
-                    <label class="ss-label">毛孩類別 *</label>
-                    <div class="ss-radio-group">
-                        <label>
-                            <input class="ss-radio" type="radio" value="dog" v-model="pet" :disabled="isView" />
-                            狗狗
-                        </label>
-                        <label>
-                            <input class="ss-radio" type="radio" value="cat" v-model="pet" :disabled="isView" />
-                            貓貓
-                        </label>
+const router = useRouter()
+// 響應式服務清單（用假資料做副本，刪除時不會影響原檔）
+const services = ref([...staticServices]) // ⬅️ 新增
+
+// Modal 狀態
+const showDelete = ref(false) // ⬅️ 新增
+const pending = ref(null)     // ⬅️ 暫存要刪除的服務資料
+
+// 頁首：true=美容, false=住宿
+const isGrooming = ref(true)
+
+// 下拉篩選選項
+const tagOptions = ['全部', '短毛', '長毛', '犬', '貓'] // 依你的資料調整
+const selectedTag = ref('全部')
+
+// 操作事件
+const onEdit = id => console.log('edit', id)
+const onDelete = svc => {           // ⬅️ 改成接收整個物件，不是 id
+    pending.value = svc               // ⬅️ 存起要刪除的項目
+    showDelete.value = true           // ⬅️ 打開 Modal
+}
+
+// 新增服務按鈕事件
+const handleAddService = () => {
+    router.push('/stores/services/add')
+}
+
+// Modal 按鈕事件
+const onModalAction = action => {   // ⬅️ 新增
+    if (action === 'cancel') {
+        showDelete.value = false
+        pending.value = null
+    }
+    if (action === 'confirm' && pending.value) {
+        services.value = services.value.filter(s => s.id !== pending.value.id)
+        showDelete.value = false
+        pending.value = null
+    }
+}
+
+// 過濾服務清單
+const filteredServices = computed(() => {
+    const type = isGrooming.value ? 'boarding' : 'grooming' // 依資料實際欄位修改
+    return (services.value ?? [])  //修正：要用 services.value
+        .filter(s => s.type === type)
+        .filter(s => selectedTag.value === '全部' ? true : s.tags?.includes(selectedTag.value))
+})
+
+/* ⬇⬇⬇ 新增：把服務物件轉成 ModalBox 需要的 infoRows 二維陣列 ⬇⬇⬇ */
+const buildInfoRows = (svc) => {
+    if (!svc) return []
+    const bullets = (svc.bullets ?? []).map(b => `• ${b}`).join('\n') // 用換行與項目符號
+    const tags = (svc.tags ?? []).join('、')
+    return [
+        ['項目', svc.title],
+        ['價格', `NT$ ${svc.price}`],
+        ['說明', svc.description],
+        ['注意事項', bullets],
+        ['服務時間', svc.duration],
+        ['標籤', tags],
+    ]
+}
+/* ⬆⬆⬆ 新增：把服務物件轉成 ModalBox 需要的 infoRows 二維陣列 ⬆⬆⬆ */
+
+</script>
+
+<template>
+    <div class="service-page">
+        <div class="service-header">
+            <h1 class="service-title-page">服務項目管理</h1>
+            <button class="svc-btn svc-btn-primary" @click="handleAddService">新增服務</button>
+        </div>
+        <!-- 美容 / 住宿 切換 -->
+        <div class="flex items-center">
+            <span class="mr-2 text-sm">美容</span>
+            <Switch v-model="isGrooming" size="md" />
+            <span class="ml-2 text-sm">住宿</span>
+            <!-- 篩選服務 下拉 -->
+            <span class="ml-2 text-sm py-2">篩選服務</span>
+            <select v-model="selectedTag" class="select-filter ml-4">
+                <option v-for="opt in tagOptions" :key="opt" :value="opt">{{ opt }}</option>
+            </select>
+        </div>
+        <section class="space-y-10">
+            <Card v-for="s in filteredServices" :key="s.id" type="vertical" :hasButton="true" :clickable="false"
+                class="service-card">
+                <!-- 不要 icon：若卡片本身會渲染空容器，就用 CSS 隱藏；或保留此具名 slot 覆蓋 -->
+                <template #icon><template v-if="false" /></template>
+
+                <template #title>
+                    <div class="flex items-center justify-between">
+                        <h3 class="service-item-title">
+                            {{ s.title }} <span class="service-price">NT${{ s.price }}</span>
+                        </h3>
+                    </div>
+                </template>
+
+                <template #content>
+                    <p class="service-desc">{{ s.description }}</p>
+
+                    <ul class="service-bullets">
+                        <li v-for="b in s.bullets" :key="b">{{ b }}</li>
+                    </ul>
+
+                    <div class="service-meta">
+                        <div class="service-duration">施作時間：{{ s.duration }}</div>
+                        <div class="service-tags">
+                            <span v-for="t in s.tags" :key="t" class="service-tag">{{ t }}</span>
+                        </div>
+                    </div>
+                </template>
+
+                <template #button>
+                    <div class="service-actions">
+                        <button class="svc-btn svc-btn-outline" @click="onDelete(s)">刪除服務</button>
+                        <button class="svc-btn svc-btn-solid" @click="onEdit(s.id)">修改內容</button>
+                    </div>
+                </template>
+            </Card>
+        </section>
+        <!-- 刪除確認 Modal -->
+        <ModalBox :visible="showDelete" :title="'確認刪除該服務'" :buttons="[
+            { text: '取消', action: 'cancel', variant: 'cancel', class: 'svc-btn svc-btn-outline w-20' },
+            { text: '確認', action: 'confirm', variant: 'danger', class: 'svc-btn svc-btn-solid gap-6' }
+        ]" @close="() => (showDelete = false)" @button-click="onModalAction" width="max-w-2xl">
+
+            <!-- ⬇⬇⬇ 這段是新的 slot：照圖示排版 ⬇⬇⬇ -->
+            <template #default>
+                <div v-if="pending" class="del-preview">
+                    <!-- 服務名稱 ＆ 價格（左右對齊） -->
+                    <div class="flex items-center justify-between">
+                        <div class="service-item-title">{{ pending.title }}<span class="service-price">NT${{
+                                pending.price }}</span>
+                        </div>
                     </div>
 
-                    <!-- 服務項目 -->
-                    <div class="mt-4">
-                        <label class="ss-label">服務項目 *</label>
-                        <div class="ss-radio-group">
-                            <label>
-                                <input class="ss-radio" type="radio" value="grooming" v-model="type"
-                                    :disabled="lockType || isView" />
-                                美容
-                            </label>
-                            <label>
-                                <input class="ss-radio" type="radio" value="lodging" v-model="type"
-                                    :disabled="lockType || isView" />
-                                住宿
-                            </label>
-                        </div>
+                    <!-- 服務描述 -->
+                    <div class="svc-desc">
+                        <p>{{ pending.description }}</p>
+                    </div>
+
+                    <!-- 注意事項：黑色圓點 -->
+                    <ul class="service-bullets">
+                        <li v-for="(b, i) in pending.bullets" :key="b">{{ b }}</li>
+                    </ul>
+
+
+                    <!-- 服務時間（灰字） -->
+                    <div class="service-duration mt-2 mb-2">服務時間：約 {{ pending.duration }}</div>
+
+                    <!-- 標籤（膠囊） -->
+                    <div class="service-tags justify-start">
+                        <span v-for="(t, i) in pending.tags" :key="i" class="service-tag">{{ t }}</span>
                     </div>
                 </div>
-            </section>
-
-            <!-- Lodging：清潔與消毒 + 房型設定 + 住宿介紹 -->
-            <template v-if="isLodging">
-                <section class="ss-card">
-                    <div class="ss-card-inner">
-                        <label class="ss-label">清潔與消毒 *</label>
-                        <div class="ss-radio-group">
-                            <label>
-                                <input class="ss-radio" type="radio" value="weekly" v-model="lodging.cleaning"
-                                    :disabled="isView" />
-                                每週清潔
-                            </label>
-                            <label>
-                                <input class="ss-radio" type="radio" value="biweekly" v-model="lodging.cleaning"
-                                    :disabled="isView" />
-                                每兩週清潔
-                            </label>
-                            <label>
-                                <input class="ss-radio" type="radio" value="halfmonth" v-model="lodging.cleaning"
-                                    :disabled="isView" />
-                                每半月清潔
-                            </label>
-                            <label class="ss-line">
-                                <input class="ss-radio" type="radio" value="other" v-model="lodging.cleaning"
-                                    :disabled="isView" />
-                                其他
-                                <input class="ss-input is-name" placeholder="請輸入內容" v-model="lodging.cleaningNote"
-                                    :disabled="isView || lodging.cleaning !== 'other'" />
-                            </label>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="ss-card">
-                    <div class="ss-card-inner">
-                        <label class="ss-label">房型設定 *</label>
-
-                        <div class="ss-dashed">
-                            <div class="ss-group-title">新增房型及狗狗最大住宿數量</div>
-
-                            <div v-for="(room, idx) in lodging.rooms" :key="room._key" class="ss-row">
-                                <!-- 房型名稱 + 房間數 -->
-                                <div class="ss-line">
-                                    <div class="unit">房型名稱</div>
-                                    <input class="ss-input is-name" placeholder="請輸入內容" v-model="room.name"
-                                        :disabled="isView" />
-
-                                    <div class="unit">房間數數量</div>
-                                    <button class="ss-mini" @click="decRoomCount(room)" :disabled="isView">
-                                        -
-                                    </button>
-                                    <input class="ss-input is-count" v-model.number="room.count" type="number" min="0"
-                                        :disabled="isView" />
-                                    <button class="ss-mini" @click="incRoomCount(room)" :disabled="isView">
-                                        +
-                                    </button>
-                                    <div class="unit">間</div>
-                                </div>
-
-                                <!-- 價格設定：可新增多筆 -->
-                                <div v-for="(price, pIdx) in room.prices" :key="price._key" class="mt-3">
-                                    <div class="ss-line">
-                                        <div class="unit unit-strong">價格設定</div>
-                                        <div class="unit">住</div>
-                                        <input class="ss-input is-count" type="number" min="1"
-                                            v-model.number="price.nights" :disabled="isView" />
-                                        <select class="ss-select is-count" v-model="price.nightUnit" :disabled="isView">
-                                            <option value="day">天</option>
-                                            <option value="month">月</option>
-                                        </select>
-
-                                        <div class="unit">每晚價格：</div>
-                                        <input class="ss-input is-price" type="number" min="0" placeholder="金額"
-                                            v-model.number="price.amount" :disabled="isView" />
-                                        <div class="unit">元</div>
-                                    </div>
-
-                                    <div class="ss-line">
-                                        <div class="unit unit-strong">超時收費 *</div>
-                                        <div class="unit">每小時：</div>
-                                        <input class="ss-input is-price" type="number" min="0" placeholder="金額"
-                                            v-model.number="price.overtime" :disabled="isView || price.noOvertime" />
-                                        <div class="unit">元</div>
-
-                                        <label class="ss-line">
-                                            <input class="ss-checkbox" type="checkbox" v-model="price.noOvertime"
-                                                :disabled="isView" />
-                                            不加收
-                                        </label>
-                                    </div>
-
-                                    <button v-if="!isView" class="ss-icon-btn" title="刪除價格"
-                                        @click="removeRoomPrice(room, pIdx)">
-                                        ×
-                                    </button>
-                                </div>
-
-                                <div class="ss-line mt-2" v-if="!isView">
-                                    <button class="btn-primary" @click="addRoomPrice(room)">
-                                        新增價格
-                                    </button>
-                                </div>
-
-                                <button v-if="!isView" class="ss-icon-btn" style="right: -10px; top: -10px" title="刪除房型"
-                                    @click="removeRoom(idx)">
-                                    ×
-                                </button>
-                            </div>
-
-                            <div class="ss-line" v-if="!isView">
-                                <button class="btn-ghost" @click="addRoom">新增房型</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="ss-card">
-                    <div class="ss-card-inner">
-                        <label class="ss-label">住宿介紹 *</label>
-                        <textarea class="ss-textarea" placeholder="請輸入住宿介紹" v-model="lodging.intro"
-                            :disabled="isView"></textarea>
-                    </div>
-                </section>
             </template>
-
-            <!-- Grooming：服務細項 + 收費標準 + 服務簡介 + 注意事項 -->
-            <template v-else>
-                <section class="ss-card">
-                    <div class="ss-card-inner">
-                        <label class="ss-label">服務細項 *</label>
-                        <div class="ss-line">
-                            <input class="ss-input is-name" placeholder="請輸入更新的服務 / 服務名稱" v-model="grooming.itemName"
-                                :disabled="isView" />
-                        </div>
-                    </div>
-                </section>
-
-                <section class="ss-card">
-                    <div class="ss-card-inner">
-                        <label class="ss-label">收費標準 *</label>
-
-                        <div class="ss-dashed">
-                            <div class="ss-group-title">設定收費標準</div>
-
-                            <div v-for="(row, idx) in grooming.rows" :key="row._key" class="ss-row">
-                                <div class="ss-line">
-                                    <div class="unit">請選擇寵物毛量、體型、服務時長及價格</div>
-
-                                    <select class="ss-select is-count" v-model="row.fur" :disabled="isView">
-                                        <option value="none">無毛</option>
-                                        <option value="short">短毛</option>
-                                        <option value="medium">中毛</option>
-                                        <option value="long">長毛</option>
-                                    </select>
-
-                                    <select class="ss-select is-count" v-model="row.size" :disabled="isView">
-                                        <option value="small">小型</option>
-                                        <option value="medium">中型</option>
-                                        <option value="large">大型</option>
-                                    </select>
-
-                                    <input class="ss-input is-count" type="number" min="0" v-model.number="row.hours"
-                                        :disabled="isView" />
-                                    <div class="unit">時</div>
-                                    <input class="ss-input is-count" type="number" min="0" v-model.number="row.mins"
-                                        :disabled="isView" />
-                                    <div class="unit">分</div>
-
-                                    <div class="unit">價格：</div>
-                                    <input class="ss-input is-price" type="number" min="0" placeholder="金額"
-                                        v-model.number="row.price" :disabled="isView" />
-                                    <div class="unit">元</div>
-                                </div>
-
-                                <button v-if="!isView" class="ss-icon-btn" title="刪除" @click="removeChargeRow(idx)">
-                                    ×
-                                </button>
-                            </div>
-
-                            <div class="ss-line" v-if="!isView">
-                                <button class="btn-ghost" @click="addChargeRow">新增</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="ss-card">
-                    <div class="ss-card-inner">
-                        <label class="ss-label">服務簡介 *</label>
-                        <textarea class="ss-textarea" placeholder="請輸入服務簡介" v-model="grooming.intro"
-                            :disabled="isView"></textarea>
-                    </div>
-                </section>
-
-                <section class="ss-card">
-                    <div class="ss-card-inner">
-                        <label class="ss-label">注意事項 *</label>
-                        <textarea class="ss-textarea" placeholder="請輸入注意事項" v-model="grooming.notice"
-                            :disabled="isView"></textarea>
-                    </div>
-                </section>
-            </template>
-
-            <!-- 底部按鈕 -->
-            <div class="btn-area">
-                <button class="btn-ghost" @click="goBack">
-                    {{ isView ? "返回" : "取消" }}
-                </button>
-                <button class="btn-primary" v-if="!isView" @click="submit">
-                    {{ submitText }}
-                </button>
-            </div>
-        </div>
+        </ModalBox>
     </div>
 </template>
-
-<script setup lang="ts">
-import { computed, reactive, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
-// ⛔️ 不要在這裡 import CSS，交給 <style src="..."> 載入
-// import "@/styles/pages/Stores/storeservices.css";
-
-type Mode = "add" | "edit" | "view";
-type SrvType = "grooming" | "lodging";
-type Pet = "dog" | "cat";
-
-const route = useRoute();
-const router = useRouter();
-
-const mode = computed<Mode>(() => {
-    const p = route.path;
-    if (p.includes("/add")) return "add";
-    if (p.includes("/edit")) return "edit";
-    return "view";
-});
-
-const type = ref<SrvType>((route.params.type as SrvType) || "lodging");
-const pet = ref<Pet>((route.params.pet as Pet) || "dog");
-
-const lockType = computed(() => mode.value !== "add");
-
-const isView = computed(() => mode.value === "view");
-const isLodging = computed(() => type.value === "lodging");
-
-const pageTitle = computed(() => {
-    const action =
-        mode.value === "add" ? "新增" : mode.value === "edit" ? "修改" : "查看";
-    const petText = pet.value === "dog" ? "狗" : "貓";
-    const srvText = type.value === "grooming" ? "美容" : "住宿";
-    return `${action}${petText}${srvText}服務項目`;
-});
-const submitText = computed(() => (mode.value === "add" ? "新增" : "完成"));
-
-const lodging = reactive({
-    cleaning: "weekly",
-    cleaningNote: "",
-    intro: "",
-    rooms: [
-        {
-            _key: cryptoRandom(),
-            name: "",
-            count: 1,
-            prices: [
-                {
-                    _key: cryptoRandom(),
-                    nights: 1,
-                    nightUnit: "day",
-                    amount: 0,
-                    overtime: 0,
-                    noOvertime: false,
-                },
-            ],
-        },
-    ],
-});
-
-function addRoom() {
-    lodging.rooms.push({
-        _key: cryptoRandom(),
-        name: "",
-        count: 1,
-        prices: [
-            {
-                _key: cryptoRandom(),
-                nights: 1,
-                nightUnit: "day",
-                amount: 0,
-                overtime: 0,
-                noOvertime: false,
-            },
-        ],
-    });
-}
-function removeRoom(idx: number) {
-    lodging.rooms.splice(idx, 1);
-}
-function incRoomCount(room: any) {
-    room.count++;
-}
-function decRoomCount(room: any) {
-    room.count = Math.max(0, (room.count || 0) - 1);
-}
-function addRoomPrice(room: any) {
-    room.prices.push({
-        _key: cryptoRandom(),
-        nights: 1,
-        nightUnit: "day",
-        amount: 0,
-        overtime: 0,
-        noOvertime: false,
-    });
-}
-function removeRoomPrice(room: any, pIdx: number) {
-    room.prices.splice(pIdx, 1);
-}
-
-const grooming = reactive({
-    itemName: "",
-    intro: "",
-    notice: "",
-    rows: [
-        {
-            _key: cryptoRandom(),
-            fur: "none",
-            size: "small",
-            hours: 0,
-            mins: 0,
-            price: 0,
-        },
-    ],
-});
-function addChargeRow() {
-    grooming.rows.push({
-        _key: cryptoRandom(),
-        fur: "none",
-        size: "small",
-        hours: 0,
-        mins: 0,
-        price: 0,
-    });
-}
-function removeChargeRow(idx: number) {
-    grooming.rows.splice(idx, 1);
-}
-
-function cryptoRandom() {
-  return Math.random().toString(36).slice(2) + Date.now().toString(36);
-}
-function goBack() {
-    router.back();
-}
-function submit() {
-    const payload = {
-        mode: mode.value,
-        type: type.value,
-        pet: pet.value,
-        lodging: isLodging.value ? lodging : undefined,
-        grooming: !isLodging.value ? grooming : undefined,
-    };
-    console.log("submit payload:", payload);
-    router.back();
-}
-</script>
