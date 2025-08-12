@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { bookings } from '../../../data/bookingfakedata'
 import Table from '../../../components/UI/Table.vue'
 import Pagination from '../../../components/common/Pagination.vue'
-import HistoryCard from './Card/HistoryCard.vue'
+import HistoryCard from '../HistoryBooking/HistoryCard.vue'
 
 const pageSize = 5
 const route = useRoute()
