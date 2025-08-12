@@ -7,7 +7,8 @@ from pet_booking.stores.serializers import StoreSerializer
 class CustomersProfileSerializer(serializers.ModelSerializer):
     user_id = serializers.SlugRelatedField(
         slug_field='user_id',
-        queryset=User.objects.all()
+        # queryset=User.objects.all(),
+        read_only=True
     )
 
     class Meta:
@@ -25,7 +26,8 @@ class CustomersProfileSerializer(serializers.ModelSerializer):
 class LikeStoreSerializer(serializers.ModelSerializer):
     user_id = serializers.SlugRelatedField(
         slug_field='user_id',
-        queryset=User.objects.all()
+        # queryset=User.objects.all(),
+        read_only=True
     )
     
     store_id = serializers.SlugRelatedField(
@@ -43,7 +45,8 @@ class LikeStoreSerializer(serializers.ModelSerializer):
 class PetSerializer(serializers.ModelSerializer):
     user_id = serializers.SlugRelatedField(
         slug_field='user_id',
-        queryset=User.objects.all()
+        # queryset=User.objects.all(),
+        read_only=True
     )
     
     class Meta:
