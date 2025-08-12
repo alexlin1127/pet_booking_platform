@@ -1,4 +1,7 @@
 # apps/users/views.py
+from django.utils.timezone import now
+from django.db.models.functions import TruncDate
+from django.db.models import Count
 from rest_framework import viewsets, status
 from rest_framework.permissions import BasePermission, AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -7,8 +10,10 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
 # from django_filters import rest_framework as filter
 from django_filters.rest_framework import DjangoFilterBackend
+from datetime import timedelta
 from .models import User, UserRole
 from .serializers import UserSerializer
+
 # Create your views here.
 
 class IsAdminOrSelf(BasePermission):
@@ -102,3 +107,78 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+
+
+    @action(detail=False, methods=['get'], url_path='registered_all')
+    def registered_all(self, request):
+        """
+        一個 API 回傳全部：
+        - 總數（所有 / 近7天 / 近30天）
+        - 會員 & 店家近7日每日註冊數
+        - 會員 & 店家近30日每日註冊數
+        只有 Admin 可用
+        """
+        if not (request.user.is_authenticated and request.user.role == UserRole.ADMIN):
+            return Response({'detail': '沒有權限'}, status=status.HTTP_403_FORBIDDEN)
+
+        today = now().date()
+        qs = User.objects.all()
+
+        # 共用每日計數方法
+        def get_daily_counts(role, days):
+            start_date = today - timedelta(days=days)
+            daily_qs = qs.filter(role=role, created_at__date__gte=start_date)
+            daily_counts = daily_qs.annotate(date=TruncDate('created_at')) \
+                                   .values('date') \
+                                   .annotate(count=Count('id')) \
+                                   .order_by('date')
+            date_to_count = {item['date']: item['count'] for item in daily_counts}
+            all_days = [today - timedelta(days=i) for i in reversed(range(days))]
+            return [
+                {'date': d.isoformat(), 'count': date_to_count.get(d, 0)} for d in all_days
+            ]
+
+        # 總數計算
+        all_member = qs.filter(role=UserRole.MEMBER).count()
+        all_store = qs.filter(role=UserRole.STORE).count()
+
+        # 近7天總數
+        start_7 = today - timedelta(days=7)
+        last7_member = qs.filter(role=UserRole.MEMBER, created_at__date__gte=start_7).count()
+        last7_store = qs.filter(role=UserRole.STORE, created_at__date__gte=start_7).count()
+
+        # 近30天總數
+        start_30 = today - timedelta(days=30)
+        last30_member = qs.filter(role=UserRole.MEMBER, created_at__date__gte=start_30).count()
+        last30_store = qs.filter(role=UserRole.STORE, created_at__date__gte=start_30).count()
+
+        # 每日統計
+        member_daily_7 = get_daily_counts(UserRole.MEMBER, 7)
+        store_daily_7 = get_daily_counts(UserRole.STORE, 7)
+        member_daily_30 = get_daily_counts(UserRole.MEMBER, 30)
+        store_daily_30 = get_daily_counts(UserRole.STORE, 30)
+
+        return Response({
+            'summary': {
+                'all': {
+                    'member_count': all_member,
+                    'store_count': all_store
+                },
+                'last_7_days': {
+                    'member_count': last7_member,
+                    'store_count': last7_store
+                },
+                'last_30_days': {
+                    'member_count': last30_member,
+                    'store_count': last30_store
+                }
+            },
+            'daily_registration_last_7_days': {
+                'member': member_daily_7,
+                'store': store_daily_7
+            },
+            'daily_registration_last_30_days': {
+                'member': member_daily_30,
+                'store': store_daily_30
+            }
+        })
