@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { bookings } from '../../../../data/bookingfakedata'
 import Table from '../../../../components/UI/Table.vue'
 import Pagination from '../../../../components/common/Pagination.vue'
-import GroomingCard from '../Card/GroomingCard.vue'
+import GroomingCard from '../Grooming/GroomingCard.vue'
 
 const pageSize = 5
 const currentPage1 = ref(1) // 待審核分頁
