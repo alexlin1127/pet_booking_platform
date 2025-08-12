@@ -5,24 +5,36 @@ import Home from "../auth/WelcomePage.vue";
 import Login from "../auth/Login.vue";
 import Register from "../auth/Register.vue";
 import CustomerRegister from "../pages/Customers/CustomerRegister.vue"
-import StoreRegister from "../pages/Stores/StoreRegister.vue"
+import StoresRegister from "../pages/Stores/StoreRegister.vue"
 
 // 使用者畫面Router
 
 
 // 商家畫面Router
-import StoreDashboard from "../pages/Stores/StoresDashboard.vue"
-import StoreGroomingManage from "../pages/Stores/Booking/Management/Grooming.vue"
-import StoreBoardingManage from "../pages/Stores/Booking/Management/Boarding.vue"
-import StoreBookingHistory from "../pages/Stores/Booking/BookingHistory.vue"
-import StoreManage from "../pages/Stores/Posts/Postsmanage.vue"
-import StorePostProcess from "../pages/Stores/Posts/PostsProcess.vue"
-import StorePostView from "../pages/Stores/Posts/PostsView.vue"
+import StoresDashboard from "../pages/Stores/StoresDashboard.vue"
+import StoresAddBookings from "../pages/Stores/Booking/AddBookings.vue"
+import StoresGrooming from "../pages/Stores/Booking/Grooming/GroomingBooking.vue"
+import StoresBoarding from "../pages/Stores/Booking/Boarding/BoardingBooking.vue"
+import StoresGroomingManage from "../pages/Stores/Booking/Grooming/GroomingManagement.vue"
+import StoresBoardingManage from "../pages/Stores/Booking/Boarding/BoardingManagement.vue"
+import StoresBookingHistory from "../pages/Stores/HistoryBooking/BookingHistory.vue"
+import StoresWatchLists from "../pages/Stores/Booking/WatchLists.vue"
+//
+import StoresEditInfo from "../pages/Stores/Info/EditInfo.vue"
+import StoresInfoManage from "../pages/Stores/Info/InfoManagement.vue"
+import StoresOpenServices from "../pages/Stores/Info/OpenServices.vue"
+// 
+import StoresAddServices from "../pages/Stores/Services/AddServices.vue"
+import StoresServicesManage from "../pages/Stores/Services/ServicesManagement.vue"
+//
+import StoresManage from "../pages/Stores/Posts/Postsmanage.vue"
+import StoresPostProcess from "../pages/Stores/Posts/PostsProcess.vue"
+import StoresPostView from "../pages/Stores/Posts/PostsView.vue"
 
 // 管理者頁面Router
 import Admin from "../pages/Admin/AdminDashboard.vue"
-import StoreManagement from "../pages/Admin/Stores/StoreManagement.vue"
-import StoreReview from "../pages/Admin/Stores/StoreReview.vue"
+import StoresManagement from "../pages/Admin/Stores/StoreManagement.vue"
+import StoresReview from "../pages/Admin/Stores/StoreReview.vue"
 import AccountManagement from "../pages/Admin/Account/AccountManagement.vue"
 import PostManagement from "../pages/Admin/Posts/PostManagement.vue"
 import PostReview from "../pages/Admin/Posts/PostReview.vue";
@@ -79,56 +91,117 @@ const routes = [
     },
     {
         path: "/register/stores/:step",
-        component: StoreRegister,
+        component: StoresRegister,
         meta: { sidebar: false }
     },
 
     // 商家頁面路由
     {
         path: "/register/stores/:step",
-        component: StoreRegister,
+        component: StoresRegister,
         meta: { sidebar: false }
     },
+
     // 儀表板
     {
         path: "/stores/dashboard",
-        component: StoreDashboard,
+        component: StoresDashboard,
         meta: { sidebar: true }
     },
-    // 預約管理
+
+    // 新增預約
+    {
+        path: "/stores/addbookings",
+        component: StoresAddBookings,
+        meta: { sidebar: true }
+    },
+
+    // 美容預約管理
+    {
+        path: "/stores/grooming-bookings",
+        component: StoresGrooming,
+        meta: { sidebar: true }
+    },
     {
         path: "/stores/grooming-bookings/manage",
-        component: StoreGroomingManage,
+        name: "Grooming",
+        component: StoresGroomingManage,
+        meta: { sidebar: true }
+    },
+    {
+        path: "/stores/grooming-bookings/history",
+        component: StoresBookingHistory,
+        meta: { sidebar: true }
+    },
+
+    // 住宿預約管理
+    {
+        path: "/stores/boarding-bookings",
+        component: StoresDashboard,
         meta: { sidebar: true }
     },
     {
         path: "/stores/boarding-bookings/manage",
-        component: StoreBoardingManage,
+        component: StoresBoardingManage,
         meta: { sidebar: true }
     },
     {
-        path: "/stores/bookings/history",
-        component: StoreBookingHistory,
+        path: "/stores/boarding-bookings/history",
+        component: StoresBookingHistory,
         meta: { sidebar: true }
     },
+    {
+        path: "/stores/watchlists",
+        component: StoresWatchLists,
+        meta: { sidebar: true }
+    },
+    // 店家管理
+    // 資訊
+    {
+        path: "/stores/info/edit",
+        component: StoresEditInfo,
+        meta: { sidebar: true }
+    },
+    {
+        path: "/stores/info/manage",
+        component: StoresInfoManage,
+        meta: { sidebar: true }
+    },
+    {
+        path: "/stores/openservices",
+        component: StoresOpenServices,
+        meta: { sidebar: true }
+    },
+    // 服務
+    {
+        path: "/stores/services/add",
+        component: StoresAddServices,
+        meta: { sidebar: true }
+    },
+    {
+        path: "/stores/services/manage",
+        component: StoresServicesManage,
+        meta: { sidebar: true }
+    },
+    // 貼文
     {
         path: "/stores/posts/manage",
-        component: StoreManage,
+        component: StoresManage,
         meta: { sidebar: true }
     },
     {
         path: "/stores/posts/add",
-        component: StorePostProcess,
+        component: StoresPostProcess,
         meta: { sidebar: false }
     },
     {
         path: "/stores/posts/edit/:id",
-        component: StorePostProcess,
+        component: StoresPostProcess,
         meta: { sidebar: false }
     },
     {
         path: "/stores/posts/view/:id",
-        component: StorePostView,
+        component: StoresPostView,
         meta: { sidebar: false }
     },
 
@@ -140,12 +213,12 @@ const routes = [
     },
     {
         path: "/admin/stores/manage",
-        component: StoreManagement,
+        component: StoresManagement,
         meta: { sidebar: true }
     },
     {
         path: "/admin/stores/:status",
-        component: StoreReview,
+        component: StoresReview,
         meta: { sidebar: false }
     },
     {
@@ -168,6 +241,18 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
+    scrollBehavior(to, from, savedPosition) {
+        if (to.hash) {
+            return {
+                el: to.hash,
+                behavior: 'smooth',
+            }
+        }
+        if (savedPosition) {
+            return savedPosition
+        }
+        return { top: 0 }
+    },
 });
 
 export default router;
