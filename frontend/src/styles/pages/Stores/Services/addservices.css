@@ -1,0 +1,281 @@
+/* ===================================================================
+   Store Services 完整樣式（照設計圖）
+   - 100% 禁止直排 / 逐字換行
+   - 表單列橫向排列，空間不足會優雅換行
+   - 色票與按鈕與卡片樣式依設計圖
+   =================================================================== */
+
+/* 如果專案有 Tailwind 可保留；沒有也沒關係 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------- 色票 ------- */
+:root {
+    --bg: #fbf1e6;
+    --panel: #fffaf4;
+    --ink: #3d2b1f;
+    --muted: #8b6f57;
+    --accent: #cda27a;
+    --accent-strong: #b48556;
+    --line: #eadfce;
+    --danger: #d05e3b;
+}
+
+/* ------- 頁面容器 ------- */
+.storeservices-page {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+}
+
+/* ！！關鍵！！整頁所有子孫一律鎖橫排，避免被舊樣式影響 */
+.storeservices-page,
+.storeservices-page * {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    letter-spacing: 0 !important;
+}
+
+/* 主寬度（照設計圖 960–1100px 視窗置中） */
+.ss-container {
+    max-width: 1080px;
+    margin: 28px auto 88px;
+    padding-inline: 20px;
+}
+
+/* ------- 區塊/卡片 ------- */
+.ss-card {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.ss-card+.ss-card {
+    margin-top: 18px;
+}
+
+.ss-card-inner {
+    padding: 24px 28px;
+}
+
+.block-title {
+    font-weight: 800;
+    font-size: 22px;
+    margin: 0 0 18px 0;
+    color: var(--ink);
+}
+
+/* 區塊標題（例如：毛孩類別、服務項目…） */
+.ss-label {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: var(--ink);
+}
+
+/* 輸入元件通則 */
+.ss-input,
+.ss-select {
+    width: 100%;
+    height: 40px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 8px 12px;
+    background: #fff;
+    outline: none;
+    line-height: 1.4;
+}
+
+.ss-textarea {
+    width: 100%;
+    min-height: 140px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 12px;
+    line-height: 1.6;
+    background: #fff;
+    resize: vertical;
+}
+
+.ss-radio {
+    accent-color: var(--ink);
+}
+
+.ss-checkbox {
+    accent-color: var(--ink);
+}
+
+/* 每一「表單列」橫排且可換行（最重要） */
+.ss-line {
+    display: flex;
+    align-items: center;
+    gap: 10px 12px;
+    flex-wrap: wrap;
+    /* 空間不夠自動換行 */
+}
+
+/* 小尺寸欄位固定寬度（照圖） */
+.is-count {
+    width: 64px;
+}
+
+/* 數字小格（住幾天 / 房數 / 時 / 分） */
+.is-price {
+    width: 160px;
+}
+
+/* 金額 */
+.is-name {
+    flex: 1 1 420px;
+    min-width: 320px;
+}
+
+/* 房型名稱 / 服務名稱 */
+.is-text {
+    flex: 1 1 100%;
+}
+
+/* 大面積輸入 */
+
+/* 單位/小字不被拆字 */
+.unit {
+    white-space: nowrap;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* ------- 可新增清單（虛線框） ------- */
+.ss-dashed {
+    border: 1px dashed var(--line);
+    border-radius: 16px;
+    background: var(--panel);
+    padding: 18px;
+}
+
+.ss-row {
+    position: relative;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    padding: 16px;
+    margin-bottom: 10px;
+}
+
+/* 刪除鈕（右上角） */
+.ss-icon-btn {
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 9999px;
+    background: var(--danger);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: filter 0.2s ease;
+}
+
+.ss-icon-btn:hover {
+    filter: brightness(0.95);
+}
+
+/* 小 + / - 鈕（房間數量） */
+.ss-mini {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+/* ------- 按鈕 ------- */
+.btn-area {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 18px;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    padding: 10px 26px;
+    font-weight: 700;
+    transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: var(--accent-strong);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: 9999px;
+    padding: 10px 26px;
+    font-weight: 700;
+}
+
+.btn-ghost:hover {
+    background: var(--ink);
+    color: #fff;
+}
+
+/* ------- 小調整 ------- */
+.ss-group-title {
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.ss-radio-group,
+.ss-check-group {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.ss-sublabel {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* 平板微調 */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+    .ss-card-inner {
+        padding: 24px;
+    }
+
+    .btn-primary,
+    .btn-ghost {
+        padding: 10px 22px;
+        font-size: 15px;
+    }
+}
+
+/* 進一步防干擾：把常見會被舊站寫死寬度/定位的 class 歸零 */
+.storeservices-page .label,
+.storeservices-page label,
+.storeservices-page .title,
+.storeservices-page .text,
+.storeservices-page .desc {
+    position: static !important;
+    width: auto !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+}
