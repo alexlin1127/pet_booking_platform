@@ -1,59 +1,50 @@
 from rest_framework import serializers
-from .models import BoardingService,BoardingRoomPricing, BoardingRoomType, GroomingService, GroomingServicePricing   
-
+from .models import BoardingService, BoardingServicePricing, GroomingService, GroomingServicePricing
 
 # 住宿
-class BoardingRoomPricingSerializer(serializers.ModelSerializer):
+class BoardingServicePricingSerializer(serializers.ModelSerializer):
+    boarding_service = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
-        model = BoardingRoomPricing
+        model = BoardingServicePricing
         fields = '__all__'
 
-class BoardingRoomTypeSerializer(serializers.ModelSerializer):
-    pricings = BoardingRoomPricingSerializer(source='boardingroompricing_set', many=True)
-
-    class Meta:
-        model = BoardingRoomType
-        fields = ['id', 'boarding_service', 'species', 'room_type', 'room_count', 'pet_available_amount', 'pricings']
-
 class BoardingServiceSerializer(serializers.ModelSerializer):
-    rooms = BoardingRoomTypeSerializer(source='boardingroomtype_set', many=True)
+    store_id = serializers.PrimaryKeyRelatedField(read_only=True)
+    pricings = BoardingServicePricingSerializer(source='boardingservicepricing_set', many=True)
 
     class Meta:
         model = BoardingService
-        fields = ['id', 'store_id', 'cleaning_frequency', 'introduction', 'created_at', 'updated_at', 'rooms']
+        fields = ['id', 'store_id', 'species', 'cleaning_frequency', 'room_type', 'room_count', 'pet_available_amount', 'introduction', 'created_at', 'updated_at', 'pricings']
 
     def create(self, validated_data):
-        rooms_data = validated_data.pop('rooms', [])
+        pricings_data = validated_data.pop('boardingservicepricing_set', [])
         service = BoardingService.objects.create(**validated_data)
-        for room_data in rooms_data:
-            pricings_data = room_data.pop('pricings', [])
-            room = BoardingRoomType.objects.create(boarding_service=service, **room_data)
-            for pricing_data in pricings_data:
-                BoardingRoomPricing.objects.create(room_type=room, **pricing_data)
+        for pricing_data in pricings_data:
+            BoardingServicePricing.objects.create(boarding_service=service, **pricing_data)
         return service
 
     def update(self, instance, validated_data):
-        rooms_data = validated_data.pop('rooms', [])
+        pricings_data = validated_data.pop('boardingservicepricing_set', [])
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
-        instance.boardingroomtype_set.all().delete()
-        for room_data in rooms_data:
-            pricings_data = room_data.pop('pricings', [])
-            room = BoardingRoomType.objects.create(boarding_service=instance, **room_data)
-            for pricing_data in pricings_data:
-                BoardingRoomPricing.objects.create(room_type=room, **pricing_data)
+        instance.boardingservicepricing_set.all().delete()
+        for pricing_data in pricings_data:
+            BoardingServicePricing.objects.create(boarding_service=instance, **pricing_data)
         return instance
-  
+
+
 
 
 # 美容
 class GroomingServicePricingSerializer(serializers.ModelSerializer):
+    grooming_service_id = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = GroomingServicePricing
         fields = '__all__'
 
 class GroomingServiceSerializer(serializers.ModelSerializer):
+    store_id = serializers.PrimaryKeyRelatedField(read_only=True)
     pricings = GroomingServicePricingSerializer(source='groomingservicepricing_set', many=True)
     duration_min = serializers.SerializerMethodField()
     duration_max = serializers.SerializerMethodField()
@@ -71,14 +62,14 @@ class GroomingServiceSerializer(serializers.ModelSerializer):
         fields = ['id', 'store_id', 'service_title', 'introduction', 'notice', 'duration_min', 'duration_max', 'created_at', 'updated_at', 'pricings']
 
     def create(self, validated_data):
-        pricings_data = validated_data.pop('pricings', [])
+        pricings_data = validated_data.pop('groomingservicepricing_set', [])
         service = GroomingService.objects.create(**validated_data)
         for pricing_data in pricings_data:
             GroomingServicePricing.objects.create(grooming_service_id=service, **pricing_data)
         return service
     
     def update(self, instance, validated_data):
-        pricings_data = validated_data.pop('pricings', [])
+        pricings_data = validated_data.pop('groomingservicepricing_set', [])
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
