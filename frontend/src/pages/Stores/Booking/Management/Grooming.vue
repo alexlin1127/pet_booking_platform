@@ -60,7 +60,7 @@ function handleSearch() {
 <template>
 
     <div class="grooming-container">
-        <div class="grooming-title">
+        <div id="pending" class="grooming-title">
             <h1>待審核預約</h1>
             <p>{{ unreviewCount }} 筆</p>
         </div>
@@ -92,7 +92,7 @@ function handleSearch() {
 
 
     <div class="grooming-container">
-        <div class="grooming-title">
+        <div id="recent" class="grooming-title">
             <h1>近期預約</h1>
             <p>{{ reviewedCount }} 筆</p>
         </div>
