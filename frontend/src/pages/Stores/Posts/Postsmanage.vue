@@ -12,8 +12,8 @@ const allPosts = ref([...rawPosts])  // rawPosts 就是從檔案 import 的資�
 // 篩選類別
 const isGrooming = ref(true) // 初始為「美容」
 const groomingPosts = computed(() => allPosts.value.filter(post => post.tag === '寵物美容'))
-const lodgingPosts = computed(() => allPosts.value.filter(post => post.tag === '寵物住宿'))
-const currentPosts = computed(() => (isGrooming.value ? groomingPosts.value : lodgingPosts.value))
+const boardingPosts = computed(() => allPosts.value.filter(post => post.tag === '寵物住宿'))
+const currentPosts = computed(() => (isGrooming.value ? groomingPosts.value : boardingPosts.value))
 
 // 分頁
 const currentPage = ref(1)
@@ -102,7 +102,7 @@ function goToNewPost() {
                 <input type="checkbox" class="sr-only peer" v-model="isGrooming" />
                 <div class="postmanage-switch-bar"></div>
             </label>
-            <span class="postmanage-filter-label" :class="{ 'lodging-active': !isGrooming }">住宿</span>
+            <span class="postmanage-filter-label" :class="{ 'boarding-active': !isGrooming }">住宿</span>
         </div>
 
         <div class="post-card-list">

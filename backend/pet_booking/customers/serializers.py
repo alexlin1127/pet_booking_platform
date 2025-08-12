@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from users.models import User
-from stores.models import Store
+from pet_booking.users.models import User
+from pet_booking.stores.models import Store
 from .models import CustomersProfile, LikeStore, Pet
-from stores.serializers import StoreSerializer
+from pet_booking.stores.serializers import StoreSerializer
 
 class CustomersProfileSerializer(serializers.ModelSerializer):
     user_id = serializers.SlugRelatedField(
@@ -57,6 +57,8 @@ class PetSerializer(serializers.ModelSerializer):
             'breed',
             'age',
             'weight',
+            'size',
+            'fur_amount',
             'spayed_or_neutered',
             'microchip',
             'last_deworming_date',

@@ -33,7 +33,7 @@
   }
 
   /* 住宿標籤選中樣式 */
-  .postmanage-filter-label.lodging-active {
+  .postmanage-filter-label.boarding-active {
     @apply text-blue-600 font-semibold;
   }
 

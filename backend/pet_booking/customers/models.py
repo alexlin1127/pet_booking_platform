@@ -16,7 +16,6 @@ class CustomersProfile(models.Model):
     user_id = models.ForeignKey('users.User', to_field='user_id', on_delete=models.CASCADE, db_index=True, related_name='customersProfiles')
     full_name = models.CharField(max_length=255, null=False, blank=False)
     gender = models.CharField(max_length=6, choices=Gender.choices, null=True, blank=True)
-    # birthday = models.DateField(null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField(null=False, blank=False)
     address = models.CharField(max_length=512, null=True, blank=True)
@@ -53,6 +52,8 @@ class Pet(models.Model):
     breed = models.CharField(max_length=255, null=True, blank=True)
     age = models.PositiveIntegerField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
+    size = models.CharField(max_length=10, blank=True, null=True)
+    fur_amount = models.CharField(max_length=10)
     spayed_or_neutered = models.CharField(max_length=10,
         choices=TernaryAnswer.choices,
         default=TernaryAnswer.UNCERTAIN)
