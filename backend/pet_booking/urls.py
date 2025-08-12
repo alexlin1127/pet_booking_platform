@@ -41,15 +41,16 @@ router.register(r'store/images', StoreImageViewSet, basename='store-images')
 # Reservation related endpoints
 router.register(r'store-info', StoreInfoViewSet, basename='store-info')
 router.register(r'pet-info', PetInfoViewSet, basename='pet-info')
-router.register(r'grooming', GroomingCalculationViewSet, basename='grooming-calculation')
-router.register(r'grooming', GroomingReservationViewSet, basename='grooming-reservation')
-router.register(r'boarding', BoardingRoomInfoViewSet, basename='boarding-room-info')
-router.register(r'boarding', BoardingCalculationViewSet, basename='boarding-calculation')
-router.register(r'boarding', BoardingReservationViewSet, basename='boarding-reservation')
+router.register(r'grooming/calculation', GroomingCalculationViewSet, basename='grooming-calculation')
+router.register(r'grooming/reservation', GroomingReservationViewSet, basename='grooming-reservation')
+router.register(r'boarding/room', BoardingRoomInfoViewSet, basename='boarding-room-info')
+router.register(r'boarding/calculation', BoardingCalculationViewSet, basename='boarding-calculation')
+router.register(r'boarding/reservation', BoardingReservationViewSet, basename='boarding-reservation')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/reservations/', include('pet_booking.reservations.urls')),
     path('api/token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify', TokenVerifyView.as_view(), name='token_verify'),

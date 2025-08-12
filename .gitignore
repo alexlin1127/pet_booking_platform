@@ -88,3 +88,6 @@ logs/
 # Temporary files
 *.tmp
 *.temp
+
+# API Documentation
+backend/pet_booking/reservations/API_DOCUMENTATION.md
