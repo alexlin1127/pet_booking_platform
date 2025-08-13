@@ -33,10 +33,21 @@ import './styles/pages/Customers/customersregister.css'
 
 // 商家頁面樣式
 import './styles/pages/Stores/dashboard.css'
+import './styles/pages/Stores/Booking/addbookings.css'
 import './styles/pages/Stores/storesregister.css'
 import './styles/pages/Stores/Booking/bookinghistory.css'
-import './styles/pages/Stores/Booking/Management/grooming.css'
-import './styles/pages/Stores/Booking/Management/boarding.css'
+import './styles/pages/Stores/Booking/Grooming/grooming.css'
+import './styles/pages/Stores/Booking/Boarding/boarding.css'
+
+// 
+import './styles/pages/Stores/Info/editinfo.css'
+import './styles/pages/Stores/Info/infomanagement.css'
+import './styles/pages/Stores/Info/openservices.css'
+// 
+import './styles/pages/Stores/Services/servicesmanagement.css'
+import './styles/pages/Stores/Services/addservices.css'
+
+// 
 import './styles/pages/Stores/Posts/postsmanage.css'
 import './styles/pages/Stores/Posts/postsprocess.css'
 import './styles/pages/Stores/Posts/postsview.css'

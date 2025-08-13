@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { boardingbookings } from '../../../../data/bookingfakedata'
+import { bookings } from '../../../../data/bookingfakedata'
 import Table from '../../../../components/UI/Table.vue'
 import Pagination from '../../../../components/common/Pagination.vue'
-import BoardingCard from '../Card/BoardingCard.vue'
+import GroomingCard from '../Grooming/GroomingCard.vue'
 
 const pageSize = 5
 const currentPage1 = ref(1) // 待審核分頁
@@ -12,17 +12,17 @@ const searchText = ref('')
 const selectedDateStart = ref('')
 
 // 待審核預約
-const pendingBoardingbookings = computed(() =>
-    boardingbookings.filter(item => item.status === '待審核')
+const pendingGroomingbookings = computed(() =>
+    bookings.filter(item => item.status === '待審核' && item.service_type === '美容')
 )
-// 已審核/已完成預約
-const reviewedBoardingbookings = computed(() =>
-    boardingbookings.filter(item => item.status === '已審核')
+// 已審核預約
+const reviewedGroomingbookings = computed(() =>
+    bookings.filter(item => item.status === '已審核' && item.service_type === '美容')
 )
 
-// 搜尋與日期篩選
+// 搜尋與日期篩選（僅針對已審核）
 const filteredReviewed = computed(() => {
-    let arr = reviewedBoardingbookings.value
+    let arr = reviewedGroomingbookings.value
     if (searchText.value.trim()) {
         arr = arr.filter(item => item.customer_name.includes(searchText.value.trim()))
     }
@@ -33,14 +33,14 @@ const filteredReviewed = computed(() => {
 })
 
 // 分頁
-const totalPages1 = computed(() => Math.ceil(pendingBoardingbookings.value.length / pageSize))
-const paginatedPendingBoarding = computed(() => {
+const totalPages1 = computed(() => Math.ceil(pendingGroomingbookings.value.length / pageSize))
+const paginatedPendingGrooming = computed(() => {
     const start = (currentPage1.value - 1) * pageSize
-    return pendingBoardingbookings.value.slice(start, start + pageSize)
+    return pendingGroomingbookings.value.slice(start, start + pageSize)
 })
 
 const totalPages2 = computed(() => Math.ceil(filteredReviewed.value.length / pageSize))
-const paginatedReviewedBoarding = computed(() => {
+const paginatedReviewedGrooming = computed(() => {
     const start = (currentPage2.value - 1) * pageSize
     return filteredReviewed.value.slice(start, start + pageSize)
 })
@@ -48,8 +48,9 @@ const paginatedReviewedBoarding = computed(() => {
 const handlePageChange1 = (page) => { currentPage1.value = page }
 const handlePageChange2 = (page) => { currentPage2.value = page }
 
-// 近期預約筆數（已審核+已完成）
-const reviewedCount = computed(() => reviewedBoardingbookings.value.length)
+// 近期預約筆數（已審核）
+const unreviewCount = computed(() => pendingGroomingbookings.value.length)
+const reviewedCount = computed(() => reviewedGroomingbookings.value.length)
 
 function handleSearch() {
     currentPage2.value = 1
@@ -58,12 +59,14 @@ function handleSearch() {
 
 <template>
 
-    <div class="boarding-container">
-        <h1 class="boarding-title">待審核預約</h1>
-        <div class="boarding-table-container">
-            <p>
-                <FontAwesomeIcon icon="fa-solid fa-bookmark" /> 此圖表示有備註
-            </p>
+    <div class="grooming-container">
+        <div id="pending" class="grooming-title">
+            <h1>待審核預約</h1>
+            <p>{{ unreviewCount }} 筆</p>
+        </div>
+
+        <div class="grooming-table-container">
+            <p><FontAwesomeIcon icon="fa-solid fa-bookmark" /> 此圖表示有備註</p>
             <Table>
                 <template #header>
                     <th></th>
@@ -73,13 +76,13 @@ function handleSearch() {
                     <th>毛孩姓名</th>
                     <th>毛孩種類</th>
                     <th>預約日期</th>
-                    <th>預約房型</th>
+                    <th>預約時間</th>
                     <th>訂單狀況</th>
                     <th>操作</th>
                 </template>
                 <template #body>
-                    <tr v-for="boarding in paginatedPendingBoarding" :key="boarding.id">
-                        <BoardingCard :boarding="boarding" />
+                    <tr v-for="grooming in paginatedPendingGrooming" :key="grooming.id">
+                        <GroomingCard :grooming="grooming" />
                     </tr>
                 </template>
             </Table>
@@ -88,25 +91,29 @@ function handleSearch() {
     </div>
 
 
-    <div class="boarding-container">
-        <div class="boarding-title">
+    <div class="grooming-container">
+        <div id="recent" class="grooming-title">
             <h1>近期預約</h1>
             <p>{{ reviewedCount }} 筆</p>
         </div>
-        <div class="boarding-filter-buttons">
+        <div class="grooming-filter-container">
             <p><FontAwesomeIcon icon="fa-solid fa-bookmark" /> 此圖表示有備註</p>
-            <label class="boarding-filter-label">
-                <span>搜尋顧客姓名：</span>
-                <input type="text" v-model="searchText" @keyup.enter="handleSearch" placeholder="請輸入姓名"
-                    class="boarding-search-input" />
-            </label>
-            <label class="boarding-filter-label">
-                <span>預約日期：</span>
-                <input type="date" v-model="selectedDateStart" class="boarding-filter-input" />
-            </label>
-            <button class="boarding-search-btn" @click="handleSearch">搜尋</button>
+            <div class="grooming-filter-row">
+                <label class="grooming-filter-label">
+                    <span>可搜尋顧客姓名：</span>
+                    <input type="text" v-model="searchText" @keyup.enter="handleSearch" placeholder="請輸入姓名"
+                        class="grooming-search-input" />
+                </label>
+                <div class="grooming-date-search-row">
+                    <label class="grooming-filter-label">
+                        <span>預約日期：</span>
+                        <input type="date" v-model="selectedDateStart" class="grooming-filter-input" />
+                    </label>
+                    <button class="grooming-search-btn" @click="handleSearch">搜尋</button>
+                </div>
+            </div>
         </div>
-        <div class="boarding-table-container">
+        <div class="grooming-table-container">
             <Table>
                 <template #header>
                     <th></th>
@@ -116,13 +123,13 @@ function handleSearch() {
                     <th>毛孩姓名</th>
                     <th>毛孩種類</th>
                     <th>預約日期</th>
-                    <th>預約房型</th>
+                    <th>預約時間</th>
                     <th>訂單狀況</th>
                     <th>操作</th>
                 </template>
                 <template #body>
-                    <tr v-for="boarding in paginatedReviewedBoarding" :key="boarding.id">
-                        <BoardingCard :boarding="boarding" />
+                    <tr v-for="grooming in paginatedReviewedGrooming" :key="grooming.id">
+                        <GroomingCard :grooming="grooming" />
                     </tr>
                 </template>
             </Table>
