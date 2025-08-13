@@ -16,8 +16,8 @@ class CustomersProfile(models.Model):
     user_id = models.ForeignKey('users.User', to_field='user_id', on_delete=models.CASCADE, db_index=True, related_name='customersProfiles')
     full_name = models.CharField(max_length=255, null=False, blank=False)
     gender = models.CharField(max_length=6, choices=Gender.choices, null=True, blank=True)
-    phone = models.CharField(max_length=20, null=True, blank=True)
-    email = models.EmailField(null=False, blank=False)
+    phone = models.CharField(max_length=20, null=True, blank=True, unique=True)
+    email = models.EmailField(null=False, blank=False, unique=True)
     address = models.CharField(max_length=512, null=True, blank=True)
 
     class Meta:
@@ -46,20 +46,24 @@ class TernaryAnswer(models.TextChoices):
 
 class Pet(models.Model):
     user_id = models.ForeignKey('users.User', to_field='user_id', on_delete=models.CASCADE, blank=False, db_index=True, related_name='pets')
-    species = models.CharField(max_length=4, choices=Species.choices, blank=False)
+    species = models.CharField(max_length=4, choices=Species.choices, blank=False, null=False)
     name = models.CharField(max_length=255, null=False, blank=False)
-    gender = models.CharField(max_length=6, choices=Gender.choices, blank=False)
-    breed = models.CharField(max_length=255, null=True, blank=True)
+    gender = models.CharField(max_length=6, choices=Gender.choices, blank=False, null=False)
+    breed = models.CharField(max_length=255, null=False, blank=False)
+    size = models.CharField(max_length=10, blank=False, null=False)
+    fur_amount = models.CharField(max_length=10, blank=False, null=False)
     age = models.PositiveIntegerField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
-    size = models.CharField(max_length=10, blank=True, null=True)
-    fur_amount = models.CharField(max_length=10)
     spayed_or_neutered = models.CharField(max_length=10,
         choices=TernaryAnswer.choices,
         default=TernaryAnswer.UNCERTAIN)
     microchip = models.CharField(max_length=10,
         choices=TernaryAnswer.choices,
         default=TernaryAnswer.UNCERTAIN)
+
+    # last_deworming_date = models.DateField(null=True, blank=True)
+    # last_vaccine_date = models.DateField(null=True, blank=True)
+
     notes = models.TextField(null=True, blank=True)
     image_url = models.ImageField(upload_to='pet_images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

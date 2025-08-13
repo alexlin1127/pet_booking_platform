@@ -55,6 +55,8 @@ urlpatterns = [
     path('api/token/verify', TokenVerifyView.as_view(), name='token_verify'),
     path('api/token/blacklist', TokenBlacklistView.as_view(), name='token_blacklist'),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    path('api/register_send_code', RegisterSendCodeAPIView.as_view(), name='register_send_code'),
+    path('api/register_confirm_code', RegisterConfirmCodeAPIView.as_view(), name='register_confirm_code'),
 ]
 
 if settings.DEBUG:
