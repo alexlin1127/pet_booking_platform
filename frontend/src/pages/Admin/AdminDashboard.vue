@@ -1,22 +1,71 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Card from '../../components/UI/Card.vue'
+import api from '../../api/api'
+import LineChart from '../../components/UI/LineChart.vue'
 
 const route = useRoute()
 const router = useRouter()
+
 
 const shopsawaitingreview = ref(3)
 const postsawaitingreview = ref(15)
 const totalusers = ref(520)
 const totalshops = ref(12)
 
-const FurryParentsRegister = ref(1546)
+const FurryParentsRegisterWeek = ref(1546)
+const FurryParentsRegisterMonth = ref(4567)
 const statRange = ref('week') // 'week' 或 'month'
 
 const statLabel = computed(() =>
-    statRange.value === 'week' ? '近一週' : '近一月'
+        statRange.value === 'week' ? '近一週' : '近一月'
 )
+
+const FurryParentsRegister = computed(() =>
+    statRange.value === 'week' ? FurryParentsRegisterWeek.value : FurryParentsRegisterMonth.value
+)
+
+const weekChart = ref([])
+const monthChart = ref([])
+
+const getpendingData = async() => {
+    try {
+        const res = await api.get('/admin/stores/statistics');
+        shopsawaitingreview.value = res.data.pending_store_count;
+        postsawaitingreview.value = res.data.pending_post_count;
+        totalshops.value = res.data.total_store_count;
+        } catch (err) {
+            alert('無法取得資料');
+            return;
+        }
+}
+
+const getTotalUsers = async () => {
+    try {
+        const res = await api.get('/users/registered_all');
+        totalusers.value = res.data.summary.all.member_count;
+        FurryParentsRegisterWeek.value = res.data.summary.last_7_days.store_count;
+        FurryParentsRegisterMonth.value = res.data.summary.last_30_days.store_count;
+        weekChart.value = res.data.daily_registration_last_7_days.member;
+        monthChart.value = res.data.daily_registration_last_30_days.member;
+        console.log(weekChart.value, monthChart.value)
+
+    } catch (err) {
+        alert('無法取得用戶和店家數量');
+        return;
+    }
+}
+
+const currentChartData = computed(() =>
+  statRange.value === 'week' ? weekChart.value : monthChart.value
+)
+
+onMounted(() => {
+  getpendingData();
+  getTotalUsers();
+});
+
 </script>
 
 <template>
@@ -81,8 +130,8 @@ const statLabel = computed(() =>
                     <p class="text-sm text-gray-400 mt-2">統計區間：近一週 / 近一月</p>
                 </div>
                 <!-- 右半邊：圖表區 -->
-                <div class="flex items-center justify-center h-32 bg-gray-50 rounded-lg border border-gray-200">
-                    <span class="text-gray-400">（這裡預留折線圖）</span>
+                <div class="flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200 h-96">
+                    <LineChart :chartData="currentChartData" :label="statLabel" />
                 </div>
             </div>
         </div>
