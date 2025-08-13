@@ -133,6 +133,11 @@ const routes = [
         component: StoresBookingHistory,
         meta: { sidebar: true }
     },
+    {
+        path: "/stores/grooming/watchlists",
+        component: StoresWatchLists,
+        meta: { sidebar: true }
+    },
 
     // 住宿預約管理
     {
@@ -151,7 +156,7 @@ const routes = [
         meta: { sidebar: true }
     },
     {
-        path: "/stores/watchlists",
+        path: "/stores/boarding/watchlists",
         component: StoresWatchLists,
         meta: { sidebar: true }
     },
