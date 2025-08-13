@@ -60,8 +60,10 @@ class Pet(models.Model):
     microchip = models.CharField(max_length=10,
         choices=TernaryAnswer.choices,
         default=TernaryAnswer.UNCERTAIN)
+
     # last_deworming_date = models.DateField(null=True, blank=True)
     # last_vaccine_date = models.DateField(null=True, blank=True)
+
     notes = models.TextField(null=True, blank=True)
     image_url = models.ImageField(upload_to='pet_images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
