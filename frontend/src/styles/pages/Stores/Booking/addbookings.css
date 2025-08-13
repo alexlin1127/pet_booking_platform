@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 色票（依你的稿） */
+:root {
+  --bg: #fbf1e6; /* 全頁米色底 */
+  --panel: #fffaf4; /* 次卡片底 */
+  --ink: #3d2b1f; /* 主要字色咖 */
+  --muted: #8b6f57; /* 次文字 */
+  --accent: #cda27a; /* 主色 焦糖 */
+  --accent-strong: #b48556; /* 主色深 */
+  --line: #eadfce; /* 邊線 */
+  --danger: #d05e3b; /* 完成勾勾紅橘 */
+}
+
+/* 背景與預設字色 */
+body,
+.storeappointment-page {
+  @apply min-h-screen;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* ===== 基本版面 ===== */
+@layer components {
+  .storeappointment-container {
+    @apply max-w-4xl mx-auto px-6 md:px-8 py-10;
+  }
+  .storeappointment-title {
+    @apply text-3xl md:text-[38px] font-extrabold text-center tracking-wide mb-8;
+    color: var(--ink);
+  }
+
+  .sa-card {
+    @apply rounded-2xl border shadow-sm;
+    border-color: var(--line);
+    background: #fff;
+  }
+  .sa-card-inner {
+    @apply p-6 md:p-8;
+  }
+
+  /* Tabs */
+  .storeappointment-tab-wrap {
+    @apply flex justify-center gap-3 mb-8;
+  }
+  .storeappointment-tab {
+    @apply w-20 md:w-28 py-2 rounded-full font-semibold text-center border transition;
+    color: var(--muted);
+    border-color: var(--line);
+    background: #fff;
+  }
+  .storeappointment-tab-active {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+
+  /* 表單欄位 */
+  .storeappointment-label {
+    @apply block text-sm font-semibold mb-1;
+    color: var(--ink);
+  }
+  .storeappointment-input {
+    @apply w-full rounded-xl px-3 py-2 outline-none;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .storeappointment-select {
+    @apply w-full rounded-xl px-3 py-2 outline-none;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .storeappointment-textarea {
+    @apply w-full rounded-xl px-3 py-2 outline-none min-h-[120px];
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .storeappointment-radio {
+    accent-color: var(--ink);
+  }
+
+  /* 次標題 */
+  .block-title {
+    @apply font-bold text-base mb-2;
+    color: var(--ink);
+  }
+
+  /* 主要按鈕群 */
+  .btn-row {
+    @apply flex items-center justify-center gap-4 pt-4;
+  }
+  .btn-primary {
+    @apply px-8 py-2 rounded-xl font-semibold transition;
+    background: var(--accent-strong);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    filter: brightness(0.95);
+  }
+  .btn-ghost {
+    @apply px-8 py-2 rounded-xl font-semibold border transition;
+    border-color: var(--line);
+    background: #fff;
+    color: var(--ink);
+  }
+  .btn-ghost:hover {
+    background: var(--panel);
+  }
+
+  /* ===== 美容：時間選擇 ===== */
+  .timepicker-details {
+    @apply rounded-2xl overflow-hidden border bg-white;
+    border-color: var(--line);
+  }
+  .timepicker-summary {
+    @apply px-5 py-4 flex items-center justify-between text-sm font-semibold;
+    background: var(--panel);
+  }
+  .timepicker-calendar {
+    @apply p-5 border-t;
+    border-color: var(--line);
+  }
+  .calendar-head {
+    @apply flex items-center justify-between mb-3;
+  }
+  .calendar-title {
+    @apply font-bold;
+  }
+  .calendar-grid {
+    @apply grid grid-cols-7 gap-2;
+  }
+  .calendar-cell {
+    @apply h-10 flex items-center justify-center rounded-lg border text-sm;
+    border-color: var(--line);
+    background: #fff;
+  }
+  .calendar-cell.muted {
+    @apply text-gray-400 bg-[rgba(0,0,0,0.02)];
+  }
+  .calendar-cell.active {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .time-period-row {
+    @apply flex gap-3 justify-center my-4;
+  }
+  .time-period {
+    @apply w-20 py-1 rounded-full border text-center;
+    border-color: var(--line);
+    background: #fff;
+    color: var(--ink);
+  }
+  .time-period-active {
+    @apply w-20 py-1 rounded-full text-white;
+    background: var(--ink);
+  }
+
+  .time-grid {
+    @apply grid grid-cols-3 md:grid-cols-4 gap-3;
+  }
+  .time-slot {
+    @apply w-full py-2 rounded-xl border text-sm font-medium text-center;
+    border-color: var(--line);
+    background: #fff;
+  }
+  .time-slot:hover:not(.disabled) {
+    @apply shadow-sm;
+    background: var(--panel);
+  }
+  .time-slot.active {
+    background: var(--ink);
+    color: #fff;
+  }
+  .time-slot.disabled {
+    @apply cursor-not-allowed;
+    background: #f1f1f1;
+    color: #b5b5b5;
+  }
+
+  /* 小計列 */
+  .subtotal {
+    @apply text-center text-sm text-gray-600 pt-2;
+  }
+
+  /* ===== 完成頁 ===== */
+  .success-wrap {
+    @apply pt-6;
+  }
+  .success-icon {
+    @apply w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-white;
+    background: var(--danger);
+  }
+  .success-title {
+    @apply text-[28px] md:text-[32px] font-extrabold text-center mb-6;
+    color: var(--accent-strong);
+  }
+  .success-card {
+    @apply sa-card;
+  }
+  .success-body {
+    @apply sa-card-inner;
+  }
+  .success-row {
+    @apply flex items-center justify-between py-3 border-b last:border-b-0;
+    border-color: var(--line);
+  }
+  .success-label {
+    @apply text-sm text-gray-600;
+  }
+  .success-value {
+    @apply font-extrabold;
+    color: var(--ink);
+  }
+  .success-sub {
+    @apply text-gray-600;
+  }
+  .contact-card {
+    @apply sa-card mt-6;
+  }
+  .contact-body {
+    @apply sa-card-inner text-center;
+  }
+  .contact-phone {
+    @apply text-2xl font-extrabold tracking-wide;
+    color: var(--ink);
+  }
+  .back-row {
+    @apply text-center mt-6;
+  }
+  .btn-back {
+    @apply inline-block px-10 py-2 rounded-xl font-semibold border;
+    border-color: var(--line);
+    background: var(--accent);
+    color: #fff;
+  }
+}

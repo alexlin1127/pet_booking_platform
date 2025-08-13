@@ -6,8 +6,9 @@
 @layer components {
   /* 外層容器 */
   .form-template-container {
-    @apply max-w-md mx-auto p-6 bg-white rounded-lg shadow-md;
-    @apply md:max-w-xl md:p-10;
+    @apply mx-auto bg-white rounded-lg shadow-md;
+    max-width: clamp(20rem, 90vw, 36rem);
+    padding: clamp(1rem, 3vw, 2.5rem);
   }
 
   /* 標題 */
