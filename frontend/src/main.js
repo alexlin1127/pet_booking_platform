@@ -30,8 +30,9 @@ import './styles/components/UI/tablecard.css'
 import './styles/components/UI/switch.css'
 
 // 客戶頁面樣式
-import './styles/pages/Customers/Register/customersregister.css'
+import './styles/pages/Customers/customersregister.css'
 import './styles/pages/Customers/Posts/news.css'
+import './styles/pages/Customers/storeslist.css'
 
 // 商家頁面樣式
 import './styles/pages/Stores/dashboard.css'

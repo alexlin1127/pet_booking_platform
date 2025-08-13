@@ -11,13 +11,25 @@ import StoresRegister from "../pages/Stores/StoreRegister.vue"
 
 
 // 商家畫面Router
-import StoreRegister from "../pages/Stores/StoreRegister.vue"
-import StoreManage from "../pages/Stores/Posts/Postsmanage.vue"
-import StorePostProcess from "../pages/Stores/Posts/PostsProcess.vue"
-import StorePostReview from "../pages/Stores/Posts/StorePostReview.vue"
-import SpostManagement from '../pages/Stores/SpostManagement.vue'
-
-
+import StoresDashboard from "../pages/Stores/StoresDashboard.vue"
+import StoresAddBookings from "../pages/Stores/Booking/AddBookings.vue"
+import StoresGrooming from "../pages/Stores/Booking/Grooming/GroomingBooking.vue"
+import StoresBoarding from "../pages/Stores/Booking/Boarding/BoardingBooking.vue"
+import StoresGroomingManage from "../pages/Stores/Booking/Grooming/GroomingManagement.vue"
+import StoresBoardingManage from "../pages/Stores/Booking/Boarding/BoardingManagement.vue"
+import StoresBookingHistory from "../pages/Stores/HistoryBooking/BookingHistory.vue"
+import StoresWatchLists from "../pages/Stores/Booking/WatchLists.vue"
+//
+import StoresEditInfo from "../pages/Stores/Info/EditInfo.vue"
+import StoresInfoManage from "../pages/Stores/Info/InfoManagement.vue"
+import StoresOpenServices from "../pages/Stores/Info/OpenServices.vue"
+// 
+import StoresAddServices from "../pages/Stores/Services/AddServices.vue"
+import StoresServicesManage from "../pages/Stores/Services/ServicesManagement.vue"
+//
+import StoresManage from "../pages/Stores/Posts/Postsmanage.vue"
+import StoresPostProcess from "../pages/Stores/Posts/PostsProcess.vue"
+import StoresPostView from "../pages/Stores/Posts/PostsView.vue"
 
 // 管理者頁面Router
 import Admin from "../pages/Admin/AdminDashboard.vue"
@@ -26,22 +38,13 @@ import StoresReview from "../pages/Admin/Stores/StoreReview.vue"
 import AccountManagement from "../pages/Admin/Account/AccountManagement.vue"
 import PostManagement from "../pages/Admin/Posts/PostManagement.vue"
 import PostReview from "../pages/Admin/Posts/PostReview.vue";
-import AdminDashboard from "../pages/Admin/AdminDashboard.vue";
-import NewPost from "../pages/Stores/NewPost.vue"
 
 // 前台頁面Router - 使用正確的路徑
 import NewsPage from "../pages/Customers/News.vue";
 import StoresPage from "../pages/Customers/StoresView.vue";
 import BookingGroomingPage from "../pages/Customers/Booking/Grooming.vue";
-import BookingLodgingPage from "../pages/Customers/Booking/Lodging.vue";
-import StoresInfo from "../pages/Stores/StoresInfo.vue";
-import EditStoresInfo from "../pages/Stores/EditStoresInfo.vue";
-import OpenService from "../pages/Stores/OpenService.vue";
-import ServicesManage from "../pages/Stores/ServicesManage.vue";
-import NewsView from "../pages/Customers/NewsView.vue";
-import ServicesList from "../pages/Customers/ServicesList.vue";
+import BookingBoardingPage from "../pages/Customers/Booking/Boarding.vue";
 import StoresList from "../pages/Customers/StoresList.vue";
-
 
 
 
@@ -57,11 +60,6 @@ const routes = [
         meta: { sidebar: false }
     },
     {
-        path: "/news/view/:id",
-        component: NewsView,
-        meta: { sidebar: false }
-    },
-    {
         path: "/stores",
         component: StoresPage,
         meta: { sidebar: false }
@@ -74,6 +72,12 @@ const routes = [
     {
         path: "/booking/boarding",
         component: BookingBoardingPage,
+        meta: { sidebar: false }
+    },
+    // 店家列表頁面
+    {
+        path: "/storeslist",
+        component: StoresList,
         meta: { sidebar: false }
     },
     // 登入註冊路由
@@ -92,17 +96,12 @@ const routes = [
         component: CustomerRegister,
         meta: { sidebar: false }
     },
-    // Customers頁面路由
     {
-        path: "/servicelist",
-        component: ServicesList,
+        path: "/register/stores/:step",
+        component: StoresRegister,
         meta: { sidebar: false }
     },
-    {
-        path: '/stores/:type(grooming|lodging)',
-        component: StoresList,
-        meta: { sidebar: false }
-    },
+
     // 商家頁面路由
     {
         path: "/register/stores/:step",
@@ -214,7 +213,7 @@ const routes = [
     },
     {
         path: "/stores/posts/view/:id",
-        component: StorePostReview,
+        component: StoresPostView,
         meta: { sidebar: false }
     },
 
@@ -249,48 +248,6 @@ const routes = [
         component: PostReview,
         meta: { sidebar: false }
     },
-    
-    // // 店家頁面Router
-    {
-        path: "/stores",
-        component: AdminDashboard,
-        meta: { sidebar: false }
-    },
-    {
-        path: "/stores/store-management",
-        component: SpostManagement,
-        meta: { sidebar: false }
-    },
-    {
-        path: "/stores/posts/:status",
-        component: StorePostReview,
-        meta: { sidebar: false }
-    },
-    {
-        path: "/stores/newpost",
-        component: NewPost,
-        meta: { sidebar: false }
-    },
-    {
-        path: "/stores/info",
-        component: StoresInfo,
-        meta: { sidebar: false }
-    },
-    {
-        path: "/stores/info/edit",
-        component: EditStoresInfo,
-        meta: { sidebar: false }
-    },    
-    {
-        path: "/stores/serviceactivate",
-        component: OpenService,
-        meta: { sidebar: false }
-    },
-    {
-        path: "/stores/service",
-        component: ServicesManage,
-        meta: { sidebar: false }
-    }
 ];
 
 const router = createRouter({
