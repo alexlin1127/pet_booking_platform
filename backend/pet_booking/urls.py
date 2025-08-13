@@ -15,7 +15,7 @@ from pet_booking.customers.views import *
 from pet_booking.stores.views import *
 from pet_booking.services.views import *
 from pet_booking.reservations.views.create_reservations import *
-from pet_booking.reservations.views.manage_reservations import *
+from pet_booking.reservations.views.manage_grooming_reservations import *
 
 router = DefaultRouter(trailing_slash=False)
 
