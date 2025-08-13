@@ -1,7 +1,14 @@
+import random
+from django.core.mail import send_mail
+from django.core.cache import cache
+from django.contrib.auth.hashers import make_password
 from rest_framework import viewsets
+from rest_framework import status
+from rest_framework.views import APIView
 from django.db import models
 from .models import Store, Post, StoreImage
-from .serializers import StoreSerializer, PostSerializer, StoreImageSerializer, StoreListSerializer, StoreDetailSerializer
+from .serializers import StoreRegisterSendCodeSerializer, StoreRegisterConfirmCodeSerializer, StoreSerializer, PostSerializer, StoreImageSerializer, StoreListSerializer, StoreDetailSerializer
+from pet_booking.users.models import User, UserRole
 import django_filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
@@ -9,6 +16,97 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
 from rest_framework.response import Response
 # Create your views here.
+
+def generate_code(length=6):
+    return ''.join(random.choices('0123456789', k=length))
+
+class StoreRegisterSendCodeAPIView(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        serializer = StoreRegisterSendCodeSerializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+
+            # 查重
+            if User.objects.filter(username=data['username']).exists():
+                return Response({'msg': '該帳號已註冊'}, status=400)
+            if User.objects.filter(email=data['email']).exists():
+                return Response({'msg': '該 email 已註冊'}, status=400)
+            if Store.objects.filter(phone=data['phone']).exists():
+                return Response({'msg': '該電話已註冊'}, status=400)
+
+            code = generate_code()
+            hashed_pwd = make_password(data['password'])
+            cache.set(
+                f"store_register_{data['email']}",
+                {
+                    'username': data['username'],
+                    'password': hashed_pwd,
+                    'email': data['email'],
+                    'phone': data['phone'],
+                    'code': code,
+                },
+                timeout=60
+            )
+            send_mail(
+                '您的店家註冊驗證碼',
+                f'您的店家註冊驗證碼是：{code}',
+                None,
+                [data['email']]
+            )
+            return Response({'msg': '驗證碼已寄出'}, status=200)
+        return Response(serializer.errors, status=400)
+
+class StoreRegisterConfirmCodeAPIView(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        serializer = StoreRegisterConfirmCodeSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            code = serializer.validated_data['code']
+            cache_data = cache.get(f"store_register_{email}")
+
+            if not cache_data:
+                return Response({'msg': '驗證逾時'}, status=400)
+            if cache_data['code'] != code:
+                return Response({'msg': '驗證碼錯誤'}, status=400)
+
+            # 雙重查重
+            if User.objects.filter(username=cache_data['username']).exists():
+                return Response({'msg': '該帳號已註冊'}, status=400)
+            if User.objects.filter(email=email).exists():
+                return Response({'msg': '該 email 已註冊'}, status=400)
+            if Store.objects.filter(phone=cache_data['phone']).exists():
+                return Response({'msg': '該電話已註冊'}, status=400)
+
+            # 創建 User
+            user = User.objects.create(
+                username=cache_data['username'],
+                password=cache_data['password'],
+                email=email,
+                role=UserRole.STORE,
+                is_store_owner=True,
+            )
+            # 創建 Store
+            store_name = request.data.get('store_name', '')
+            owner_name = request.data.get('owner_name', '')
+            address =  request.data.get('address', '')
+            Store.objects.create(
+                user_id=user,
+                store_name=store_name,
+                owner_name=owner_name,
+                address=address,
+                email=email,
+                phone=cache_data['phone'],
+                status='pending',   # 或你要的預設值
+            )
+            cache.delete(f"store_register_{email}")
+            return Response({'msg': '註冊成功'}, status=201)
+        return Response(serializer.errors, status=400)
+
+# -------------------------------------------------------------------------------------------------
 
 class StoreFilter(django_filters.FilterSet):
     created_at_after = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='gte')

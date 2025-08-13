@@ -7,7 +7,7 @@ defineProps({
 </script>
 
 <template>
-     <td>
+    <td>
       <FontAwesomeIcon v-if="boarding.note && boarding.note.trim() !== ''" icon="fa-solid fa-bookmark" />
     </td>
     <td>{{ boarding.id }}</td>
@@ -18,7 +18,6 @@ defineProps({
     <td>{{ boarding.booking_date }}</td>
     <td>{{ boarding.room_type }}</td>
     <td>{{ boarding.status }}</td>
-
     <td v-if="boarding.status === '待審核'">
         <RouterLink :to="`/stores/boarding-booking/review?id=${boarding.id}`">
             <button class="boarding-btn">審核</button>

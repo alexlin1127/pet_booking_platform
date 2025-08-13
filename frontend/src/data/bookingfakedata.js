@@ -1,4 +1,4 @@
-export const groomingbookings = [
+export const bookings = [
     {
         id: 1,
         customer_name: '王小明',
@@ -9,127 +9,138 @@ export const groomingbookings = [
         booking_time: '09:00-11:00',
         status: '待審核',
         note: '需要特別照顧',
-        create_at: '2025-07-20 10:00:00'
+        create_at: '2025-07-20 10:00:00',
+        service_type: '美容'
     },
     {
         id: 2,
         customer_name: '陳美麗',
         phone: `0987654322`,
-        pet_name: '球球',
+        pet_name: '小黑',
         pet_type: '貓',
-        booking_date: '2025-08-11',
+        booking_date: '2025-08-12',
         booking_time: '10:30-12:00',
         status: '已審核',
         note: '',
-        create_at: '2025-07-21 10:00:00'
+        create_at: '2025-07-21 10:00:00',
+        service_type: '美容'
     },
     {
         id: 3,
         customer_name: '林志強',
         phone: `0987654323`,
-        pet_name: 'Lucky',
+        pet_name: '小紅',
         pet_type: '狗',
         booking_date: '2025-08-12',
         booking_time: '11:00-12:30',
         status: '已完成',
         note: '',
-        create_at: '2025-07-22 10:00:00'
+        create_at: '2025-08-22 10:00:00',
+        service_type: '美容'
     },
     {
         id: 4,
         customer_name: '張雅芳',
         phone: `0987654324`,
-        pet_name: 'Mimi',
+        pet_name: '小橙',
         pet_type: '貓',
         booking_date: '2025-08-13',
         booking_time: '12:30-14:00',
         status: '已審核',
         note: '怕生',
-        create_at: '2025-07-23 10:00:00'
+        create_at: '2025-07-23 10:00:00',
+        service_type: '美容'
     },
     {
         id: 5,
         customer_name: '李大華',
         phone: `0987654325`,
-        pet_name: '阿花',
+        pet_name: '小黃',
         pet_type: '狗',
         booking_date: '2025-08-14',
         booking_time: '13:00-15:00',
         status: '待審核',
         note: '易緊張',
-        create_at: '2025-07-24 10:00:00'
+        create_at: '2025-07-24 10:00:00',
+        service_type: '美容'
     },
     {
         id: 6,
         customer_name: '周小美',
         phone: `0987654326`,
-        pet_name: '小黑',
+        pet_name: '小綠',
         pet_type: '貓',
         booking_date: '2025-08-15',
         booking_time: '14:00-15:30',
         status: '已完成',
         note: '有過敏史',
-        create_at: '2025-07-25 10:00:00'
+        create_at: '2025-07-25 10:00:00',
+        service_type: '美容'
     },
     {
         id: 7,
         customer_name: '吳明哲',
         phone: `0987654327`,
-        pet_name: '皮皮',
+        pet_name: '小藍',
         pet_type: '狗',
-        booking_date: '2025-08-16',
+        booking_date: '2025-08-18',
         booking_time: '15:00-16:30',
         status: '待審核',
         note: '',
-        create_at: '2025-07-26 10:00:00'
+        create_at: '2025-07-26 10:00:00',
+        service_type: '美容'
     },
     {
         id: 8,
         customer_name: '鄭玉珍',
         phone: `0987654328`,
-        pet_name: 'Coco',
+        pet_name: '小紫',
         pet_type: '貓',
         booking_date: '2025-08-17',
         booking_time: '16:30-18:00',
         status: '已完成',
         note: '',
-        create_at: '2025-07-27 10:00:00'
+        create_at: '2025-07-27 10:00:00',
+        service_type: '美容'
     },
     {
         id: 9,
         customer_name: '黃信宏',
         phone: `0987654329`,
-        pet_name: '阿福',
+        pet_name: '小灰',
         pet_type: '狗',
         booking_date: '2025-08-18',
         booking_time: '17:00-18:30',
         status: '已審核',
         note: '',
-        create_at: '2025-07-28 10:00:00'
+        create_at: '2025-07-28 10:00:00',
+        service_type: '美容'
     },
     {
         id: 10,
         customer_name: '簡佩君',
         phone: `0987654330`,
-        pet_name: '妞妞',
+        pet_name: '大黑',
         pet_type: '貓',
         booking_date: '2025-08-19',
         booking_time: '18:00-19:30',
         status: '待審核',
         note: '請提前聯絡',
-        create_at: '2025-07-29 10:00:00'
+        create_at: '2025-07-29 10:00:00',
+        service_type: '美容'
     },
     {
         id: 11,
         customer_name: '林怡君',
         phone: `0987654331`,
-        pet_name: '小乖',
+        pet_name: '大黃',
         pet_type: '狗',
         booking_date: '2025-08-20',
         booking_time: '19:00-20:00',
         status: '已完成',
         note: '',
-        create_at: '2025-07-30 10:00:00'
+        create_at: '2025-07-30 10:00:00',
+        service_type: '美容'
     },
     {
         id: 12,
@@ -137,11 +148,12 @@ export const groomingbookings = [
         phone: `0987654332`,
         pet_name: '阿寶',
         pet_type: '貓',
-        booking_date: '2025-08-21',
+        booking_date: '2025-08-12',
         booking_time: '18:30-20:00',
         status: '待審核',
         note: '不喜歡洗澡',
-        create_at: '2025-07-31 10:00:00'
+        create_at: '2025-07-31 10:00:00',
+        service_type: '美容'
     },
     {
         id: 13,
@@ -149,11 +161,12 @@ export const groomingbookings = [
         phone: `0987654333`,
         pet_name: '小虎',
         pet_type: '狗',
-        booking_date: '2025-08-22',
+        booking_date: '2025-08-20',
         booking_time: '09:30-11:00',
         status: '已審核',
         note: '',
-        create_at: '2025-08-01 10:00:00'
+        create_at: '2025-08-01 10:00:00',
+        service_type: '美容'
     },
     {
         id: 14,
@@ -161,11 +174,12 @@ export const groomingbookings = [
         phone: `0987654334`,
         pet_name: '阿吉',
         pet_type: '貓',
-        booking_date: '2025-08-23',
+        booking_date: '2025-08-19',
         booking_time: '10:00-12:00',
         status: '已完成',
         note: '需陪伴',
-        create_at: '2025-08-02 10:00:00'
+        create_at: '2025-08-02 10:00:00',
+        service_type: '美容'
     },
     {
         id: 15,
@@ -173,11 +187,12 @@ export const groomingbookings = [
         phone: `0987654335`,
         pet_name: '小美',
         pet_type: '狗',
-        booking_date: '2025-08-24',
+        booking_date: '2025-08-18',
         booking_time: '11:30-13:00',
         status: '待審核',
         note: '',
-        create_at: '2025-08-03 10:00:00'
+        create_at: '2025-08-03 10:00:00',
+        service_type: '美容'
     },
     {
         id: 16,
@@ -185,11 +200,12 @@ export const groomingbookings = [
         phone: `0987654336`,
         pet_name: '小新',
         pet_type: '狗',
-        booking_date: '2025-08-25',
+        booking_date: '2025-08-17',
         booking_time: '12:00-13:30',
         status: '已完成',
         note: '需剪指甲',
-        create_at: '2025-08-04 10:00:00'
+        create_at: '2025-08-04 10:00:00',
+        service_type: '美容'
     },
     {
         id: 17,
@@ -197,11 +213,12 @@ export const groomingbookings = [
         phone: `0987654337`,
         pet_name: '阿樂',
         pet_type: '貓',
-        booking_date: '2025-08-26',
+        booking_date: '2025-08-16',
         booking_time: '13:30-15:00',
         status: '已審核',
         note: '',
-        create_at: '2025-08-05 10:00:00'
+        create_at: '2025-08-05 10:00:00',
+        service_type: '美容'
     },
     {
         id: 18,
@@ -209,11 +226,12 @@ export const groomingbookings = [
         phone: `0987654338`,
         pet_name: '小咪',
         pet_type: '狗',
-        booking_date: '2025-08-27',
+        booking_date: '2025-08-17',
         booking_time: '14:00-16:00',
         status: '待審核',
         note: '討厭洗澡',
-        create_at: '2025-08-06 10:00:00'
+        create_at: '2025-08-06 10:00:00',
+        service_type: '美容'
     },
     {
         id: 19,
@@ -221,11 +239,12 @@ export const groomingbookings = [
         phone: `0987654339`,
         pet_name: '阿寶',
         pet_type: '貓',
-        booking_date: '2025-08-28',
+        booking_date: '2025-08-12',
         booking_time: '15:30-17:00',
         status: '已完成',
         note: '',
-        create_at: '2025-08-07 10:00:00'
+        create_at: '2025-08-07 10:00:00',
+        service_type: '美容'
     },
     {
         id: 20,
@@ -233,11 +252,12 @@ export const groomingbookings = [
         phone: `0987654340`,
         pet_name: '小黑',
         pet_type: '狗',
-        booking_date: '2025-08-29',
+        booking_date: '2025-08-15',
         booking_time: '16:00-18:00',
         status: '已審核',
         note: '請小心',
-        create_at: '2025-08-08 10:00:00'
+        create_at: '2025-08-08 10:00:00',
+        service_type: '美容'
     },
     {
         id: 21,
@@ -245,11 +265,12 @@ export const groomingbookings = [
         phone: `0987654341`,
         pet_name: '皮皮',
         pet_type: '狗',
-        booking_date: '2025-08-30',
+        booking_date: '2025-08-14',
         booking_time: '17:30-19:00',
         status: '待審核',
         note: '怕陌生人',
-        create_at: '2025-08-09 10:00:00'
+        create_at: '2025-08-09 10:00:00',
+        service_type: '美容'
     },
     {
         id: 22,
@@ -257,11 +278,12 @@ export const groomingbookings = [
         phone: `0987654342`,
         pet_name: 'Coco',
         pet_type: '貓',
-        booking_date: '2025-08-31',
+        booking_date: '2025-08-12',
         booking_time: '18:00-20:00',
         status: '已完成',
         note: '',
-        create_at: '2025-08-10 10:00:00'
+        create_at: '2025-08-10 10:00:00',
+        service_type: '美容'
     },
     {
         id: 23,
@@ -269,11 +291,12 @@ export const groomingbookings = [
         phone: `0987654343`,
         pet_name: '阿福',
         pet_type: '狗',
-        booking_date: '2025-09-01',
+        booking_date: '2025-08-13',
         booking_time: '09:00-10:30',
         status: '已審核',
         note: '有特殊飲食',
-        create_at: '2025-08-11 10:00:00'
+        create_at: '2025-08-11 10:00:00',
+        service_type: '美容'
     },
     {
         id: 24,
@@ -281,11 +304,12 @@ export const groomingbookings = [
         phone: `0987654344`,
         pet_name: '妞妞',
         pet_type: '貓',
-        booking_date: '2025-09-02',
+        booking_date: '2025-08-12',
         booking_time: '10:30-12:30',
         status: '待審核',
         note: '',
-        create_at: '2025-08-12 10:00:00'
+        create_at: '2025-08-12 10:00:00',
+        service_type: '美容'
     },
     {
         id: 25,
@@ -293,43 +317,43 @@ export const groomingbookings = [
         phone: `0987654345`,
         pet_name: '小乖',
         pet_type: '狗',
-        booking_date: '2025-09-03',
+        booking_date: '2025-08-13',
         booking_time: '12:00-14:00',
         status: '已完成',
         note: '怕生',
-        create_at: '2025-08-13 10:00:00'
-    }
-]
-
-export const boardingbookings = [
+        create_at: '2025-08-13 10:00:00',
+        service_type: '美容'
+    },
     {
-        id: 1,
+        id: 26,
         customer_name: '王小明',
         phone: `0987654321`,
         pet_name: '小白',
         pet_type: '狗',
-        booking_date: '2025-08-10',
+        booking_date: '2025-08-12',
         booking_time: '10:00',
         room_type: '標準房',
         status: '待審核',
         note: '',
-        create_at: '2025-07-15 09:00:00'
+        create_at: '2025-07-15 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 2,
+        id: 27,
         customer_name: '陳美麗',
         phone: `0987654322`,
         pet_name: '球球',
         pet_type: '貓',
-        booking_date: '2025-08-11',
+        booking_date: '2025-08-14',
         booking_time: '11:00',
         room_type: '豪華房',
         status: '已完成',
         note: '需餵藥',
-        create_at: '2025-07-16 09:00:00'
+        create_at: '2025-07-16 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 3,
+        id: 28,
         customer_name: '林志強',
         phone: `0987654323`,
         pet_name: 'Lucky',
@@ -339,10 +363,11 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '已審核',
         note: '請多關心',
-        create_at: '2025-07-17 09:00:00'
+        create_at: '2025-07-17 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 4,
+        id: 29,
         customer_name: '張雅芳',
         phone: `0987654324`,
         pet_name: 'Mimi',
@@ -352,10 +377,11 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '已完成',
         note: '',
-        create_at: '2025-07-18 09:00:00'
+        create_at: '2025-07-18 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 5,
+        id: 30,
         customer_name: '李大華',
         phone: `0987654325`,
         pet_name: '阿花',
@@ -365,10 +391,11 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '待審核',
         note: '',
-        create_at: '2025-07-19 09:00:00'
+        create_at: '2025-07-19 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 6,
+        id: 31,
         customer_name: '周小美',
         phone: `0987654326`,
         pet_name: '小黑',
@@ -378,10 +405,11 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '已完成',
         note: '有過敏',
-        create_at: '2025-07-20 09:00:00'
+        create_at: '2025-07-20 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 7,
+        id: 32,
         customer_name: '吳明哲',
         phone: `0987654327`,
         pet_name: '皮皮',
@@ -391,10 +419,11 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '已審核',
         note: '',
-        create_at: '2025-07-21 09:00:00'
+        create_at: '2025-07-21 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 8,
+        id: 33,
         customer_name: '鄭玉珍',
         phone: `0987654328`,
         pet_name: 'Coco',
@@ -404,10 +433,11 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '待審核',
         note: '請提前通知',
-        create_at: '2025-07-22 09:00:00'
+        create_at: '2025-07-22 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 9,
+        id: 34,
         customer_name: '黃信宏',
         phone: `0987654329`,
         pet_name: '阿福',
@@ -417,10 +447,11 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '已完成',
         note: '怕吵',
-        create_at: '2025-07-23 09:00:00'
+        create_at: '2025-07-23 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 10,
+        id: 35,
         customer_name: '簡佩君',
         phone: `0987654330`,
         pet_name: '妞妞',
@@ -430,10 +461,11 @@ export const boardingbookings = [
         room_type: '豪華房',
         status: '已審核',
         note: '',
-        create_at: '2025-07-24 09:00:00'
+        create_at: '2025-07-24 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 11,
+        id: 36,
         customer_name: '林怡君',
         phone: `0987654331`,
         pet_name: '小乖',
@@ -443,188 +475,203 @@ export const boardingbookings = [
         room_type: '標準房',
         status: '已完成',
         note: '怕生',
-        create_at: '2025-07-25 09:00:00'
+        create_at: '2025-07-25 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 12,
+        id: 37,
         customer_name: '蔡明慧',
         phone: `0987654332`,
         pet_name: '阿寶',
         pet_type: '貓',
-        booking_date: '2025-08-21',
+        booking_date: '2025-08-13',
         booking_time: '17:00-19:00',
         room_type: '豪華房',
         status: '待審核',
         note: '',
-        create_at: '2025-07-26 09:00:00'
+        create_at: '2025-07-26 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 13,
+        id: 38,
         customer_name: '曾國榮',
         phone: `0987654333`,
         pet_name: '小虎',
         pet_type: '狗',
-        booking_date: '2025-08-22',
+        booking_date: '2025-08-12',
         booking_time: '18:00-20:00',
         room_type: '標準房',
         status: '已審核',
         note: '不吃乾飼料',
-        create_at: '2025-07-27 09:00:00'
+        create_at: '2025-07-27 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 14,
+        id: 39,
         customer_name: '賴怡如',
         phone: `0987654334`,
         pet_name: '阿吉',
         pet_type: '貓',
-        booking_date: '2025-08-23',
+        booking_date: '2025-08-13',
         booking_time: '09:00-11:00',
         room_type: '豪華房',
         status: '已完成',
         note: '',
-        create_at: '2025-07-28 09:00:00'
+        create_at: '2025-07-28 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 15,
+        id: 40,
         customer_name: '蘇建宏',
         phone: `0987654335`,
         pet_name: '小美',
         pet_type: '狗',
-        booking_date: '2025-08-24',
+        booking_date: '2025-08-14',
         booking_time: '00:00',
         room_type: '標準房',
         status: '待審核',
         note: '請小心',
-        create_at: '2025-07-29 09:00:00'
+        create_at: '2025-07-29 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 16,
+        id: 41,
         customer_name: '洪玉婷',
         phone: `0987654336`,
         pet_name: '小新',
         pet_type: '狗',
-        booking_date: '2025-08-25',
+        booking_date: '2025-08-15',
         booking_time: '08:00',
         room_type: '豪華房',
         status: '已完成',
         note: '',
-        create_at: '2025-07-30 09:00:00'
+        create_at: '2025-07-30 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 17,
+        id: 42,
         customer_name: '葉志偉',
         phone: `0987654337`,
         pet_name: '阿樂',
         pet_type: '貓',
-        booking_date: '2025-08-26',
+        booking_date: '2025-08-16',
         booking_time: '09:00',
         room_type: '標準房',
         status: '已審核',
         note: '需定時餵食',
-        create_at: '2025-07-31 09:00:00'
+        create_at: '2025-07-31 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 18,
+        id: 43,
         customer_name: '簡佩珊',
         phone: `0987654338`,
         pet_name: '小咪',
         pet_type: '狗',
-        booking_date: '2025-08-27',
+        booking_date: '2025-08-17',
         booking_time: '10:00',
         room_type: '豪華房',
         status: '待審核',
         note: '',
-        create_at: '2025-08-01 09:00:00'
+        create_at: '2025-08-01 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 19,
+        id: 44,
         customer_name: '高志明',
         phone: `0987654339`,
         pet_name: '阿寶',
         pet_type: '貓',
-        booking_date: '2025-08-28',
+        booking_date: '2025-08-18',
         booking_time: '11:00',
         room_type: '標準房',
         status: '已完成',
         note: true,
-        create_at: '2025-08-02 09:00:00'
+        create_at: '2025-08-02 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 20,
+        id: 45,
         customer_name: '鍾怡君',
         phone: `0987654340`,
         pet_name: '小黑',
         pet_type: '狗',
-        booking_date: '2025-08-29',
+        booking_date: '2025-08-19',
         booking_time: '12:00',
         room_type: '豪華房',
         status: '已審核',
         note: '',
-        create_at: '2025-08-03 09:00:00'
+        create_at: '2025-08-03 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 21,
+        id: 46,
         customer_name: '曾玉珍',
         phone: `0987654341`,
         pet_name: '皮皮',
         pet_type: '狗',
-        booking_date: '2025-08-30',
+        booking_date: '2025-08-20',
         booking_time: '13:00',
         room_type: '標準房',
         status: '待審核',
         note: '',
-        create_at: '2025-08-04 09:00:00'
+        create_at: '2025-08-04 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 22,
+        id: 47,
         customer_name: '賴信宏',
         phone: `0987654342`,
         pet_name: 'Coco',
         pet_type: '貓',
-        booking_date: '2025-08-31',
+        booking_date: '2025-08-19',
         booking_time: '14:00',
         room_type: '豪華房',
         status: '已完成',
         note: '需注意飲食',
-        create_at: '2025-08-05 09:00:00'
+        create_at: '2025-08-05 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 23,
+        id: 48,
         customer_name: '蘇怡如',
         phone: `0987654343`,
         pet_name: '阿福',
         pet_type: '狗',
-        booking_date: '2025-09-01',
+        booking_date: '2025-08-18',
         booking_time: '15:00',
         room_type: '標準房',
         status: '已審核',
         note: '',
-        create_at: '2025-08-06 09:00:00'
+        create_at: '2025-08-06 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 24,
+        id: 49,
         customer_name: '洪建宏',
         phone: `0987654344`,
         pet_name: '妞妞',
         pet_type: '貓',
-        booking_date: '2025-09-02',
+        booking_date: '2025-08-17',
         booking_time: '16:00',
         room_type: '豪華房',
         status: '待審核',
         note: '怕吵雜',
-        create_at: '2025-08-07 09:00:00'
+        create_at: '2025-08-07 09:00:00',
+        service_type: '住宿'
     },
     {
-        id: 25,
+        id: 50,
         customer_name: '葉玉婷',
         phone: `0987654345`,
         pet_name: '小乖',
         pet_type: '狗',
-        booking_date: '2025-09-03',
+        booking_date: '2025-08-20',
         booking_time: '17:00',
         room_type: '標準房',
         status: '已完成',
         note: '',
-        create_at: '2025-08-08 09:00:00'
+        create_at: '2025-08-08 09:00:00',
+        service_type: '住宿'
     }
 ]

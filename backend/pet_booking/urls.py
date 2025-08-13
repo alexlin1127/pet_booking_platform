@@ -41,11 +41,11 @@ router.register(r'store/images', StoreImageViewSet, basename='store-images')
 # Reservation related endpoints
 router.register(r'store-info', StoreInfoViewSet, basename='store-info')
 router.register(r'pet-info', PetInfoViewSet, basename='pet-info')
-router.register(r'grooming', GroomingCalculationViewSet, basename='grooming-calculation')
-router.register(r'grooming', GroomingReservationViewSet, basename='grooming-reservation')
-router.register(r'boarding', BoardingRoomInfoViewSet, basename='boarding-room-info')
-router.register(r'boarding', BoardingCalculationViewSet, basename='boarding-calculation')
-router.register(r'boarding', BoardingReservationViewSet, basename='boarding-reservation')
+router.register(r'grooming/calculation', GroomingCalculationViewSet, basename='grooming-calculation')
+router.register(r'grooming/reservation', GroomingReservationViewSet, basename='grooming-reservation')
+router.register(r'boarding/room', BoardingRoomInfoViewSet, basename='boarding-room-info')
+router.register(r'boarding/calculation', BoardingCalculationViewSet, basename='boarding-calculation')
+router.register(r'boarding/reservation', BoardingReservationViewSet, basename='boarding-reservation')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -55,6 +55,10 @@ urlpatterns = [
     path('api/token/verify', TokenVerifyView.as_view(), name='token_verify'),
     path('api/token/blacklist', TokenBlacklistView.as_view(), name='token_blacklist'),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    path('api/register_send_code', RegisterSendCodeAPIView.as_view(), name='register_send_code'),
+    path('api/register_confirm_code', RegisterConfirmCodeAPIView.as_view(), name='register_confirm_code'),
+    path('api/store/register_send_code', StoreRegisterSendCodeAPIView.as_view()),
+    path('api/store/register_confirm_code', StoreRegisterConfirmCodeAPIView.as_view()),
 ]
 
 if settings.DEBUG:

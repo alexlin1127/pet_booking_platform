@@ -1,41 +1,42 @@
-    
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ================= Grooming Management ================= */
+/* ================= Boarding Management ================= */
 @layer components {
-    .grooming-container {
+    .boarding-container {
         @apply p-4;
     }
 
-    .grooming-title {
+    .boarding-title {
         @apply text-2xl font-bold flex items-center justify-between bg-gray-200 px-4 py-2 rounded-t-xl mb-2 border-b border-gray-300;
     }
 
-    .grooming-filter-buttons {
+    .boarding-filter-buttons {
         @apply flex items-center gap-4 pl-1 mb-6;
     }
 
-    .grooming-filter-label {
+
+    .boarding-filter-label {
         @apply flex items-center gap-2 pl-1;
     }
 
-    .grooming-filter-input {
+    .boarding-filter-input {
         @apply border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer;
     }
 
-    .grooming-table-container {
+    .boarding-table-container {
         @apply mb-4;
     }
 
-    .grooming-search-input {
+    .boarding-search-input {
         @apply border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-40;
     }
-    .grooming-search-btn {
+    .boarding-search-btn {
         @apply bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-all text-sm h-8 mx-1;
     }
-    .grooming-btn {
+    
+    .boarding-btn {
         @apply bg-black text-white px-3 py-1 rounded transition-all text-sm h-9 mx-1;
     }
 }

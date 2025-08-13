@@ -88,3 +88,17 @@ logs/
 # Temporary files
 *.tmp
 *.temp
+
+# Auto-generated script files (prevent unwanted .cjs files)
+**/update_service_type.*
+**/add_service_type.*
+**/fix_service_type.*
+*.cjs
+
+# Prevent duplicate/empty component files
+**/Booking/GroomingBooking.vue
+**/Booking/BookingHistory.vue
+**/Management/grooming.css
+
+# API Documentation
+backend/pet_booking/reservations/API_DOCUMENTATION.md
