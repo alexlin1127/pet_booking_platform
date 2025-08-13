@@ -126,7 +126,7 @@ const showStore = ref(false)
                             active-class="sidebar-link-active">待審核預約</RouterLink>
                         <RouterLink to="/stores/grooming-bookings/history" class="sidebar-link sidebar-submenu"
                             active-class="sidebar-link-active">歷史訂單紀錄</RouterLink>
-                        <RouterLink to="/stores/watchlists" class="sidebar-link sidebar-submenu"
+                        <RouterLink to="/stores/grooming/watchlists" class="sidebar-link sidebar-submenu"
                             active-class="sidebar-link-active">查看觀察名單</RouterLink>
                     </template>
                 </div>
@@ -140,7 +140,7 @@ const showStore = ref(false)
                             active-class="sidebar-link-active">待審核預約</RouterLink>
                         <RouterLink to="/stores/boarding-bookings/history" class="sidebar-link sidebar-submenu"
                             active-class="sidebar-link-active">歷史訂單紀錄</RouterLink>
-                        <RouterLink to="/stores/watchlists" class="sidebar-link sidebar-submenu"
+                        <RouterLink to="/stores/boarding/watchlists" class="sidebar-link sidebar-submenu"
                             active-class="sidebar-link-active">查看觀察名單</RouterLink>
                     </template>
                 </div>
