@@ -1,3 +1,3 @@
-# Import all ViewSets from create_reservations and manage_reservations
+# Import all ViewSets from create_reservations and manage_grooming_reservations
 from .create_reservations import *
-from .manage_reservations import *
+from .manage_grooming_reservations import *
