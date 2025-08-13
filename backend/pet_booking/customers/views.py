@@ -48,8 +48,9 @@ class RegisterSendCodeAPIView(APIView):
                     'phone': data['phone'],
                     'code': code,
                     'email': data['email'],  # 方便一致
+                    'full_name': data['full_name'],
                 },
-                timeout=60
+                timeout=300
             )
             send_mail(
                 '您的驗證碼',
@@ -94,7 +95,8 @@ class RegisterConfirmCodeAPIView(APIView):
                 user_id=user,
                 email=email,
                 phone=cache_data['phone'],
-                # ...如有 full_name, gender, address 再補完整
+                full_name=cache_data['full_name']
+                # ...如有 gender, address 再補完整
             )
             cache.delete(f"register_{email}")
             return Response({'msg': '註冊成功'}, status=201)

@@ -57,6 +57,8 @@ urlpatterns = [
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('api/register_send_code', RegisterSendCodeAPIView.as_view(), name='register_send_code'),
     path('api/register_confirm_code', RegisterConfirmCodeAPIView.as_view(), name='register_confirm_code'),
+    path('api/store/register_send_code', StoreRegisterSendCodeAPIView.as_view()),
+    path('api/store/register_confirm_code', StoreRegisterConfirmCodeAPIView.as_view()),
 ]
 
 if settings.DEBUG:
