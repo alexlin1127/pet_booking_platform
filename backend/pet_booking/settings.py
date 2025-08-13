@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'oauth2_provider',
+    'pet_booking.coupon',
     'pet_booking.customers',
     'pet_booking.reservations',
     'pet_booking.services',
