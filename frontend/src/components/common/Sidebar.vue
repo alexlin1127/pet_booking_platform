@@ -1,8 +1,20 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import api from '../../api/api.js'
 
 const role = ref("stores")
+
+const getRole = async () => {
+    // 登入成功後取得腳色並導向
+    try {
+        const userRes = await api.get('/users/me');
+        role.value = userRes.data.role;
+        
+    } catch (err) {
+        alert('無法取得腳色');
+    }
+}
 
 const isOpen = ref(true)
 const isDesktop = ref(window.matchMedia('(min-width: 1024px)').matches)
@@ -16,7 +28,8 @@ function handleResize() {
 }
 
 onMounted(() => {
-    window.addEventListener('resize', handleResize)
+    window.addEventListener('resize', handleResize);
+    getRole();
 })
 onUnmounted(() => {
     window.removeEventListener('resize', handleResize)
