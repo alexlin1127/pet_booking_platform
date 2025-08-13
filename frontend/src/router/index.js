@@ -35,6 +35,7 @@ import EditStoresInfo from "../pages/Stores/EditStoresInfo.vue";
 import OpenService from "../pages/Stores/OpenService.vue";
 import ServicesManage from "../pages/Stores/ServicesManage.vue";
 import NewsView from "../pages/Customers/NewsView.vue";
+import ServicesList from "../pages/Customers/ServicesList.vue";
 
 
 
@@ -85,7 +86,12 @@ const routes = [
         component: CustomerRegister,
         meta: { sidebar: false }
     },
-
+    // Customers頁面路由
+    {
+        path: "/servicelist",
+        component: ServicesList,
+        meta: { sidebar: false }
+    },
     // 商家頁面路由
     {
         path: "/register/stores/:step",
