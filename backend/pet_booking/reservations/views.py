@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 
 # app
 from .models import GroomingSchedules, BoardingSchedules, ReservationBoarding
-from pet_booking.services.models import GroomingService, GroomingServicePricing, BoardingService, BoardingRoomType, BoardingRoomPricing
+from pet_booking.services.models import GroomingService, GroomingServicePricing, BoardingService, BoardingServicePricing
 from pet_booking.stores.models import Store
 from .serializers import ReservationGroomingSerializer
 from pet_booking.customers.serializers import PetSerializer
@@ -81,10 +81,10 @@ class StoreInfoViewSet(viewsets.ModelViewSet):
                 
                 for boarding_service in boarding_services:
                     try:
-                        boarding_room_type = BoardingRoomType.objects.get(boarding_service=boarding_service)
+                        boarding_room_type = BoardingService.objects.get(boarding_service=boarding_service)
                         
                         try:
-                            boarding_pricing = BoardingRoomPricing.objects.get(room_type=boarding_room_type)
+                            boarding_pricing = BoardingServicePricing.objects.get(room_type=boarding_room_type)
                             
                             pricing_info = {
                                 'duration': boarding_pricing.duration,
@@ -93,8 +93,8 @@ class StoreInfoViewSet(viewsets.ModelViewSet):
                                 'overtime_price': boarding_pricing.overtime_rate,
                                 'overtime_charging': boarding_pricing.overtime_charging
                             }
-                            
-                        except BoardingRoomPricing.DoesNotExist:
+
+                        except BoardingServicePricing.DoesNotExist:
                             pricing_info = None
                         
                         room_type_data = {
@@ -106,7 +106,7 @@ class StoreInfoViewSet(viewsets.ModelViewSet):
                             'pricing_info': pricing_info
                         }
                         
-                    except BoardingRoomType.DoesNotExist:
+                    except BoardingService.DoesNotExist:
                         room_type_data = None
                     
                     boarding_data.append({
@@ -190,11 +190,11 @@ class StoreInfoViewSet(viewsets.ModelViewSet):
                 
                 for boarding_service in boarding_services:
                     try:
-                        boarding_room_type = BoardingRoomType.objects.get(boarding_service=boarding_service)
+                        boarding_room_type = BoardingService.objects.get(boarding_service=boarding_service)
                         
                         try:
-                            boarding_pricing = BoardingRoomPricing.objects.get(room_type=boarding_room_type)
-                            
+                            boarding_pricing = BoardingServicePricing.objects.get(room_type=boarding_room_type)
+
                             pricing_info = {
                                 'duration': boarding_pricing.duration,
                                 'duration_unit': boarding_pricing.duration_unit,
@@ -202,8 +202,8 @@ class StoreInfoViewSet(viewsets.ModelViewSet):
                                 'overtime_price': boarding_pricing.overtime_rate,
                                 'overtime_charging': boarding_pricing.overtime_charging
                             }
-                            
-                        except BoardingRoomPricing.DoesNotExist:
+
+                        except BoardingServicePricing.DoesNotExist:
                             pricing_info = None
                         
                         room_type_data = {
@@ -215,7 +215,7 @@ class StoreInfoViewSet(viewsets.ModelViewSet):
                             'pricing_info': pricing_info
                         }
 
-                    except BoardingRoomType.DoesNotExist:
+                    except BoardingService.DoesNotExist:
                         room_type_data = None
                     
                     boarding_data.append({
@@ -834,13 +834,13 @@ class BoardingRoomInfoViewSet(viewsets.ModelViewSet):
             
             for boarding_service in boarding_services:
                 try:
-                    room_type = BoardingRoomType.objects.get(
+                    room_type = BoardingService.objects.get(
                         boarding_service=boarding_service,
                         species=pet_species
                     )
                     
                     try:
-                        room_pricing = BoardingRoomPricing.objects.get(room_type=room_type)
+                        room_pricing = BoardingServicePricing.objects.get(room_type=room_type)
                         pricing_info = {
                             'duration': room_pricing.duration,
                             'duration_unit': room_pricing.duration_unit,
@@ -848,7 +848,7 @@ class BoardingRoomInfoViewSet(viewsets.ModelViewSet):
                             'overtime_rate': room_pricing.overtime_rate,
                             'overtime_charging': room_pricing.overtime_charging
                         }
-                    except BoardingRoomPricing.DoesNotExist:
+                    except BoardingServicePricing.DoesNotExist:
                         pricing_info = None
                     
                     # combine room type data
@@ -861,8 +861,8 @@ class BoardingRoomInfoViewSet(viewsets.ModelViewSet):
                         'pricing_info': pricing_info
                     }
                     room_types_data.append(room_type_data)
-                    
-                except BoardingRoomType.DoesNotExist:
+
+                except BoardingService.DoesNotExist:
                     continue
             
             if not room_types_data:
@@ -955,8 +955,8 @@ class BoardingCalculationViewSet(viewsets.ModelViewSet):
                     room_type_filters['species'] = pet_species
                 
                 try:
-                    boarding_room_type = BoardingRoomType.objects.get(**room_type_filters)
-                    room_pricings = BoardingRoomPricing.objects.filter(room_type=boarding_room_type)
+                    boarding_service = BoardingService.objects.get(**room_type_filters)
+                    room_pricings = BoardingServicePricing.objects.filter(room_type=boarding_service)
                     
                     if not room_pricings.exists():
                         return Response(
@@ -984,15 +984,15 @@ class BoardingCalculationViewSet(viewsets.ModelViewSet):
                             service_detail['overtime_price'] = room_pricing.overtime_rate
                         
                         service_details.append(service_detail)
-                        
-                except BoardingRoomType.DoesNotExist:
+
+                except BoardingService.DoesNotExist:
                     continue
 
-                except BoardingRoomType.MultipleObjectsReturned:
+                except BoardingService.MultipleObjectsReturned:
                     # 如果找到多筆資料，表示資料設計有問題，但仍然處理第一筆
-                    boarding_room_type = BoardingRoomType.objects.filter(**room_type_filters).first()
-                    room_pricings = BoardingRoomPricing.objects.filter(room_type=boarding_room_type)
-                    
+                    boarding_service = BoardingService.objects.filter(**room_type_filters).first()
+                    room_pricings = BoardingServicePricing.objects.filter(room_type=boarding_service)
+
                     if room_pricings.exists():
                         for room_pricing in room_pricings:
                             duration_in_days = room_pricing.duration
@@ -1084,12 +1084,12 @@ class BoardingCalculationViewSet(viewsets.ModelViewSet):
                 {'error': '住宿服務不存在'}, 
                 status=status.HTTP_404_NOT_FOUND
             )
-        except BoardingRoomType.DoesNotExist:
+        except BoardingService.DoesNotExist:
             return Response(
                 {'error': '房間類型不存在'}, 
                 status=status.HTTP_404_NOT_FOUND
             )
-        except BoardingRoomPricing.DoesNotExist:
+        except BoardingServicePricing.DoesNotExist:
             return Response(
                 {'error': '房間價格資訊不存在'}, 
                 status=status.HTTP_404_NOT_FOUND
@@ -1208,12 +1208,12 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
                 room_type_obj = None
                 for boarding_service in boarding_services:
                     try:
-                        room_type_obj = BoardingRoomType.objects.get(
+                        room_type_obj = BoardingService.objects.get(
                             boarding_service=boarding_service,
                             room_type=room_type
                         )
                         break
-                    except BoardingRoomType.DoesNotExist:
+                    except BoardingService.DoesNotExist:
                         continue
                 
                 if not room_type_obj:
@@ -1367,12 +1367,12 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
                 room_type_obj = None
                 for boarding_service in boarding_services:
                     try:
-                        room_type_obj = BoardingRoomType.objects.get(
+                        room_type_obj = BoardingService.objects.get(
                             boarding_service=boarding_service,
                             room_type=room_type
                         )
                         break
-                    except BoardingRoomType.DoesNotExist:
+                    except BoardingService.DoesNotExist:
                         continue
                 
                 if not room_type_obj:

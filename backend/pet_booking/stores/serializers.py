@@ -1,6 +1,17 @@
+# stores/serializers.py
 from rest_framework import serializers
 from .models import Store, StoreImage, Post
 from pet_booking.users.models import User
+
+class StoreRegisterSendCodeSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+    email = serializers.EmailField()
+    phone = serializers.CharField()
+
+class StoreRegisterConfirmCodeSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    code = serializers.CharField()
 
 # 店家資訊圖片集
 class StoreImageSerializer(serializers.ModelSerializer):

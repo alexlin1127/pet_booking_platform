@@ -1,8 +1,22 @@
+# customers/serializers.py
 from rest_framework import serializers
-from pet_booking.users.models import User
+# from pet_booking.users.models import User
 from pet_booking.stores.models import Store
 from .models import CustomersProfile, LikeStore, Pet
 from pet_booking.stores.serializers import StoreSerializer
+
+class RegisterSendCodeSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+    email = serializers.EmailField()
+    phone = serializers.CharField()
+    full_name = serializers.CharField()
+
+class RegisterConfirmCodeSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    code = serializers.CharField()
+
+# -------------------------------------------------------------
 
 class CustomersProfileSerializer(serializers.ModelSerializer):
     user_id = serializers.SlugRelatedField(
