@@ -126,7 +126,11 @@ class Orders(models.Model):
     )
 
     total_price = models.IntegerField()
-
+    status = models.CharField(
+        max_length=20,
+        default='confirmed'
+        )
+    blacklist = models.BooleanField()
     class Meta:
         db_table = 'orders'
 
