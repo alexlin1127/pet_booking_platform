@@ -49,8 +49,15 @@ router.register(r'boarding/calculation', BoardingCalculationViewSet, basename='b
 router.register(r'boarding/reservation', BoardingReservationViewSet, basename='boarding-reservation')
 
 # Reservation management endpoints
-router.register(r'grooming/info', GroomingReservationInfoViewSet, basename='grooming-reservation-info')
-router.register(r'grooming/management', GroomingReservationManagementViewSet, basename='grooming-reservation-management')
+router.register(r'reservations/grooming/today', GroomingReservationInfoViewSet, basename='today-reservations')
+router.register(r'reservations/grooming/notes', StoreNoteUpdateViewSet, basename='reservation-notes')
+router.register(r'reservations/grooming/actions', GroomingReservationManagementViewSet, basename='reservation-actions')
+
+# Reservation listing and details endpoints
+router.register(r'reservations/grooming/pending', PendingReservationViewSet, basename='pending-reservations')
+router.register(r'reservations/grooming/upcoming', UpcomingReservationViewSet, basename='upcoming-reservations')
+router.register(r'reservations/grooming/overview', AllReservationsViewSet, basename='reservations-overview')
+router.register(r'reservations/grooming/details', ReservationDetailsViewSet, basename='reservation-details')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
