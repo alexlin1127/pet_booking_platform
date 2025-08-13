@@ -264,7 +264,7 @@ class GroomingReservationManagementViewSet(viewsets.ViewSet):
                 }, status=status.HTTP_400_BAD_REQUEST)
             
             order_data = {
-                'reservation_grooming': reservation.id,
+                'reservation_grooming': reservation_id,
                 'user_id': user_id,
                 'total_price': reservation.total_price,
                 'status': 'completed',
