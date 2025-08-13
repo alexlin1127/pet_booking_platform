@@ -18,7 +18,7 @@ class ReservationGrooming(models.Model):
     pet_type = models.CharField(max_length=10)
     pet_breed = models.CharField(max_length=10)
     pet_size = models.CharField(max_length=10)
-    pick_up_service = models.BooleanField()
+    pick_up_service = models.BooleanField(default=False)
     reservation_time = models.DateTimeField()
     customer_note = models.TextField(blank=True)
     store_note = models.TextField(blank=True)
@@ -59,13 +59,15 @@ class GroomingSchedules(models.Model):
 
 class ReservationBoarding(models.Model):
     reservation_id = models.CharField(max_length=20, unique=True)
-    store_name = models.CharField(max_length=50, )
-    user_name = models.CharField(max_length=20, )
-    user_phone = models.CharField(max_length=15, )
-    pet_name = models.CharField(max_length=10, )
-    room_type = models.CharField(max_length=20, )
+    store_name = models.CharField(max_length=50)
+    user_name = models.CharField(max_length=20)
+    user_phone = models.CharField(max_length=15)
+    pet_name = models.CharField(max_length=10)
+    room_type = models.CharField(max_length=20)
     checkin_date = models.DateTimeField()
     checkout_date = models.DateTimeField()
+    pick_up_service = models.BooleanField(default=False)
+    boarding_durations = models.IntegerField()
     customer_note = models.TextField(blank=True)
     store_note = models.TextField(blank=True)
     status = models.CharField(
@@ -73,6 +75,7 @@ class ReservationBoarding(models.Model):
         choices=STATUS_CHOICES,
         default='pending'
     )
+    total_price = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -130,7 +133,7 @@ class Orders(models.Model):
         max_length=20,
         default='confirmed'
         )
-    blacklist = models.BooleanField()
+    blacklist = models.BooleanField(default=False)
     class Meta:
         db_table = 'orders'
 
