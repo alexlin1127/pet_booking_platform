@@ -90,4 +90,16 @@
   .service-page .vertical-card.service-card .card-icon {
     display: none !important;
   }
+  /* Tag 容器：橫向排列 + 可換行 + 取消清單預設 */
+  .service-page .service-tags {
+    @apply flex flex-wrap  gap-2 mt-2 p-0 m-0 list-none justify-start;
+  }
+
+  /* 單顆 Tag（樣式同你原本 service-tag，但保證 inline-flex） */
+  .service-page .service-tag {
+    @apply inline-flex items-center text-xs leading-4 px-2 py-0.5
+           rounded border border-[#d8c9b8] text-[#5f4b3a] bg-[#f9f3ed];
+    /* 如果內容很長想裁斷再顯示省略，可開這行 */
+    /* @apply truncate max-w-full; */
+  }
 }
