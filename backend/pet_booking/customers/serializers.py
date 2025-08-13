@@ -10,6 +10,7 @@ class RegisterSendCodeSerializer(serializers.Serializer):
     password = serializers.CharField()
     email = serializers.EmailField()
     phone = serializers.CharField()
+    full_name = serializers.CharField()
 
 class RegisterConfirmCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
