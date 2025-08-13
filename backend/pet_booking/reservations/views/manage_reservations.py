@@ -19,7 +19,7 @@ from pet_booking.customers.models import CustomersProfile
 
 class ReservationPagination(PageNumberPagination):
     """自定義分頁類別"""
-    page_size = 5  # 每頁顯示10筆資料
+    page_size = 5  # 每頁顯示5筆資料
     page_size_query_param = 'page_size'  # 允許前端設定每頁筆數
     max_page_size = 50  # 最大每頁筆數限制
 
@@ -199,6 +199,130 @@ class GroomingReservationManagementViewSet(viewsets.ModelViewSet):
             'confirmed_count': confirmed_count,
         }, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['get'], url_path='pending-reservations')
+    def get_pending_reservations(self, request):
+        '''取得待審核預約資料（支援分頁）'''
+        store_id = request.query_params.get('store_id')
+
+        if not store_id:
+            return Response({
+                'error': 'store_id is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        store = get_object_or_404(Store, id=store_id)
+        store_name = store.store_name
+
+        # 取得待審核預約資料
+        pending_reservations = ReservationGrooming.objects.filter(
+            store_name=store_name,
+            status='pending'
+        ).order_by('-created_at')
+
+        # 使用分頁
+        page = self.paginate_queryset(pending_reservations)
+        if page is not None:
+            # 序列化分頁資料
+            serialized_data = []
+            for reservation in page:
+                serialized_data.append({
+                    'reservation_id': reservation.reservation_id,
+                    'user_name': reservation.user_name,
+                    'user_phone': reservation.user_phone,
+                    'grooming_services_name': reservation.grooming_services_name,
+                    'pet_name': reservation.pet_name,
+                    'pet_type': reservation.pet_type,
+                    'pet_breed': reservation.pet_breed,
+                    'pet_size': reservation.pet_size,
+                    'pick_up_service': reservation.pick_up_service,
+                    'reservation_time': reservation.reservation_time,
+                    'customer_note': reservation.customer_note,
+                    'store_note': reservation.store_note,
+                    'total_price': reservation.total_price,
+                    'grooming_duration': reservation.grooming_period,
+                    'status': reservation.status,
+                    'created_at': reservation.created_at
+                })
+            
+            return self.get_paginated_response({
+                'store_name': store_name,
+                'reservations': serialized_data,
+                'total_count': pending_reservations.count()
+            })
+
+        # 如果沒有分頁，回傳所有資料
+        return Response({
+            'store_name': store_name,
+            'reservations': list(pending_reservations.values()),
+            'total_count': pending_reservations.count()
+        }, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path='confirmed-reservations')
+    def get_confirmed_reservations(self, request):
+        '''取得近期預約資料（支援分頁）'''
+        store_id = request.query_params.get('store_id')
+
+        if not store_id:
+            return Response({
+                'error': 'store_id is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        store = get_object_or_404(Store, id=store_id)
+        store_name = store.store_name
+
+        # 取得已確認預約資料
+        confirmed_reservations = ReservationGrooming.objects.filter(
+            store_name=store_name,
+            status='confirmed'
+        ).order_by('reservation_time')
+
+        # 使用分頁
+        page = self.paginate_queryset(confirmed_reservations)
+        if page is not None:
+            # 處理時間資料並序列化
+            serialized_data = []
+            for reservation in page:
+                reservation_datetime = reservation.reservation_time
+                reservation_date = reservation_datetime.date()
+                reservation_start_time = reservation_datetime.time()
+                
+                # 計算預約結束時間
+                start_datetime = reservation_datetime
+                end_datetime = start_datetime + timedelta(minutes=reservation.grooming_period)
+                reservation_end_time = end_datetime.time()
+                
+                serialized_data.append({
+                    'reservation_id': reservation.reservation_id,
+                    'user_name': reservation.user_name,
+                    'user_phone': reservation.user_phone,
+                    'grooming_services_name': reservation.grooming_services_name,
+                    'pet_name': reservation.pet_name,
+                    'pet_type': reservation.pet_type,
+                    'pet_breed': reservation.pet_breed,
+                    'pet_size': reservation.pet_size,
+                    'pick_up_service': reservation.pick_up_service,
+                    'reservation_date': reservation_date,
+                    'reservation_start_time': reservation_start_time,
+                    'reservation_end_time': reservation_end_time,
+                    'customer_note': reservation.customer_note,
+                    'store_note': reservation.store_note,
+                    'total_price': reservation.total_price,
+                    'grooming_duration': reservation.grooming_period,
+                    'status': reservation.status,
+                })
+            
+            return self.get_paginated_response({
+                'store_name': store_name,
+                'reservations': serialized_data,
+                'total_count': confirmed_reservations.count()
+            })
+
+        # 如果沒有分頁，回傳所有資料
+        return Response({
+            'store_name': store_name,
+            'reservations': [],
+            'total_count': confirmed_reservations.count()
+        }, status=status.HTTP_200_OK)
+
     @action(detail=False, methods=['patch'], url_path='confirm-reservation')
     def confirm_reservation(self, request):
         '''確認預約：將 pending 狀態改為 confirmed'''
@@ -373,7 +497,7 @@ class GroomingReservationManagementViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='reservation-details')
     def get_reservation_details(self, request):
         '''取得預約詳情：根據 reservation_id 取得 confirmed 預約 + 該客戶在該店家的所有 finished 預約'''
-        reservation_id = request.data.get('reservation_id')
+        reservation_id = request.query_params.get('reservation_id')
         
         if not reservation_id:
             return Response({

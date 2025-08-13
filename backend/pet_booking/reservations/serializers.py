@@ -9,6 +9,18 @@ class ReservationGroomingSerializer(serializers.ModelSerializer):
         model = ReservationGrooming
         fields = '__all__'
 
+class StoreNoteUpdateSerializer(serializers.Serializer):
+    reservation_id = serializers.CharField(max_length=20, required=True)
+    store_note = serializers.CharField(max_length=1000, required=True, allow_blank=True)
+
+    def validate_reservation_id(self, value):
+        """驗證 reservation_id 是否存在"""
+        try:
+            ReservationGrooming.objects.get(reservation_id=value)
+        except ReservationGrooming.DoesNotExist:
+            raise serializers.ValidationError("Reservation not found")
+        return value
+
 class ReservationBoardingSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReservationBoarding

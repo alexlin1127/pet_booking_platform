@@ -14,7 +14,8 @@ from pet_booking.users.views import *
 from pet_booking.customers.views import *
 from pet_booking.stores.views import *
 from pet_booking.services.views import *
-from pet_booking.reservations.views import *
+from pet_booking.reservations.views.create_reservations import *
+from pet_booking.reservations.views.manage_reservations import *
 
 router = DefaultRouter(trailing_slash=False)
 
@@ -46,6 +47,10 @@ router.register(r'grooming/reservation', GroomingReservationViewSet, basename='g
 router.register(r'boarding/room', BoardingRoomInfoViewSet, basename='boarding-room-info')
 router.register(r'boarding/calculation', BoardingCalculationViewSet, basename='boarding-calculation')
 router.register(r'boarding/reservation', BoardingReservationViewSet, basename='boarding-reservation')
+
+# Reservation management endpoints
+router.register(r'grooming/info', GroomingReservationInfoViewSet, basename='grooming-reservation-info')
+router.register(r'grooming/management', GroomingReservationManagementViewSet, basename='grooming-reservation-management')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
