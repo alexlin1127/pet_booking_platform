@@ -36,6 +36,7 @@ import OpenService from "../pages/Stores/OpenService.vue";
 import ServicesManage from "../pages/Stores/ServicesManage.vue";
 import NewsView from "../pages/Customers/NewsView.vue";
 import ServicesList from "../pages/Customers/ServicesList.vue";
+import StoresList from "../pages/Customers/StoresList.vue";
 
 
 
@@ -90,6 +91,11 @@ const routes = [
     {
         path: "/servicelist",
         component: ServicesList,
+        meta: { sidebar: false }
+    },
+    {
+        path: '/stores/:type(grooming|lodging)',
+        component: StoresList,
         meta: { sidebar: false }
     },
     // 商家頁面路由
