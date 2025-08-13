@@ -72,7 +72,7 @@ const handleCardClick = (event) => {
       'clickable': clickable,
       'has-button': hasButton
     }"
-    @click="clickable ? handleCardClick : null"
+    @click="clickable&& !hasButton && handleCardClick($event)"
   >
     <!-- 左側圖片區域 -->
     <div class="card-image">

@@ -25,7 +25,7 @@ const open = (item) => {
 
 const handleOpen = (item) => {
   console.log('[Card click] id=', item.id)   // <— 應該會看到
-  router.push(`/news/view/${item.id}`)
+  router.push({ path: `/news/view/${item.id}` })
 }
 </script>
 
@@ -57,13 +57,13 @@ const handleOpen = (item) => {
         :key="item.id"
         type="horizontal"
         :clickable="true"
-        class="news-card"
+        class="news-card  card--service-look"
         @click="handleOpen(item)"
       >
         <!-- 左側圖片 -->
         <template #image>
           <img
-            :src="item.image"
+            :src="item.imgSrc"
             :alt="item.title"
             class="h-full w-full object-cover"
             loading="lazy"
@@ -111,4 +111,5 @@ const handleOpen = (item) => {
   min-height: calc(100vh - 80px);
   padding-top: 80px; /* 導航欄高度 */
 }
+
 </style>

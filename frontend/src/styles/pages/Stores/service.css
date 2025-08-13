@@ -2,90 +2,92 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* ================= 服務頁面樣式 ================= */
+
 @layer components {
-  /* 頁面框架 */
-
-  .service-page { @apply max-w-5xl mx-auto px-6 py-6; }
-  .service-header { @apply flex items-center justify-between mb-6; }
-  .service-title-page { @apply text-3xl font-bold text-gray-800; }
-
-  /* 單張卡片外觀：在 card.css 的 vertical-card 基礎上補充 */
-  .service-card { @apply border border-[#d8c9b8] bg-white; }
-
-  .service-body { @apply space-y-3; }
-
-  /* .service-item-title { @apply text-lg font-semibold text-gray-800; } */
-  .service-price { @apply ml-3 text-sm font-medium text-gray-700; }
-
-  .service-desc { @apply text-sm leading-6 text-gray-700; }
-
-  .service-bullets { @apply list-disc pl-5 text-sm text-gray-700; }
-  .service-bullets li { @apply mb-1; }
-
-  .service-meta { @apply mt-2 space-y-2; }
-  .service-duration { @apply text-xs text-gray-500; }
-
-  /* .service-tags { @apply flex  gap-2; } */
-  .service-tag {
-    @apply inline-block text-xs px-2 py-0.5 rounded border border-[#d8c9b8] text-[#5f4b3a] bg-[#f9f3ed];
+  /* ── 服務頁面專屬（不外溢） ───────────────────── */
+  .service-page {
+    @apply max-w-5xl mx-auto px-6 py-6;
   }
-
-  .service-actions { @apply mt-4 flex justify-center gap-6; }
-
-  /* 按鈕（米色系） */
-  .svc-btn { @apply px-5 py-2 rounded-lg text-sm font-medium w-40 text-center; }
-  .svc-btn-outline {
+  .service-page .service-header {
+    @apply flex items-center justify-between mb-6;
+  }
+  .service-page .service-title-page {
+    @apply text-3xl font-bold text-gray-800;
+  }
+  .service-page .service-body {
+    @apply space-y-3;
+  }
+  .service-page .service-price {
+    @apply ml-3 text-sm font-medium text-gray-700;
+  }
+  .service-page .service-desc {
+    @apply text-sm leading-6 text-gray-700;
+  }
+  .service-page .service-bullets {
+    @apply list-disc pl-5 text-sm text-gray-700;
+  }
+  .service-page .service-bullets li {
+    @apply mb-1;
+  }
+  .service-page .service-meta {
+    @apply mt-2 space-y-2;
+  }
+  .service-page .service-duration {
+    @apply text-xs text-gray-500;
+  }
+  .service-page .service-actions {
+    @apply mt-4 flex justify-center gap-6;
+  }
+  .service-page .svc-btn {
+    @apply px-5 py-2 rounded-lg text-sm font-medium w-40 text-center;
+  }
+  .service-page .svc-btn-outline {
     @apply border border-[#c9b6a1] text-[#5f4b3a] bg-white hover:bg-[#f6eee6];
   }
-  .svc-btn-solid {
+  .service-page .svc-btn-solid {
     @apply bg-[#5f4b3a] text-white hover:brightness-110;
   }
-  .svc-btn-primary {
+  .service-page .svc-btn-primary {
     @apply bg-[#f3e6d9] border border-[#d8c9b8] text-[#5f4b3a] rounded-lg px-4 py-2 hover:brightness-95;
   }
- .vertical-card.service-card .card-title{
-  @apply text-left;
-}
-.vertical-card.service-card .service-tags{
-  @apply flex flex-wrap justify-start;
-
-}
-.vertical-card.service-card .card-icon {
-    display: none !important;
-  }
-/* select {
-  text-align: left;
-  text-align-last: left; 
-} */
-.select-filter {
+  .service-page .select-filter {
     @apply border border-[#d8c9b8] rounded pl-3 pr-20 py-1 text-sm text-gray-800 bg-white appearance-none;
     text-align: left;
-    text-align-last: left;       /* Chrome/Edge */
-    -moz-text-align-last: left;  /* Firefox */
+    text-align-last: left;
+    -moz-text-align-last: left;
   }
-  .select-filter option {
+  .service-page .select-filter option {
     text-align: left;
   }
-  /* 讓包含 \n 的字串能換行顯示（例如 bullets） */
-.modal-value { white-space: pre-line; }
-
-.modal-header {
-  @apply flex justify-center;
-}
-
-.modal-title-text {
-  @apply text-center w-full text-3xl font-bold text-gray-800;
-}
-.modal-overlay .modal-content .modal-buttons {
+  .service-page .modal-value {
+    white-space: pre-line;
+  }
+  .service-page .modal-header {
+    @apply flex justify-center;
+  }
+  .service-page .modal-title-text {
+    @apply text-center w-full text-3xl font-bold text-gray-800;
+  }
+  .service-page .modal-overlay .modal-content .modal-buttons {
     @apply flex justify-center gap-6;
   }
-
-  /* 只影響 Modal 內的按鈕尺寸，不改動全域 .svc-btn 樣式 */
-  .modal-overlay .modal-content .modal-buttons .svc-btn {
+  .service-page .modal-overlay .modal-content .modal-buttons .svc-btn {
     @apply !w-auto flex-none inline-flex items-center justify-center px-14;
-    /* !w-auto 覆蓋別處的固定寬 (e.g. w-40)
-       flex-none 防止被撐滿；px-14 = 左右各 3.5rem */
   }
 
+  /* ── 可重用的「卡片外觀修正」：給其他頁也能用 ─────────────── */
+  .card--service-look {
+    @apply border border-[#d8c9b8] bg-white;
+  }
+  .card--service-look .card-title {
+    @apply text-left;
+  }
+  .card--service-look .service-tags {
+    @apply flex flex-wrap justify-start;
+  }
+
+  /* 若你在服務頁會把 icon 關掉，但 News 需要顯示，就別放在 card--service-look */
+  .service-page .vertical-card.service-card .card-icon {
+    display: none !important;
+  }
 }

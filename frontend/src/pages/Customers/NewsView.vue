@@ -1,66 +1,57 @@
 <script setup>
-// import { newsreview } from '../../data/postreview';
-import { ref, onMounted } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import {  newsItems } from '@/data/news.js'
+import { newsItems } from '@/data/news.js'
 
 const route = useRoute()
 const router = useRouter()
-// 找對應文章
-const title = ref('')
-const content = ref([])
-const imgSrc = ref(newsItems.imgSrc)
 
+// 1) 取得路由參數 id（字串化）
+const postId = computed(() => String(route.params.id))
 
+// 2) 找到對應文章（computed）
+const article = computed(() =>
+  newsItems.find(n => String(n.id) === postId.value)
+)
 
-// const show = ref(false)
-const infoRows = ref([])
-const postId = String(route.params.id) // ✅ 轉成字串
-const article = newsItems.find(n => String(n.id) === postId)
-// 找不到就回列表
-if (!article.value) {
-  console.warn('找不到文章 id =', postId.value)
-  router.replace('/news')
-}
-/** 初始化：優先 /stores/Posts/PostReview/:id，其次相容 query */
-// onMounted(() => {
+// 3) 將需要的欄位「投影」成 computed，模板直接吃
+const title   = computed(() => article.value?.title   ?? '')
+const imgSrc  = computed(() => article.value?.imgSrc  ?? '')
+const content = computed(() => article.value?.content ?? [])
+// const store   = computed(() => article.value?.store   ?? '')
+// const date    = computed(() => article.value?.date    ?? '')
 
-//   article.value = newsreview.find(n => n.id === postId)
-// })
- 
-    // ✅ 改：直接用 article 的資料，不從 query 取
-  title.value = article.title
-  content.value = article.content
-  imgSrc.value = article.imgSrc
+// 4) 找不到就回列表（用 watchEffect 保證在值變更時也會反應）
+watchEffect(() => {
+  if (!article.value) {
+    console.warn('找不到文章 id =', postId.value)
+    router.replace('/news')
+  }
+})
 
-  infoRows.value = [
-    ['編號', article.id],
-    ['店家名稱', article.store],
-    ['標題', article.title]
-  ]
-
-
-
-
-/** 返回（避免回到同頁，建議回列表或上一頁） */
-const goBack = () => router.push('/news') // 或 router.back()
+// 返回
+const goBack = () => router.push('/news')
 </script>
 
 <template>
-  <div class="page-layout">
+  <div class="page-layout" v-if="article">
     <main class="page-main">
-      <!-- 新增：圖片上方的按鈕列 -->
-      <img :src="imgSrc" alt="封面圖" class="article-img" />
+      <img :src="imgSrc" :alt="title" class="article-img max-h-[500px]" />
       <h1 class="article-title">{{ title }}</h1>
+      <p class="text-sm text-gray-500 mb-4">
+        {{ store }} · {{ date }}
+      </p>
 
       <div class="article-content">
         <p v-for="(para, idx) in content" :key="idx">{{ para }}</p>
       </div>
-        <div class="flex justify-center gap-3 mb-2">
+
+      <div class="flex justify-center gap-3 mt-6">
         <button class="btn-back" @click="goBack">返回</button>
       </div>
     </main>
   </div>
-
 </template>
-<style></style>
+
+<style scoped></style>
+ 
