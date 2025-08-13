@@ -16,8 +16,8 @@ class CustomersProfile(models.Model):
     user_id = models.ForeignKey('users.User', to_field='user_id', on_delete=models.CASCADE, db_index=True, related_name='customersProfiles')
     full_name = models.CharField(max_length=255, null=False, blank=False)
     gender = models.CharField(max_length=6, choices=Gender.choices, null=True, blank=True)
-    phone = models.CharField(max_length=20, null=True, blank=True)
-    email = models.EmailField(null=False, blank=False)
+    phone = models.CharField(max_length=20, null=True, blank=True, unique=True)
+    email = models.EmailField(null=False, blank=False, unique=True)
     address = models.CharField(max_length=512, null=True, blank=True)
 
     class Meta:
