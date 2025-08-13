@@ -1,10 +1,11 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import '@/styles/pages/Stores/service.css'
 import { useRouter } from 'vue-router'
 import Card from '@/components/UI/Card.vue'
 import Switch from '@/components/UI/Switch.vue'
 import { services as staticServices } from '@/data/service.js' //避免和響應式變數撞名
+import Pagination from '@/components/common/Pagination.vue'
 
 // 響應式服務清單（用假資料做副本，刪除時不會影響原檔）
 const services = ref([...staticServices]) // ⬅️ 新增
@@ -17,7 +18,8 @@ const tagOptions = ['全部', '短毛', '長毛', '犬', '貓'] // 依你的資�
 const selectedTag = ref('全部')
 
 const router = useRouter()
-
+const pageSize = 2                                 // 一頁 2 張
+const currentPage = ref(1)                         // 目前頁碼（從 1 開始）
 
 // 過濾服務清單
 const filteredServices = computed(() => {
@@ -33,23 +35,30 @@ const order = (svc) => {
  router.push({ path, query: { id: svc.id, from: 'services' } })
 }
 
+// ✅ 總頁數
+const totalPages = computed(() => {
+  const len = filteredServices.value.length
+  return len === 0 ? 1 : Math.ceil(len / pageSize)
+})
 
+// ✅ 目前頁的資料（切片）
+const pagedServices = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+  return filteredServices.value.slice(start, start + pageSize)
+})
 
-/* ⬇⬇⬇ 新增：把服務物件轉成 ModalBox 需要的 infoRows 二維陣列 ⬇⬇⬇ */
-const buildInfoRows = (svc) => {
-  if (!svc) return []
-  const bullets = (svc.bullets ?? []).map(b => `• ${b}`).join('\n') // 用換行與項目符號
-  const tags    = (svc.tags ?? []).join('、')
-  return [
-    ['項目', svc.title],
-    ['價格', `NT$ ${svc.price}`],
-    ['說明', svc.description],
-    ['注意事項', bullets],
-    ['服務時間', svc.duration],
-    ['標籤', tags],
-  ]
+// ✅ 切換分頁（配合 <Pagination /> 的 @page-change）
+const handlePageChange = (page) => {
+  // 防呆：限制頁碼範圍
+  const p = Math.min(Math.max(1, Number(page) || 1), totalPages.value)
+  currentPage.value = p
 }
-/* ⬆⬆⬆ 新增：把服務物件轉成 ModalBox 需要的 infoRows 二維陣列 ⬆⬆⬆ */
+
+// ✅ 當切換「美容/住宿」或「標籤」時，回到第 1 頁
+watch([isGrooming, selectedTag], () => {
+  currentPage.value = 1
+})
+
 // 返回
 const goBack = () => router.push('/news')
 
@@ -78,7 +87,7 @@ const goBack = () => router.push('/news')
     
     <section class="space-y-10">
       <Card
-        v-for="s in filteredServices"
+        v-for="s in pagedServices"
         :key="s.id"
         type="vertical"
         :hasButton="true"
@@ -119,5 +128,10 @@ const goBack = () => router.push('/news')
         </template>
       </Card>
     </section>
+      <Pagination
+    :current-page="currentPage"
+    :total-pages="totalPages"
+    @page-change="handlePageChange"
+  />
   </div>
 </template>
