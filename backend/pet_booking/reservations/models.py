@@ -1,5 +1,13 @@
 from django.db import models
 
+
+STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+        ('finished', 'Finished'),
+    ]
+
 class ReservationGrooming(models.Model):
     reservation_id = models.CharField(max_length=20, unique=True)
     store_name = models.CharField(max_length=50)
@@ -9,11 +17,18 @@ class ReservationGrooming(models.Model):
     pet_name = models.CharField(max_length=10)
     pet_type = models.CharField(max_length=10)
     pet_breed = models.CharField(max_length=10)
+    pet_size = models.CharField(max_length=10)
     pick_up_service = models.BooleanField()
     reservation_time = models.DateTimeField()
     customer_note = models.TextField(blank=True)
     store_note = models.TextField(blank=True)
-    status = models.CharField(max_length=20, default='pending')
+    total_price = models.IntegerField()
+    grooming_period = models.IntegerField()
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -53,7 +68,11 @@ class ReservationBoarding(models.Model):
     checkout_date = models.DateTimeField()
     customer_note = models.TextField(blank=True)
     store_note = models.TextField(blank=True)
-    status = models.CharField(max_length=20, default='pending')
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
