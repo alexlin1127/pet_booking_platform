@@ -75,7 +75,8 @@
   }
   /* ===== 主容器 ===== */
   .stores-dashboard {
-    @apply min-h-screen bg-gray-50 px-4 pb-4;
+    @apply min-h-screen bg-gray-50 px-4 pb-4 pt-2;
+    background-color: rgb(251, 241, 230);
   }
 
   /* ===== 頁面標題區域 ===== */
