@@ -473,8 +473,6 @@ class BoardingReservationDetailsViewSet(viewsets.ViewSet):
             checkin_date = current_reservation.checkin_date.date()
             checkout_date = current_reservation.checkout_date.date()
 
-
-
             current_reservation_data = {
                 'reservation_id': current_reservation.reservation_id,
                 'user_name': current_reservation.user_name,
