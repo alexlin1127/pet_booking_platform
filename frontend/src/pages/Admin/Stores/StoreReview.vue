@@ -87,14 +87,32 @@ function closeModal() {
   showModal.value = false;
   rejectReason.value = "";
 }
-function confirmReject() {
-  // 這裡可以串 API
-  alert("退件原因：" + rejectReason.value);
-  closeModal();
-}
-function approve() {
-  alert("核准完成！");
-}
+const confirmReject = async () => {
+  try {
+    const res = await api.patch(`/admin/stores/${storeId.value}`, {
+      status: "rechecked",
+      reject_content: rejectReason.value,
+    });
+    alert("退件原因已更新：" + rejectReason.value);
+    closeModal();
+  } catch (error) {
+    console.error("更新失敗", error);
+    alert("更新失敗，請稍後再試");
+  }
+  router.push("/admin/stores/manage");
+};
+const approve = async () => {
+  try {
+    const res = await api.patch(`/admin/stores/${storeId.value}`, {
+      status: "confirmed",
+    });
+    alert("核准完成！");
+  } catch (error) {
+    console.error("核准失敗", error);
+    alert("核准失敗，請稍後再試");
+  }
+  router.push("/admin/stores/manage");
+};
 function setService(svc) {
   router.replace({ query: { ...route.query, service: svc } });
 }
@@ -123,18 +141,23 @@ function back() {
       <!-- 基本資訊 -->
       <section>
         <div class="sr-row">
-          <span class="sr-label">店家名稱</span><span class="sr-value">{{ currentStore.store_name }}</span>
+          <span class="sr-label">店家名稱</span
+          ><span class="sr-value">{{ currentStore.store_name }}</span>
         </div>
         <div class="sr-row">
-          <span class="sr-label">負責人姓名</span><span class="sr-value">{{ currentStore.owner_name }}</span>
+          <span class="sr-label">負責人姓名</span
+          ><span class="sr-value">{{ currentStore.owner_name }}</span>
         </div>
         <div class="sr-row">
-          <span class="sr-label">店家地址</span><span class="sr-value">{{ currentStore.address.county }}{{
-            currentStore.address.district
-          }}{{ currentStore.address.detail }}</span>
+          <span class="sr-label">店家地址</span
+          ><span class="sr-value"
+            >{{ currentStore.address.county }}{{ currentStore.address.district
+            }}{{ currentStore.address.detail }}</span
+          >
         </div>
         <div class="sr-row">
-          <span class="sr-label">聯絡電話</span><span class="sr-value">{{ currentStore.phone }}</span>
+          <span class="sr-label">聯絡電話</span
+          ><span class="sr-value">{{ currentStore.phone }}</span>
         </div>
         <div class="sr-row">
           <span class="sr-label">信箱</span>
@@ -142,22 +165,26 @@ function back() {
         </div>
 
         <div class="sr-row">
-          <span class="sr-label">提供接送服務</span><span class="sr-value">{{
+          <span class="sr-label">提供接送服務</span
+          ><span class="sr-value">{{
             bullet(currentStore.pick_up_service)
           }}</span>
         </div>
         <div class="sr-row">
-          <span class="sr-label">提供美容服務</span><span class="sr-value">{{
+          <span class="sr-label">提供美容服務</span
+          ><span class="sr-value">{{
             bullet(currentStore.grooming_service)
           }}</span>
         </div>
         <div class="sr-row">
-          <span class="sr-label">提供住宿服務</span><span class="sr-value">{{
+          <span class="sr-label">提供住宿服務</span
+          ><span class="sr-value">{{
             bullet(currentStore.boarding_service)
           }}</span>
         </div>
         <div class="sr-row">
-          <span class="sr-label">同一時段允許單筆或多筆預約</span><span class="sr-value">{{
+          <span class="sr-label">同一時段允許單筆或多筆預約</span
+          ><span class="sr-value">{{
             bullet(currentStore.grooming_single_appointment)
           }}</span>
         </div>
@@ -172,10 +199,21 @@ function back() {
         <div v-for="(image, idx) in imageList" :key="idx" class="sr-image-item">
           <p class="sr-image-title">{{ image.title }}</p>
           <div class="sr-image-box">
-            <img v-if="image.url" :src="image.url" :alt="image.title" class="sr-image-img" />
+            <img
+              v-if="image.url"
+              :src="image.url"
+              :alt="image.title"
+              class="sr-image-img"
+            />
             <!-- 佔位用 -->
           </div>
         </div>
+      </div>
+
+      <!-- 退件原因 -->
+      <div v-if="currentStore.status === 'rechecked'" class="sr-reject-content">
+        <h3 class="sr-reject-title">退件原因</h3>
+        <p class="sr-reject-text">{{ currentStore.reject_content }}</p>
       </div>
 
       <!-- 底部按鈕 -->
@@ -193,7 +231,9 @@ function back() {
           </div>
           <div class="sr-modal-row">
             <div class="sr-modal-label">店家編號</div>
-            <div class="sr-modal-label">{{ currentStore.store_id || '0000' }}</div>
+            <div class="sr-modal-label">
+              {{ currentStore.store_id || "0000" }}
+            </div>
           </div>
           <div class="sr-modal-row">
             <div class="sr-modal-label">店家名稱</div>
@@ -204,9 +244,16 @@ function back() {
             <div class="sr-modal-label">{{ currentStore.owner_name }}</div>
           </div>
           <div class="sr-modal-title">退件原因</div>
-          <textarea v-model="rejectReason" placeholder="請輸入退件原因" rows="4" class="sr-modal-textarea"></textarea>
+          <textarea
+            v-model="rejectReason"
+            placeholder="請輸入退件原因"
+            rows="4"
+            class="sr-modal-textarea"
+          ></textarea>
           <div class="sr-modal-btns">
-            <button @click="closeModal" class="sr-modal-btn-outline">返回</button>
+            <button @click="closeModal" class="sr-modal-btn-outline">
+              返回
+            </button>
             <button @click="confirmReject" class="sr-modal-btn">確定</button>
           </div>
         </div>
