@@ -36,10 +36,10 @@ class IsAdminForList(BasePermission):
                 raise PermissionDenied(detail="只有系統管理者能查看所有使用者資料")
         return True
 
-class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 10              # 每頁顯示 10 筆
-    page_size_query_param = 'page_size'  # 可用 URL ?page_size=20 動態調整
-    max_page_size = 50         # 最大每頁顯示數
+# class StandardResultsSetPagination(PageNumberPagination):
+#     page_size = 10              # 每頁顯示 10 筆
+#     page_size_query_param = 'page_size'  # 可用 URL ?page_size=20 動態調整
+#     max_page_size = 50         # 最大每頁顯示數
 
 class UserViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
@@ -47,7 +47,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['role']  # 可根據需求增加欄位
-    pagination_class = StandardResultsSetPagination
+    # pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         user = self.request.user
