@@ -8,7 +8,7 @@ import Pagination from "../../../components/common/Pagination.vue"
 const route = useRoute()
 const router = useRouter()
 
-const pageSize = 4 // 每頁顯示4個
+const pageSize = 5
 const currentPage = ref(parseInt(route.params.page) || 1)
 
 // 篩選條件
@@ -259,4 +259,4 @@ const accounts = [
     </div>
 </template>
 
-<style></style>
+<style scoped src="../../../styles/pages/Admin/Accounts/manage.css"></style>

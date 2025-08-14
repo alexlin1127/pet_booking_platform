@@ -54,7 +54,6 @@ import './styles/pages/Stores/Posts/postsview.css'
 
 // 管理員頁面樣式
 import './styles/pages/Admin/admindashboard.css'
-import './styles/pages/Admin/Accounts/accmanage.css'
 import './styles/pages/Admin/Posts/postmanage.css'
 import './styles/pages/Admin/Posts/postreview.css'
 
