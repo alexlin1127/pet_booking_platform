@@ -29,11 +29,6 @@ class BoardingServiceViewSet(viewsets.ModelViewSet):
         serializer.save(store_id=store)
 
 
-
-    
-
-
-
 class GroomingServiceViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
     serializer_class = GroomingServiceSerializer

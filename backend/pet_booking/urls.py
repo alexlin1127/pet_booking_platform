@@ -14,7 +14,15 @@ from pet_booking.users.views import *
 from pet_booking.customers.views import *
 from pet_booking.stores.views import *
 from pet_booking.services.views import *
-from pet_booking.reservations.views import *
+from pet_booking.reservations.views.create_reservations import *
+from pet_booking.reservations.views.manage_grooming_reservations import *
+from pet_booking.reservations.views.manage_boarding_reservations import *
+from pet_booking.reservations.views.manage_history_reservations import *
+from pet_booking.reservations.views.manage_risk_reservations import (
+    RiskGroomingViewSet,
+    RiskBoardingViewSet,
+    RiskStoreNoteUpdateViewSet
+)
 
 router = DefaultRouter(trailing_slash=False)
 
@@ -46,6 +54,39 @@ router.register(r'grooming/reservation', GroomingReservationViewSet, basename='g
 router.register(r'boarding/room', BoardingRoomInfoViewSet, basename='boarding-room-info')
 router.register(r'boarding/calculation', BoardingCalculationViewSet, basename='boarding-calculation')
 router.register(r'boarding/reservation', BoardingReservationViewSet, basename='boarding-reservation')
+
+# Reservation management endpoints
+router.register(r'reservations/grooming/today', GroomingReservationInfoViewSet, basename='today-reservations')
+router.register(r'reservations/grooming/notes', StoreNoteUpdateViewSet, basename='reservation-notes')
+router.register(r'reservations/grooming/actions', GroomingReservationManagementViewSet, basename='reservation-actions')
+
+# Reservation listing and details endpoints
+router.register(r'reservations/grooming/pending', PendingReservationViewSet, basename='pending-reservations')
+router.register(r'reservations/grooming/upcoming', UpcomingReservationViewSet, basename='upcoming-reservations')
+router.register(r'reservations/grooming/overview', AllReservationsViewSet, basename='reservations-overview')
+router.register(r'reservations/grooming/details', ReservationDetailsViewSet, basename='reservation-details')
+
+# Boarding room availability endpoint
+router.register(r'reservations/boarding/availability', BoardingRoomAvailabilityViewSet, basename='boarding-availability')
+router.register(r'reservations/boarding/notes', BoardingStoreNoteUpdateViewSet, basename='boarding-notes')
+router.register(r'reservations/boarding/actions', BoardingReservationManagementViewSet, basename='boarding-actions')
+router.register(r'reservations/boarding/overview', BoardingAllReservationsViewSet, basename='boarding-overview')
+router.register(r'reservations/boarding/details', BoardingReservationDetailsViewSet, basename='boarding-details')
+router.register(r'reservations/boarding/pending', BoardingPendingReservationViewSet, basename='boarding-pending')
+router.register(r'reservations/boarding/upcoming', BoardingUpcomingReservationViewSet, basename='boarding-upcoming')
+router.register(r'reservations/boarding/pending-detail', BoardingPendingReservationDetailViewSet, basename='boarding-pending-detail')
+
+# History endpoints
+router.register(r'reservations/grooming/history', GroomingHistoryViewSet, basename='grooming-history')
+router.register(r'reservations/boarding/history', BoardingHistoryViewSet, basename='boarding-history')
+
+# Customer observation endpoints
+router.register(r'reservations/customer-observation', CustomerObservationViewSet, basename='customer-observation')
+
+# Risk management endpoints (blacklist customers)
+router.register(r'reservations/risk/grooming', RiskGroomingViewSet, basename='risk-grooming')
+router.register(r'reservations/risk/boarding', RiskBoardingViewSet, basename='risk-boarding')
+router.register(r'reservations/risk/notes', RiskStoreNoteUpdateViewSet, basename='risk-notes')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
