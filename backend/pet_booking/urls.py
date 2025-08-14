@@ -100,6 +100,7 @@ urlpatterns = [
     path('api/register_confirm_code', RegisterConfirmCodeAPIView.as_view(), name='register_confirm_code'),
     path('api/store/register_send_code', StoreRegisterSendCodeAPIView.as_view()),
     path('api/store/register_confirm_code', StoreRegisterConfirmCodeAPIView.as_view()),
+    path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 ]
 
 if settings.DEBUG:
