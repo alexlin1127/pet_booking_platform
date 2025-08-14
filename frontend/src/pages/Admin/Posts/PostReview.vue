@@ -1,101 +1,93 @@
 <!-- src/pages/Admin/PostReview.vue -->
 <script setup>
-import { ref, onMounted } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
-import ModalBox from '../../../components/UI/ModalBox.vue'
-// import axios from 'axios' // 若未來要打真 API
+import { ref, onMounted } from "vue";
+import { RouterLink, useRoute, useRouter } from "vue-router";
+import ModalBox from "../../../components/UI/ModalBox.vue";
+import api from "../../../api/api.js";
 
-const route = useRoute()
+const route = useRoute();
+const router = useRouter();
 
-const postId = ref('')
-const title = ref('')
-const content = ref([])
-const imgSrc = ref('https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') // 預設封面圖
+const postId = ref("");
+const title = ref("");
+const content = ref([]);
+const imgSrc = ref("");
 
-const show = ref(false)
-const infoRows = ref([])
+const show = ref(false);
+const infoRows = ref([]);
 
+const getPostDetail = async () => {
+  try {
+    const res = await api.get(`/admin/posts/${postId.value}`);
+    const post = res.data;
+    console.log("取得貼文詳細資料：", post);
+    // 更新資料
+    title.value = post.title;
+    content.value = [post.content]; // 假設 content 是單一字串，包裝成陣列以便渲染
+    imgSrc.value = post.image_url || imgSrc.value; // 如果有圖片 URL，則使用
 
-//  模擬從 API 拿資料（日後這段只要換成 axios.get()）
+    // 更新 infoRows
+    infoRows.value = [
+      ["編號", post.id],
+      ["店家名稱", post.store_name],
+      ["標題", post.title],
+    ];
+  } catch (error) {
+    console.error("無法取得貼文詳細資料：", error);
+    alert("無法取得貼文詳細資料，請稍後再試。");
+  }
+};
+
 onMounted(() => {
   // 從路由查詢參數獲取資料
-  const routePostId = route.query.id
-  const routeTitle = route.query.title
-  const routeContent = route.query.content
-  const routeStoreName = route.query.storeName
-  
-  // 如果有路由參數就使用，否則使用假資料
-  if (routePostId && routeTitle) {
-    postId.value = routePostId
-    title.value = decodeURIComponent(routeTitle)
-    
-    // 處理 content - 如果有傳遞就使用，否則使用預設內容
-    if (routeContent) {
-      try {
-        const decodedContent = decodeURIComponent(routeContent)
-        content.value = JSON.parse(decodedContent)
-      } catch {
-        content.value = [decodeURIComponent(routeContent)]
-      }
-    } else {
-      content.value = getDefaultContent()
-    }
-    
-    // 將資料轉為 modal 可用格式
-    infoRows.value = [
-      ['編號', routePostId],
-      ['店家名稱', routeStoreName ? decodeURIComponent(routeStoreName) : '毛星球寵物美容館'],
-      ['標題', decodeURIComponent(routeTitle)]
-    ]
+  const routePostId = route.query.id;
+
+  if (routePostId) {
+    postId.value = routePostId;
+    getPostDetail(); // 呼叫 API 獲取貼文詳細資料
   } else {
-    // 假資料備用
-    const res = {
-      id: '001',
-      store: '毛星球寵物美容館',
-      title: '今天的店裡超熱鬧！三位新朋友來洗香香'
-    }
-    postId.value = res.id
-    title.value = res.title
-    content.value = getDefaultContent()
-    
-    infoRows.value = [
-      ['編號', res.id],
-      ['店家名稱', res.store],
-      ['標題', res.title]
-    ]
+    alert("無法取得貼文 ID，請返回重試。");
+    router.push("/admin/posts");
   }
-})
+});
 
-// 預設內容函數，避免重複程式碼
-const getDefaultContent = () => [
-  '今天我們迎接了三位可愛的新朋友洗澡洗香香：米克斯「肉肉」、黃金獵犬組合「阿吉」與「阿豆」，還有常常來報到的哈士奇爆毛王「哈丁」！',
-  '牠們一進門就吸引不少目光，一開始都有點害羞，但在熟悉的美容師帶領與香香的洗毛小浴缸下，很快就放下不安，用呆萌、歡樂、無辜的表情征服大家。',
-  '最後的吹乾與造型，「肉肉」和「阿吉」都超配合，不只變得超帥氣，還紛紛搖尾巴向工作人員撒嬌。而哈丁雖然狂掉毛，本店美容師還是迅速處理完畢，毛量不減，帥度破表！',
-  '若你家毛孩也需要香香洗澡，或想看看更多可愛瞬間，記得追蹤我們的社群平台唷！如果想預約洗澡，可以直接透過下方按鈕快速前往預約頁！'
-]
-
-const handleButtonClick = (event) => {
-  if (event.action === 'cancel') {
-    show.value = false
-  } else if (event.action === 'confirm') {
-    const reason = event.data.textareas.reason || ''
-    console.log('收到駁回原因：', reason)
+const handleButtonClick = async (event) => {
+  if (event.action === "cancel") {
+    show.value = false;
+  } else if (event.action === "confirm") {
+    const reason = event.data.textareas.reason || "";
+    console.log("收到駁回原因：", reason);
 
     // 模擬發送駁回資料給後端
     const payload = {
-      postId: postId.value, 
-      reason: reason
-    }
+      status: "rechecked",
+      reject_content: reason,
+    };
 
-    console.log('模擬送出 API 資料：', payload)
-    // await axios.post('/api/posts/reject', payload) // 正式使用時啟用
+    console.log("模擬送出 API 資料：", payload);
+    await api.patch(`/admin/posts/${postId.value}`, payload); // 正式使用時啟用
 
-    alert('已成功駁回貼文')
-    show.value = false
+    alert("已成功駁回貼文");
+    show.value = false;
+    router.push("/admin/posts"); // 駁回後返回貼文列表
   }
-}
+};
 
+const confirmPost = async () => {
+  const payload = {
+    status: "confirmed",
+  };
+  try {
+    await api.patch(`/admin/posts/${postId.value}`, payload);
 
+    alert("已成功核准貼文");
+    show.value = false;
+    router.push("/admin/posts");
+  } catch (err) {
+    console.error("無法核准貼文：", err);
+    alert("無法核准貼文，請稍後再試。");
+  }
+};
 </script>
 
 <template>
@@ -110,9 +102,12 @@ const handleButtonClick = (event) => {
       <div class="article-buttons" v-if="route.path === '/admin/posts/review'">
         <RouterLink to="/admin/posts" class="btn-back">返回</RouterLink>
         <button class="btn-addQ" @click="show = true">加入問題件</button>
-        <button class="btn-check">核准</button>
+        <button class="btn-check" @click="confirmPost">核准</button>
       </div>
-      <div class="article-buttons" v-else-if="route.path === '/admin/posts/details'">
+      <div
+        class="article-buttons"
+        v-else-if="route.path === '/admin/posts/details'"
+      >
         <RouterLink to="/admin/posts" class="btn-back">返回</RouterLink>
       </div>
     </main>
@@ -129,20 +124,20 @@ const handleButtonClick = (event) => {
         placeholder: '請輸入退件原因',
         rows: 5,
         maxlength: 200,
-        required: true
-      }
+        required: true,
+      },
     ]"
     :buttons="[
       {
         text: '取消',
         action: 'cancel',
-        class: 'modal-btn-cancel'
+        class: 'modal-btn-cancel',
       },
       {
         text: '確認並通知店家',
         action: 'confirm',
-        class: 'modal-btn-danger'
-      }
+        class: 'modal-btn-danger',
+      },
     ]"
     @close="show = false"
     @button-click="handleButtonClick"
