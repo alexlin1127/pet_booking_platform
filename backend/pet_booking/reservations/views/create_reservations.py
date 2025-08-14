@@ -14,6 +14,7 @@ from django.db.models import QuerySet
 from ..models import GroomingSchedules, BoardingSchedules, ReservationBoarding, ReservationGrooming
 from pet_booking.services.models import GroomingService, GroomingServicePricing, BoardingService, BoardingServicePricing
 from pet_booking.stores.models import Store
+from pet_booking.coupon.models import Coupon, CouponStatus
 from ..serializers import ReservationGroomingSerializer, ReservationBoardingSerializer
 from pet_booking.customers.serializers import PetSerializer
 from pet_booking.customers.models import CustomersProfile, Pet
@@ -637,6 +638,10 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
             unavailable_time=time_slot
         )
 
+    def get_user_coupon_queryset(self, user_id: int) -> QuerySet:
+        """獲取用戶優惠券 QuerySet"""
+        return Coupon.objects.filter(user_id=user_id)
+
     def create_customer_info_dict(self, customer_profile: CustomersProfile) -> Dict:
         """創建客戶資訊字典"""
         return {
@@ -686,12 +691,14 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
 
     def create_success_response_data(self, reservation_id: str, user_name: str, reservation_date: str,
                                    reservation_time: str, selected_services: List[str], pet_name: str,
-                                   species: str, store_phone: str) -> Dict:
+                                   species: str, store_phone: str, store_id: str, 
+                                   coupon_number: Optional[str] = None) -> Dict:
         """創建成功回應資料"""
-        return {
+        response_data = {
             'success': True,
             'message': '預約建立成功',
             'reservation_id': reservation_id,
+            'store_id': store_id,
             'customer_name': user_name,
             'reservation_date': reservation_date,
             'reservation_time': reservation_time,
@@ -700,6 +707,14 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
             'species': species,
             'store_phone': store_phone
         }
+
+        if coupon_number:
+            response_data['coupon_number'] = coupon_number
+        
+        else:
+            response_data['coupon_number'] = '用戶未取得優惠券代碼'
+
+        return response_data
 
     def create_error_response(self, error_message: str, status_code: int) -> Response:
         """創建錯誤回應"""
@@ -791,6 +806,36 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
                 )
         return None
 
+    def check_and_process_user_coupon(self, user_id: int, reservation_id: str, store_id: str) -> Tuple[Optional[str], Optional[Response]]:
+        """檢查並處理用戶優惠券"""
+        try:
+            # 查詢用戶的優惠券
+            coupon_queryset = self.get_user_coupon_queryset(user_id)
+            coupon = coupon_queryset.first()
+            
+            if not coupon:
+                # 用戶沒有優惠券，返回None但不算錯誤
+                return None, None
+            
+            # 檢查優惠券狀態
+            if coupon.status == CouponStatus.NOT_USED:
+                # 將預約ID存入優惠券的reservation_id欄位
+                coupon.reservation_id = reservation_id
+                coupon.store_id = store_id
+                coupon.save()
+                # 返回優惠券號碼
+                return coupon.coupon_number, None
+            else:
+                # 優惠券已使用，不返回優惠券號碼
+                return '您之前預約已經使用過優惠券囉!', None
+                
+        except Exception as e:
+            error_response = self.create_error_response(
+                f'處理優惠券時發生錯誤: {str(e)}', 
+                status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+            return None, error_response
+
     @action(detail=False, methods=['post'], url_path='user_create')
     def create_reservation(self, request):
         """建立美容預約(客戶端)"""
@@ -880,7 +925,6 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
             if availability_error:
                 return availability_error
 
-            # 創建預約資料
             reservation_id = create_reservation_id(service_type)
             reservation_data = self.create_reservation_data_dict(
                 reservation_id, store_name, customer_info['user_name'], customer_info['user_phone'],
@@ -888,15 +932,19 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
                 reservation_datetime, customer_note, '', total_price, total_grooming_duration
             )
 
-            # 序列化和保存
             serializer = ReservationGroomingSerializer(data=reservation_data)
             
             if serializer.is_valid():
                 serializer.save()
 
+                coupon_number, coupon_error = self.check_and_process_user_coupon(user_id, reservation_id, store_id)
+                if coupon_error:
+                    return coupon_error
+
                 response_data = self.create_success_response_data(
                     reservation_id, customer_info['user_name'], reservation_date, reservation_time,
-                    selected_services, pet.name, pet.species, store_info['store_phone']
+                    selected_services, pet.name, pet.species, store_info['store_phone'], coupon_number,
+                    store_id
                 )
                 return Response(response_data, status=status.HTTP_201_CREATED)
             
@@ -1577,9 +1625,9 @@ class BoardingReservationManager:
     
     def create_success_response_data(self, user_name: str, checkin_datetime: datetime,
                                    checkout_datetime: datetime, boarding_duration: int,
-                                   room_type: str, store_phone: str) -> Dict:
+                                   room_type: str, store_phone: str, coupon_number: Optional[str] = None) -> Dict:
         """創建成功回應資料"""
-        return {
+        response_data = {
             'success': True,
             'message': '住宿預約建立成功',
             'user_name': user_name,
@@ -1589,6 +1637,14 @@ class BoardingReservationManager:
             'room_type': room_type,
             'store_phone': store_phone,
         }
+        
+        # 如果有優惠券，加入回應資料
+        if coupon_number:
+            response_data['coupon_number'] = coupon_number
+        else:
+            response_data['coupon_number'] = '用戶未取得優惠券代碼'
+        
+        return response_data
     
     def parse_datetime_from_strings(self, check_in_date: str, check_in_time: str,
                                   check_out_date: str, check_out_time: str) -> Tuple[datetime, datetime, int, Optional[str]]:
@@ -1646,6 +1702,31 @@ class BoardingReservationManager:
         
         return None, f'找不到房型 "{room_type}"'
     
+    def get_user_coupon_queryset(self, user_id: int) -> QuerySet:
+        """獲取用戶優惠券 QuerySet"""
+        return Coupon.objects.filter(user_id=user_id)
+    
+    def check_and_process_user_coupon(self, user_id: int, reservation_id: str, store_id: str) -> Tuple[Optional[str], Optional[str]]:
+        """檢查並處理用戶優惠券"""
+        try:
+            # 查找用戶的優惠券
+            coupon_queryset = self.get_user_coupon_queryset(user_id)
+            coupon = coupon_queryset.first()
+            
+            if coupon and coupon.status == CouponStatus.NOT_USED:
+                # 更新預約ID和店家ID
+                coupon.reservation_id = reservation_id
+                coupon.store_id = store_id
+                coupon.save()
+                
+                return coupon.coupon_number, None
+            else:
+                # 沒有可用優惠券或已使用
+                return None, None
+                
+        except Exception as e:
+            return None, f'處理優惠券時發生錯誤: {str(e)}'
+    
     def create_reservation_and_schedules(self, reservation_data: Dict, time_slots: List[datetime],
                                        store_name: str, room_type: str) -> ReservationBoarding:
         """創建預約記錄和時間表"""
@@ -1666,7 +1747,6 @@ class BoardingReservationManager:
         BoardingSchedules.objects.bulk_create(schedule_objects)
         
         return reservation
-
 
 class BoardingReservationViewSet(viewsets.ModelViewSet):
     """住宿預約管理ViewSet"""
@@ -1822,10 +1902,19 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
                 reservation_data, time_slots, request_data['store_name'], request_data['room_type']
             )
             
+            # 檢查並處理用戶優惠券
+            coupon_number, coupon_error = self.manager.check_and_process_user_coupon(
+                request_data['user_id'], reservation_id, request_data['store_id']
+            )
+            
+            if coupon_error:
+                # 如果優惠券處理有錯誤，記錄但不影響主要預約流程
+                print(f"優惠券處理警告: {coupon_error}")
+            
             # 創建成功回應
             response_data = self.manager.create_success_response_data(
                 customer_profile.full_name, checkin_datetime, checkout_datetime,
-                boarding_duration, request_data['room_type'], store.phone
+                boarding_duration, request_data['room_type'], store.phone, coupon_number
             )
             
             return Response(response_data, status=status.HTTP_201_CREATED)
