@@ -18,6 +18,7 @@ from pet_booking.reservations.models import ReservationBoarding
 from pet_booking.reservations.serializers import StoreNoteUpdateSerializer, OrdersSerializer
 from pet_booking.customers.models import CustomersProfile  
 from pet_booking.customers.models import Pet
+from pet_booking.coupon.models import Coupon, CouponStatus
 
 
 
@@ -332,7 +333,28 @@ class BoardingReservationManagementViewSet(viewsets.ViewSet):
             
             reservation.status = 'finished'
             reservation.save()
-            order_serializer.save()
+            order = order_serializer.save()
+
+            # 處理優惠券：根據 reservation_id 找到對應的優惠券並更新狀態
+            try:
+                coupon = Coupon.objects.get(reservation_id=reservation_id)
+                coupon.status = CouponStatus.USED
+                coupon.order_id = str(order.id)
+                coupon.save()
+            except Coupon.DoesNotExist:
+                pass
+            except Exception as coupon_error:
+                print(f"優惠券處理錯誤: {coupon_error}")
+
+            try:
+                store = Store.objects.get(store_name=reservation.store_name)
+                used_coupons_count = Coupon.objects.filter(
+                    store_id=store.id,
+                    status=CouponStatus.USED
+                ).count()
+                used_coupons_total_revenue = 50 * int(used_coupons_count)
+            except Store.DoesNotExist:
+                used_coupons_count = 0
 
             checkin_date = reservation.checkin_date
             checkout_date = reservation.checkout_date
@@ -352,6 +374,8 @@ class BoardingReservationManagementViewSet(viewsets.ViewSet):
                 'pet_name': reservation.pet_name,
                 'pick_up_service': reservation.pick_up_service,
                 'total_price': reservation.total_price,
+                'used_coupons_count': used_coupons_count,
+                'used_coupons_total_revenue': used_coupons_total_revenue
             }, status=status.HTTP_200_OK)
 
         except ReservationBoarding.DoesNotExist:
