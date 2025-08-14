@@ -1,41 +1,37 @@
 <script setup>
-import { RouterLink } from 'vue-router';
+import { RouterLink } from "vue-router";
 
 defineProps({
-  store: Object
+  store: Object,
 });
-
-
 </script>
 
 <template>
-  <td>{{ store.storeName }}</td>
-  <td>{{ store.owner }}</td>
+  <td>{{ store.store_name }}</td>
+  <td>{{ store.owner_name }}</td>
   <td>{{ store.phone }}</td>
-  <td>{{ store.address }}</td>
-  <td v-if="store.applystatus !=='已通過'">
-    {{ store.services }}
+  <td>
+    {{ store.address.county }}{{ store.address.district
+    }}{{ store.address.detail }}
   </td>
-  <td v-else>
-    {{ store.storestatus }}
+  <td>
+    <span v-if="store.grooming_service">美容</span>
+    <span v-if="store.grooming_service && store.boarding_service"> / </span>
+    <span v-if="store.boarding_service">住宿</span>
   </td>
-  <td>{{ store.registerDate }}</td>
-  <td v-if="store.applystatus !=='已通過'">
-    {{ store.applystatus }}
+  <td>{{ new Date(store.created_at).toLocaleDateString() }}</td>
+  <td>
+    {{
+      store.status === "pending"
+        ? "待審核"
+        : store.status === "confirmed"
+        ? "已審核"
+        : store.status
+    }}
   </td>
-  <td v-if="store.applystatus === '首次申請'">
-    <RouterLink :to="`/admin/stores/review?id=${store.id}&name=${store.storeName}`">
-      <button class="btn">審核</button>
-    </RouterLink>
-  </td>
-  <td v-else-if="store.applystatus === '補件申請'">
-    <RouterLink :to="`/admin/stores/review?id=${store.id}&name=${store.storeName}`">
-      <button class="btn">重新審核</button>
-    </RouterLink>
-  </td>
-  <td v-else>
-    <RouterLink :to="`/admin/stores/details?id=${store.id}&name=${store.storeName}`">
-      <button class="btn">店家詳情</button>
+  <td>
+    <RouterLink :to="`/admin/stores/details/${store.id}`">
+      <button class="btn">查看詳情</button>
     </RouterLink>
   </td>
 </template>
