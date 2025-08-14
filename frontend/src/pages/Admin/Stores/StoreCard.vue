@@ -30,9 +30,7 @@ defineProps({
     }}
   </td>
   <td>
-    <RouterLink
-      :to="`/admin/stores/details?id=${store.id}&name=${store.store_name}`"
-    >
+    <RouterLink :to="`/admin/stores/details/${store.id}`">
       <button class="btn">查看詳情</button>
     </RouterLink>
   </td>
