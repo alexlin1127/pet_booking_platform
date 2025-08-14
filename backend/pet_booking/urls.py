@@ -17,6 +17,12 @@ from pet_booking.services.views import *
 from pet_booking.reservations.views.create_reservations import *
 from pet_booking.reservations.views.manage_grooming_reservations import *
 from pet_booking.reservations.views.manage_boarding_reservations import *
+from pet_booking.reservations.views.manage_history_reservations import *
+from pet_booking.reservations.views.manage_risk_reservations import (
+    RiskGroomingViewSet,
+    RiskBoardingViewSet,
+    RiskStoreNoteUpdateViewSet
+)
 
 router = DefaultRouter(trailing_slash=False)
 
@@ -69,6 +75,18 @@ router.register(r'reservations/boarding/details', BoardingReservationDetailsView
 router.register(r'reservations/boarding/pending', BoardingPendingReservationViewSet, basename='boarding-pending')
 router.register(r'reservations/boarding/upcoming', BoardingUpcomingReservationViewSet, basename='boarding-upcoming')
 router.register(r'reservations/boarding/pending-detail', BoardingPendingReservationDetailViewSet, basename='boarding-pending-detail')
+
+# History endpoints
+router.register(r'reservations/grooming/history', GroomingHistoryViewSet, basename='grooming-history')
+router.register(r'reservations/boarding/history', BoardingHistoryViewSet, basename='boarding-history')
+
+# Customer observation endpoints
+router.register(r'reservations/customer-observation', CustomerObservationViewSet, basename='customer-observation')
+
+# Risk management endpoints (blacklist customers)
+router.register(r'reservations/risk/grooming', RiskGroomingViewSet, basename='risk-grooming')
+router.register(r'reservations/risk/boarding', RiskBoardingViewSet, basename='risk-boarding')
+router.register(r'reservations/risk/notes', RiskStoreNoteUpdateViewSet, basename='risk-notes')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
