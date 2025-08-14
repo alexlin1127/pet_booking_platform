@@ -112,7 +112,7 @@ const handleSubmit = async () => {
 
 <template>
     <div class="login-page">
-        <FormTemplate title="登入 / 註冊" @submit="handleSubmit">
+        <FormTemplate @submit="handleSubmit">
             <h1 class="text-4xl text-center font-bold">登入 / 註冊</h1>
             <div>
                 <div class="mb-4">
