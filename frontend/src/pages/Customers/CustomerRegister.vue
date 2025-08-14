@@ -1,5 +1,4 @@
 <script setup>
-
 import { ref, computed } from 'vue'
 import FormTemplate from '../../components/UI/FormTemplate.vue'
 
@@ -80,7 +79,7 @@ const handleSubmit = () => {
                 </div>
                 <div class="mb-4">
                     <label class="customers-register-label">Email *</label>
-                    <input type="text" class="customers-register-input" v-model="email" placeholder="請輸入您的Email">
+                    <input type="email" class="customers-register-input" v-model="email" placeholder="請輸入您的Email">
                     <p v-if="!isEmailValid && email === ''" class="customers-register-error">Email為必填</p>
                 </div>
                 <div class="mb-4">
