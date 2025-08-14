@@ -1,8 +1,20 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import api from '../../api/api.js'
 
-const role = ref("stores")
+const role = ref("admin")
+
+const getRole = async () => {
+    // 登入成功後取得腳色並導向
+    try {
+        const userRes = await api.get('/users/me');
+        role.value = userRes.data.role;
+        
+    } catch (err) {
+        alert('無法取得腳色');
+    }
+}
 
 const isOpen = ref(true)
 const isDesktop = ref(window.matchMedia('(min-width: 1024px)').matches)
@@ -16,7 +28,8 @@ function handleResize() {
 }
 
 onMounted(() => {
-    window.addEventListener('resize', handleResize)
+    window.addEventListener('resize', handleResize);
+    getRole();
 })
 onUnmounted(() => {
     window.removeEventListener('resize', handleResize)
@@ -113,7 +126,7 @@ const showStore = ref(false)
                             active-class="sidebar-link-active">待審核預約</RouterLink>
                         <RouterLink to="/stores/grooming-bookings/history" class="sidebar-link sidebar-submenu"
                             active-class="sidebar-link-active">歷史訂單紀錄</RouterLink>
-                        <RouterLink to="/stores/watchlists" class="sidebar-link sidebar-submenu"
+                        <RouterLink to="/stores/grooming/watchlists" class="sidebar-link sidebar-submenu"
                             active-class="sidebar-link-active">查看觀察名單</RouterLink>
                     </template>
                 </div>
@@ -127,7 +140,7 @@ const showStore = ref(false)
                             active-class="sidebar-link-active">待審核預約</RouterLink>
                         <RouterLink to="/stores/boarding-bookings/history" class="sidebar-link sidebar-submenu"
                             active-class="sidebar-link-active">歷史訂單紀錄</RouterLink>
-                        <RouterLink to="/stores/watchlists" class="sidebar-link sidebar-submenu"
+                        <RouterLink to="/stores/boarding/watchlists" class="sidebar-link sidebar-submenu"
                             active-class="sidebar-link-active">查看觀察名單</RouterLink>
                     </template>
                 </div>

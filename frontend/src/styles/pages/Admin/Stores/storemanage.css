@@ -2,37 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ================= Store Management ================= */
 @layer components {
     .storemanage-container {
         @apply p-4;
     }
-
     .storemanage-title {
         @apply text-4xl font-bold mb-4;
     }
-
-    .filter-buttons {
-        @apply flex items-center gap-4 pl-1 mb-6;
-    }
-
-    .storemanage-list {
-        @apply text-xl font-bold mb-0 flex justify-center items-center h-10;
-    }
-
-    .storemanage-filter-label {
-        @apply flex items-center gap-2 pl-1;
-    }
-
-    .storemanage-filter-input {
-        @apply border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer;
-    }
-
     .storemanage-table-container {
         @apply mb-4;
     }
-
-    .storemanage-search-input {
-        @apply border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-40;
+    /* Table 樣式 */
+    .storemanage-table-container table {
+        @apply w-full;
+        @apply border-separate;
+        border-spacing: 0 12px;
+    }
+    .storemanage-table-container th {
+        @apply bg-transparent font-semibold text-center py-3 px-4 text-gray-700;
+        @apply border-0;
+    }
+    /* Table 內的卡片樣式 */
+    .card-row {
+        @apply bg-white shadow-md rounded-xl;
+        @apply transition-all duration-300 ease-in-out;
+    }
+    .card-row td {
+        @apply py-6 px-4 text-center;
+        @apply border-0;
+    }
+    .card-row td:first-child {
+        @apply rounded-l-xl;
+    }
+    .card-row td:last-child {
+        @apply rounded-r-xl;
+    }
+    .card-row:hover {
+        @apply shadow-lg transform -translate-y-1;
+    }
+    .storemanage-filter-bar {
+        @apply flex items-center gap-2 mb-4;
+    }
+    .storemanage-filter-label {
+        @apply mr-2 text-gray-700;
+    }
+    .storemanage-filter-btns {
+        @apply flex gap-2;
+    }
+    .storemanage-filter-btn {
+        @apply px-4 py-1 rounded border font-semibold bg-white text-[#C7A27C] border-[#C7A27C] transition;
+    }
+    .storemanage-filter-btn.active {
+        @apply bg-[#C7A27C] text-white border-[#C7A27C];
     }
 }

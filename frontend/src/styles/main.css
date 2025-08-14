@@ -56,7 +56,8 @@
   }
 
   .content-area {
-    @apply flex-1 overflow-y-auto;
+    @apply flex-1 overflow-y-auto; 
+    background-color: rgb(251, 241, 230);
   }
 
   /* 響應式容器 */
