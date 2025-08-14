@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed,onMounted} from "vue";
 import Table from "../../../components/UI/Table.vue";
 import StoreCard from "./StoreCard.vue";
 import Pagination from "../../../components/common/Pagination.vue";
@@ -22,11 +22,24 @@ onMounted(() => {
   storeData();
 });
 
-const pageSize = 5; // 每頁顯示5個
+// 狀態對應表
+const statusOptions = [
+  { label: "首次申請", value: "pending" },
+  { label: "補件申請", value: "repending" },
+  { label: "退回補件", value: "rechecked" }
+];
+const selectedType = ref('pending');
 
+// 狀態文字動態顯示
+const statusLabel = computed(() => {
+  const found = statusOptions.find(opt => opt.value === selectedType.value);
+  return found ? found.label : "";
+});
+
+
+const pageSize = 5;
 // 第一個表格的分頁邏輯（審核中的店家）
 const currentPage1 = ref(1);
-
 // 第二個表格的分頁邏輯（營運中的店家）
 const currentPage2 = ref(1);
 
@@ -73,6 +86,21 @@ const handlePageChange2 = (page) => {
 <template>
   <div class="storemanage-container">
     <h1 class="storemanage-title">店家帳號審核及管理</h1>
+    <!-- 狀態切換按鈕 -->
+    <div class="storemanage-filter-bar">
+      <span class="storemanage-filter-label">{{ statusLabel }}店家列表</span>
+      <div class="storemanage-filter-btns">
+        <button
+          v-for="opt in statusOptions"
+          :key="opt.value"
+          class="storemanage-filter-btn"
+          :class="selectedType === opt.value ? 'active' : ''"
+          @click="selectedType = opt.value"
+        >
+          {{ opt.label }}
+        </button>
+      </div>
+    </div>
 
     <div class="storemanage-table-container">
       <Table>
@@ -96,7 +124,6 @@ const handlePageChange2 = (page) => {
           </tr>
         </template>
       </Table>
-
       <Pagination
         :current-page="currentPage1"
         :total-pages="totalPages1"
@@ -107,7 +134,6 @@ const handlePageChange2 = (page) => {
 
   <div class="storemanage-container">
     <h1 class="storemanage-title">營運中</h1>
-
     <div class="storemanage-table-container">
       <Table>
         <template #header>
@@ -130,7 +156,6 @@ const handlePageChange2 = (page) => {
           </tr>
         </template>
       </Table>
-
       <Pagination
         :current-page="currentPage2"
         :total-pages="totalPages2"
@@ -140,4 +165,4 @@ const handlePageChange2 = (page) => {
   </div>
 </template>
 
-<style></style>
+<style scoped src="../../../styles/pages/Admin/Stores/storemanage.css"></style>
