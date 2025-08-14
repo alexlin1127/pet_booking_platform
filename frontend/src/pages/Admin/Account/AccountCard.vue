@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from "vue";
 import api from "../../../api/api.js";
-defineProps({
+
+const props = defineProps({
   account: Object,
 });
 
@@ -24,36 +25,51 @@ function confirmReset() {
 }
 const toggleStatus = async () => {
   try {
-    const res = await api.patch(`users/${account.id}`, {
-      is_active: !account.isActive,
+    console.log("Toggling status for account:", props.account);
+    console.log("Account ID:", props.account.id);
+    console.log("Current isActive:", props.account.isActive);
+    console.log("Will set is_active to:", !props.account.isActive);
+    
+    const res = await api.patch(`users/${props.account.id}`, {
+      is_active: !props.account.isActive,
     });
+    
+    console.log("API response:", res);
+    
     if (res.status === 200) {
-      emit("statusChanged");
+      // 立即更新本地狀態
+      props.account.isActive = !props.account.isActive;
+      // 通知父組件狀態已變更
+      emit("statusChanged", props.account.id, props.account.isActive);
     }
   } catch (error) {
     console.error("Error toggling status:", error);
+    console.error("Error response:", error.response);
+    console.error("Error status:", error.response?.status);
+    console.error("Error data:", error.response?.data);
+    alert(`狀態更新失敗：${error.response?.data?.detail || error.message}`);
   }
 };
 </script>
 
 <template>
-  <td>{{ account.user_id }}</td>
-  <td>{{ account.full_name }}</td>
-  <td>{{ account.username }}</td>
+  <td>{{ props.account.user_id }}</td>
+  <td>{{ props.account.full_name }}</td>
+  <td>{{ props.account.username }}</td>
   <td>
-    <span v-if="account.role === 'admin'">管理員</span>
-    <span v-else-if="account.role === 'store'">店家</span>
-    <span v-else-if="account.role === 'member'">一般用戶</span>
+    <span v-if="props.account.role === 'admin'">管理員</span>
+    <span v-else-if="props.account.role === 'store'">店家</span>
+    <span v-else-if="props.account.role === 'member'">一般用戶</span>
     <span v-else>未知角色</span>
   </td>
-  <td>{{ account.isActive ? "啟用" : "停用" }}</td>
-  <td>{{ new Date(account.createdAt).toLocaleDateString() }}</td>
+  <td>{{ props.account.isActive ? "啟用" : "停用" }}</td>
+  <td>{{ new Date(props.account.createdAt).toLocaleDateString() }}</td>
   <td class="btn-td">
     <button class="acc-btn acc-btn-solid" @click="openResetModal">
       重設密碼
     </button>
     <button class="acc-btn acc-btn-outline" @click="toggleStatus">
-      {{ account.isActive ? "停用" : "啟用" }}
+      {{ props.account.isActive ? "停用" : "啟用" }}
     </button>
   </td>
 
@@ -67,15 +83,15 @@ const toggleStatus = async () => {
         <div class="acc-modal-title">重設密碼</div>
         <div class="acc-modal-row">
           <span class="acc-modal-label">編號</span>
-          <span class="acc-modal-value">{{ account.user_id }}</span>
+          <span class="acc-modal-value">{{ props.account.user_id }}</span>
         </div>
         <div class="acc-modal-row">
           <span class="acc-modal-label">名字</span>
-          <span class="acc-modal-value">{{ account.full_name }}</span>
+          <span class="acc-modal-value">{{ props.account.full_name }}</span>
         </div>
         <div class="acc-modal-row">
           <span class="acc-modal-label">帳號</span>
-          <span class="acc-modal-value">{{ account.username }}</span>
+          <span class="acc-modal-value">{{ props.account.username }}</span>
         </div>
         <div class="acc-modal-row">
           <span class="acc-modal-label">密碼</span>
