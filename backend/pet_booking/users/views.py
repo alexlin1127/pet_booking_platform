@@ -1,4 +1,4 @@
-# apps/users/views.py
+# users/views.py
 from django.utils.timezone import now
 from django.db.models.functions import TruncDate
 from django.db.models import Count
