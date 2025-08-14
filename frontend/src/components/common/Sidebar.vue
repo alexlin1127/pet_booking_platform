@@ -3,7 +3,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import api from '../../api/api.js'
 
-const role = ref("stores")
+const role = ref("admin")
 
 const getRole = async () => {
     // 登入成功後取得腳色並導向
