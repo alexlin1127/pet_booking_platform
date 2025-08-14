@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed,onMounted} from "vue";
+import { ref, computed, onMounted } from "vue";
 import Table from "../../../components/UI/Table.vue";
 import StoreCard from "./StoreCard.vue";
 import Pagination from "../../../components/common/Pagination.vue";
@@ -11,7 +11,7 @@ const storeData = async () => {
   try {
     const res = await api.get("admin/stores");
     console.log(res.data); // 調試 API 響應
-    stores.value = Array.isArray(res.data.results) ? res.data.results : []; // 確保 results 為陣列
+    stores.value = Array.isArray(res.data) ? res.data : []; // 確保返回值為陣列
   } catch (err) {
     alert("無法取得店家資料");
     stores.value = []; // 確保失敗時為空陣列
@@ -26,16 +26,14 @@ onMounted(() => {
 const statusOptions = [
   { label: "首次申請", value: "pending" },
   { label: "補件申請", value: "repending" },
-  { label: "退回補件", value: "rechecked" }
+  { label: "退回補件", value: "rechecked" },
 ];
-const selectedType = ref('pending');
 
 // 狀態文字動態顯示
 const statusLabel = computed(() => {
-  const found = statusOptions.find(opt => opt.value === selectedType.value);
+  const found = statusOptions.find((opt) => opt.value === selectedStatus.value);
   return found ? found.label : "";
 });
-
 
 const pageSize = 5;
 // 第一個表格的分頁邏輯（審核中的店家）
@@ -48,7 +46,9 @@ const selectedStatus = ref("pending");
 
 // 根據狀態篩選店家
 const pendingStores = computed(() => {
-  return stores.value.filter((store) => store.status === selectedStatus.value);
+  return stores.value.filter(
+    (store) => store.status?.trim() === selectedStatus.value
+  );
 });
 
 const operatingStores = computed(() => {
@@ -94,8 +94,8 @@ const handlePageChange2 = (page) => {
           v-for="opt in statusOptions"
           :key="opt.value"
           class="storemanage-filter-btn"
-          :class="selectedType === opt.value ? 'active' : ''"
-          @click="selectedType = opt.value"
+          :class="selectedStatus === opt.value ? 'active' : ''"
+          @click="selectedStatus = opt.value"
         >
           {{ opt.label }}
         </button>

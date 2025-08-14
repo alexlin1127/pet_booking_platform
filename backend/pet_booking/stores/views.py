@@ -187,17 +187,17 @@ class StoreImageViewSet(viewsets.ModelViewSet):
 # 管理者
 # 分頁
 
-class StorePagination(PageNumberPagination):
-    page_size = 5
-    page_size_query_param = 'page_size'
-    max_page_size = 50
+# class StorePagination(PageNumberPagination):
+#     page_size = 5
+#     page_size_query_param = 'page_size'
+#     max_page_size = 50
 
 # 管理者店家頁
 class StoreAdminViewSet(viewsets.ModelViewSet):
     queryset = Store.objects.all().order_by('-created_at')
     filter_backends = [DjangoFilterBackend]
     filterset_class= StoreFilter
-    pagination_class = StorePagination
+    # pagination_class = StorePagination
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
@@ -225,7 +225,7 @@ class AdminPostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class= PostFilter
-    pagination_class = StorePagination
+    # pagination_class = StorePagination
     permission_classes = [IsAuthenticated]
 
 
@@ -252,16 +252,16 @@ class CustomerStoreFilter(django_filters.FilterSet):
         return queryset.filter(address__district=value)
 
 
-class CustomerStorePagination(PageNumberPagination):
-    page_size = 9
-    page_size_query_param = 'page_size'
-    max_page_size = 50
+# class CustomerStorePagination(PageNumberPagination):
+#     page_size = 9
+#     page_size_query_param = 'page_size'
+#     max_page_size = 50
 
 class CustomerStoreViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
     permission_classes = []
     serializer_class = StoreListSerializer
-    pagination_class = CustomerStorePagination
+    # pagination_class = CustomerStorePagination
     filter_backends = [DjangoFilterBackend]
     filterset_class = CustomerStoreFilter
     queryset = Store.objects.filter(status='confirmed').order_by('-created_at')
@@ -298,16 +298,16 @@ class CustomerPostFilter(django_filters.FilterSet):
         fields = ['type']
     
 
-class CustomerPostPagination(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 50
+# class CustomerPostPagination(PageNumberPagination):
+#     page_size = 10
+#     page_size_query_param = 'page_size'
+#     max_page_size = 50
 
 class CustomerPostViewSet(viewsets.ModelViewSet):
     permission_classes = []
     http_method_names = ['get']
     serializer_class = PostSerializer
-    pagination_class = CustomerPostPagination
+    # pagination_class = CustomerPostPagination
     filter_backends = [DjangoFilterBackend]
     filterset_class = CustomerPostFilter
     queryset = Post.objects.filter(status='confirmed').order_by('-created_at')
