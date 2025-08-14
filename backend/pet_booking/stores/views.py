@@ -15,6 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
 # Create your views here.
 
 def generate_code(length=6):
@@ -135,6 +136,8 @@ class StoreProfileViewSet(viewsets.ModelViewSet):
         return Store.objects.get(user_id=self.request.user)
 
     def perform_create(self, serializer):
+        if not self.request.user.is_store_owner:
+            raise PermissionDenied("只有店家帳號才能新增店家資訊。")
         if Store.objects.filter(user_id=self.request.user).exists():
             from rest_framework.exceptions import ValidationError
             raise ValidationError("每個使用者只能新增一筆店家資訊")

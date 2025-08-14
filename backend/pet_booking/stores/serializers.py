@@ -81,7 +81,7 @@ class StoreDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Store
-        fields = ['id','user_id','username', 'store_name', 'owner_name', 'address', 'phone', 'email','pick_up_service', 'created_at', 'status', 'grooming_service', 'boarding_service', 'staff_number', 'business_licences_url', 'boarding_license_dog_url', 'boarding_license_cat_url', 'grooming_single_appointment', 'reject_content']
+        fields = ['id','user_id','username', 'store_name', 'owner_name', 'address', 'phone', 'email','pick_up_service', 'created_at','boarding_pet_type', 'status', 'grooming_service', 'boarding_service', 'staff_number', 'business_licences_url', 'boarding_license_dog_url', 'boarding_license_cat_url', 'grooming_single_appointment', 'reject_content']
 
 
 
