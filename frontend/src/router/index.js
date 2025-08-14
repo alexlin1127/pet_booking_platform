@@ -219,7 +219,7 @@ const routes = [
     meta: { sidebar: true },
   },
   {
-    path: "/admin/stores/:id",
+    path: "/admin/stores/details/:id",
     component: StoresReview,
     meta: { sidebar: false },
   },

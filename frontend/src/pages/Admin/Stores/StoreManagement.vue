@@ -39,7 +39,7 @@ const pendingStores = computed(() => {
 });
 
 const operatingStores = computed(() => {
-  return stores.value.filter((store) => store.status === "confirmed");
+  return stores.value.filter((store) => store.status?.trim() === "confirmed");
 });
 
 // 第一個表格的分頁邏輯（審核中的店家）

@@ -15,9 +15,9 @@ defineProps({
     }}{{ store.address.detail }}
   </td>
   <td>
-    <ul>
-      <li v-for="item in store.service_item" :key="item">{{ item }}</li>
-    </ul>
+    <span v-if="store.grooming_service">美容</span>
+    <span v-if="store.grooming_service && store.boarding_service"> / </span>
+    <span v-if="store.boarding_service">住宿</span>
   </td>
   <td>{{ new Date(store.created_at).toLocaleDateString() }}</td>
   <td>

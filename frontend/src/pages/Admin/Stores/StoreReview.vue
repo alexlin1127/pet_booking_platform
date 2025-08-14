@@ -8,7 +8,7 @@ const router = useRouter();
 
 // 從 URL 參數取得店家 ID
 const storeId = computed(() => route.params.id);
-
+// console.log(storeId.value);
 // 根據 ID 調用 API 獲取店家詳細資料
 const currentStore = ref(null);
 
@@ -28,9 +28,9 @@ onMounted(() => {
 });
 
 // 取得服務種類
-const type = computed(() =>
-  route.query.service === "boarding" ? "boarding" : "grooming"
-);
+const type = computed(() => {
+  return route.query.service === "boarding" ? "boarding" : "grooming";
+});
 
 // 標題
 const title = computed(() => {
@@ -43,14 +43,14 @@ const title = computed(() => {
 });
 
 // 切換鈕：只有同時有美容和住宿才顯示
-const showSwitchBtn = computed(() => hasGrooming.value && hasBoarding.value);
+// const showSwitchBtn = computed(() => hasGrooming.value && hasBoarding.value);
 
 // 美容專屬欄位
-const showGrooming = computed(() => hasGrooming.value);
+// const showGrooming = computed(() => hasGrooming.value);
 // 住宿專屬欄位
-const showBoarding = computed(() => hasBoarding.value);
+// const showBoarding = computed(() => hasBoarding.value);
 // const showSafety = computed(
-() => type.value === "boarding" && hasBoarding.value;
+// () => type.value === "boarding" && hasBoarding.value;
 // );
 
 const imageList = computed(() => {
@@ -59,13 +59,19 @@ const imageList = computed(() => {
   ];
 
   if (currentStore.value?.boarding_service) {
-    if (currentStore.value?.boarding_pet_type.includes("dog")) {
+    if (
+      Array.isArray(currentStore.value?.boarding_pet_type) &&
+      currentStore.value.boarding_pet_type.includes("dog")
+    ) {
       baseImages.push({
         title: "特定寵物登記許可證(狗狗)",
         url: currentStore.value?.boarding_license_dog_url,
       });
     }
-    if (currentStore.value?.boarding_pet_type.includes("cat")) {
+    if (
+      Array.isArray(currentStore.value?.boarding_pet_type) &&
+      currentStore.value.boarding_pet_type.includes("cat")
+    ) {
       baseImages.push({
         title: "特定寵物登記許可證(貓咪)",
         url: currentStore.value?.boarding_license_cat_url,
@@ -93,14 +99,8 @@ function setService(svc) {
 
 <template>
   <div class="sr-container max-w-4xl mx-auto">
-    <!-- 當沒有找到店家資料時顯示提示 -->
-    <div v-if="!currentStore.value" class="text-center py-16">
-      <h2 class="text-xl font-semibold text-gray-600 mb-4">找不到店家資料</h2>
-      <p class="text-gray-500">請確認 URL 中的店家 ID 是否正確</p>
-    </div>
-
     <!-- 當有店家資料時顯示內容 -->
-    <div v-else>
+    <div v-if="currentStore">
       <!-- demo 切換鈕，可刪 -->
       <div class="flex gap-2 mb-4" v-if="showSwitchBtn">
         <button class="sr-btn-outline" @click="setService('grooming')">
@@ -206,6 +206,11 @@ function setService(svc) {
           <button type="button" class="sr-btn sm:w-40">返回</button>
         </RouterLink>
       </div>
+    </div>
+    <!-- 當沒有找到店家資料時顯示提示 -->
+    <div v-else="!currentStore" class="text-center py-16">
+      <h2 class="text-xl font-semibold text-gray-600 mb-4">找不到店家資料</h2>
+      <p class="text-gray-500">請確認 URL 中的店家 ID 是否正確</p>
     </div>
   </div>
 </template>
