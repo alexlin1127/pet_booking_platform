@@ -11,7 +11,7 @@ const storeData = async () => {
   try {
     const res = await api.get("admin/stores");
     console.log(res.data); // 調試 API 響應
-    stores.value = Array.isArray(res.data) ? res.data : []; // 確保 results 為陣列
+    stores.value = Array.isArray(res.data) ? res.data : []; 
   } catch (err) {
     alert("無法取得店家資料");
     stores.value = []; // 確保失敗時為空陣列
