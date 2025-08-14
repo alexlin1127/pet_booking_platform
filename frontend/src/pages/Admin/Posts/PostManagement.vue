@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import Table from "../../../components/UI/Table.vue";
 import PostCard from "./PostCard.vue";
 import Pagination from "../../../components/common/Pagination.vue";
@@ -56,13 +56,29 @@ const paginatedPendingPosts = computed(() => {
   return pendingPosts.value.slice(start, start + pageSize);
 });
 
-// 第二個表格的分頁邏輯（已通過的貼文）
+// 日期篩選條件
+const selectedStartDate = ref("");
+const selectedEndDate = ref("");
+
+// 篩選邏輯
+const filteredApprovedPosts = computed(() => {
+  return approvedPosts.value.filter((post) => {
+    const postDate = new Date(post.created_at);
+    const startMatch =
+      !selectedStartDate.value || postDate >= new Date(selectedStartDate.value);
+    const endMatch =
+      !selectedEndDate.value || postDate <= new Date(selectedEndDate.value);
+    return startMatch && endMatch;
+  });
+});
+
+// 分頁邏輯
 const totalPages2 = computed(
-  () => Math.ceil(approvedPosts.value.length / pageSize) || 1
+  () => Math.ceil(filteredApprovedPosts.value.length / pageSize) || 1
 );
 const paginatedApprovedPosts = computed(() => {
   const start = (currentPage2.value - 1) * pageSize;
-  return approvedPosts.value.slice(start, start + pageSize);
+  return filteredApprovedPosts.value.slice(start, start + pageSize);
 });
 
 // 分頁處理函數
@@ -74,8 +90,10 @@ const handlePageChange2 = (page) => {
   currentPage2.value = page;
 };
 
-// 日期篩選
-const selectedDate = ref("");
+// 監聽篩選條件變更
+watch([selectedStartDate, selectedEndDate], () => {
+  currentPage2.value = 1; // 重置到第一頁
+});
 </script>
 
 <template>
@@ -146,13 +164,13 @@ const selectedDate = ref("");
       發布日期：
       <input
         type="date"
-        v-model="selectedDate"
+        v-model="selectedStartDate"
         class="accmanage-filter-input"
       />
-      -
+      ~
       <input
         type="date"
-        v-model="selectedDate"
+        v-model="selectedEndDate"
         class="accmanage-filter-input"
       />
     </label>
