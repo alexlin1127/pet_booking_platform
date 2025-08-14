@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+	.storecard-btn {
+		@apply rounded-lg bg-[#6B5B43] text-white font-bold px-6 py-2;
+	}
+}

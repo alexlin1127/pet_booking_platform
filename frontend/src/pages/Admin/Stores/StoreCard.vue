@@ -23,17 +23,33 @@ defineProps({
   <td>
     {{
       store.status === "pending"
-        ? "待審核"
-        : store.status === "confirmed"
-        ? "已審核"
-        : store.status
+        ? "首次申請"
+        : store.status === "repending"
+          ? "補件申請"
+          : store.status === "rechecked"
+            ? "退回補件"
+            : store.status === "confirmed"
+              ? "營業中"
+              : store.status
     }}
   </td>
   <td>
     <RouterLink :to="`/admin/stores/details/${store.id}`">
-      <button class="btn">查看詳情</button>
+      <button class="storecard-btn">
+        {{
+          store.status === "pending"
+            ? "查看並審核"
+            : store.status === "repending"
+              ? "重新審核"
+              : store.status === "rechecked"
+                ? "查看詳情"
+                : store.status === "confirmed"
+                  ? "查看"
+                  : "查看"
+        }}
+      </button>
     </RouterLink>
   </td>
 </template>
 
-<style></style>
+<style scoped src="../../../styles/pages/Admin/Stores/card.css"></style>
