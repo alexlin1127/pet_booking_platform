@@ -9,10 +9,10 @@ from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 
 # app
-from .models import GroomingSchedules, BoardingSchedules, ReservationBoarding
+from ..models import GroomingSchedules, BoardingSchedules, ReservationBoarding
 from pet_booking.services.models import GroomingService, GroomingServicePricing, BoardingService, BoardingServicePricing
 from pet_booking.stores.models import Store
-from .serializers import ReservationGroomingSerializer
+from ..serializers import ReservationGroomingSerializer
 from pet_booking.customers.serializers import PetSerializer
 from pet_booking.customers.models import CustomersProfile, Pet
 
@@ -531,6 +531,7 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
 
             # calculate grooming service duration
             total_grooming_duration = 0
+            total_price = 0
 
             for service_title in selected_services:
                 try:
@@ -547,6 +548,7 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
 
                     if grooming_result:
                         total_grooming_duration += int(grooming_result.grooming_duration)
+                        total_price += int(grooming_result.pricing)
                     else:
                         return Response(
                             {'error': f'找不到服務 "{service_title}" 對應此寵物類型的定價資訊'}, 
@@ -604,10 +606,13 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
                 'pet_name': pet.name,
                 'pet_type': pet.species,
                 'pet_breed': pet.breed,
+                'pet_size': pet_size,
                 'pick_up_service': pick_up_service,
                 'reservation_time': reservation_datetime,
                 'customer_note': customer_note,
                 'store_note': '',
+                'total_price': total_price,
+                'grooming_period': total_grooming_duration,
                 'status': 'pending'
             }
 
