@@ -24,35 +24,45 @@ const currentPage = ref(1)
 
 watch(() => route.params.type, (v) => {
   type.value = v === 'boarding' ? 'boarding' : 'grooming'
+  selectedService.value = type.value        // <- 同步回下拉選單
   currentPage.value = 1
 })
 
 const pageTitle = computed(() =>
-  type.value === 'grooming' ? '美容店家總覽' : '住宿店家總覽'
+  (selectedService.value || type.value) === 'grooming'
+    ? '美容店家總覽'
+    : '住宿店家總覽'
 )
+
 const pageContent = computed(() =>
-  type.value === 'grooming' ? '瀏覽所有合作店家資訊，快速找到適合你毛孩的美容地點' : '瀏覽所有合作店家資訊，快速找到適合你毛孩的住宿地點'
+  (selectedService.value || type.value) === 'grooming'
+    ? '瀏覽所有合作店家資訊，快速找到適合你毛孩的美容地點'
+    : '瀏覽所有合作店家資訊，快速找到適合你毛孩的住宿地點'
 )
 
 const filtered = computed(() => {
-  // 先依類型（hasGrooming / hasLodging）篩
-  const typed = stores.filter(s =>
-    type.value === 'grooming' ? s.hasGrooming : s.hasLodging
+  // 用既有變數：優先看 selectedService，沒選時回退到 type
+  const mode = selectedService.value || type.value  // 非新增狀態，僅區域常數
+  let list = stores.filter(s =>
+    mode === 'grooming' ? !!s.hasGrooming : !!s.hasBoarding
   )
-  if (selectedCity.value)
-    typed = typed.filter(s => (s.address || '').includes(selectedCity.value))
-  if (selectedDistrict.value)
-    typed = typed.filter(s => (s.address || '').includes(selectedDistrict.value))
-  if (!keyword.value.trim()) return typed
-  // 最後依關鍵字篩選
-  // 注意：這裡假設 storeName, address, owner 都是字串
-  const kw = keyword.value.trim().toLowerCase()
-  return typed.filter(s =>
-    (s.storeName || '').toLowerCase().includes(kw) ||
-    (s.address || '').toLowerCase().includes(kw) ||
-    (s.owner || '').toLowerCase().includes(kw)
-  )
+  if (selectedCity.value) {
+    list = list.filter(s => (s.address || '').includes(selectedCity.value))
+  }
+  if (selectedDistrict.value) {
+    list = list.filter(s => (s.address || '').includes(selectedDistrict.value))
+  }
+  if (keyword.value.trim()) {
+    const kw = keyword.value.trim().toLowerCase()
+    list = list.filter(s =>
+      (s.storeName || '').toLowerCase().includes(kw) ||
+      (s.address || '').toLowerCase().includes(kw) ||
+      (s.owner || '').toLowerCase().includes(kw)
+    )
+  }
+  return list
 })
+
 
 const totalPages = computed(() =>
   Math.max(1, Math.ceil(filtered.value.length / PAGE_SIZE))
@@ -63,17 +73,19 @@ const paginated = computed(() => {
   return filtered.value.slice(start, start + PAGE_SIZE)
 })
 
-function goto(next) {
-  if (next !== type.value)
-    router.push({ name: 'StoresList', params: { type: next } })
-}
+
+watch(selectedService, (v) => {
+  if (v === 'grooming' || v === 'boarding') {
+    
+  }
+})
 function go(p) {
   if (p >= 1 && p <= totalPages.value) currentPage.value = p
 }
-/* 點搜尋或改變服務項目 */
+/* 點搜尋或任何篩選改變 -> 回到第 1 頁 */
 function handleSearch() { go(1) }
-watch(selectedService, (v) => {
-  if (v === 'grooming' || v === 'boarding') goto(v)
+watch([selectedService, selectedCity, selectedDistrict, keyword], () => {
+  currentPage.value = 1
 })
 </script>
 
