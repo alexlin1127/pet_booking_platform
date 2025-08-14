@@ -62,13 +62,15 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'django_rest_passwordreset',
     'oauth2_provider',
     'pet_booking.coupon',
     'pet_booking.customers',
     'pet_booking.reservations',
     'pet_booking.services',
     'pet_booking.stores',
-    'pet_booking.users'
+    # 'pet_booking.users',
+    'pet_booking.users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
