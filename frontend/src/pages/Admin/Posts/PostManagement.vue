@@ -149,7 +149,7 @@ const selectedDate = ref("");
         v-model="selectedDate"
         class="accmanage-filter-input"
       />
-      ~
+      -
       <input
         type="date"
         v-model="selectedDate"

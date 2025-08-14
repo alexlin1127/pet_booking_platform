@@ -9,7 +9,8 @@ defineProps({
 <template>
   <td>{{ post.id }}</td>
   <td>{{ post.store_name }}</td>
-  <td>{{ post.created_at }}</td>
+  <td>{{ new Date(post.created_at).toLocaleDateString() }}</td>
+  <!-- 取日期部分 -->
   <td>{{ post.title }}</td>
   <td>
     {{
