@@ -86,6 +86,16 @@ const getProfile = async () => {
   }
 };
 
+// 處理狀態變更事件
+const handleStatusChanged = (userId, newStatus) => {
+  // 更新 accounts 資料中的對應項目
+  const accountIndex = accounts.value.findIndex(acc => acc.id === userId);
+  if (accountIndex !== -1) {
+    accounts.value[accountIndex].is_active = newStatus;
+  }
+  console.log(`帳號 ${userId} 狀態已更新為: ${newStatus ? '啟用' : '停用'}`);
+};
+
 onMounted(() => {
   getAccounts();
   getProfile();
@@ -141,7 +151,7 @@ onMounted(() => {
             :key="acc.user_id"
             class="card-row"
           >
-            <AccountCard :account="acc" @statusChanged="getAccounts" />
+            <AccountCard :account="acc" @statusChanged="handleStatusChanged" />
           </tr>
         </template>
       </Table>
