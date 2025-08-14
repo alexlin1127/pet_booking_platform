@@ -11,7 +11,6 @@ import './style.css'
 import './styles/main.css'
 
 // 
-import './styles/auth/login.css'
 import './styles/auth/register.css'
 
 // 通用組件樣式
