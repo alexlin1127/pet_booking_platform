@@ -33,10 +33,21 @@ import './styles/pages/Customers/customersregister.css'
 
 // 商家頁面樣式
 import './styles/pages/Stores/dashboard.css'
+import './styles/pages/Stores/Booking/addbookings.css'
 import './styles/pages/Stores/storesregister.css'
 import './styles/pages/Stores/Booking/bookinghistory.css'
-import './styles/pages/Stores/Booking/Management/grooming.css'
-import './styles/pages/Stores/Booking/Management/boarding.css'
+import './styles/pages/Stores/Booking/Grooming/grooming.css'
+import './styles/pages/Stores/Booking/Boarding/boarding.css'
+
+// 
+import './styles/pages/Stores/Info/editinfo.css'
+import './styles/pages/Stores/Info/infomanagement.css'
+import './styles/pages/Stores/Info/openservices.css'
+// 
+import './styles/pages/Stores/Services/servicesmanagement.css'
+import './styles/pages/Stores/Services/addservices.css'
+
+// 
 import './styles/pages/Stores/Posts/postsmanage.css'
 import './styles/pages/Stores/Posts/postsprocess.css'
 import './styles/pages/Stores/Posts/postsview.css'
@@ -44,7 +55,6 @@ import './styles/pages/Stores/Posts/postsview.css'
 // 管理員頁面樣式
 import './styles/pages/Admin/admindashboard.css'
 import './styles/pages/Admin/Accounts/accmanage.css'
-import './styles/pages/Admin/Stores/storemanage.css'
 import './styles/pages/Admin/Stores/storereview.css'
 import './styles/pages/Admin/Posts/postmanage.css'
 import './styles/pages/Admin/Posts/postreview.css'

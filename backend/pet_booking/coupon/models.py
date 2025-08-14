@@ -16,6 +16,12 @@ class Coupon(models.Model):
         db_column='user_id',
         verbose_name="用戶ID"
     )
+    store_id = models.CharField(
+        max_length=50,
+        null=True,
+        blank=True,
+        verbose_name="店家ID"
+    )
     coupon_number = models.CharField(
         max_length=100, 
         unique=True, 

@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================= FormTemplate 元件 ================= */
+@layer components {
+    .page-title {
+        @apply text-2xl md:text-4xl font-extrabold mb-4 block font-semibold mb-1;
+    }
+
+    /* 表單卡片（外框） */
+    .form-card {
+        @apply rounded-lg border-2 bg-white shadow p-5 md:p-8;
+
+    }
+
+    /* 讓照片區標題與按鈕兩端對齊（你已有 .photos-header 也可以保留） */
+    .photos-header {
+        @apply flex items-center justify-between mb-2;
+    }
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    @apply border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400;
+}
+
+.boarding-type-block {
+    @apply border p-4 rounded;
+}
+
+.boarding-type-label {
+    @apply block font-medium mb-2;
+}
+
+.boarding-type-checkboxes {
+    @apply flex gap-4;
+}
+
+.boarding-type-option {
+    @apply inline-flex items-center;
+}
+
+.license-upload-block {
+    @apply border p-4 rounded flex items-center gap-2;
+}
+
+.license-label {
+    @apply block font-medium;
+}
+
+.upload-btn {
+    @apply bg-black text-white px-4 py-2 rounded hover:bg-gray-800;
+}
+
+.form-actions {
+    @apply flex flex-col items-center gap-4 mt-6;
+}
+
+.photos-header {
+    @apply flex items-center justify-between mb-2
+}
+
+.photo-title {
+    @apply text-lg font-semibold;
+}
+.photo-grid {
+    @apply grid gap-3 grid-cols-2 md:grid-cols-8;
+}
+
+/* 共用卡片 */
+.photo-card {
+    @apply relative bg-gray-100 rounded overflow-hidden cursor-default;
+}
+
+/* 縮圖比例固定 4:3 */
+.photo-card {
+    aspect-ratio: 4 / 3;
+}
+
+/* 圖片樣式：填滿容器且不變形 */
+.photo-img {
+    @apply w-full h-full object-cover;
+}
+
+/* 刪除按鈕 */
+.photo-delete {
+    @apply absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/70 text-white leading-6 text-center text-sm hover:bg-black;
+}
+
+/* 封面卡（最大格） */
+.cover-card {
+    @apply col-span-2 md:col-span-4 md:row-span-2;
+    aspect-ratio: 4 / 3;
+}
+
+/* 封面標籤與提示 */
+.cover-badge {
+    @apply absolute left-2 top-2 text-xs font-semibold bg-white/90 text-gray-800 px-2 py-0.5 rounded;
+}
+
+.cover-tip {
+    @apply absolute left-0 right-0 bottom-0 text-xs text-white bg-black/40 px-2 py-1;
+}
+
+.form-row {
+    @apply flex flex-col gap-2;
+}
+
+.field-label {
+    @apply text-base md:text-lg;
+}
+
+/* 時間 */
+.time-row {
+    @apply flex items-center gap-3 flex-wrap;
+}
+
+.time-label {
+    @apply whitespace-nowrap;
+}
+
+.time-select {
+    @apply border rounded px-3 py-1.5 outline-none;
+    border-color: var(--coffee);
+    color: #3b2e23;
+}
+
+/* 公休 */
+.days-row {
+    @apply flex flex-wrap gap-5;
+}
+
+.day-item {
+    @apply inline-flex items-center gap-2;
+}
+
+.day-checkbox {
+    @apply w-4 h-4;
+}
+
+/* 服務項目 */
+.service-wrap {
+    @apply border rounded p-2;
+    border-color: var(--coffee);
+}
+
+.service-input {
+    @apply min-h-[44px] flex flex-wrap items-center gap-2;
+}
+
+.tag-chip {
+    @apply inline-flex items-center gap-1 px-2 py-1 border rounded text-sm;
+    border-color: var(--coffee);
+    color: #3b2e23;
+    background: white;
+}
+
+.tag-x {
+    @apply leading-none;
+}
+
+.tag-text {
+    @apply flex-1 min-w-[180px] border-0 focus:outline-none text-sm;
+}
+
+/* 建議清單 */
+.service-suggest {
+    @apply mt-3 flex flex-wrap gap-2 border rounded p-2;
+    border-color: var(--coffee);
+}
+
+.suggest-chip {
+    @apply inline-flex items-center px-2 py-1 border rounded text-sm disabled:opacity-40;
+    border-color: var(--coffee);
+}
