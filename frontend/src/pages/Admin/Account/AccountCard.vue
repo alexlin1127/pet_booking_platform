@@ -37,9 +37,10 @@ function toggleStatus() {
   <td class="btn-td">
     <button class="acc-btn acc-btn-solid" @click="openResetModal">重設密碼</button>
     <button class="acc-btn acc-btn-outline" @click="toggleStatus">{{ acc.status === '啟用' ? '停用' : '啟用' }}</button>
+  </td>
 
-    <!-- 重設密碼 Modal -->
-    <div v-if="showResetModal" class="acc-modal-mask">
+  <Teleport to="body">
+    <div v-if="showResetModal" class="acc-modal-mask" @click.self="closeResetModal">
       <div class="acc-modal-box">
         <div class="acc-modal-title">重設密碼</div>
         <div class="acc-modal-row">
@@ -68,7 +69,7 @@ function toggleStatus() {
         </div>
       </div>
     </div>
-  </td>
+  </Teleport>
 </template>
 
 <style scoped src="../../../styles/pages/Admin/Accounts/card.css"></style>
