@@ -1,24 +1,43 @@
 <script setup>
-import { RouterLink } from 'vue-router';
+import { RouterLink } from "vue-router";
 
 defineProps({
-  post: Object
+  post: Object,
 });
 </script>
 
 <template>
   <td>{{ post.id }}</td>
-  <td>{{ post.storeName }}</td>
-  <td>{{ post.publishDate }}</td>
+  <td>{{ post.store_name }}</td>
+  <td>{{ new Date(post.created_at).toLocaleDateString() }}</td>
+  <!-- 取日期部分 -->
   <td>{{ post.title }}</td>
-  <td>{{ post.status }}</td>
-  <td v-if="post.status === '待審核'">
-    <RouterLink :to="`/admin/posts/review?id=${post.id}&title=${encodeURIComponent(post.title)}&storeName=${encodeURIComponent(post.storeName)}`">
+  <td>
+    {{
+      post.status === "pending"
+        ? "待審核"
+        : post.status === "rechecked"
+        ? "退回補件"
+        : post.status === "confirmed"
+        ? "已審核"
+        : "未知狀態"
+    }}
+  </td>
+  <td v-if="post.status === 'pending'">
+    <RouterLink
+      :to="`/admin/posts/review?id=${post.id}&title=${encodeURIComponent(
+        post.title
+      )}&store_name=${encodeURIComponent(post.store_name)}`"
+    >
       <button class="btn">查看並審核</button>
     </RouterLink>
   </td>
   <td v-else>
-    <RouterLink :to="`/admin/posts/details?id=${post.id}&title=${encodeURIComponent(post.title)}&storeName=${encodeURIComponent(post.storeName)}`">
+    <RouterLink
+      :to="`/admin/posts/details?id=${post.id}&title=${encodeURIComponent(
+        post.title
+      )}&store_name=${encodeURIComponent(post.store_name)}`"
+    >
       <button class="btn">店家詳情</button>
     </RouterLink>
   </td>
