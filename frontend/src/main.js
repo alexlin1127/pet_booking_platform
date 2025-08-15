@@ -43,9 +43,6 @@ import './styles/pages/Stores/Info/openservices.css'
 import './styles/pages/Stores/Services/servicesmanagement.css'
 import './styles/pages/Stores/Services/addservices.css'
 
-// 
-import './styles/pages/Stores/Posts/postsprocess.css'
-import './styles/pages/Stores/Posts/postsview.css'
 
 
 
