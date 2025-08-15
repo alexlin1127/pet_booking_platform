@@ -1,10 +1,11 @@
 <!-- src/pages/PetInfo.vue -->
 <script setup>
 import { reactive, ref, onBeforeUnmount} from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import FormTemplate from '@/components/UI/FormTemplate.vue'
 
 const router = useRouter()
+const route = useRoute()
 
 /* 假資料（下拉選單選項） */
 const genderOptions = [
@@ -66,8 +67,8 @@ function cancel() { router.back() }
 <template>
   <main class="max-w-5xl mx-auto px-4 md:px-6 pb-16 pt-10">
     <!-- 頁面標題（置中；不放在 FormTemplate 內） -->
-    <!-- <h1 v-if="" class="cp-title">新增毛孩子基本資料</h1>
-    <h1 v-else-if="" class="cp-title">修改毛孩子基本資料</h1> -->
+    <h1 v-if="route.params.mode === 'edit'" class="cp-title">修改毛孩子基本資料</h1>
+    <h1 v-else class="cp-title">新增毛孩子基本資料</h1>
 
     <!-- 表單主體（使用 FormTemplate；不帶 title） -->
     <FormTemplate>
