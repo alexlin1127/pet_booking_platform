@@ -1,13 +1,14 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import api from "../../../api/api.js";
 
-const router = useRouter()
-const pickup = ref(true) //接送服務
-const grooming = ref(true) //美容服務
-const boarding = ref(false) //住宿服務
-const boardingTypes = ref([]) // 住宿類型
-const imageNote = ref('') // 圖片說明
+const router = useRouter();
+const pickup = ref(true); //接送服務
+const grooming = ref(true); //美容服務
+const boarding = ref(false); //住宿服務
+const boardingTypes = ref([]); // 住宿類型
+const imageNote = ref(""); // 圖片說明
 
 const submitForm = () => {
   console.log({
@@ -15,13 +16,13 @@ const submitForm = () => {
     grooming: grooming.value,
     boarding: boarding.value,
     boardingTypes: boardingTypes.value,
-    imageNote: imageNote.value
-  })
-}
+    imageNote: imageNote.value,
+  });
+};
 
 const handleCancel = () => {
-  router.push('/stores/info/manage')
-}
+  router.push("/stores/info/manage");
+};
 </script>
 
 <template>
@@ -95,8 +96,13 @@ const handleCancel = () => {
     </form>
 
     <!-- 登記證上傳：獨立卡片 -->
-    <section v-if="boardingTypes.includes('狗狗') || boardingTypes.includes('貓咪')" class="card mt-6">
-      <h2 class="section-subtitle">特定寵物業登記許可證 <span class="required">*</span></h2>
+    <section
+      v-if="boardingTypes.includes('狗狗') || boardingTypes.includes('貓咪')"
+      class="card mt-6"
+    >
+      <h2 class="section-subtitle">
+        特定寵物業登記許可證 <span class="required">*</span>
+      </h2>
 
       <div v-if="boardingTypes.includes('狗狗')" class="license-upload-block">
         <label class="license-label">狗狗特定寵物業登記許可證</label>
@@ -111,7 +117,9 @@ const handleCancel = () => {
 
     <!-- 按鈕列（在最底、容器內） -->
     <div class="btn-row">
-      <button type="button" class="btn btn-secondary" @click="handleCancel">取消並返回</button>
+      <button type="button" class="btn btn-secondary" @click="handleCancel">
+        取消並返回
+      </button>
       <button type="button" class="btn btn-primary">送出審核</button>
     </div>
   </div>
