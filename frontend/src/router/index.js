@@ -151,7 +151,7 @@ const routes = [
   // 住宿預約管理
   {
     path: "/stores/boarding-bookings",
-    component: StoresDashboard,
+    component: StoresBoarding,
     meta: { sidebar: true },
   },
   {
