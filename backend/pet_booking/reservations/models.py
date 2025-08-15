@@ -16,7 +16,7 @@ class ReservationGrooming(models.Model):
     grooming_services_name = models.JSONField(default=list)
     pet_name = models.CharField(max_length=10)
     pet_type = models.CharField(max_length=10)
-    pet_breed = models.CharField(max_length=10)
+    pet_breed = models.CharField(max_length=10, blank=True, null=True)
     pet_size = models.CharField(max_length=10)
     pick_up_service = models.BooleanField(default=False)
     reservation_time = models.DateTimeField()
