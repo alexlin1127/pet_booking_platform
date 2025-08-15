@@ -143,3 +143,5 @@ const confirmPost = async () => {
     @button-click="handleButtonClick"
   />
 </template>
+
+<style scoped src="../../../styles/pages/Admin/Posts/postreview.css"></style>

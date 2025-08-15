@@ -74,8 +74,10 @@ const showNextImage = () => {
       </div>
     </div>
     <!-- 店家審核狀態 -->
+
     <h2 class="store-status">
-      <FontAwesomeIcon :icon="['fas', 'sync-alt']" />
+
+      <FontAwesomeIcon icon="fa-solid fa-sync-alt" />
       <span v-if="storesinfo.status === 'pending'">審核中</span>
       <span v-else-if="storesinfo.status === 'confirmed'">已通過</span>
       <span v-else-if="storesinfo.status === 'rechecked'">退回補件</span>
@@ -85,11 +87,11 @@ const showNextImage = () => {
     <div class="store-info">
       <div class="flex flex-col md:flex-row md:justify-between md:items-center">
         <h2 class="store-name">
-          <FontAwesomeIcon :icon="['fas', 'circle']" />
+          <FontAwesomeIcon icon="fa-solid fa-circle" />
           {{ storesinfo.store_name }}
         </h2>
         <p class="store-address" v-if="storesinfo.address">
-          <FontAwesomeIcon :icon="['fas', 'location-dot']" class="mr-1" />
+          <FontAwesomeIcon icon="fa-solid fa-location-dot" class="mr-1" />
           {{ storesinfo.address.county }}{{ storesinfo.address.district
           }}{{ storesinfo.address.detail }}
         </p>
@@ -195,7 +197,7 @@ const showNextImage = () => {
         aria-label="LINE"
         class="icon"
       >
-        <FontAwesomeIcon :icon="['fab', 'line']" class="text-green-500" />
+        <FontAwesomeIcon icon="fa-solid fa-line" class="text-green-500" />
       </a>
 
       <a
@@ -206,7 +208,7 @@ const showNextImage = () => {
         aria-label="Facebook"
         class="icon"
       >
-        <FontAwesomeIcon :icon="['fab', 'facebook-f']" class="text-blue-600" />
+        <FontAwesomeIcon icon="fa-solid fa-facebook-f" class="text-blue-600" />
       </a>
 
       <a
@@ -217,8 +219,11 @@ const showNextImage = () => {
         aria-label="Google Maps"
         class="icon"
       >
-        <FontAwesomeIcon :icon="['fab', 'google']" class="text-red-500" />
+
+        <FontAwesomeIcon icon="fa-solid fa-google" class="text-red-500" />
       </a>
     </div>
   </section>
 </template>
+
+<style scoped src="../../../styles/pages/Stores/Info/infomanagement.css"></style>
