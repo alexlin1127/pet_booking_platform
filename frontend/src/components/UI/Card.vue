@@ -119,4 +119,4 @@ const handleCardClick = (event) => {
   </div>
 </template>
 
-<style></style>
+<style scoped src="../../styles/components/UI/card.css"></style>

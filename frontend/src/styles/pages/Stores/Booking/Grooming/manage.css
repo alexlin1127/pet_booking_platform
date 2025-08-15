@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================= Grooming Management ================= */
+@layer components {
+    .grooming-container {
+        @apply p-4 mb-8;
+    }
+
+    .grooming-card {
+        @apply bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200;
+    }
+
+    .grooming-title {
+        @apply text-xl font-bold flex items-center justify-between bg-[#D1A371] text-white px-6 py-4;
+    }
+
+    .grooming-title h1 {
+        @apply text-xl font-bold;
+    }
+
+    .grooming-title p {
+        @apply text-lg font-semibold;
+    }
+
+    .grooming-table-content {
+        @apply p-4;
+    }
+
+    .grooming-table-container {
+        @apply mb-4 bg-white;
+    }
+
+    .grooming-filters {
+        @apply flex gap-4 items-center mb-2;
+    }
+
+    .grooming-filter-label {
+        @apply flex items-center gap-2 text-base text-gray-600;
+    }
+
+    .grooming-filter-input {
+        @apply border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer;
+    }
+
+    .grooming-search-input {
+        @apply border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-40;
+    }
+
+    .grooming-search-btn {
+        @apply bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all text-sm;
+    }
+
+
+    /* Table 樣式 */
+    .grooming-table-content table {
+        @apply w-full border-separate;
+        border-spacing: 0 4px;
+    }
+    
+    .grooming-table-content th {
+        @apply bg-transparent font-semibold text-center py-3 px-4 text-gray-700 border-0;
+    }
+    
+    .grooming-table-content tbody td {
+        @apply py-3 px-4 text-center;
+        background-color: #ffffff ;
+        border: 1px solid #d1d5db ;
+    }
+    
+    .grooming-table-content tbody tr {
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+    
+    .grooming-table-content tbody td:first-child {
+        border-left: 1px solid #d1d5db ;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+    }
+    
+    .grooming-table-content tbody td:last-child {
+        border-right: 1px solid #d1d5db ;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+    
+    .grooming-table-content tbody tr:hover td {
+        background-color: #f3f4f6;
+    }
+
+    /* 響應式佈局 */
+    .grooming-filter-container {
+        @apply flex flex-col gap-4;
+    }
+
+
+    
+
+    /* 桌機樣式 - 全部同一行 */
+    @media (min-width: 1024px) {
+        .grooming-filter-container {
+            @apply flex-row items-center;
+        }
+
+        .grooming-filter-row {
+            @apply flex flex-row items-center gap-4;
+        }
+
+        .grooming-date-search-row {
+            @apply flex flex-row items-center gap-2;
+        }
+    }
+
+    /* 平板樣式 - 圖示說明一行，搜尋區塊一行 */
+    @media (min-width: 768px) and (max-width: 1023px) {
+        .grooming-filter-container {
+            @apply flex-col gap-2;
+        }
+
+        .grooming-filter-row {
+            @apply flex flex-row items-center gap-4;
+        }
+
+        .grooming-date-search-row {
+            @apply flex flex-row items-center gap-2;
+        }
+    }
+
+    /* 手機樣式 - 每個元素一行 */
+    @media (max-width: 767px) {
+        .grooming-filter-container {
+            @apply flex-col gap-3;
+        }
+
+        .grooming-filter-row {
+            @apply flex flex-col gap-2;
+        }
+
+        .grooming-filter-label {
+            @apply flex flex-row items-center gap-2;
+        }
+
+        .grooming-date-search-row {
+            @apply flex flex-row items-center gap-2;
+        }
+    }
+
+
+}
