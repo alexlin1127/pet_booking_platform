@@ -14,16 +14,16 @@ const router = useRouter()
       </div>
     </div>
     <!-- 店家審核狀態 -->
-    <h2 class="store-status"><FontAwesomeIcon :icon="['fas', 'sync-alt']" />
+    <h2 class="store-status"><FontAwesomeIcon icon="fa-solid fa-sync-alt" />
     {{ storesinfo.status }}
     </h2>
 
     <!-- 店名與地址 -->
     <div class="store-info">
        <div class="flex flex-col md:flex-row md:justify-between md:items-center">
-      <h2 class="store-name"><FontAwesomeIcon :icon="['fas', 'circle']" />
+      <h2 class="store-name"><FontAwesomeIcon icon="fa-solid fa-circle" />
         {{ storesinfo.name }}</h2>
-      <p class="store-address"><FontAwesomeIcon :icon="['fas','location-dot']" class="mr-1" />
+      <p class="store-address"><FontAwesomeIcon icon="fa-solid fa-location-dot" class="mr-1" />
       {{ storesinfo.address }}</p>
        </div>
     </div>
@@ -121,3 +121,5 @@ const router = useRouter()
 </div>
   </section>
 </template>
+
+<style scoped src="../../../styles/pages/Stores/Info/infomanagement.css"></style>
