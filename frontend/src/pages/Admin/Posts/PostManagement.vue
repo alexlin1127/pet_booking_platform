@@ -60,17 +60,56 @@ const paginatedPendingPosts = computed(() => {
 const selectedStartDate = ref("");
 const selectedEndDate = ref("");
 
+// 日期驗證
+const dateValidationError = ref("");
+
+// 驗證日期區間
+const validateDateRange = () => {
+  if (selectedStartDate.value && selectedEndDate.value) {
+    const startDate = new Date(selectedStartDate.value);
+    const endDate = new Date(selectedEndDate.value);
+    
+    if (startDate > endDate) {
+      dateValidationError.value = "結束日期不能早於開始日期";
+      return false;
+    }
+  }
+  dateValidationError.value = "";
+  return true;
+};
+
 // 篩選邏輯
 const filteredApprovedPosts = computed(() => {
+  // 先驗證日期範圍
+  if (!validateDateRange()) {
+    return approvedPosts.value;
+  }
+
   return approvedPosts.value.filter((post) => {
     const postDate = new Date(post.created_at);
-    const startMatch =
-      !selectedStartDate.value || postDate >= new Date(selectedStartDate.value);
-    const endMatch =
-      !selectedEndDate.value || postDate <= new Date(selectedEndDate.value);
-    return startMatch && endMatch;
+    let dateMatch = true;
+    
+    if (selectedStartDate.value) {
+      const startDate = new Date(selectedStartDate.value);
+      dateMatch = dateMatch && postDate >= startDate;
+    }
+    
+    if (selectedEndDate.value) {
+      const endDate = new Date(selectedEndDate.value);
+      endDate.setHours(23, 59, 59, 999);
+      dateMatch = dateMatch && postDate <= endDate;
+    }
+    
+    return dateMatch;
   });
 });
+
+// 清空篩選
+const clearDateFilter = () => {
+  selectedStartDate.value = "";
+  selectedEndDate.value = "";
+  dateValidationError.value = "";
+};
 
 // 分頁邏輯
 const totalPages2 = computed(
@@ -100,34 +139,34 @@ watch([selectedStartDate, selectedEndDate], () => {
   <div class="postmanage-container">
     <h1 class="postmanage-title">貼文管理</h1>
 
-    <div class="postmanage-filters">
-      <div class="storemanage-list">
+    <div class="postmanage-filter">
+      <div class="postmanage-filter-label">
         <p>
           {{
             selectedStatus === "pending"
               ? "待審核貼文列表"
               : "退回補件貼文列表"
-          }}貼文列表
+          }}
         </p>
       </div>
 
       <button
-        class="btn"
-        :class="{ 'btn-active': selectedStatus === 'pending' }"
+        class="postmanage-filter-btn"
+        :class="{ active: selectedStatus === 'pending' }"
         @click="filterByStatus('pending')"
       >
         待審核
       </button>
       <button
-        class="btn"
-        :class="{ 'btn-active': selectedStatus === 'rechecked' }"
+        class="postmanage-filter-btn"
+        :class="{ active: selectedStatus === 'rechecked' }"
         @click="filterByStatus('rechecked')"
       >
         退回補件
       </button>
     </div>
 
-    <div class="storemanage-table-container">
+    <div class="postmanage-table-container">
       <Table>
         <template #header>
           <th>貼文ID</th>
@@ -156,26 +195,41 @@ watch([selectedStartDate, selectedEndDate], () => {
     </div>
   </div>
 
-  <div class="storemanage-container">
-    <h1 class="storemanage-title">已通過貼文</h1>
+  <div class="postmanage-container">
+    <h1 class="postmanage-title">已通過貼文</h1>
 
-    <!-- 選擇日期 -->
-    <label class="storemanage-filter-label">
-      發布日期：
-      <input
-        type="date"
-        v-model="selectedStartDate"
-        class="accmanage-filter-input"
-      />
-      ~
-      <input
-        type="date"
-        v-model="selectedEndDate"
-        class="accmanage-filter-input"
-      />
-    </label>
+    <!-- 選擇日期區間 -->
+    <div class="postmanage-filters">
+      <label class="postmanage-filter-label">
+        發布日期：
+        <input
+          type="date"
+          v-model="selectedStartDate"
+          class="postmanage-filter-input"
+          @change="validateDateRange"
+        />
+        ~
+        <input
+          type="date"
+          v-model="selectedEndDate"
+          class="postmanage-filter-input"
+          @change="validateDateRange"
+        />
+      </label>
+      <!-- 日期驗證錯誤訊息 -->
+      <span v-if="dateValidationError" class="text-red-500 text-sm">
+        {{ dateValidationError }}
+      </span>
+      <button 
+        class="postmanage-filter-btn"
+        @click="clearDateFilter"
+        v-if="selectedStartDate || selectedEndDate"
+      >
+        清空篩選
+      </button>
+    </div>
 
-    <div class="storemanage-table-container">
+    <div class="postmanage-table-container">
       <Table>
         <template #header>
           <th>貼文ID</th>
@@ -205,4 +259,4 @@ watch([selectedStartDate, selectedEndDate], () => {
   </div>
 </template>
 
-<style></style>
+<style scoped src="../../../styles/pages/Admin/Posts/postmanage.css"></style>
