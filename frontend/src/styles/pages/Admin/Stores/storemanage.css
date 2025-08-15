@@ -12,6 +12,29 @@
     .storemanage-table-container {
         @apply mb-4;
     }
+    .storemanage-filter-bar {
+        @apply flex items-center gap-2 mb-4;
+    }
+    .storemanage-filter-label {
+        @apply mr-2 text-gray-700;
+    }
+    .storemanage-filter-btns {
+        @apply flex gap-2;
+    }
+    .storemanage-filter-btn {
+        @apply px-4 py-1 rounded border font-semibold bg-white text-[#C7A27C] border-[#C7A27C] transition;
+    }
+    .storemanage-filter-btn.active {
+        @apply bg-[#C7A27C] text-white border-[#C7A27C];
+    }
+    
+    .storemanage-filters {
+        @apply flex gap-4 mb-4 items-center;
+    }
+    
+    .storemanage-filter-input {
+        @apply border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500;
+    }
     /* Table 樣式 */
     .storemanage-table-container table {
         @apply w-full;
@@ -39,20 +62,5 @@
     }
     .card-row:hover {
         @apply shadow-lg transform -translate-y-1;
-    }
-    .storemanage-filter-bar {
-        @apply flex items-center gap-2 mb-4;
-    }
-    .storemanage-filter-label {
-        @apply mr-2 text-gray-700;
-    }
-    .storemanage-filter-btns {
-        @apply flex gap-2;
-    }
-    .storemanage-filter-btn {
-        @apply px-4 py-1 rounded border font-semibold bg-white text-[#C7A27C] border-[#C7A27C] transition;
-    }
-    .storemanage-filter-btn.active {
-        @apply bg-[#C7A27C] text-white border-[#C7A27C];
     }
 }
