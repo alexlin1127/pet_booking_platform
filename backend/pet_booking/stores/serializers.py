@@ -23,8 +23,8 @@ class StoreImageSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         store = attrs.get('store')
-        if store and store.images.count() >= 8:
-            raise serializers.ValidationError("最多只能上傳8張圖片")
+        if store and store.images.count() >= 9:
+            raise serializers.ValidationError("最多只能上傳9張圖片")
         return attrs
 
 # 店家詳細頁
