@@ -273,6 +273,18 @@ onMounted(async () => {
     console.error("無法載入店家資訊：", error);
   }
 });
+
+// 確保 remove 函數正確定義並綁定
+const remove = (index) => {
+  if (index === 0) {
+    // 如果是封面圖片，清空封面
+    form.value.hero_image = null;
+  } else {
+    // 刪除對應的圖片
+    imagesToUpload.value.splice(index - 1, 1);
+  }
+  images.value.splice(index, 1);
+};
 </script>
 
 <template>
