@@ -31,10 +31,8 @@ import './styles/pages/Customers/customersregister.css'
 
 // 商家頁面樣式
 import './styles/pages/Stores/dashboard.css'
-import './styles/pages/Stores/Booking/addbookings.css'
 import './styles/pages/Stores/storesregister.css'
 import './styles/pages/Stores/Booking/bookinghistory.css'
-import './styles/pages/Stores/Booking/Boarding/boarding.css'
 
 // 
 import './styles/pages/Stores/Info/editinfo.css'
