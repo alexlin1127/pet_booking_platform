@@ -125,7 +125,7 @@ class Orders(models.Model):
         to_field='user_id',
         on_delete=models.CASCADE,
         db_column='user_id',
-        related_name='orders'  # 添加 related_name
+        related_name='orders'
     )
 
     total_price = models.IntegerField()
@@ -136,7 +136,7 @@ class Orders(models.Model):
     blacklist = models.BooleanField(default=False)
     class Meta:
         db_table = 'orders'
-
+        
     def __str__(self):
         service_type = "grooming" if self.reservation_grooming else "boarding"
         return f'Order {self.id} - {service_type} (${self.total_price})'
