@@ -149,7 +149,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Taipei"
 
 USE_I18N = True
 
@@ -169,7 +169,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = 'users.User'
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=30),  # Access Token 有效時間
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=1),  # Access Token 有效時間
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),     # Refresh Token 有效時間
     'ROTATE_REFRESH_TOKENS': True,          # 是否在 refresh 時換新 token（配合黑名單用）
     'BLACKLIST_AFTER_ROTATION': True,       # 將舊 refresh token 加入黑名單（需token_blacklist app）
