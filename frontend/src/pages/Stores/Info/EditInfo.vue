@@ -10,9 +10,9 @@ onMounted(async () => {
   try {
     const response = await api.get("/users/me");
     userId.value = response.data.id;
-    // console.log("User ID fetched:", userId.value);
+    console.log("User ID fetched:", userId.value);
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    // console.error("Error fetching user data:", error);
   }
 });
 
@@ -34,6 +34,7 @@ const boarding_service = ref(false); //住宿服務
 const boarding_pet_type = ref([]); // 住宿類型
 const imageNote = ref(""); // 圖片說明
 const imagesToUpload = ref([]); // 用於存儲待上傳的圖片文件
+const heroImage = ref(null); // 用於存儲封面圖片
 
 const submitForm = () => {
   console.log({
@@ -52,19 +53,31 @@ const handleFiles = (e) => {
   const files = Array.from(e.target.files || []);
   if (!files.length) return;
 
-  const remain = 9 - images.value.length; // 限制圖片數量
+  const remain = 9 - (imagesToUpload.value.length + (heroImage.value ? 1 : 0)); // 限制圖片數量
   const toAdd = files.slice(0, remain);
 
-  toAdd.forEach((file) => {
+  toAdd.forEach((file, index) => {
     const url = URL.createObjectURL(file);
-    images.value.push(url); // 即時渲染
-    imagesToUpload.value.push(file); // 存入待上傳的圖片文件
+    if (!heroImage.value) {
+      // 如果沒有封面圖片，將第一張設為封面
+      heroImage.value = file;
+      images.value.unshift(url); // 即時渲染封面
+    } else {
+      images.value.push(url); // 即時渲染其餘圖片
+      imagesToUpload.value.push(file); // 存入待上傳的圖片文件
+    }
   });
 
   e.target.value = ""; // 清空檔案選擇器
 };
 // 刪除圖片
 const remove = (index) => {
+  if (index === 0 && heroImage.value) {
+    // 刪除封面圖片
+    heroImage.value = null;
+  } else {
+    imagesToUpload.value.splice(index - 1, 1); // 刪除其餘圖片
+  }
   images.value.splice(index, 1);
 };
 
@@ -184,6 +197,11 @@ const updateStoreInfo = async () => {
     imagesToUpload.value.forEach((file) => {
       formData.append("images", file); // 後端 getlist('images') 可以抓到
     });
+    if (heroImage.value === null) {
+      formData.append("hero_image", ""); // 提交空值以刪除 hero_image
+    } else {
+      formData.append("hero_image", heroImage.value);
+    }
 
     // 發送請求
     const response = await api.patch(
@@ -227,10 +245,20 @@ onMounted(async () => {
     boarding_service.value = data.boarding_service || false;
     boarding_pet_type.value = data.boarding_pet_type || [];
 
-    daily_opening_time.value = data.daily_opening_time || "09 : 00";
-    daily_closing_hours.value = data.daily_closing_hours || "17 : 00";
+    daily_opening_time.value = data.daily_opening_time
+      ? data.daily_opening_time.slice(0, 5).replace(":", " : ")
+      : "09 : 00";
+    daily_closing_hours.value = data.daily_closing_hours
+      ? data.daily_closing_hours.slice(0, 5).replace(":", " : ")
+      : "17 : 00";
+
+    // 初始化公休日期
+    close_day.value = data.close_day || [];
 
     selectedServices.value = data.service_item || [];
+
+    // 提取圖片 URL
+    images.value = data.images ? data.images.map((img) => img.image_url) : [];
 
     console.log("店家資訊已載入：", data);
   } catch (error) {
