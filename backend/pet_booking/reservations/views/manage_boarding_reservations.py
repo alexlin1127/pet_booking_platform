@@ -15,7 +15,7 @@ from django.db.models import Count
 from pet_booking.stores.models import Store
 from pet_booking.services.models import BoardingService
 from pet_booking.reservations.models import ReservationBoarding
-from pet_booking.reservations.serializers import StoreNoteUpdateSerializer, OrdersSerializer
+from pet_booking.reservations.serializers import BoardingStoreNoteUpdateSerializer, OrdersSerializer
 from pet_booking.customers.models import CustomersProfile  
 from pet_booking.customers.models import Pet
 from pet_booking.coupon.models import Coupon, CouponStatus
@@ -60,7 +60,7 @@ class BoardingRoomAvailabilityViewSet(viewsets.ReadOnlyModelViewSet):
                 'error': 'store_id is required'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        store = get_object_or_404(Store, id=store_id)
+        store = get_object_or_404(Store, user_id__user_id=store_id)
         store_name = store.store_name
 
         # 1. 根據 store_name 取得 BoardingService 資料
@@ -87,10 +87,7 @@ class BoardingRoomAvailabilityViewSet(viewsets.ReadOnlyModelViewSet):
             status='pending'
         ).count()
 
-        confirmed_total_count = ReservationBoarding.objects.filter(
-            store_name=store_name,
-            status='confirmed'
-        ).count()
+        
 
         # 4. 組織資料結構
         # 先建立房型使用數量的字典
@@ -102,7 +99,7 @@ class BoardingRoomAvailabilityViewSet(viewsets.ReadOnlyModelViewSet):
         result_by_species = defaultdict(lambda: {
             'room_types': [],
         })
-
+        count_usage = 0
         for service in boarding_services:
             species = service['species']
             room_type = service['room_type']
@@ -124,6 +121,8 @@ class BoardingRoomAvailabilityViewSet(viewsets.ReadOnlyModelViewSet):
                     'used_slots': used_rooms,
                     'remaining_pet_slots': remaining_pet_slots
                 })
+
+                count_usage += used_rooms
             elif species == 'dog':
                 # 計算剩餘房間數量
                 remaining_rooms = max(0, total_rooms - used_rooms)
@@ -133,6 +132,13 @@ class BoardingRoomAvailabilityViewSet(viewsets.ReadOnlyModelViewSet):
                     'used_count': used_rooms,
                     'remaining_count': remaining_rooms,
                 })
+                count_usage += used_rooms
+
+        confirmed_total_count = ReservationBoarding.objects.filter(
+            store_name=store_name,
+            status='confirmed',
+            checkin_date__date__gte=today
+        ).count() + count_usage
 
         # 6. 格式化最終回傳資料
         return Response({
@@ -150,7 +156,8 @@ class BoardingStoreNoteUpdateViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
     
     def create(self, request):
-        serializer = StoreNoteUpdateSerializer(data=request.data, partial=True)
+        print(request.data)
+        serializer = BoardingStoreNoteUpdateSerializer(data=request.data, partial=True)
         
         if not serializer.is_valid():
             return Response({
@@ -284,7 +291,7 @@ class BoardingReservationManagementViewSet(viewsets.ViewSet):
     def finish_reservation(self, request):
         '''完成預約：將 confirmed 狀態改為 finished 並創建訂單記錄'''
         reservation_id = request.data.get('reservation_id')
-        
+
         if not reservation_id:
             return Response({
                 'error': 'reservation_id is required'
@@ -295,13 +302,13 @@ class BoardingReservationManagementViewSet(viewsets.ViewSet):
                 reservation_id=reservation_id,
                 status='confirmed'
             )
-            
+
             try:
                 customer_profile = CustomersProfile.objects.get(
                     full_name=reservation.user_name,
                     phone=reservation.user_phone
                 )
-                user_id = customer_profile.user_id
+                user_id = customer_profile.user_id.user_id
 
             except CustomersProfile.DoesNotExist:
                 return Response({
@@ -314,7 +321,7 @@ class BoardingReservationManagementViewSet(viewsets.ViewSet):
                     'error': 'Multiple customer profiles found',
                     'details': f'Multiple customers found with name: {reservation.user_name} and phone: {reservation.user_phone}'
                 }, status=status.HTTP_400_BAD_REQUEST)
-            
+
             order_data = {
                 'reservation_boarding': reservation_id,
                 'user_id': user_id,

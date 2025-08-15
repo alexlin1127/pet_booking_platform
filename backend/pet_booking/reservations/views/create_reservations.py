@@ -723,9 +723,9 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
     def parse_datetime(self, reservation_date: str, reservation_time: str) -> Tuple[Optional[datetime], Optional[Response]]:
         """解析日期時間"""
         try:
-            reservation_date_obj = datetime.strptime(reservation_date, "%Y-%m-%d").date()
-            reservation_time_obj = datetime.strptime(reservation_time, "%H:%M").time()
-            reservation_datetime = datetime.combine(reservation_date_obj, reservation_time_obj)
+            reservation_date_obj = datetime.now().strptime(reservation_date, "%Y-%m-%d").date()
+            reservation_time_obj = datetime.now().strptime(reservation_time, "%H:%M").time()
+            reservation_datetime = datetime.now().combine(reservation_date_obj, reservation_time_obj)
             return reservation_datetime, None
         except ValueError:
             error_response = self.create_error_response(
@@ -921,7 +921,6 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
                 if coupon_error:
                     return coupon_error
 
-                print(store_info)
                 response_data = self.create_success_response_data(
                     reservation_id, customer_info['user_name'], reservation_date, reservation_time,
                     selected_services, pet.name, pet.species, store_id, store_info['store_phone'], coupon_number,
@@ -1782,7 +1781,7 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
     def validate_store_side_parameters(self, request) -> Tuple[Dict, Optional[Response]]:
         """驗證店家端參數"""
         store_id = request.query_params.get('store_id')
-        
+
         required_fields = ['service_type', 'user_name', 'user_phone', 'pet_name', 
                           'pet_type', 'pet_breed', 'room_type', 'check_in_date',
                           'check_in_time', 'check_out_date', 'check_out_time']
@@ -1833,7 +1832,6 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
             # 獲取店家資訊
             store_queryset = self.manager.get_store_by_name_queryset(request_data['store_name'])
             store = store_queryset.first()
-
             if not store:
                 return self.create_error_response('店家不存在', status.HTTP_404_NOT_FOUND)
 
@@ -1881,7 +1879,6 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
                 time_slots, room_type_obj['room_count']
             )
 
-
             if availability_error:
                 return self.create_error_response(availability_error, status.HTTP_400_BAD_REQUEST)
             # 計算住宿費用 - 使用 BoardingCalculationViewSet 的邏輯
@@ -1905,6 +1902,11 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
                 checkin_datetime, checkout_datetime, total_price, request_data['customer_note']
             )
             
+            serializer = ReservationBoardingSerializer(data=reservation_data)
+
+            if serializer.is_valid():
+                serializer.save()
+
             # 檢查並處理用戶優惠券
             coupon_number, coupon_error = self.manager.check_and_process_user_coupon(
                 request_data['user_id'], reservation_id, request_data['store_id']
@@ -1932,23 +1934,14 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
             request_data, error_response = self.validate_store_side_parameters(request)
             if error_response:
                 return error_response
-            
-            # 獲取客戶資訊
-            customer_queryset = self.manager.get_customer_by_name_phone_queryset(
-                request_data['user_name'], request_data['user_phone']
-            )
-            
-            try:
-                customer_profile = customer_queryset.get()
-            except CustomersProfile.DoesNotExist:
-                return self.create_error_response('找不到對應的用戶', status.HTTP_404_NOT_FOUND)
-            except CustomersProfile.MultipleObjectsReturned:
-                return self.create_error_response('找到多個相同的用戶記錄', status.HTTP_400_BAD_REQUEST)
+
+            if request_data['service_type'] != 'boarding':
+                return self.create_error_response('服務類型非住宿', status.HTTP_500_INTERNAL_SERVER_ERROR) 
             
             # 獲取店家資訊
             store_queryset = self.manager.get_store_by_id_queryset(request_data['store_id'])
             store = store_queryset.first()
-            
+
             if not store:
                 return self.create_error_response('店家不存在', status.HTTP_404_NOT_FOUND)
             
@@ -1958,13 +1951,13 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
                     request_data['check_in_date'], request_data['check_in_time'],
                     request_data['check_out_date'], request_data['check_out_time']
                 )
-            
+
             if datetime_error:
                 return self.create_error_response(datetime_error, status.HTTP_400_BAD_REQUEST)
             
             # 生成時間段
             time_slots = self.manager.generate_time_slots(checkin_datetime, checkout_datetime)
-            
+
             # 獲取住宿服務
             boarding_services_queryset = self.manager.get_boarding_services_queryset(request_data['store_id'])
             
@@ -1982,12 +1975,16 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
             # 驗證房間可用性
             availability_error = self.manager.validate_room_availability(
                 store.store_name, request_data['room_type'], 
-                time_slots, room_type_obj.room_count
+                time_slots, room_type_obj['room_count']
             )
             
             if availability_error:
                 return self.create_error_response(availability_error, status.HTTP_400_BAD_REQUEST)
             
+            total_price = self.calculate_boarding_total_price(
+                request_data['store_id'], request_data['room_type'], 
+                request_data['pet_type'], boarding_duration
+            )
             # 創建預約ID
             reservation_id = create_reservation_id(request_data['service_type'])
             
@@ -1995,9 +1992,13 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
             reservation_data = self.manager.create_reservation_data_dict(
                 reservation_id, store.store_name, request_data['user_name'],
                 request_data['user_phone'], request_data['pet_name'], request_data['room_type'],
-                checkin_datetime, checkout_datetime, '', request_data['store_note']
+                checkin_datetime, checkout_datetime, total_price, '', request_data['store_note'], 
+                
             )
-            
+            serializer = ReservationBoardingSerializer(data=reservation_data)
+
+            if serializer.is_valid():
+                serializer.save()
             
             # 創建成功回應
             response_data = self.manager.create_success_response_data(
