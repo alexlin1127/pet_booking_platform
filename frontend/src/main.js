@@ -20,7 +20,6 @@ import './styles/components/common/sidebar.css'
 import './styles/components/common/pagination.css'
 
 // UI組件樣式
-import './styles/components/UI/card.css'
 import './styles/components/UI/form.css'
 import './styles/components/UI/modalbox.css'
 import './styles/components/UI/button.css'
@@ -35,7 +34,6 @@ import './styles/pages/Stores/dashboard.css'
 import './styles/pages/Stores/Booking/addbookings.css'
 import './styles/pages/Stores/storesregister.css'
 import './styles/pages/Stores/Booking/bookinghistory.css'
-import './styles/pages/Stores/Booking/Grooming/grooming.css'
 import './styles/pages/Stores/Booking/Boarding/boarding.css'
 
 // 
@@ -49,10 +47,6 @@ import './styles/pages/Stores/Services/addservices.css'
 // 
 import './styles/pages/Stores/Posts/postsprocess.css'
 import './styles/pages/Stores/Posts/postsview.css'
-
-// 管理員頁面樣式
-import './styles/pages/Admin/admindashboard.css'
-import './styles/pages/Admin/Posts/postreview.css'
 
 
 
