@@ -95,17 +95,40 @@ const handleAddService = () => {
 };
 
 // Modal 按鈕事件
-const onModalAction = (action) => {
-  //  新增
-  if (action === "cancel") {
-    showDelete.value = false;
-    pending.value = null;
-  }
+const onModalAction = async (event) => {
+  const action = event?.action;
+  console.log("Action triggered:", action);
+  console.log("Pending value before action:", pending.value);
+
   if (action === "confirm" && pending.value) {
-    services.value = services.value.filter((s) => s.id !== pending.value.id);
-    showDelete.value = false;
-    pending.value = null;
+    // 先更新前端數據
+    services.value = services.value.filter(
+      (s) => !(s.id === pending.value.id && s.type === pending.value.type)
+    );
+
+    try {
+      const endpoint =
+        pending.value.type === "grooming"
+          ? `/store/grooming_services/${pending.value.id}`
+          : `/store/boarding_services/${pending.value.id}`;
+      await api.delete(endpoint);
+      console.log(`Service with ID ${pending.value.id} deleted successfully.`);
+    } catch (error) {
+      console.error(
+        `Failed to delete service with ID ${pending.value.id}:`,
+        error
+      );
+      // 如果刪除失敗，重新調用 API 獲取最新數據
+      if (pending.value.type === "grooming") {
+        await getGroomingServices();
+      } else {
+        await getBoardingServices();
+      }
+    }
   }
+
+  showDelete.value = false;
+  pending.value = null;
 };
 
 // 過濾服務清單
@@ -223,7 +246,12 @@ const buildInfoRows = (svc) => {
           class: 'svc-btn svc-btn-solid gap-6',
         },
       ]"
-      @close="() => (showDelete = false)"
+      @close="
+        () => {
+          showDelete = false;
+          pending = null;
+        }
+      "
       @button-click="onModalAction"
       width="max-w-2xl"
     >
