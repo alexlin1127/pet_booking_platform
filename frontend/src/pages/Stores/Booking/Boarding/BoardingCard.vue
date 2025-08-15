@@ -40,4 +40,4 @@ defineProps({
     </td>
 </template>
 
-<style></style>
+<style scoped src="../../../../styles/pages/Stores/Booking/Boarding/card.css"></style>

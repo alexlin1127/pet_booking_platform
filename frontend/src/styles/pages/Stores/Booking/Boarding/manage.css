@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================= Boarding Management ================= */
+@layer components {
+    .boarding-container {
+        @apply p-4 mb-8;
+    }
+
+    .boarding-card {
+        @apply bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200;
+    }
+
+    .boarding-title {
+        @apply text-xl font-bold flex items-center justify-between bg-[#D1A371] text-white px-6 py-4;
+    }
+
+    .boarding-title h1 {
+        @apply text-xl font-bold;
+    }
+
+    .boarding-title p {
+        @apply text-lg font-semibold;
+    }
+
+    .boarding-table-content {
+        @apply p-4;
+    }
+
+    .boarding-table-container {
+        @apply mb-4 bg-white;
+    }
+
+    .boarding-filters {
+        @apply flex gap-4 items-center mb-2;
+    }
+
+    .boarding-filter-label {
+        @apply flex items-center gap-2 text-base text-gray-600;
+    }
+
+    .boarding-filter-input {
+        @apply border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer;
+    }
+
+    .boarding-search-input {
+        @apply border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-40;
+    }
+
+    .boarding-search-btn {
+        @apply bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all text-sm;
+    }
+
+
+    /* Table 樣式 */
+    .boarding-table-content table {
+        @apply w-full border-separate;
+        border-spacing: 0 4px;
+    }
+    
+    .boarding-table-content th {
+        @apply bg-transparent font-semibold text-center py-3 px-4 text-gray-700 border-0;
+    }
+    
+    .boarding-table-content tbody td {
+        @apply py-3 px-4 text-center;
+        background-color: #ffffff ;
+        border: 1px solid #d1d5db ;
+    }
+    
+    .boarding-table-content tbody tr {
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+    
+    .boarding-table-content tbody td:first-child {
+        border-left: 1px solid #d1d5db ;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+    }
+    
+    .boarding-table-content tbody td:last-child {
+        border-right: 1px solid #d1d5db ;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+    
+    .boarding-table-content tbody tr:hover td {
+        background-color: #f3f4f6;
+    }
+
+    /* 響應式佈局 */
+    .boarding-filter-container {
+        @apply flex flex-col gap-4;
+    }
+}
