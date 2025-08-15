@@ -45,11 +45,11 @@ class TernaryAnswer(models.TextChoices):
     UNCERTAIN = 'uncertain', '不確定'
 
 class Pet(models.Model):
-    user_id = models.ForeignKey('users.User', to_field='user_id', on_delete=models.CASCADE, blank=False, db_index=True, related_name='pets')
+    user_id = models.ForeignKey('users.User', to_field='user_id', db_column='user_id', on_delete=models.CASCADE, blank=False, db_index=True, related_name='pets')
     species = models.CharField(max_length=4, choices=Species.choices, blank=False, null=False)
     name = models.CharField(max_length=255, null=False, blank=False)
     gender = models.CharField(max_length=6, choices=Gender.choices, blank=False, null=False)
-    breed = models.CharField(max_length=255, null=False, blank=False, default="")
+    breed = models.CharField(max_length=255, null=True, blank=True, default="")
     size = models.CharField(max_length=10, blank=False, null=False, default="")
     fur_amount = models.CharField(max_length=10, blank=False, null=False)
     age = models.PositiveIntegerField(null=True, blank=True)
@@ -60,9 +60,6 @@ class Pet(models.Model):
     microchip = models.CharField(max_length=10,
         choices=TernaryAnswer.choices,
         default=TernaryAnswer.UNCERTAIN)
-
-    # last_deworming_date = models.DateField(null=True, blank=True)
-    # last_vaccine_date = models.DateField(null=True, blank=True)
 
     notes = models.TextField(null=True, blank=True)
     image_url = models.ImageField(upload_to='pet_images/', null=True, blank=True)
