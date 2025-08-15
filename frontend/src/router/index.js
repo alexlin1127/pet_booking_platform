@@ -45,6 +45,9 @@ import StoresPage from "../pages/Customers/StoresView.vue";
 import BookingGroomingPage from "../pages/Customers/Booking/Grooming.vue";
 import BookingBoardingPage from "../pages/Customers/Booking/Boarding.vue";
 import StoresList from "../pages/Customers/StoresList.vue";
+import Storesinfo from "../pages/Customers/Storesinfo.vue";
+import NewsView from "../pages/Customers/NewsView.vue";
+import
 
 
 
@@ -57,6 +60,12 @@ const routes = [
     {
         path: "/news",
         component: NewsPage,
+        meta: { sidebar: false }
+    },
+    // 查看最新消息
+    {
+        path: "/news/view/:id",
+        component: NewsView,
         meta: { sidebar: false }
     },
     {
@@ -72,6 +81,11 @@ const routes = [
     {
         path: "/booking/boarding",
         component: BookingBoardingPage,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/stores/storesinfo",
+        component: Storesinfo,
         meta: { sidebar: false }
     },
     // 店家列表頁面
@@ -99,6 +113,11 @@ const routes = [
     {
         path: "/register/stores/:step",
         component: StoresRegister,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/login/customers/info",
+        component: CustomerInfo,
         meta: { sidebar: false }
     },
 

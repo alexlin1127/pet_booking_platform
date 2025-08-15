@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* ---- 延伸你的 form template，維持現有視覺 ---- */
+/* 這些 class 名稱屬於「語意化 Tailwind」：樣式集中在 CSS，template 乾淨 */
+/* 你的通用樣式來自 form.css（form-template-xxx 等）。此處只補密碼列排版。 */
+
+/* 密碼列整體（區塊間距） */
+@layer components {
+/* —— 密碼列：手機單欄；md 起「輸入框 + 按鈕」同列 —— */
+.page-title  { @apply text-3xl md:text-4xl font-bold text-center mb-20; }
+
+.pw-row { @apply flex flex-col gap-2; }
+.pw-label { @apply text-sm font-medium text-gray-700; }
+.pw-grid { @apply grid gap-3; grid-template-columns: 1fr; }
+@media (min-width: 768px){ .pw-grid { grid-template-columns: 1fr auto; align-items: end; } }
+.pw-input { @apply w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2; border-color:#5c4636; --tw-ring-color:#d8c9b8; }
+.pw-btn { @apply inline-flex items-center justify-center whitespace-nowrap rounded-md px-4 text-sm font-medium text-white transition-colors h-[42px]; background-color:#5c4636; }
+.pw-btn:hover { background-color:#4b3a2d; }
+.pw-btn:disabled { @apply opacity-60 cursor-not-allowed; }
+
+/* —— 優惠券內容：左代碼 / 右狀態（md 起並排） —— */
+.coupon-card { @apply grid gap-2; grid-template-columns: 1fr; }
+ .coupon-title {
+    @apply text-sm text-gray-600 ml-2;
+  }
+  @screen md {
+    .coupon-title { grid-column: 1 / -1; }
+  }
+
+@media (min-width:768px){ .coupon-card { grid-template-columns: 1fr auto; align-items:center; } }
+.coupon-code { @apply text-2xl md:text-3xl font-semibold tracking-wide text-gray-800; word-break:break-all; }
+.coupon-status { @apply flex items-center gap-2 text-sm; }
+@media (min-width:768px){ .coupon-status { justify-self:end; } }
+.coupon-status .icon { @apply w-5 h-5; fill: currentColor; }
+.coupon-status.is-unused { color:#c27853; }
+.coupon-status.is-used { @apply text-gray-500; }
+.action-bar {
+  @apply flex items-center justify-center mt-8 mb-8;
+}
+
+}
