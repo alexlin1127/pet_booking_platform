@@ -4,6 +4,13 @@ import { useRouter } from 'vue-router'
 import Card from '@/components/UI/Card.vue'
 import { newsItems } from '@/data/news.js' // 引入假資料
 import Pagination from '@/components/common/Pagination.vue' // 如果需要分頁功能
+
+/* ✅ 新增：可選的控制用 props */
+const props = defineProps({
+  storeId: { type: [String, Number], default: null },   // 有值就只看該店家
+  storeName: { type: String, default: '' },             // 有值就顯示「xxx 店家最新消息」
+})
+
 const tabs = ['全部', '店休', '住宿服務', '美容服務']
 const selectedTab = ref('全部')
 const setTab = (tab) => {
@@ -26,6 +33,11 @@ const currentPage = ref(1)
 
 // 先做篩選（不切片）
 const filteredAll = computed(() => {
+  /* 先依 storeId（若有）篩一次，再依分類篩 */
+   const base = props.storeId
+    ? newsItems.filter(n => String(n.storeId) === String(props.storeId))
+    : newsItems
+
   return selectedTab.value === '全部'
     ? newsItems
     : newsItems.filter(n => n.tags.includes(selectedTab.value))
@@ -61,6 +73,10 @@ const handlePageChange = (page) => {
   <div class="news-page max-w-screen-xl mx-auto px-4 md:px-8 py-8">
     <!-- Title -->
     <header class="text-center mb-6">
+   <!-- ✅ 額外一行：當有 storeName 時顯示 -->
+    <p v-if="props.storeName" class="mt-1 text-base md:text-lg text-amber-700">
+    {{ props.storeName }}
+    </p>
       <h1 class="text-3xl md:text-4xl font-bold tracking-wide">最新消息</h1>
       <p class="text-gray-600 mt-2">掌握店家最新活動、公告與重要訊息</p>
     </header>
