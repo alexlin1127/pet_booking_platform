@@ -6,8 +6,6 @@ import { useRouter, RouterLink } from 'vue-router'
 
 const router = useRouter()
 
-
-
 // 表單資料
 const password = ref('')
 const username = ref('')
@@ -62,7 +60,6 @@ onMounted(() => {
     setTimeout(() => { drawCaptcha(); }, 0);
 });
 
-
 const handleSubmit = async () => {
     // 僅允許 4 位數字
     if (!/^[0-9]{4}$/.test(captchaInput.value)) {
@@ -89,7 +86,7 @@ const handleSubmit = async () => {
         alert('帳號或密碼錯誤');
         return;
     }
-    // 登入成功後取得腳色並導向
+    // 登入成功後取得角色並導向
     try {
         const userRes = await api.get('/users/me');
         const role = userRes.data.role;
@@ -136,7 +133,7 @@ const handleSubmit = async () => {
                 </div>
             </div>
             <div class="mb-4 text-end">
-                <label>忘記密碼</label>
+                <RouterLink to="/password/forgot">忘記密碼</RouterLink>
             </div>
             <template #actions>
                 <div class="login-actions">
@@ -169,3 +166,5 @@ const handleSubmit = async () => {
         </div>
     </div>
 </template>
+
+<style scoped src="../styles/auth/login.css"></style>

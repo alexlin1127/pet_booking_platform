@@ -142,3 +142,5 @@ function goToNewPost() {
         }
     ]" @close="showModal = false" @button-click="handleButtonClick" />
 </template>
+
+<style scoped src="../../../styles/pages/Stores/Posts/postsmanage.css"></style>

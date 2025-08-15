@@ -4,6 +4,7 @@ import Home from "../auth/WelcomePage.vue";
 // 註冊登入
 import Login from "../auth/Login.vue";
 import Register from "../auth/Register.vue";
+import ForgotPassword from "../auth/ForgotPassword.vue";
 import CustomerRegister from "../pages/Customers/CustomerRegister.vue";
 import StoresRegister from "../pages/Stores/StoreRegister.vue";
 
@@ -44,6 +45,7 @@ import StoresPage from "../pages/Customers/StoresView.vue";
 import BookingGroomingPage from "../pages/Customers/Booking/Grooming.vue";
 import BookingBoardingPage from "../pages/Customers/Booking/Boarding.vue";
 
+
 const routes = [
   {
     path: "/",
@@ -79,6 +81,16 @@ const routes = [
   {
     path: "/register",
     component: Register,
+    meta: { sidebar: false },
+  },
+  {
+    path: "/password/forgot",
+    component: ForgotPassword,
+    meta: { sidebar: false },
+  },
+  {
+    path: "/password/change",
+    component: ForgotPassword,
     meta: { sidebar: false },
   },
   {
@@ -139,7 +151,7 @@ const routes = [
   // 住宿預約管理
   {
     path: "/stores/boarding-bookings",
-    component: StoresDashboard,
+    component: StoresBoarding,
     meta: { sidebar: true },
   },
   {
