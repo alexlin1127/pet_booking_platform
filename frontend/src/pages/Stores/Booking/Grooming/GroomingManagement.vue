@@ -60,84 +60,95 @@ function handleSearch() {
 <template>
 
     <div class="grooming-container">
-        <div id="pending" class="grooming-title">
-            <h1>待審核預約</h1>
-            <p>{{ unreviewCount }} 筆</p>
-        </div>
-
-        <div class="grooming-table-container">
-            <p><FontAwesomeIcon icon="fa-solid fa-bookmark" /> 此圖表示有備註</p>
-            <Table>
-                <template #header>
-                    <th></th>
-                    <th>編號</th>
-                    <th>客戶姓名</th>
-                    <th>聯絡電話</th>
-                    <th>毛孩姓名</th>
-                    <th>毛孩種類</th>
-                    <th>預約日期</th>
-                    <th>預約時間</th>
-                    <th>訂單狀況</th>
-                    <th>操作</th>
-                </template>
-                <template #body>
-                    <tr v-for="grooming in paginatedPendingGrooming" :key="grooming.id">
-                        <GroomingCard :grooming="grooming" />
-                    </tr>
-                </template>
-            </Table>
-            <Pagination :current-page="currentPage1" :total-pages="totalPages1" @page-change="handlePageChange1" />
+        <div class="grooming-card">
+            <div id="pending" class="grooming-title">
+                <h1>待審核預約</h1>
+                <p>{{ unreviewCount }}筆</p>
+            </div>
+            
+            <div class="grooming-table-content">
+                <div class="grooming-filters">
+                    <label class="grooming-filter-label">
+                        <FontAwesomeIcon icon="fa-solid fa-bookmark" /> 此圖表示有備註
+                    </label>
+                </div>
+                
+                <Table>
+                    <template #header>
+                        <th></th>
+                        <th>編號</th>
+                        <th>客戶姓名</th>
+                        <th>聯絡電話</th>
+                        <th>毛孩姓名</th>
+                        <th>毛孩種類</th>
+                        <th>預約日期</th>
+                        <th>預約時間</th>
+                        <th>訂單狀況</th>
+                        <th>操作</th>
+                    </template>
+                    <template #body>
+                        <tr v-for="grooming in paginatedPendingGrooming" :key="grooming.id">
+                            <GroomingCard :grooming="grooming" />
+                        </tr>
+                    </template>
+                </Table>
+                <Pagination :current-page="currentPage1" :total-pages="totalPages1" @page-change="handlePageChange1" />
+            </div>
         </div>
     </div>
 
 
     <div class="grooming-container">
-        <div id="recent" class="grooming-title">
-            <h1>近期預約</h1>
-            <p>{{ reviewedCount }} 筆</p>
-        </div>
-        <div class="grooming-filter-container">
-            <p><FontAwesomeIcon icon="fa-solid fa-bookmark" /> 此圖表示有備註</p>
-            <div class="grooming-filter-row">
-                <label class="grooming-filter-label">
-                    <span>可搜尋顧客姓名：</span>
-                    <input type="text" v-model="searchText" @keyup.enter="handleSearch" placeholder="請輸入姓名"
-                        class="grooming-search-input" />
-                </label>
-                <div class="grooming-date-search-row">
-                    <label class="grooming-filter-label">
-                        <span>預約日期：</span>
-                        <input type="date" v-model="selectedDateStart" class="grooming-filter-input" />
-                    </label>
-                    <button class="grooming-search-btn" @click="handleSearch">搜尋</button>
-                </div>
+        <div class="grooming-card">
+            <div id="recent" class="grooming-title">
+                <h1>近期預約</h1>
+                <p>{{ reviewedCount }}筆</p>
             </div>
-        </div>
-        <div class="grooming-table-container">
-            <Table>
-                <template #header>
-                    <th></th>
-                    <th>編號</th>
-                    <th>客戶姓名</th>
-                    <th>聯絡電話</th>
-                    <th>毛孩姓名</th>
-                    <th>毛孩種類</th>
-                    <th>預約日期</th>
-                    <th>預約時間</th>
-                    <th>訂單狀況</th>
-                    <th>操作</th>
-                </template>
-                <template #body>
-                    <tr v-for="grooming in paginatedReviewedGrooming" :key="grooming.id">
-                        <GroomingCard :grooming="grooming" />
-                    </tr>
-                </template>
-            </Table>
-            <Pagination :current-page="currentPage2" :total-pages="totalPages2" @page-change="handlePageChange2" />
+            
+            <div class="grooming-table-content">
+                <div class="grooming-filters">
+                    <label class="grooming-filter-label">
+                        <FontAwesomeIcon icon="fa-solid fa-bookmark" /> 此圖表示有備註
+                    </label>
+                    <label class="grooming-filter-label">
+                        <span>可搜尋顧客姓名：</span>
+                        <input type="text" v-model="searchText" @keyup.enter="handleSearch" placeholder="請輸入姓名"
+                            class="grooming-search-input" />
+                    </label>
+                    <div class="grooming-date-search-row">
+                        <label class="grooming-filter-label">
+                            <span>預約日期：</span>
+                            <input type="date" v-model="selectedDateStart" class="grooming-filter-input" />
+                        </label>
+                        <button class="grooming-search-btn" @click="handleSearch">搜尋</button>
+                    </div>
+                </div>
+
+                <Table>
+                    <template #header>
+                        <th></th>
+                        <th>編號</th>
+                        <th>客戶姓名</th>
+                        <th>聯絡電話</th>
+                        <th>毛孩姓名</th>
+                        <th>毛孩種類</th>
+                        <th>預約日期</th>
+                        <th>預約時間</th>
+                        <th>訂單狀況</th>
+                        <th>操作</th>
+                    </template>
+                    <template #body>
+                        <tr v-for="grooming in paginatedReviewedGrooming" :key="grooming.id">
+                            <GroomingCard :grooming="grooming" />
+                        </tr>
+                    </template>
+                </Table>
+                <Pagination :current-page="currentPage2" :total-pages="totalPages2" @page-change="handlePageChange2" />
+            </div>
         </div>
     </div>
 
 
 </template>
 
-<style></style>
+<style scoped src="../../../../styles/pages/Stores/Booking/Grooming/manage.css"></style>
