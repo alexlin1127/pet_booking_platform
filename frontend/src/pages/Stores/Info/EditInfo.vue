@@ -10,6 +10,7 @@ onMounted(async () => {
   try {
     const response = await api.get("/users/me");
     userId.value = response.data.id;
+    // console.log("User ID fetched:", userId.value);
   } catch (error) {
     console.error("Error fetching user data:", error);
   }
@@ -144,43 +145,55 @@ const updateStoreInfo = async () => {
     return;
   }
 
-  const uploadedImages = [];
-  for (const file of imagesToUpload.value) {
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const response = await api.patch(
-        `/store/profile/${userId.value}`,
-        formData
-      );
-      uploadedImages.push(response.data.url); // 獲取後端返回的圖片 URL
-    } catch (error) {
-      console.error("圖片上傳失敗：", error);
-      alert("圖片上傳失敗，請稍後再試！");
-      return;
-    }
-  }
-
-  const payload = {
-    ...form.value,
-    pick_up_service: pick_up_service.value,
-    grooming_service: grooming_service.value,
-    boarding_service: boarding_service.value,
-    boarding_pet_type: boarding_pet_type.value.length
-      ? boarding_pet_type.value
-      : null,
-    images: uploadedImages,
-    daily_opening_time: formatTime(daily_opening_time.value),
-    daily_closing_hours: formatTime(daily_closing_hours.value),
-    close_day: close_day.value,
-    selectedServices: selectedServices.value,
-  };
-
-  console.log("提交的店家資訊：", payload);
-
   try {
-    const response = await api.patch(`/store/profile/${userId.value}`, payload);
+    const formData = new FormData();
+
+    // 一般欄位
+    formData.append("name", form.value.name);
+    formData.append("phone", form.value.phone);
+    formData.append("address", JSON.stringify(form.value.address)); // 物件要轉成字串
+    formData.append("traffic_info", form.value.traffic_info);
+    formData.append("description", form.value.description);
+    formData.append("facebook_link", form.value.facebook_link);
+    formData.append("line_link", form.value.line_link);
+    formData.append("google_map_link", form.value.google_map_link);
+
+    // 服務選項
+    formData.append("pick_up_service", pick_up_service.value);
+    formData.append("grooming_service", grooming_service.value);
+    formData.append("boarding_service", boarding_service.value);
+    formData.append(
+      "boarding_pet_type",
+      JSON.stringify(
+        boarding_pet_type.value.length ? boarding_pet_type.value : null
+      )
+    );
+
+    // 營業時間 & 公休
+    formData.append("daily_opening_time", formatTime(daily_opening_time.value));
+    formData.append(
+      "daily_closing_hours",
+      formatTime(daily_closing_hours.value)
+    );
+    formData.append("close_day", JSON.stringify(close_day.value));
+
+    // 服務項目
+    formData.append("service_item", JSON.stringify(selectedServices.value));
+
+    // 圖片
+    imagesToUpload.value.forEach((file) => {
+      formData.append("images", file); // 後端 getlist('images') 可以抓到
+    });
+
+    // 發送請求
+    const response = await api.patch(
+      `/store/profile/${userId.value}`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+
     console.log("店家資訊更新成功：", response.data);
     router.push("/stores/info/manage");
   } catch (error) {
