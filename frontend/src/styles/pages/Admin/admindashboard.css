@@ -3,108 +3,108 @@
 @tailwind utilities;
 
 @layer components {
-  /* 重要通知標題 */
-  .storemanage-title {
-    @apply font-bold text-gray-800 tracking-wide;
-    font-size: clamp(1.25rem, 3.5vw, 1.5rem);
-    margin-bottom: clamp(0.75rem, 2vw, 1rem);
-    margin-top: clamp(0.5rem, 1vw, 0.5rem);
+  .dashboard-container {
+    @apply p-6 min-h-screen;
   }
 
-  /* 卡片區塊 */
-  .admindashboard-cardgrid {
-    @apply grid grid-cols-1 md:grid-cols-2;
-    gap: clamp(0.5rem, 1.5vw, 1rem);
-    margin: clamp(0.75rem, 2vw, 1rem) 0;
+  .dashboard-title {
+    @apply text-3xl font-bold text-gray-800 mb-6 ml-6;
   }
 
-  /* 卡片統計區塊 */
-  .admindashboard-stat {
-    @apply w-full bg-gray-200 text-center;
-    font-size: clamp(1.5rem, 4vw, 1.875rem);
-    padding: clamp(0.75rem, 2vw, 1rem) 0;
-    margin: clamp(0.5rem, 1.5vw, 0.75rem) 0;
+  /* 重要通知卡片區域 */
+  .notification-cards {
+    @apply flex gap-6 mb-8;
   }
 
-  /* 營運概況外框 */
-  .admindashboard-overview {
-    @apply bg-white rounded-lg shadow-md;
-    padding: clamp(1rem, 3vw, 1.5rem);
-    margin-top: clamp(0.75rem, 2vw, 1rem);
+  .notification-card {
+    @apply bg-white rounded-lg shadow-md p-6 flex-1 flex flex-col items-center text-center;
   }
 
-  /* 概況按鈕區 */
-  .admindashboard-btnrow {
-    @apply flex justify-center;
-    gap: clamp(0.75rem, 2vw, 1rem);
-    margin-bottom: clamp(1rem, 3vw, 1.5rem);
-    flex-wrap: wrap;
-  }
-  
-  .admindashboard-btn {
-    @apply text-lime-700 rounded-lg font-semibold hover:bg-lime-200 transition bg-lime-100;
-    padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem);
-    font-size: clamp(0.875rem, 2vw, 1rem);
-  }
-  
-  .admindashboard-btn.active {
-    @apply bg-lime-300;
+  .card-icon {
+    @apply w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-4;
   }
 
-  /* 概況內容分欄 */
-  .admindashboard-contentgrid {
-    @apply grid grid-cols-1 md:grid-cols-2 items-center;
-    gap: clamp(1rem, 3vw, 1.5rem);
+  .card-content {
+    @apply mb-4;
   }
 
-  /* 左半邊數字區 */
-  .admindashboard-numblock {
-    @apply flex flex-col items-center justify-center;
-  }
-  
-  .admindashboard-numtitle {
-    @apply text-gray-600;
-    font-size: clamp(1rem, 2.5vw, 1.125rem);
-    margin-bottom: clamp(0.5rem, 1vw, 0.5rem);
-  }
-  
-  .admindashboard-numvalue {
-    @apply font-bold text-lime-600;
-    font-size: clamp(2rem, 6vw, 2.25rem);
-  }
-  
-  .admindashboard-numdesc {
-    @apply text-gray-400;
-    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
-    margin-top: clamp(0.5rem, 1vw, 0.5rem);
+  .card-label {
+    @apply text-gray-600 text-base mb-2;
   }
 
-  /* 右半邊圖表區 */
-  .admindashboard-chartblock {
-    @apply flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200;
-    height: clamp(6rem, 20vw, 8rem);
-  }
-  
-  .admindashboard-charttext {
-    @apply text-gray-400;
-    font-size: clamp(0.875rem, 2vw, 1rem);
+  .card-number {
+    @apply text-3xl font-bold text-gray-800;
   }
 
-  /* 響應式調整 */
-  @media (max-width: 640px) {
-    .admindashboard-btnrow {
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .admindashboard-btn {
-      width: 100%;
-      max-width: 12rem;
-    }
-    
-    .admindashboard-contentgrid {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
+  .card-unit {
+    @apply text-lg font-normal ml-1;
+  }
+
+  .card-button {
+    @apply bg-[#C7A27C] text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200;
+  }
+
+  /* 統計資訊條 */
+  .stats-bar {
+    @apply bg-[#6F5840] text-white text-center py-4 rounded-lg mb-8;
+  }
+
+  .stats-text {
+    @apply text-3xl;
+  }
+
+  .stats-number {
+    @apply font-bold text-white;
+  }
+
+  /* 營運概況區域 */
+  .operations-section {
+    @apply bg-white rounded-lg shadow-md p-6;
+  }
+
+  .section-title {
+    @apply text-3xl font-bold text-gray-800 mb-6;
+  }
+
+  .chart-container {
+    @apply bg-gray-50 rounded-lg p-6;
+  }
+
+  .chart-controls {
+    @apply flex gap-4 mb-6;
+  }
+
+  .chart-btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200;
+    @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+  }
+
+  .chart-btn.active {
+    @apply bg-[#C7A27C] text-white;
+  }
+
+  .chart-content {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch;
+  }
+
+  .data-display {
+    @apply text-center flex flex-col justify-center items-center;
+  }
+
+  .data-title {
+    @apply text-2xl text-gray-600 mb-4 font-medium;
+  }
+
+  .data-number {
+    @apply text-4xl font-bold text-gray-800;
+  }
+
+  .chart-area {
+    @apply bg-white rounded-lg border border-gray-200 p-4 h-80 overflow-hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
   }
 }
