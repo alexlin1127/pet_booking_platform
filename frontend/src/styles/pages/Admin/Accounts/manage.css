@@ -24,6 +24,10 @@
         @apply border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500;
     }
 
+    .accmanage-filter-btn {
+        @apply px-4 py-1 rounded border font-semibold bg-white text-[#C7A27C] border-[#C7A27C] transition hover:bg-[#C7A27C] hover:text-white;
+    }
+
     .accmanage-table-container {
         @apply mb-4;
     }

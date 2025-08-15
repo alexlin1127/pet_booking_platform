@@ -19,4 +19,38 @@
     .postmanage-filter-label {
         @apply flex items-center gap-2 pl-1;
     }
+
+    .postmanage-filter-input {
+        @apply border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500;
+    }
+
+    .postmanage-filter {
+        @apply flex gap-2;
+    }
+
+    .postmanage-filter-label {
+        @apply mr-2 text-gray-700;
+    }
+
+    .postmanage-filter-btn {
+        @apply px-4 py-1 rounded border font-semibold bg-white text-[#C7A27C] border-[#C7A27C] transition;
+    }
+
+    .postmanage-filter-btn.active {
+        @apply bg-[#C7A27C] text-white border-[#C7A27C];
+    }
+
+    /* Table 樣式 */
+    .postmanage-table-container table {
+        @apply w-full;
+        @apply border-separate;
+        border-spacing: 0 12px;
+    }
+
+    .postmanage-table-container th {
+        @apply bg-transparent font-semibold text-center py-3 px-4 text-gray-700;
+        @apply border-0;
+    }
+
+
 }
