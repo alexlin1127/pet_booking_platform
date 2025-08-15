@@ -46,20 +46,25 @@ class StoreSerializer(serializers.ModelSerializer):
         return store
 
     def update(self, instance, validated_data):
-        # 更新其他欄位
+    # 先更新其他欄位
         images_data = validated_data.pop('images', None)
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
 
-        
-        # 刪除舊圖片
-        instance.images.all().delete()
+        # 如果要覆蓋圖片 → 先刪除舊的
+        if images_data is not None or self.context['request'].FILES.getlist('images'):
+            instance.images.all().delete()
 
-        # 從 request.FILES 取得圖片檔案
-        files = self.context['request'].FILES.getlist('images')
-        for image_file in files:
-            StoreImage.objects.create(store=instance, image_url=image_file)
+            # 處理 JSON 傳來的圖片（URL 或 dict）
+            if images_data:
+                for image_data in images_data:
+                    StoreImage.objects.create(store=instance, **image_data)
+
+            # 處理上傳的檔案
+            files = self.context['request'].FILES.getlist('images')
+            for image_file in files:
+                StoreImage.objects.create(store=instance, image_url=image_file)
 
         return instance
 
