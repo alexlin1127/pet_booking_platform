@@ -115,12 +115,14 @@ const router = useRouter();
     <!-- 服務項目 -->
     <div class="store-services">
       <h3 class="section-subtitle font-bold text-xl">服務項目</h3>
-      <div
-        v-for="service in storesinfo.service_item"
-        :key="service"
-        class="service-tags"
-      >
-        <span class="tag">{{ service }}</span>
+      <div class="service-tags-container flex flex-wrap justify-center gap-2">
+        <div
+          v-for="service in storesinfo.service_item"
+          :key="service"
+          class="service-tags"
+        >
+          <span class="tag">{{ service }}</span>
+        </div>
       </div>
     </div>
 
