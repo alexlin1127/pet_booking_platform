@@ -59,7 +59,6 @@ class LikeStoreSerializer(serializers.ModelSerializer):
 class PetSerializer(serializers.ModelSerializer):
     user_id = serializers.SlugRelatedField(
         slug_field='user_id',
-        # queryset=User.objects.all(),
         read_only=True
     )
     
@@ -78,8 +77,6 @@ class PetSerializer(serializers.ModelSerializer):
             'fur_amount',
             'spayed_or_neutered',
             'microchip',
-            'last_deworming_date',
-            'last_vaccine_date',
             'notes',
             'image_url',
             'created_at',

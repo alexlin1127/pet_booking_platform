@@ -1,17 +1,17 @@
 # origin
 from datetime import datetime, timedelta, date, time
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Dict, List, Optional, Tuple
+import math
 
 # third-party
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
-from django.shortcuts import get_object_or_404
 from django.db.models import QuerySet
 
 # app
-from ..models import GroomingSchedules, BoardingSchedules, ReservationBoarding, ReservationGrooming
+from ..models import GroomingSchedules, BoardingSchedules, ReservationBoarding
 from pet_booking.services.models import GroomingService, GroomingServicePricing, BoardingService, BoardingServicePricing
 from pet_booking.stores.models import Store
 from pet_booking.coupon.models import Coupon, CouponStatus
@@ -39,7 +39,7 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_store_queryset(self, store_id: str) -> QuerySet:
         """獲取店家 QuerySet"""
-        return Store.objects.filter(id=store_id)
+        return Store.objects.filter(user_id__user_id=store_id)
 
     def get_user_pets_queryset(self, user_id: int) -> QuerySet:
         """獲取用戶寵物 QuerySet"""
@@ -82,8 +82,8 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
     def create_user_pets_list(self, pets_queryset: QuerySet) -> Dict[str, Dict]:
         """創建用戶寵物列表"""
         user_pets = {}
-        for pet in pets_queryset:
-            user_pets[pet.name] = self.create_pet_info_dict(pet)
+        for index, pet in enumerate(pets_queryset):
+            user_pets[index] = self.create_pet_info_dict(pet)
         return user_pets
 
     def create_grooming_services_list(self, grooming_services_queryset: QuerySet) -> List[str]:
@@ -169,13 +169,11 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
         """獲取店家資訊和服務選項(客戶端)"""
         store_id = request.query_params.get('store_id')
         service_type = request.query_params.get('service_type')
-        user_id = request.user.id
-
+        user_id = request.user.user_id
         if not store_id:
             return Response({
                 'error': '缺少店家ID參數'
             }, status=status.HTTP_400_BAD_REQUEST)
-
         try:
             store_queryset = self.get_store_queryset(store_id)
             store = store_queryset.first()
@@ -188,7 +186,7 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
             # 獲取用戶寵物資訊
             pets_queryset = self.get_user_pets_queryset(user_id)
             user_pets = self.create_user_pets_list(pets_queryset)
-
+            
             if service_type == 'grooming':
                 grooming_services_queryset = self.get_grooming_services_queryset(store_id)
                 service_titles = self.create_grooming_services_list(grooming_services_queryset)
@@ -232,9 +230,12 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
                 return Response({
                     'error': '店家不存在或已停用'
                 }, status=status.HTTP_404_NOT_FOUND)
-
+            else:
+                store_id = store.id
+                
             if service_type == 'grooming':
                 grooming_services_queryset = self.get_grooming_services_queryset(store_id)
+                
                 service_titles = self.create_grooming_services_list(grooming_services_queryset)
                 response_data = {
                     'store': self.create_store_info_dict(store),
@@ -290,12 +291,6 @@ class PetInfoViewSet(viewsets.ModelViewSet):
             'pet_info': self.create_pet_info_dict(pet)
         }
 
-    def create_pet_data_with_user_id(self, pet_data: Dict, user_id: int) -> Dict:
-        """創建包含用戶ID的寵物資料"""
-        pet_data_copy = pet_data.copy()
-        pet_data_copy['user_id'] = user_id
-        return pet_data_copy
-
     def create_success_response(self, message: str, action: str, pet_info: Dict, status_code: int) -> Response:
         """創建成功回應"""
         return Response({
@@ -326,10 +321,9 @@ class PetInfoViewSet(viewsets.ModelViewSet):
                     '用戶未認證', 
                     status.HTTP_401_UNAUTHORIZED
                 )
-
-            user_id = request.user.id
             pet_name = request.query_params.get('pet_name')
 
+            user_id = request.user.user_id
             if not pet_name:
                 return self.create_error_response(
                     '缺少寵物姓名參數', 
@@ -338,7 +332,6 @@ class PetInfoViewSet(viewsets.ModelViewSet):
             
             pet_queryset = self.get_pet_queryset(user_id, pet_name)
             pet = pet_queryset.first()
-            
             if pet:
                 response_data = self.create_pet_response_data(pet)
                 return Response(response_data, status=status.HTTP_200_OK)
@@ -365,7 +358,7 @@ class PetInfoViewSet(viewsets.ModelViewSet):
                     status.HTTP_401_UNAUTHORIZED
                 )
 
-            user_id = request.user.id
+            user_id = request.user
             pet_data = request.data
             pet_name = pet_data.get('name')
 
@@ -375,20 +368,15 @@ class PetInfoViewSet(viewsets.ModelViewSet):
                     status.HTTP_400_BAD_REQUEST
                 )
 
-            # 創建包含用戶ID的寵物資料
-            pet_data_with_user = self.create_pet_data_with_user_id(pet_data, user_id)
-
             # 檢查寵物是否已存在
-            pet_queryset = self.get_pet_queryset(user_id, pet_name)
+            pet_queryset = Pet.objects.filter(user_id=user_id, name=pet_name)
             existing_pet = pet_queryset.first()
-            
+
             if existing_pet:
                 # 更新現有寵物
-                serializer = PetSerializer(existing_pet, data=pet_data_with_user, partial=True)
-                
+                serializer = PetSerializer(existing_pet, data=pet_data, partial=True)
                 if serializer.is_valid():
-                    serializer.save()
-                    
+                    serializer.save(user_id=user_id)
                     return self.create_success_response(
                         f'寵物 "{pet_name}" 資訊覆寫更新成功',
                         'updated',
@@ -403,7 +391,7 @@ class PetInfoViewSet(viewsets.ModelViewSet):
                 
             else:
                 # 創建新寵物
-                serializer = PetSerializer(data=pet_data_with_user)
+                serializer = PetSerializer(data=pet_data)
                 
                 if serializer.is_valid():
                     serializer.save()
@@ -433,13 +421,13 @@ class GroomingCalculationViewSet(viewsets.ModelViewSet):
 
     def get_store_queryset(self, store_id: str) -> QuerySet:
         """獲取店家 QuerySet"""
-        return Store.objects.filter(id=store_id)
-
+        return Store.objects.filter(user_id__user_id=store_id)
     def get_grooming_service_queryset(self, service_title: str, store_id: str) -> QuerySet:
         """獲取美容服務 QuerySet"""
+        store = Store.objects.filter(user_id__user_id=store_id).first()
         return GroomingService.objects.filter(
             service_title=service_title, 
-            store_id=store_id
+            store_id=store.id
         )
 
     def get_grooming_pricing_queryset(self, grooming_service: GroomingService, pet_size: str, pet_fur_amount: str) -> QuerySet:
@@ -530,7 +518,6 @@ class GroomingCalculationViewSet(viewsets.ModelViewSet):
     def calculate_total_price(self, selected_services: List[str], store_id: str, pet_size: str, pet_fur_amount: str) -> Tuple[int, Optional[Response]]:
         """計算所有服務的總價格"""
         total_price = 0
-        
         for service_title in selected_services:
             service_price, error_response = self.calculate_service_price(
                 service_title, store_id, pet_size, pet_fur_amount
@@ -551,16 +538,13 @@ class GroomingCalculationViewSet(viewsets.ModelViewSet):
             store_id = request.query_params.get('store_id')
             pet_data = request.data.get('pet_data', {})
             selected_services = request.data.get('selected_services', [])
-
             # 驗證請求參數
             validation_error = self.validate_request_parameters(store_id, pet_data, selected_services)
             if validation_error:
                 return validation_error
-
             # 獲取店家資訊
             store_queryset = self.get_store_queryset(store_id)
             store = store_queryset.first()
-            
             if not store:
                 return self.create_error_response(
                     '店家不存在', 
@@ -572,7 +556,6 @@ class GroomingCalculationViewSet(viewsets.ModelViewSet):
             pet_validation_error = self.validate_pet_data(pet_data_dict)
             if pet_validation_error:
                 return pet_validation_error
-
             # 計算總價格
             total_price, calculation_error = self.calculate_total_price(
                 selected_services, 
@@ -580,7 +563,6 @@ class GroomingCalculationViewSet(viewsets.ModelViewSet):
                 pet_data_dict['size'], 
                 pet_data_dict['fur_amount']
             )
-            
             if calculation_error:
                 return calculation_error
 
@@ -609,7 +591,7 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
 
     def get_store_by_id_queryset(self, store_id: str) -> QuerySet:
         """根據店家ID獲取店家 QuerySet"""
-        return Store.objects.filter(id=store_id)
+        return Store.objects.filter(user_id__user_id=store_id)
 
     def get_pet_queryset(self, user_id: int, pet_name: str) -> QuerySet:
         """獲取寵物 QuerySet"""
@@ -617,9 +599,10 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
 
     def get_grooming_service_queryset(self, service_title: str, store_id: str) -> QuerySet:
         """獲取美容服務 QuerySet"""
+        store = Store.objects.filter(user_id__user_id=store_id).first()
         return GroomingService.objects.filter(
             service_title=service_title,
-            store_id=store_id
+            store_id=store.id
         )
 
     def get_grooming_pricing_queryset(self, grooming_service: GroomingService, pet_size: str, pet_fur_amount: str) -> QuerySet:
@@ -669,6 +652,7 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
                                    selected_services: List[str], pet: Pet, pet_size: str, pick_up_service: bool,
                                    reservation_datetime: datetime, customer_note: str, store_note: str,
                                    total_price: int, total_grooming_duration: int) -> Dict:
+        
         """創建預約資料字典"""
         return {
             'reservation_id': reservation_id,
@@ -691,7 +675,7 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
 
     def create_success_response_data(self, reservation_id: str, user_name: str, reservation_date: str,
                                    reservation_time: str, selected_services: List[str], pet_name: str,
-                                   species: str, store_phone: str, store_id: str, 
+                                   species: str,  store_id: str, store_phone: str,
                                    coupon_number: Optional[str] = None) -> Dict:
         """創建成功回應資料"""
         response_data = {
@@ -847,10 +831,9 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
                     status.HTTP_401_UNAUTHORIZED
                 )
 
-            # 提取請求參數
             store_id = request.query_params.get('store_id')
             service_type = request.query_params.get('service_type')
-            user_id = request.user.id
+            user_id = request.user.user_id
             store_name = request.data.get('store_name')
             pet_name = request.data.get('pet_name')                     
             selected_services = request.data.get('selected_services', [])
@@ -869,7 +852,6 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
             # 獲取客戶資訊
             customer_queryset = self.get_customer_profile_queryset(user_id)
             customer_profile = customer_queryset.first()
-            
             if not customer_profile:
                 return self.create_error_response(
                     '用戶不存在', 
@@ -877,11 +859,9 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
                 )
 
             customer_info = self.create_customer_info_dict(customer_profile)
-
             # 獲取店家資訊
             store_queryset = self.get_store_by_name_queryset(store_name)
             store = store_queryset.first()
-            
             if not store:
                 return self.create_error_response(
                     '店家不存在', 
@@ -906,7 +886,7 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
             total_grooming_duration, total_price, calculation_error = self.calculate_service_duration_and_price(
                 selected_services, store_id, pet_info['pet_size'], pet_info['pet_fur_amount']
             )
-            
+
             if calculation_error:
                 return calculation_error
 
@@ -917,14 +897,14 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
 
             # 創建不可用時間段
             unavailable_times = self.create_unavailable_time_slots(reservation_datetime, total_grooming_duration)
-
+            
             # 檢查時間段可用性
             availability_error = self.check_time_slot_availability(
                 unavailable_times, store_name, reservation_datetime.date()
             )
             if availability_error:
                 return availability_error
-
+            
             reservation_id = create_reservation_id(service_type)
             reservation_data = self.create_reservation_data_dict(
                 reservation_id, store_name, customer_info['user_name'], customer_info['user_phone'],
@@ -933,7 +913,7 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
             )
 
             serializer = ReservationGroomingSerializer(data=reservation_data)
-            
+
             if serializer.is_valid():
                 serializer.save()
 
@@ -941,11 +921,13 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
                 if coupon_error:
                     return coupon_error
 
+                print(store_info)
                 response_data = self.create_success_response_data(
                     reservation_id, customer_info['user_name'], reservation_date, reservation_time,
-                    selected_services, pet.name, pet.species, store_info['store_phone'], coupon_number,
-                    store_id
+                    selected_services, pet.name, pet.species, store_id, store_info['store_phone'], coupon_number,
+                    
                 )
+
                 return Response(response_data, status=status.HTTP_201_CREATED)
             
             else:
@@ -993,7 +975,7 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
             # 獲取店家資訊
             store_queryset = self.get_store_by_id_queryset(store_id)
             store = store_queryset.first()
-            
+
             if not store:
                 return self.create_error_response(
                     '店家不存在', 
@@ -1003,10 +985,9 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
             store_info = self.create_store_info_dict(store)
 
             # 計算服務持續時間
-            total_grooming_duration, _, calculation_error = self.calculate_service_duration_and_price(
+            total_grooming_duration, total_price, calculation_error = self.calculate_service_duration_and_price(
                 selected_services, store_id, pet_size, pet_fur_amount
             )
-            
             if calculation_error:
                 return calculation_error
 
@@ -1014,12 +995,12 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
             reservation_datetime, datetime_error = self.parse_datetime(reservation_date, reservation_time)
             if datetime_error:
                 return datetime_error
-
+            
             # 創建不可用時間段（店家端計算方式略有不同）
-            total_grooming_duration_count = int(round(total_grooming_duration / 15) - 1, 0)
+            total_grooming_duration_count = math.ceil(total_grooming_duration / 15) - 1
             grooming_unavailable_time = []
             current_time = reservation_datetime
-            
+
             for i in range(total_grooming_duration_count + 1):
                 grooming_unavailable_time.append(current_time.time())
                 current_time += timedelta(minutes=15)
@@ -1028,6 +1009,7 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
             availability_error = self.check_time_slot_availability(
                 grooming_unavailable_time, store_info['store_name'], reservation_datetime.date()
             )
+
             if availability_error:
                 return availability_error
 
@@ -1042,8 +1024,11 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
                 'pet_name': pet_name,
                 'pet_type': pet_type,
                 'pet_breed': pet_breed,
+                'pet_size': pet_size,
                 'pick_up_service': pick_up_service,
                 'reservation_time': reservation_datetime,
+                'total_price': total_price,
+                'grooming_period': total_grooming_duration,
                 'customer_note': '',
                 'store_note': store_note,
                 'status': 'pending'
@@ -1051,14 +1036,14 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
 
             # 序列化和保存
             serializer = ReservationGroomingSerializer(data=reservation_data)
-            
+
             if serializer.is_valid():
                 serializer.save()
-
                 response_data = self.create_success_response_data(
                     reservation_id, user_name, reservation_date, reservation_time,
-                    selected_services, pet_name, pet_type, store_info['store_phone']
+                    selected_services, pet_name, pet_type, store_id, store_info['store_phone']
                 )
+
                 return Response(response_data, status=status.HTTP_201_CREATED)
             
             else:
@@ -1080,22 +1065,22 @@ class BoardingRoomInfoViewSet(viewsets.ModelViewSet):
 
     def get_store_queryset(self, store_id: str) -> QuerySet:
         """獲取店家 QuerySet"""
-        return Store.objects.filter(id=store_id)
+        return Store.objects.filter(user_id__user_id=store_id)
 
     def get_boarding_services_queryset(self, store_id: str) -> QuerySet:
         """獲取住宿服務 QuerySet"""
-        return BoardingService.objects.filter(store_id=store_id)
+        store = Store.objects.filter(user_id__user_id=store_id).first()
+        return BoardingService.objects.filter(store_id=store.id)
 
     def get_room_type_queryset(self, boarding_service: BoardingService, pet_species: str) -> QuerySet:
         """獲取房間類型 QuerySet"""
         return BoardingService.objects.filter(
-            boarding_service=boarding_service,
             species=pet_species
         )
 
     def get_room_pricing_queryset(self, room_type: BoardingService) -> QuerySet:
         """獲取房間定價 QuerySet"""
-        return BoardingServicePricing.objects.filter(room_type=room_type)
+        return BoardingServicePricing.objects.filter(boarding_service_id=room_type)
 
     def create_pricing_info_dict(self, room_pricing: BoardingServicePricing) -> Dict:
         """創建定價資訊字典"""
@@ -1107,18 +1092,7 @@ class BoardingRoomInfoViewSet(viewsets.ModelViewSet):
             'overtime_charging': room_pricing.overtime_charging
         }
 
-    def create_room_type_data_dict(self, room_type: BoardingService, pricing_info: Optional[Dict]) -> Dict:
-        """創建房間類型資料字典"""
-        return {
-            'id': room_type.id,
-            'species': room_type.species,
-            'room_type': room_type.room_type,
-            'room_count': room_type.room_count,
-            'pet_available_amount': room_type.pet_available_amount,
-            'pricing_info': pricing_info
-        }
-
-    def create_response_data_dict(self, store_id: str, store_name: str, room_types_data: List[Dict]) -> Dict:
+    def create_response_data_dict(self, store_id: str, store_name: str, room_types_data: Dict) -> Dict:
         """創建回應資料字典"""
         return {
             'success': True,
@@ -1149,31 +1123,28 @@ class BoardingRoomInfoViewSet(viewsets.ModelViewSet):
 
     def process_room_types(self, boarding_services_queryset: QuerySet, pet_species: str) -> List[Dict]:
         """處理房間類型資料"""
-        room_types_data = []
-        
+        room_types_data = {}
+
         for boarding_service in boarding_services_queryset:
-            room_type_queryset = self.get_room_type_queryset(boarding_service, pet_species)
-            room_type = room_type_queryset.first()
-            
-            if room_type:
+            room_id = boarding_service.id
+            room_type = boarding_service.room_type
+            if room_id:
                 # 獲取定價資訊
-                pricing_queryset = self.get_room_pricing_queryset(room_type)
-                room_pricing = pricing_queryset.first()
-                
-                pricing_info = None
-                if room_pricing:
+                pricing_queryset = self.get_room_pricing_queryset(room_id)
+
+                room = []
+                for room_pricing in pricing_queryset:
                     pricing_info = self.create_pricing_info_dict(room_pricing)
+
+                    room.append(pricing_info)
                 
-                # 創建房間類型資料
-                room_type_data = self.create_room_type_data_dict(room_type, pricing_info)
-                room_types_data.append(room_type_data)
+                room_types_data[room_type] = room
         
         return room_types_data
 
     @action(detail=False, methods=['get'], url_path='info')
     def get_room_types(self, request):
         """獲取房間類型資訊"""
-        
         try:
             store_id = request.query_params.get('store_id')
             pet_species = request.query_params.get('pet_species')
@@ -1186,7 +1157,7 @@ class BoardingRoomInfoViewSet(viewsets.ModelViewSet):
             # 獲取店家資訊
             store_queryset = self.get_store_queryset(store_id)
             store = store_queryset.first()
-            
+
             if not store:
                 return self.create_error_response(
                     '店家不存在', 
@@ -1195,7 +1166,6 @@ class BoardingRoomInfoViewSet(viewsets.ModelViewSet):
             
             # 獲取住宿服務
             boarding_services_queryset = self.get_boarding_services_queryset(store_id)
-            
             if not boarding_services_queryset.exists():
                 return self.create_error_response(
                     '該店家沒有提供住宿服務', 
@@ -1228,11 +1198,12 @@ class BoardingCalculationViewSet(viewsets.ModelViewSet):
 
     def get_store_queryset(self, store_id: str) -> QuerySet:
         """獲取店家 QuerySet"""
-        return Store.objects.filter(id=store_id)
+        return Store.objects.filter(user_id__user_id=store_id)
 
     def get_boarding_services_queryset(self, store_id: str) -> QuerySet:
         """獲取住宿服務 QuerySet"""
-        return BoardingService.objects.filter(store_id=store_id)
+        store = Store.objects.filter(user_id__user_id=store_id).first()
+        return BoardingService.objects.filter(store_id=store.id)
 
     def get_boarding_service_by_filters_queryset(self, filters: Dict) -> QuerySet:
         """根據過濾條件獲取住宿服務 QuerySet"""
@@ -1240,7 +1211,7 @@ class BoardingCalculationViewSet(viewsets.ModelViewSet):
 
     def get_room_pricing_queryset(self, boarding_service: BoardingService) -> QuerySet:
         """獲取房間定價 QuerySet"""
-        return BoardingServicePricing.objects.filter(room_type=boarding_service)
+        return BoardingServicePricing.objects.filter(room_id=boarding_service)
 
     def create_date_validation_error_response(self, error_message: str) -> Response:
         """創建日期驗證錯誤回應"""
@@ -1340,7 +1311,7 @@ class BoardingCalculationViewSet(viewsets.ModelViewSet):
             
             # 計算住宿晚數
             boarding_duration = (check_out_date_obj - check_in_date_obj).days
-            
+
             # 如果當天入住當天退房，至少算1晚
             if boarding_duration <= 0:
                 boarding_duration = 1
@@ -1362,66 +1333,44 @@ class BoardingCalculationViewSet(viewsets.ModelViewSet):
             duration_in_days = room_pricing.duration * 30
         return duration_in_days
 
-    def process_boarding_service_pricing(self, boarding_service: BoardingService) -> List[Dict]:
-        """處理住宿服務定價"""
-        service_details = []
-        room_pricing_queryset = self.get_room_pricing_queryset(boarding_service)
-        
-        for room_pricing in room_pricing_queryset:
-            duration_in_days = self.calculate_duration_in_days(room_pricing)
-            service_detail = self.create_service_detail_dict(room_pricing, duration_in_days)
-            service_details.append(service_detail)
-        
-        return service_details
 
-    def process_multiple_boarding_services(self, boarding_services_queryset: QuerySet, room_type_filters: Dict) -> List[Dict]:
+    def process_multiple_boarding_services(self, boarding_services_queryset: QuerySet, room_type: any) -> List[Dict]:
         """處理多個住宿服務"""
         service_details = []
         
         for boarding_service in boarding_services_queryset:
             try:
-                boarding_service_queryset = self.get_boarding_service_by_filters_queryset(room_type_filters)
-                boarding_service_obj = boarding_service_queryset.first()
-                
-                if boarding_service_obj:
-                    room_pricing_queryset = self.get_room_pricing_queryset(boarding_service_obj)
+                if boarding_service.room_type == room_type:
+                    pricing_queryset = BoardingServicePricing.objects.filter(boarding_service_id=boarding_service.id)
                     
-                    if not room_pricing_queryset.exists():
-                        return [{'error': '找不到房型對應價格'}]
-                    
-                    pricing_details = self.process_boarding_service_pricing(boarding_service_obj)
-                    service_details.extend(pricing_details)
+                    for pricing in pricing_queryset:
+                        if pricing.duration_unit == 'week':
+                            pricing.duration = int(pricing.duration) * 7
+
+                        elif pricing.duration_unit == 'month':
+                            pricing.duration = int(pricing.duration) * 30
+
+                        elif pricing.duration_unit == 'day':
+                            pass
+
+                        service_details.append({
+                            "duration_in_days": int(pricing.duration),
+                            "duration_unit": 'day',
+                            "pricing": pricing.pricing,
+                            "overtime_charging": pricing.overtime_charging,
+                            "overtime_rate": pricing.overtime_rate
+                            })
 
             except BoardingService.DoesNotExist:
                 continue
 
-            except Exception:
-                # 處理多筆資料的情況
-                boarding_service_obj = self.get_boarding_service_by_filters_queryset(room_type_filters).first()
-                if boarding_service_obj:
-                    room_pricing_queryset = self.get_room_pricing_queryset(boarding_service_obj)
-                    
-                    if room_pricing_queryset.exists():
-                        for room_pricing in room_pricing_queryset:
-                            duration_in_days = self.calculate_duration_in_days(room_pricing)
-                            service_detail = self.create_service_detail_with_warning_dict(
-                                room_pricing, 
-                                duration_in_days, 
-                                '發現多筆房型資料，但只處理第一筆房型的所有價格選項'
-                            )
-                            service_details.append(service_detail)
-                    else:
-                        service_details.append({
-                            'warning': '發現多筆相同房型資料且該房型尚未設定價格資訊'
-                        })
-        
         return service_details
 
     def select_best_pricing_option(self, service_details: List[Dict], boarding_duration: int) -> Tuple[Dict, int, Optional[Response]]:
         """選擇最佳定價選項"""
         # 驗證價格選項
         valid_pricing_options = [detail for detail in service_details if 'pricing' in detail]
-        
+
         if not valid_pricing_options:
             error_response = self.create_error_response(
                 '沒有找到有效的價格資訊', 
@@ -1441,7 +1390,6 @@ class BoardingCalculationViewSet(viewsets.ModelViewSet):
             best_pricing_option = min(valid_pricing_options, key=lambda x: x['duration_in_days'])
         
         total_cost = boarding_duration * best_pricing_option['pricing']
-        
         return best_pricing_option, total_cost, None
     
     @action(detail=False, methods=['post'], url_path='calculate')
@@ -1476,7 +1424,7 @@ class BoardingCalculationViewSet(viewsets.ModelViewSet):
             # 獲取店家資訊
             store_queryset = self.get_store_queryset(store_id)
             store = store_queryset.first()
-            
+
             if not store:
                 return self.create_error_response(
                     '店家不存在', 
@@ -1485,7 +1433,6 @@ class BoardingCalculationViewSet(viewsets.ModelViewSet):
 
             # 獲取住宿服務
             boarding_services_queryset = self.get_boarding_services_queryset(store_id)
-            
             # 建立過濾條件
             room_type_filters = {
                 'room_type': room_type
@@ -1495,31 +1442,28 @@ class BoardingCalculationViewSet(viewsets.ModelViewSet):
                 room_type_filters['species'] = pet_species
             
             # 處理住宿服務
-            service_details = self.process_multiple_boarding_services(boarding_services_queryset, room_type_filters)
-            
+            service_details = self.process_multiple_boarding_services(boarding_services_queryset, room_type)
             if not service_details:
                 return self.create_error_response(
                     f'該店家沒有提供 "{room_type}" 房型的住宿服務', 
                     status.HTTP_404_NOT_FOUND
                 )
-            
-            # 檢查是否有錯誤
-            if service_details and 'error' in service_details[0]:
-                return self.create_error_response(
-                    service_details[0]['error'], 
-                    status.HTTP_400_BAD_REQUEST
-                )
-
+    
             # 選擇最佳定價選項
             best_pricing_option, total_cost, pricing_error = self.select_best_pricing_option(service_details, boarding_duration)
             if pricing_error:
                 return pricing_error
 
             # 創建回應資料
-            store_info = self.create_store_info_dict(store)
-            pricing_option = self.create_pricing_option_dict(best_pricing_option)
-            cost_result = self.create_cost_result_dict(boarding_duration, best_pricing_option['pricing'], total_cost)
-            response_data = self.create_response_data_dict(store_info, pricing_option, cost_result)
+            response_data = {
+                'success': True,
+                'store_id': store.id,
+                'store_name': store.store_name,
+                'pricing_option': best_pricing_option,
+                'boarding_duration_days': boarding_duration,
+                'duration_unit': 'day',
+                'total_boarding_cost': total_cost,
+            }
             
             return Response(response_data, status=status.HTTP_200_OK)
             
@@ -1581,11 +1525,12 @@ class BoardingReservationManager:
     
     def get_store_by_id_queryset(self, store_id: str) -> QuerySet:
         """根據店家ID獲取店家 QuerySet"""
-        return Store.objects.filter(id=store_id)
+        return Store.objects.filter(user_id__user_id=store_id)
     
     def get_boarding_services_queryset(self, store_id: str) -> QuerySet:
         """獲取住宿服務 QuerySet"""
-        return BoardingService.objects.filter(store_id=store_id)
+        store = Store.objects.filter(user_id__user_id=store_id).first()
+        return BoardingService.objects.filter(store_id=store.id)
     
     def get_room_type_queryset(self, boarding_service: BoardingService, room_type: str) -> QuerySet:
         """獲取房間類型 QuerySet"""
@@ -1605,7 +1550,7 @@ class BoardingReservationManager:
     def create_reservation_data_dict(self, reservation_id: str, store_name: str, user_name: str, 
                                    user_phone: str, pet_name: str, room_type: str,
                                    checkin_datetime: datetime, checkout_datetime: datetime,
-                                   customer_note: str = '', store_note: str = '') -> Dict:
+                                   total_price, customer_note: str = '', store_note: str = '') -> Dict:
         """創建預約資料字典"""
         return {
             'reservation_id': reservation_id,
@@ -1620,7 +1565,7 @@ class BoardingReservationManager:
             'customer_note': customer_note,
             'store_note': store_note,
             'status': 'pending',
-            'total_price': 0  # 需要根據業務邏輯計算
+            'total_price': total_price
         }
     
     def create_success_response_data(self, user_name: str, checkin_datetime: datetime,
@@ -1693,11 +1638,11 @@ class BoardingReservationManager:
     
     def find_room_type_info(self, boarding_services_queryset: QuerySet, room_type: str) -> Tuple[Optional[BoardingService], Optional[str]]:
         """查找房間類型資訊"""
+        room_type_obj = {}
         for boarding_service in boarding_services_queryset:
-            room_type_queryset = self.get_room_type_queryset(boarding_service, room_type)
-            room_type_obj = room_type_queryset.first()
-            
-            if room_type_obj:
+            if boarding_service.room_type == room_type:
+                room_type_obj["room_count"] = boarding_service.room_count
+                room_type_obj["species"] = boarding_service.species
                 return room_type_obj, None
         
         return None, f'找不到房型 "{room_type}"'
@@ -1726,27 +1671,6 @@ class BoardingReservationManager:
                 
         except Exception as e:
             return None, f'處理優惠券時發生錯誤: {str(e)}'
-    
-    def create_reservation_and_schedules(self, reservation_data: Dict, time_slots: List[datetime],
-                                       store_name: str, room_type: str) -> ReservationBoarding:
-        """創建預約記錄和時間表"""
-        # 創建預約記錄
-        reservation = ReservationBoarding.objects.create(**reservation_data)
-        
-        # 創建時間表記錄
-        schedule_objects = [
-            BoardingSchedules(
-                reservation_boarding_id=reservation,
-                store_name=store_name,
-                room_type=room_type,
-                unavailable_time=time_slot
-            )
-            for time_slot in time_slots
-        ]
-        
-        BoardingSchedules.objects.bulk_create(schedule_objects)
-        
-        return reservation
 
 class BoardingReservationViewSet(viewsets.ModelViewSet):
     """住宿預約管理ViewSet"""
@@ -1758,6 +1682,68 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
         super().__init__(**kwargs)
         self.manager = BoardingReservationManager()
     
+    def calculate_boarding_total_price(self, store_id: str, room_type: str, pet_species: str, boarding_duration: int) -> Optional[int]:
+        """計算住宿總價格 - 複用 BoardingCalculationViewSet 的邏輯"""
+        try:
+            boarding_services_queryset = self.manager.get_boarding_services_queryset(store_id)
+            service_details = []
+            
+            for boarding_service in boarding_services_queryset:
+                if boarding_service.room_type == room_type and boarding_service.species == pet_species:
+                    try:
+                        from pet_booking.services.models import BoardingServicePricing
+
+                        pricing_queryset = BoardingServicePricing.objects.filter(boarding_service_id=boarding_service.id)
+                        
+                        for pricing in pricing_queryset:
+                            duration_in_days = pricing.duration
+                            
+                            # 轉換時間單位為天數
+                            if pricing.duration_unit == 'week':
+                                duration_in_days = int(pricing.duration) * 7
+                            elif pricing.duration_unit == 'month':
+                                duration_in_days = int(pricing.duration) * 30
+                            elif pricing.duration_unit == 'day':
+                                duration_in_days = int(pricing.duration)
+                                
+                            service_details.append({
+                                "duration_in_days": duration_in_days,
+                                "duration_unit": 'day',
+                                "pricing": pricing.pricing,
+                                "overtime_charging": pricing.overtime_charging,
+                                "overtime_rate": pricing.overtime_rate
+                            })
+                    except Exception:
+                        continue
+            
+            if not service_details:
+                return None
+            
+            # 選擇最佳定價選項 - 複用 BoardingCalculationViewSet 的邏輯
+            valid_pricing_options = [detail for detail in service_details if 'pricing' in detail]
+
+            if not valid_pricing_options:
+                return None
+            
+            # 選擇最適合的價格選項
+            suitable_options = [
+                option for option in valid_pricing_options 
+                if option['duration_in_days'] <= boarding_duration
+            ]
+            
+            if suitable_options:
+                best_pricing_option = max(suitable_options, key=lambda x: x['duration_in_days'])
+            else:
+                best_pricing_option = min(valid_pricing_options, key=lambda x: x['duration_in_days'])
+            
+            # 計算總價格
+            total_cost = boarding_duration * best_pricing_option['pricing']
+            return total_cost
+            
+        except Exception as e:
+            print(f"計算住宿費用時發生錯誤: {str(e)}")
+            return None
+    
     def create_error_response(self, error_message: str, status_code: int) -> Response:
         """創建錯誤回應"""
         return Response({'error': error_message}, status=status_code)
@@ -1765,7 +1751,7 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
     def validate_user_side_parameters(self, request) -> Tuple[Dict, Optional[Response]]:
         """驗證客戶端參數"""
         store_id = request.query_params.get('store_id')
-        user_id = request.user.id
+        user_id = request.user.user_id
         service_type = request.query_params.get('service_type')
         
         required_fields = ['store_name', 'pet_name', 'room_type', 'check_in_date', 
@@ -1836,20 +1822,45 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
             request_data, error_response = self.validate_user_side_parameters(request)
             if error_response:
                 return error_response
-            
+
             # 獲取客戶資訊
             customer_queryset = self.manager.get_customer_profile_queryset(request_data['user_id'])
             customer_profile = customer_queryset.first()
-            
+
             if not customer_profile:
                 return self.create_error_response('用戶不存在', status.HTTP_404_NOT_FOUND)
             
             # 獲取店家資訊
             store_queryset = self.manager.get_store_by_name_queryset(request_data['store_name'])
             store = store_queryset.first()
-            
+
             if not store:
                 return self.create_error_response('店家不存在', status.HTTP_404_NOT_FOUND)
+
+            # 獲取寵物資訊
+            pet = Pet.objects.filter(user_id=request_data['user_id'], name=request_data['pet_name']).first()
+            if not pet:
+                return self.create_error_response('找不到對應的寵物資訊', status.HTTP_404_NOT_FOUND)
+            
+            # 獲取住宿服務
+            boarding_services_queryset = self.manager.get_boarding_services_queryset(request_data['store_id'])
+            if not boarding_services_queryset.exists():
+                return self.create_error_response('該店家沒有提供住宿服務', status.HTTP_404_NOT_FOUND)
+
+            # 查找房間類型
+            room_type_obj, room_error = self.manager.find_room_type_info(
+                boarding_services_queryset, request_data['room_type']
+            )
+            
+            if room_error:
+                return self.create_error_response(room_error, status.HTTP_404_NOT_FOUND)
+
+            # 驗證寵物類型與房型的物種是否一致
+            if pet.species != room_type_obj['species']:
+                return self.create_error_response(
+                    f"寵物類型 ({pet.species}) 與房型的物種 ({room_type_obj['species']}) 不一致，無法預約。",
+                    status.HTTP_400_BAD_REQUEST
+                )
             
             # 解析日期時間
             checkin_datetime, checkout_datetime, boarding_duration, datetime_error = \
@@ -1860,32 +1871,29 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
             
             if datetime_error:
                 return self.create_error_response(datetime_error, status.HTTP_400_BAD_REQUEST)
-            
+
             # 生成時間段
             time_slots = self.manager.generate_time_slots(checkin_datetime, checkout_datetime)
-            
-            # 獲取住宿服務
-            boarding_services_queryset = self.manager.get_boarding_services_queryset(request_data['store_id'])
-            
-            if not boarding_services_queryset.exists():
-                return self.create_error_response('該店家沒有提供住宿服務', status.HTTP_404_NOT_FOUND)
-            
-            # 查找房間類型
-            room_type_obj, room_error = self.manager.find_room_type_info(
-                boarding_services_queryset, request_data['room_type']
-            )
-            
-            if room_error:
-                return self.create_error_response(room_error, status.HTTP_404_NOT_FOUND)
             
             # 驗證房間可用性
             availability_error = self.manager.validate_room_availability(
                 request_data['store_name'], request_data['room_type'], 
-                time_slots, room_type_obj.room_count
+                time_slots, room_type_obj['room_count']
             )
-            
+
+
             if availability_error:
                 return self.create_error_response(availability_error, status.HTTP_400_BAD_REQUEST)
+            # 計算住宿費用 - 使用 BoardingCalculationViewSet 的邏輯
+            total_price = self.calculate_boarding_total_price(
+                request_data['store_id'], request_data['room_type'], 
+                pet.species, boarding_duration
+            )
+            if total_price is None:
+                return self.create_error_response(
+                    '無法計算住宿費用，請聯繫店家', 
+                    status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
             
             # 創建預約ID
             reservation_id = create_reservation_id(request_data['service_type'])
@@ -1894,12 +1902,7 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
             reservation_data = self.manager.create_reservation_data_dict(
                 reservation_id, request_data['store_name'], customer_profile.full_name,
                 customer_profile.phone or '', request_data['pet_name'], request_data['room_type'],
-                checkin_datetime, checkout_datetime, request_data['customer_note']
-            )
-            
-            # 創建預約和時間表
-            self.manager.create_reservation_and_schedules(
-                reservation_data, time_slots, request_data['store_name'], request_data['room_type']
+                checkin_datetime, checkout_datetime, total_price, request_data['customer_note']
             )
             
             # 檢查並處理用戶優惠券
@@ -1908,7 +1911,6 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
             )
             
             if coupon_error:
-                # 如果優惠券處理有錯誤，記錄但不影響主要預約流程
                 print(f"優惠券處理警告: {coupon_error}")
             
             # 創建成功回應
@@ -1921,7 +1923,7 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
             
         except Exception as e:
             return self.create_error_response(f'建立預約時發生錯誤: {str(e)}', status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+        
     @action(detail=False, methods=['post'], url_path='store')
     def create_reservation_storesides(self, request):
         """建立住宿預約(店家端)"""
@@ -1996,10 +1998,6 @@ class BoardingReservationViewSet(viewsets.ModelViewSet):
                 checkin_datetime, checkout_datetime, '', request_data['store_note']
             )
             
-            # 創建預約和時間表
-            self.manager.create_reservation_and_schedules(
-                reservation_data, time_slots, store.store_name, request_data['room_type']
-            )
             
             # 創建成功回應
             response_data = self.manager.create_success_response_data(
