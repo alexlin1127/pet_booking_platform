@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faPlay, faAngleLeft, faAngleRight, faCalendar, faHandshake, faBookmark, faPeopleGroup, faClipboardList } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faAngleLeft, faAngleRight, faCalendar, faHandshake, faBookmark, faPeopleGroup, faClipboardList, faSyncAlt, faCircle, faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { faLine, faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons'
 
 // 引入css套件
@@ -38,7 +38,6 @@ import './styles/pages/Stores/Booking/Boarding/boarding.css'
 
 // 
 import './styles/pages/Stores/Info/editinfo.css'
-import './styles/pages/Stores/Info/infomanagement.css'
 import './styles/pages/Stores/Info/openservices.css'
 // 
 import './styles/pages/Stores/Services/servicesmanagement.css'
@@ -52,7 +51,7 @@ import './styles/pages/Stores/Posts/postsview.css'
 
 
 
-library.add(faPlay, faAngleLeft, faAngleRight, faCalendar, faHandshake, faBookmark, faPeopleGroup, faClipboardList, faLine, faGoogle, faFacebookF)
+library.add(faPlay, faAngleLeft, faAngleRight, faCalendar, faHandshake, faBookmark, faPeopleGroup, faClipboardList, faSyncAlt, faCircle, faLocationDot, faLine, faGoogle, faFacebookF)
 
 const app = createApp(App)
 app.component('FontAwesomeIcon', FontAwesomeIcon)
