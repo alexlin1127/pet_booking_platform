@@ -402,18 +402,16 @@ class BoardingAllReservationsViewSet(viewsets.ViewSet):
 
     def list(self, request, *args, **kwargs):
         '''取得所有住宿預約資料（待審核 + 近期預約）'''
-        store_id = request.query_params.get('store_id')
-        user_id = request.query_params.get('user_id')
+        store_id = request.user.user_id
 
         if not store_id:
             return Response({
                 'error': 'store_id is required'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        store = get_object_or_404(Store, id=store_id)
+        store = Store.objects.filter(user_id=store_id).first()
         store_name = store.store_name
 
-        # get boarding reservation with pending status
         pending_reservations = ReservationBoarding.objects.filter(
             store_name=store_name,
             status='pending'
@@ -427,10 +425,10 @@ class BoardingAllReservationsViewSet(viewsets.ViewSet):
 
         pending_count = pending_reservations.count()
         confirmed_count = confirmed_reservations.count()
-
         confirmed_reservations_data = []
 
         for reservation in confirmed_reservations:
+            user_id = CustomersProfile.objects.filter(full_name=reservation.user_name, phone=reservation.user_phone).first().user_id.user_id
             pet = Pet.objects.filter(user_id=user_id, name=reservation.pet_name).values('breed', 'size').first()
             pet_breed = pet['breed'] if pet else None
 
@@ -478,37 +476,41 @@ class BoardingReservationDetailsViewSet(viewsets.ViewSet):
     def list(self, request, *args, **kwargs):
         '''取得預約詳情：根據 reservation_id 取得 confirmed 預約 + 該客戶在該店家的所有 finished 預約'''
         reservation_id = request.query_params.get('reservation_id')
-        user_id = request.query_params.get('user_id')
-        
         if not reservation_id:
             return Response({
                 'error': 'reservation_id is required'
             }, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            current_reservation = ReservationBoarding.objects.get(
+            current_reservation = ReservationBoarding.objects.filter(
                 reservation_id=reservation_id,
                 status='confirmed'
-            )
-           
+            ).first()
+
             finished_reservations = ReservationBoarding.objects.filter(
                 store_name=current_reservation.store_name,
                 user_name=current_reservation.user_name,
                 user_phone=current_reservation.user_phone,
                 status='finished'
             ).order_by('-updated_at')  
+            user_name = current_reservation.user_name
+            user_phone = current_reservation.user_phone
+
+            user_id = CustomersProfile.objects.filter(full_name=user_name, phone=user_phone).first().user_id.user_id
 
             pet = Pet.objects.filter(user_id=user_id, name=current_reservation.pet_name).values('breed', 'size').first()
+            pet_name = current_reservation.pet_name
+            print(pet)
             pet_breed = pet['breed'] if pet else None
             pet_size = pet['size'] if pet else None
             checkin_date = current_reservation.checkin_date.date()
             checkout_date = current_reservation.checkout_date.date()
 
             current_reservation_data = {
-                'reservation_id': current_reservation.reservation_id,
-                'user_name': current_reservation.user_name,
-                'user_phone': current_reservation.user_phone,
-                'pet_name': current_reservation.pet_name,
+                'reservation_id': reservation_id,
+                'user_name': user_name,
+                'user_phone': user_phone,
+                'pet_name': pet_name,
                 'pet_breed': pet_breed,
                 'pet_size': pet_size,
                 'checkin_date': checkin_date,
@@ -525,7 +527,7 @@ class BoardingReservationDetailsViewSet(viewsets.ViewSet):
                 'reservation_id',
                 'checkin_date',
                 'room_type',
-                'boarding_duration',
+                'boarding_durations',
                 'total_price',
                 'store_note'
             )
@@ -548,37 +550,39 @@ class BoardingReservationDetailsViewSet(viewsets.ViewSet):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 
-class BoardingPendingReservationViewSet(viewsets.ReadOnlyModelViewSet):
+class BoardingPendingReservationViewSet(viewsets.ViewSet):
     """待審核預約"""
     permission_classes = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
     
     def list(self, request, *args, **kwargs):
-        store_id = request.query_params.get('store_id')
+        store_id = request.user.user_id
+
         if not store_id:
             return Response({
                 'error': 'store_id is required'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        store = get_object_or_404(Store, id=store_id)
+        store = Store.objects.filter(user_id=store_id).first()
         store_name = store.store_name
 
         queryset = ReservationBoarding.objects.filter(
             store_name=store_name,
             status='pending'
         ).order_by('-created_at')
+
         page = self.paginate_queryset(queryset)
-        
+
         if page is not None:
             serialized_data = []
             for reservation in page:
-                
+                pet_breed = Pet.objects.filter(name=reservation.pet_name).first().breed
                 serialized_data.append({
                     'reservation_id': reservation.reservation_id,
                     'user_name': reservation.user_name,
                     'user_phone': reservation.user_phone,
                     'pet_name': reservation.pet_name,
-                    'pet_breed': reservation.pet_breed,
+                    'pet_breed': pet_breed,
                     'checkin_date': reservation.checkin_date,
                     'room_type': reservation.room_type,
                     'status': reservation.status,
@@ -603,13 +607,13 @@ class BoardingUpcomingReservationViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = StandardResultsSetPagination
     
     def list(self, request, *args, **kwargs):
-        store_id = request.query_params.get('store_id')
+        store_id = request.user.user_id
         if not store_id:
             return Response({
                 'error': 'store_id is required'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        store = get_object_or_404(Store, id=store_id)
+        store = Store.objects.filter(user_id=store_id).first()
         store_name = store.store_name
 
         queryset = ReservationBoarding.objects.filter(
@@ -617,16 +621,17 @@ class BoardingUpcomingReservationViewSet(viewsets.ReadOnlyModelViewSet):
                 status='confirmed'
             ).order_by('checkin_date')
         page = self.paginate_queryset(queryset)
-        
+
         if page is not None:
             serialized_data = []
             for reservation in page:
-                 serialized_data.append({
+                pet_breed = Pet.objects.filter(name=reservation.pet_name).first().breed
+                serialized_data.append({
                     'reservation_id': reservation.reservation_id,
                     'user_name': reservation.user_name,
                     'user_phone': reservation.user_phone,
                     'pet_name': reservation.pet_name,
-                    'pet_breed': reservation.pet_breed,
+                    'pet_breed': pet_breed,
                     'checkin_date': reservation.checkin_date,
                     'room_type': reservation.room_type,
                     'status': reservation.status,
@@ -649,15 +654,17 @@ class BoardingPendingReservationDetailViewSet(viewsets.ViewSet):
     """待審核預約詳情 - 用於審核 Modal 視窗"""
     permission_classes = [IsAuthenticated]
     
-    def retrieve(self, request):
+    def list(self, request):
         '''根據 reservation_id 取得待審核預約的詳細資訊'''
         try:
-            user_id = request.query_params.get('user_id')
             reservation_id = request.query_params.get('reservation_id')
             reservation = ReservationBoarding.objects.get(
                 reservation_id=reservation_id,
                 status='pending'
             )
+            user_name = reservation.user_name
+            user_phone = reservation.user_phone
+            user_id = CustomersProfile.objects.filter(full_name=user_name, phone=user_phone).first().user_id.user_id
             
             # 取得寵物品種資訊
             pet = Pet.objects.filter(user_id=user_id, name=reservation.pet_name).values('breed', 'size').first()
