@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+.pet-title { @apply text-3xl md:text-4xl font-bold; }
+
+/* 卡片：手機 1 欄，md 起 2 欄 × 4 行 */
+.pet-summary-card {
+  @apply grid gap-4 p-6 rounded-2xl border bg-white;
+  border-color: #d8c9b8;
+  box-shadow: 0 0 0 1px rgba(216,201,184,.08) inset;
+
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "avatar"
+    "header"
+    "neutered"
+    "chip"
+    "count"
+    "last"
+    "del"
+    "edit";
+}
+@media (min-width: 768px) {
+  .pet-summary-card {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "avatar  header"
+      "neutered chip"
+      "count   last"
+      "del     edit";
+    align-items: center;
+  }
+}
+
+/* 區塊定位 */
+.pet-avatar-wrap   { grid-area: avatar; }
+.pet-header        { grid-area: header; }
+.pet-summary-card .pet-badge:nth-of-type(1) { grid-area: neutered; }
+.pet-summary-card .pet-badge:nth-of-type(2) { grid-area: chip; }
+.pet-summary-card .pet-stat:nth-of-type(1)  { grid-area: count; }
+.pet-summary-card .pet-stat:nth-of-type(2)  { grid-area: last; }
+.pet-action--danger { grid-area: del; }
+.pet-summary-card .pet-action:not(.pet-action--danger) { grid-area: edit; }
+
+/* 照片 */
+.pet-avatar {
+  @apply rounded-md border object-cover;
+  width: 350px;
+  height: 350px;
+  border-color: #d8c9b8;
+}
+.pet-avatar-wrap { @apply flex justify-center; }
+
+/* 標頭 */
+.pet-header  { @apply flex flex-col gap-1 justify-center md:ml-8; }
+.pet-name    { @apply text-base font-semibold text-gray-800; }
+.pet-subtitle{ @apply text-sm text-gray-600; }
+
+/* 標籤與統計 */
+.pet-badge, .pet-stat {
+  @apply flex items-center justify-center rounded-md border py-3 text-sm text-gray-700;
+  border-color: #d8c9b8;
+}
+.pet-badge.is-ok    { @apply text-gray-800 bg-white; }
+.pet-badge.is-muted { @apply text-gray-800 bg-white; }
+
+/* 內部行為按鈕（卡片底列） */
+.pet-action {
+  @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white transition-colors;
+  background: #5c4636;
+}
+.pet-action:hover { background:#4b3a2d; }
+.pet-action--danger { background:#7a4a3a; }
+.pet-action--danger:hover { background:#623a2d; }
+
+/* ====== 覆蓋 ModalBox 的層級與遮罩：放在本檔，不動 modalbox.css ====== */
+:deep(.modal-overlay){
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0,0,0,.5) !important;
+  z-index: 2147483001 !important; /* 比任何內容都高 */
+}
+:deep(.modal-container){
+  position: fixed !important;
+  inset: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  z-index: 2147483002 !important;
+}
+:deep(.modal-panel){
+  background: #fff !important;
+  border-radius: 16px !important;
+  width: min(90vw, 680px) !important;   /* 比預設更寬，符合設計稿 */
+  max-height: calc(100vh - 2rem) !important;
+  overflow: auto !important;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,.25) !important;
+}
+
+/* Modal 內部的按鈕列（沿用你的語意 class） */
+.modal-buttons { @apply w-full max-w-xl mx-auto grid grid-cols-2 gap-4 mt-6; }
+.modal-btn { @apply inline-flex items-center justify-center rounded-md px-5 py-2.5 text-sm font-medium transition-colors; }
+.modal-btn-cancel { @apply bg-white text-amber-700 border; border-color:#d8c9b8; }
+.modal-btn-cancel:hover { @apply bg-amber-50; }
+.modal-btn-danger { @apply text-white; background:#5c4636; }
+.modal-btn-danger:hover { background:#4b3a2d; }
+
+/* Modal 內的排版微調 */
+.pet-modal { @apply pt-2; }
+.pet-modal-card {
+  @apply grid gap-4 p-6  bg-white;
+  border-color: #d8c9b8;
+  box-shadow: 0 0 0 1px rgba(216,201,184,.08) inset;
+
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "avatar"
+    "header"
+    "neutered"
+    "chip"
+    "count"
+    "last"
+    "del"
+    "edit";
+}
+@media (min-width: 768px) {
+  .pet-modal-card {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "avatar  header"
+      "neutered chip"
+      "count   last"
+      "del     edit";
+    align-items: center;
+  }
+}
+}
