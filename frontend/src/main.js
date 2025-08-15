@@ -33,6 +33,10 @@ import './styles/components/UI/switch.css'
 import './styles/pages/Customers/customersregister.css'
 import './styles/pages/Customers/Posts/news.css'
 import './styles/pages/Customers/storeslist.css'
+import './styles/pages/Customers/customerinfo.css'
+// import './styles/pages/Customers/petinfo.css'
+import './styles/pages/Customers/petconfirm.css'
+import './styles/pages/Customers/order.css'
 
 // 商家頁面樣式
 import './styles/pages/Stores/dashboard.css'

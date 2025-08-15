@@ -47,7 +47,11 @@ import BookingBoardingPage from "../pages/Customers/Booking/Boarding.vue";
 import StoresList from "../pages/Customers/StoresList.vue";
 import Storesinfo from "../pages/Customers/Storesinfo.vue";
 import NewsView from "../pages/Customers/NewsView.vue";
-import
+import CustomerInfo from "../pages/Customers/Customerinfo.vue";
+import ChangePassword from "../pages/Customers/ChangePassword.vue";
+import PetInfo from "../pages/Customers/PetInfo.vue";
+import PetConfirm from "../pages/Customers/PetConfirm.vue";
+import Order from "../pages/Customers/Order.vue";
 
 
 
@@ -120,6 +124,35 @@ const routes = [
         component: CustomerInfo,
         meta: { sidebar: false }
     },
+    {
+        path: "/login/customers/changepassword",
+        component:  ChangePassword,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/login/customers/petinfo",
+        component:  PetInfo,
+        meta: { sidebar: false }
+    },
+    {
+        path: '/login/customers/petinfo/:mode', // :mode 為動態參數
+        name: 'PetInfo',
+        component: PetInfo,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/login/customers/petinfo/confirm",
+        component:  PetConfirm,
+        meta: { sidebar: false }
+    },
+    {
+        path: "/login/customers/order",
+        component:  Order,
+        meta: { sidebar: false }
+    },
+
+    
+
 
     // 商家頁面路由
     {

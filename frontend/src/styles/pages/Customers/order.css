@@ -1,0 +1,187 @@
+/* src/styles/pages/order.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* ---- Page blocks ---- */
+  .container-block {
+    @apply w-full max-w-screen-xl mx-auto px-4 md:px-6 lg:px-8 py-6;
+  }
+  .section-block {
+    @apply mb-8 text-left;
+  }
+  .page-title {
+    @apply text-2xl font-bold text-gray-900 text-left mb-4;
+  }
+  .section-subtitle {
+    @apply text-sm text-gray-600 mt-4 mb-4;
+  }
+
+  /* ---- Grids ---- */
+  .grid-pets {
+    @apply grid grid-cols-1 gap-4 mt-4;
+  }
+  @screen md {
+    .grid-pets {
+      @apply grid-cols-2;
+    }
+  }
+
+  .grid-history {
+    @apply grid grid-cols-1 gap-4 mt-4;
+  }
+  @screen md {
+    .grid-history {
+      @apply grid-cols-2;
+    }
+  }
+
+  /* ---- Filter row ---- */
+  .filter-row {
+    @apply mt-2 inline-flex items-center gap-2;
+  }
+  .filter-label {
+    @apply text-sm text-gray-700;
+  }
+
+  /* =========================
+     Page-scoped Card overrides
+     ========================= */
+
+  /* ── 上方寵物卡（你的 Card 仍是 type="vertical"）
+     以 CSS Grid 指定 slot 區塊位置：左圖右文  */
+  .pet-summary-card {
+    display: grid;
+    grid-template-columns: 84px 1fr; /* 左側縮圖、右側文字 */
+    grid-template-areas:
+      "avatar title"
+      "avatar content";
+    column-gap: 16px;
+    align-items: start;
+  }
+  .pet-summary--active {
+    @apply ring-2 ring-gray-400;
+  }
+
+  /* 指派 Card 的內部容器到對應區域（Card.vue 常見 class） */
+  /* 上方寵物卡：左圖右文排版（不改 Card.vue） */
+  .pet-summary-card {
+    display: grid;
+    grid-template-columns: 84px 1fr; /* 左縮圖 84px */
+    grid-template-areas:
+      "avatar title"
+      "avatar content";
+    column-gap: 16px;
+    align-items: start;
+  }
+  .pet-summary--active {
+    @apply ring-2 ring-gray-400;
+  }
+
+  /* 對應 Card 內部容器 */
+  .pet-summary-card .card-icon {
+    grid-area: avatar;
+  }
+  .pet-summary-card .card-title {
+    grid-area: title;
+    @apply m-0;
+  }
+  .pet-summary-card .card-content {
+    grid-area: content;
+  }
+
+  /* 縮圖大小 */
+  .pet-card__avatar {
+    @apply w-20 h-20 rounded-md overflow-hidden bg-gray-100;
+  }
+  .pet-card__avatar img {
+    @apply w-full h-full object-cover;
+  }
+
+  /* 同行標題區 */
+  .pet-card__titleLine {
+    @apply flex items-center gap-4;
+  }
+  .pet-card__name {
+    @apply text-lg font-semibold text-gray-900;
+  }
+  .pet-card__spec {
+    @apply text-base text-gray-800 flex items-center gap-1 whitespace-nowrap;
+  }
+  .spec-weight {
+    @apply font-semibold;
+  }
+
+  /* 圓點列 */
+  /* 兩列 bullets 放同一個 Grid，確保第二欄對齊 */
+  .pet-card__bullets {
+    display: grid;
+    grid-template-columns: max-content 1fr; /* 第1欄依最長內容決定寬度，第二欄跟著對齊 */
+    column-gap: 40px; /* 欄間距可調 */
+    row-gap: 6px; /* 列間距 */
+    align-items: center;
+  }
+
+  /* 每個 bullet 的樣式 */
+  .bullet {
+    @apply inline-flex items-center text-sm text-gray-700;
+    gap: 8px; /* 圓點與文字的距離 */
+    white-space: nowrap; /* 避免被硬換行（若想允許長日期換行可拿掉） */
+  }
+  .bullet::before {
+    content: "●";
+    color: #374151; /* gray-700 */
+    flex-shrink: 0;
+  }
+
+  /* ── 下方歷史卡（type="horizontal"） */
+  /* #image 會掛到 .card-image，這裡把它做成圓形頭貼 */
+  .history-card .card-image {
+    @apply w-8 h-8 rounded-full overflow-hidden shrink-0;
+  }
+  .history-card .card-image img {
+    @apply w-full h-full object-cover;
+  }
+
+  .history-card__titleRow {
+    @apply flex items-center justify-between gap-3;
+  }
+  .history-card__leftGroup {
+    @apply flex items-center gap-2 min-w-0;
+  }
+  .store-name {
+    @apply text-base font-semibold text-gray-900 truncate;
+  }
+  .service-chip {
+    @apply inline-flex items-center px-2 py-0.5 text-xs rounded border border-gray-300 text-gray-700 bg-white;
+  }
+  .status-chip {
+    @apply inline-flex items-center px-2 py-0.5 text-xs rounded-full bg-amber-50 text-amber-700 shrink-0;
+  }
+
+  .history-card__contentRow {
+    @apply flex items-center justify-between gap-3;
+  }
+  .history-card__time {
+    @apply text-sm text-gray-800;
+  }
+  .history-card__price {
+    @apply text-lg font-semibold text-gray-900;
+  }
+  /* 行動裝置點擊優化 */
+  .tap-card {
+    touch-action: manipulation; /* 移除點擊延遲 / 禁止雙擊縮放觸發 */
+    -webkit-tap-highlight-color: transparent; /* iOS 移除藍色高亮 */
+    @apply block outline-none;
+  }
+  .tap-card:active {
+    /* 輕微觸感 */
+    transform: translateY(1px);
+  }
+
+  /* 避免圖片攔截事件/拖拉 */
+  .pet-card__avatar img {
+    pointer-events: none;
+  }
+}
