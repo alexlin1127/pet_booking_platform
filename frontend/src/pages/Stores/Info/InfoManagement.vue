@@ -40,6 +40,24 @@ const fetchStoreInfo = async () => {
 onMounted(fetchStoreInfo);
 
 const router = useRouter();
+
+const currentImageIndex = ref(0);
+
+const imagesList = computed(() => {
+  return (storesinfo.value.images || [])
+    .filter((img) => img && img.image_url) // 過濾掉空的
+    .map((img) => img.image_url); // 取出 URL
+});
+const showPreviousImage = () => {
+  currentImageIndex.value =
+    (currentImageIndex.value - 1 + imagesList.value.length) %
+    imagesList.value.length;
+};
+
+const showNextImage = () => {
+  currentImageIndex.value =
+    (currentImageIndex.value + 1) % imagesList.value.length;
+};
 </script>
 <template>
   <section class="store-section">
@@ -79,14 +97,41 @@ const router = useRouter();
     </div>
 
     <!-- 輪播圖 -->
-    <div class="store-carousel">
-      <!-- 模擬圖片區塊 -->
-      <div class="carousel-image"></div>
-      <div class="carousel-dots">
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
+    <div class="store-carousel relative">
+      <div class="carousel-image">
+        <img
+          v-if="imagesList.length > 0"
+          :src="imagesList[currentImageIndex]"
+          alt="Carousel Image"
+          class="w-full h-full object-cover"
+        />
+        <p v-else>暫無圖片</p>
       </div>
+      <div
+        class="carousel-dots absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2"
+      >
+        <span
+          v-for="(image, index) in imagesList"
+          :key="index"
+          class="dot w-2 h-2 rounded-full"
+          :class="{
+            'bg-gray-800': index === currentImageIndex,
+            'bg-gray-400': index !== currentImageIndex,
+          }"
+        ></span>
+      </div>
+      <button
+        @click="showPreviousImage"
+        class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
+      >
+        &lt;
+      </button>
+      <button
+        @click="showNextImage"
+        class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
+      >
+        &gt;
+      </button>
     </div>
 
     <!-- 四格資訊 -->
@@ -135,12 +180,16 @@ const router = useRouter();
     <!-- icon 區塊：只要其中任何一個有值才顯示整區 -->
     <div
       class="store-social-icons flex items-center gap-4"
-      v-if="storesinfo.line || storesinfo.fb || storesinfo.google"
+      v-if="
+        storesinfo.line_link ||
+        storesinfo.facebook_link ||
+        storesinfo.google_map_link
+      "
     >
       <!-- _blank點擊連結時 在新分頁開啟網址 rel避免安全漏洞 -->
       <a
-        v-if="storesinfo.line"
-        :href="storesinfo.line"
+        v-if="storesinfo.line_link"
+        :href="storesinfo.line_link"
         target="_blank"
         rel="noopener"
         aria-label="LINE"
@@ -150,8 +199,8 @@ const router = useRouter();
       </a>
 
       <a
-        v-if="storesinfo.fb"
-        :href="storesinfo.fb"
+        v-if="storesinfo.facebook_link"
+        :href="storesinfo.facebook_link"
         target="_blank"
         rel="noopener"
         aria-label="Facebook"
@@ -161,8 +210,8 @@ const router = useRouter();
       </a>
 
       <a
-        v-if="storesinfo.google"
-        :href="storesinfo.google"
+        v-if="storesinfo.google_map_link"
+        :href="storesinfo.google_map_link"
         target="_blank"
         rel="noopener"
         aria-label="Google Maps"

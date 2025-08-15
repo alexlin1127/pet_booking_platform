@@ -53,40 +53,30 @@ const handleFiles = (e) => {
   const files = Array.from(e.target.files || []);
   if (!files.length) return;
 
-  const remain = 9 - (imagesToUpload.value.length + (heroImage.value ? 1 : 0)); // 限制圖片數量
+  const remain = 9 - imagesToUpload.value.length; // 限制圖片數量
   const toAdd = files.slice(0, remain);
 
-  toAdd.forEach((file, index) => {
+  toAdd.forEach((file) => {
     const url = URL.createObjectURL(file);
-    if (!heroImage.value) {
-      // 如果沒有封面圖片，將第一張設為封面
-      heroImage.value = file;
-      images.value.unshift(url); // 即時渲染封面
-    } else {
-      images.value.push(url); // 即時渲染其餘圖片
-      imagesToUpload.value.push(file); // 存入待上傳的圖片文件
-    }
+    images.value.push(url); // 即時渲染圖片
+    imagesToUpload.value.push(file); // 存入待上傳的圖片文件
   });
 
-  e.target.value = ""; // 清空檔案選擇器
-};
-// 刪除圖片
-const remove = (index) => {
-  if (index === 0 && heroImage.value) {
-    // 刪除封面圖片
-    heroImage.value = null;
-  } else {
-    imagesToUpload.value.splice(index - 1, 1); // 刪除其餘圖片
+  // 將第一張圖片的 URL 存為 hero_image
+  if (images.value.length > 0) {
+    form.value.hero_image = images.value[0];
   }
-  images.value.splice(index, 1);
+
+  e.target.value = ""; // 清空檔案選擇器
 };
 
 //營業時間
 /* 時間下拉：每 30 分一格（可改） */
-// length: 48 → 代表一天要切成 48 格（因為 24 小時 × 每小時 2 格 = 48）
-// i / 2 → 因為每小時有兩格（:00 和 :30），除以 2 就能得到小時數
-// Math.floor() → 去掉小數
-// String(...).padStart(2, '0') → 小時補 0，讓 9 變成 09
+/* length: 48 → 代表一天要切成 48 格（因為 24 小時 × 每小時 2 格 = 48）
+  i / 2 → 因為每小時有兩格（:00 和 :30），除以 2 就能得到小時數
+  Math.floor() → 去掉小數
+  String(...).padStart(2, '0') → 小時補 0，讓 9 變成 09
+*/
 const timeOptions = Array.from({ length: 48 }, (_, i) => {
   const h = String(Math.floor(i / 2)).padStart(2, "0");
   const m = i % 2 ? "30" : "00";
@@ -192,16 +182,31 @@ const updateStoreInfo = async () => {
 
     // 服務項目
     formData.append("service_item", JSON.stringify(selectedServices.value));
-
     // 圖片
     imagesToUpload.value.forEach((file) => {
       formData.append("images", file); // 後端 getlist('images') 可以抓到
     });
-    if (heroImage.value === null) {
-      formData.append("hero_image", ""); // 提交空值以刪除 hero_image
-    } else {
-      formData.append("hero_image", heroImage.value);
-    }
+
+    formData.append("hero_img", heroImage.value);
+
+    // 清晰區分已有圖片和新上傳圖片，並加入日誌檢查
+    console.log("準備附加到 FormData 的圖片資料：");
+
+    // 附加已有圖片的 URL
+    images.value.forEach((url, index) => {
+      if (
+        !imagesToUpload.value.some((file) => URL.createObjectURL(file) === url)
+      ) {
+        formData.append(`existing_images[${index}]`, url);
+        console.log(`附加已有圖片 URL: existing_images[${index}] = ${url}`);
+      }
+    });
+
+    // 附加新上傳的圖片文件
+    imagesToUpload.value.forEach((file, index) => {
+      formData.append(`new_images[${index}]`, file);
+      console.log(`附加新圖片文件: new_images[${index}] = ${file.name}`);
+    });
 
     // 發送請求
     const response = await api.patch(
@@ -225,6 +230,13 @@ onMounted(async () => {
     const response = await api.get(`/store/profile/${userId.value}`);
     const data = response.data;
 
+    // 提取 hero_image 和圖片 URL
+    if (data.images) {
+      images.value = data.images.map((img) => img.image_url);
+      console.log("提取的圖片 URL：", images.value);
+    } else {
+      console.log("沒有圖片資料");
+    }
     // 填充表單資料
     form.value.name = data.store_name || "";
     form.value.address = data.address || {
@@ -235,10 +247,9 @@ onMounted(async () => {
     form.value.phone = data.phone || "";
     form.value.traffic_info = data.traffic_info || "";
     form.value.description = data.description || "";
-    form.value.facebook_link = data.fb || "";
-    form.value.line_link = data.line || "";
-    form.value.google_map_link = data.google || "";
-
+    form.value.facebook_link = data.facebook_link || "";
+    form.value.line_link = data.line_link || "";
+    form.value.google_map_link = data.google_map_link || "";
     // 填充其他資料
     pick_up_service.value = data.pick_up_service || false;
     grooming_service.value = data.grooming_service || false;
@@ -256,9 +267,6 @@ onMounted(async () => {
     close_day.value = data.close_day || [];
 
     selectedServices.value = data.service_item || [];
-
-    // 提取圖片 URL
-    images.value = data.images ? data.images.map((img) => img.image_url) : [];
 
     console.log("店家資訊已載入：", data);
   } catch (error) {
