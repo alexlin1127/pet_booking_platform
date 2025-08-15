@@ -222,5 +222,4 @@ const showNextImage = () => {
     </div>
   </section>
 </template>
-
 <style scoped src="../../../styles/pages/Stores/Info/infomanagement.css"></style>
