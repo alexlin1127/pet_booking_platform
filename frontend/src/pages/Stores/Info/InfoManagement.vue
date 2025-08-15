@@ -15,7 +15,7 @@ const router = useRouter()
     </div>
     <!-- 店家審核狀態 -->
      <h2 class="store-status">
-      <FontAwesomeIcon icon="fa-solid fa-sync-alt" />
+      <FontAwesomeIcon :icon="['fas', 'sync-alt']" />
       <span v-if="storesinfo.status === 'pending'">審核中</span>
       <span v-else-if="storesinfo.status === 'confirmed'">已通過</span>
       <span v-else-if="storesinfo.status === 'rechecked'">退回補件</span>
@@ -23,13 +23,13 @@ const router = useRouter()
 
     <!-- 店名與地址 -->
     <div class="store-info">
-       <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+      <div class="flex flex-col md:flex-row md:justify-between md:items-center">
         <h2 class="store-name">
-          <FontAwesomeIcon icon="fa-solid fa-circle" />
+          <FontAwesomeIcon :icon="['fas', 'circle']" />
           {{ storesinfo.store_name }}
         </h2>
         <p class="store-address" v-if="storesinfo.address">
-          <FontAwesomeIcon icon="fa-solid fa-location-dot" class="mr-1" />
+          <FontAwesomeIcon :icon="['fas', 'location-dot']" class="mr-1" />
           {{ storesinfo.address.county }}{{ storesinfo.address.district
           }}{{ storesinfo.address.detail }}
         </p>
@@ -88,45 +88,23 @@ const router = useRouter()
     </div>
 
 
- <!-- icon 區塊：只要其中任何一個有值才顯示整區 -->
-    <div
-  class="store-social-icons flex items-center gap-4"
-  v-if="storesinfo.line || storesinfo.fb || storesinfo.google"
->
-<!-- _blank點擊連結時 在新分頁開啟網址 rel避免安全漏洞 -->
-  <a
-    v-if="storesinfo.line"
-    :href="storesinfo.line"
-    target="_blank"  
-    rel="noopener"
-    aria-label="LINE"
-    class="icon"
-  >
-    <FontAwesomeIcon :icon="['fab', 'line']" class="text-green-500" />
-  </a>
+    <!-- icon 區塊：只要其中任何一個有值才顯示整區 -->
+    <div class="store-social-icons flex items-center gap-4"
+      v-if="storesinfo.line || storesinfo.fb || storesinfo.google">
+      <!-- _blank點擊連結時 在新分頁開啟網址 rel避免安全漏洞 -->
+      <a v-if="storesinfo.line" :href="storesinfo.line" target="_blank" rel="noopener" aria-label="LINE" class="icon">
+        <FontAwesomeIcon :icon="['fab', 'line']" class="text-green-500" />
+      </a>
 
-  <a
-    v-if="storesinfo.fb"
-    :href="storesinfo.fb"
-    target="_blank"
-    rel="noopener"
-    aria-label="Facebook"
-    class="icon"
-  >
-    <FontAwesomeIcon :icon="['fab', 'facebook-f']" class="text-blue-600" />
-  </a>
+      <a v-if="storesinfo.fb" :href="storesinfo.fb" target="_blank" rel="noopener" aria-label="Facebook" class="icon">
+        <FontAwesomeIcon :icon="['fab', 'facebook-f']" class="text-blue-600" />
+      </a>
 
-  <a
-    v-if="storesinfo.google"
-    :href="storesinfo.google"
-    target="_blank"
-    rel="noopener"
-    aria-label="Google Maps"
-    class="icon"
-  >
-    <FontAwesomeIcon :icon="['fab', 'google']" class="text-red-500" />
-  </a>
-</div>
+      <a v-if="storesinfo.google" :href="storesinfo.google" target="_blank" rel="noopener" aria-label="Google Maps"
+        class="icon">
+        <FontAwesomeIcon :icon="['fab', 'google']" class="text-red-500" />
+      </a>
+    </div>
   </section>
 </template>
 
