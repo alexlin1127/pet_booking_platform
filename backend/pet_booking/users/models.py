@@ -2,7 +2,7 @@
 import time
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django.conf import settings
 
 class UserRole(models.TextChoices):
     MEMBER = 'member', '一般會員'   
@@ -40,3 +40,8 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.username}-{self.role}"
+    
+class UserRefreshToken(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    refresh_token = models.TextField()  # 可用加密欄位加強安全
+    created_at = models.DateTimeField(auto_now_add=True)

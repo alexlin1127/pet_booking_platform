@@ -91,16 +91,19 @@ router.register(r'reservations/risk/notes', RiskStoreNoteUpdateViewSet, basename
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/', include(router.urls)),
-    path('api/token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/token/verify', TokenVerifyView.as_view(), name='token_verify'),
-    path('api/token/blacklist', TokenBlacklistView.as_view(), name='token_blacklist'),
-    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    # path('api/token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('api/token/verify', TokenVerifyView.as_view(), name='token_verify'),
+    # path('api/token/blacklist', TokenBlacklistView.as_view(), name='token_blacklist'),
+    # path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('api/register_send_code', RegisterSendCodeAPIView.as_view(), name='register_send_code'),
     path('api/register_confirm_code', RegisterConfirmCodeAPIView.as_view(), name='register_confirm_code'),
     path('api/store/register_send_code', StoreRegisterSendCodeAPIView.as_view()),
     path('api/store/register_confirm_code', StoreRegisterConfirmCodeAPIView.as_view()),
     path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
+    path('api/token', BFFTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh', BFFTokenRefreshView.as_view(), name='token_refresh'),
+    path('api/logout', LogoutView.as_view(), name='logout'),
 ]
 
 if settings.DEBUG:
