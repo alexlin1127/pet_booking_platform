@@ -201,6 +201,42 @@ const updateStoreInfo = async () => {
     alert("更新失敗，請稍後再試！");
   }
 };
+
+onMounted(async () => {
+  try {
+    const response = await api.get(`/store/profile/${userId.value}`);
+    const data = response.data;
+
+    // 填充表單資料
+    form.value.name = data.store_name || "";
+    form.value.address = data.address || {
+      county: "",
+      district: "",
+      detail: "",
+    };
+    form.value.phone = data.phone || "";
+    form.value.traffic_info = data.traffic_info || "";
+    form.value.description = data.description || "";
+    form.value.facebook_link = data.fb || "";
+    form.value.line_link = data.line || "";
+    form.value.google_map_link = data.google || "";
+
+    // 填充其他資料
+    pick_up_service.value = data.pick_up_service || false;
+    grooming_service.value = data.grooming_service || false;
+    boarding_service.value = data.boarding_service || false;
+    boarding_pet_type.value = data.boarding_pet_type || [];
+
+    daily_opening_time.value = data.daily_opening_time || "09 : 00";
+    daily_closing_hours.value = data.daily_closing_hours || "17 : 00";
+
+    selectedServices.value = data.service_item || [];
+
+    console.log("店家資訊已載入：", data);
+  } catch (error) {
+    console.error("無法載入店家資訊：", error);
+  }
+});
 </script>
 
 <template>
