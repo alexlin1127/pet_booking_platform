@@ -75,7 +75,7 @@ const showNextImage = () => {
     </div>
     <!-- 店家審核狀態 -->
      <h2 class="store-status">
-      <FontAwesomeIcon icon="fa-solid fa-sync-alt" />
+      <FontAwesomeIcon :icon="['fas', 'sync-alt']" />
       <span v-if="storesinfo.status === 'pending'">審核中</span>
       <span v-else-if="storesinfo.status === 'confirmed'">已通過</span>
       <span v-else-if="storesinfo.status === 'rechecked'">退回補件</span>
@@ -83,13 +83,13 @@ const showNextImage = () => {
 
     <!-- 店名與地址 -->
     <div class="store-info">
-       <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+      <div class="flex flex-col md:flex-row md:justify-between md:items-center">
         <h2 class="store-name">
-          <FontAwesomeIcon icon="fa-solid fa-circle" />
+          <FontAwesomeIcon :icon="['fas', 'circle']" />
           {{ storesinfo.store_name }}
         </h2>
         <p class="store-address" v-if="storesinfo.address">
-          <FontAwesomeIcon icon="fa-solid fa-location-dot" class="mr-1" />
+          <FontAwesomeIcon :icon="['fas', 'location-dot']" class="mr-1" />
           {{ storesinfo.address.county }}{{ storesinfo.address.district
           }}{{ storesinfo.address.detail }}
         </p>
