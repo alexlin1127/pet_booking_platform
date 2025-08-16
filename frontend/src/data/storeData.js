@@ -1,4 +1,3 @@
-// 店家假資料
 export const stores = [
     {
         id: "H0001",

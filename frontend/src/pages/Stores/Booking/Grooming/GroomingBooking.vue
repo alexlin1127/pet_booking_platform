@@ -76,9 +76,11 @@ function parseTime(str) {
 }
 
 
-// 訂單顏色（依customer_name分配，同顧客同色）
+// 訂單顏色（依customer_name分配，同顧客同色）- 更豐富的顏色搭配
 const orderColors = [
-    '#b8895a', '#b87333', '#c97b63', '#a67c52', '#c9a063', '#b88a5a', '#b87399', '#a6a652', '#c963a0', '#63b8c9'
+    '#dc2626', '#16a34a', '#2563eb', '#ea580c', '#7c3aed', '#db2777', 
+    '#059669', '#ca8a04', '#9333ea', '#e11d48', '#0d9488', '#c2410c',
+    '#7c2d12', '#166534', '#1e3a8a', '#78350f', '#581c87', '#9f1239'
 ]
 const getBookingColor = (booking) => {
     if (!booking) return '#b8895a'
@@ -88,9 +90,11 @@ const getBookingColor = (booking) => {
 }
 
 // Modal 狀態
-import { ref as vueRef } from 'vue'
+import { ref as vueRef, onMounted, nextTick } from 'vue'
 const showModal = vueRef(false)
 const modalBooking = vueRef(null)
+const bookingScheduleRef = vueRef(null)
+
 const openModal = (booking) => {
     modalBooking.value = booking
     showModal.value = true
@@ -99,7 +103,52 @@ const closeModal = () => {
     showModal.value = false
 }
 
-// 計算預約方塊的 left/width，精確對齊到時間線條
+// 自動滾動到當前時間
+const scrollToCurrentTime = () => {
+    const now = new Date()
+    const currentHour = now.getHours()
+    const currentMinute = now.getMinutes()
+    
+    // 計算當前時間對應的時間軸位置
+    let targetTimeSlot = null
+    let targetIndex = -1
+    
+    // 找到最接近當前時間的時間格
+    for (let i = 0; i < timeSlots.length; i++) {
+        const slot = timeSlots[i]
+        const [hour, minute] = slot.label.split(':').map(Number)
+        
+        if (hour < currentHour || (hour === currentHour && minute <= currentMinute)) {
+            targetTimeSlot = slot
+            targetIndex = i
+        } else {
+            break
+        }
+    }
+    
+    // 如果找到目標時間，滾動到該位置
+    if (targetIndex >= 0 && bookingScheduleRef.value) {
+        nextTick(() => {
+            const scheduleElement = bookingScheduleRef.value
+            const timeSlotWidth = scheduleElement.scrollWidth / timeSlots.length
+            const scrollPosition = targetIndex * timeSlotWidth - 100 // 往左偏移一點，讓當前時間不會太靠邊
+            
+            scheduleElement.scrollTo({
+                left: Math.max(0, scrollPosition),
+                behavior: 'smooth'
+            })
+        })
+    }
+}
+
+onMounted(() => {
+    // 組件掛載後自動滾動到當前時間
+    setTimeout(() => {
+        scrollToCurrentTime()
+    }, 100) // 稍微延遲確保DOM完全渲染
+})
+
+
 const getBookingPosition = (booking) => {
     const t = parseTime(booking.booking_time)
     if (!t) return { left: '0%', width: '0%' }
@@ -143,68 +192,55 @@ const getBookingPosition = (booking) => {
 </script>
 
 <template>
-    <div class="grooming-booking-container pt-6 pr-6 pl-6 bg-gray-50 mb-8">
+    <div class="grooming-booking-container">
         <!-- 標題 -->
-        <div class="title-header bg-amber-200 text-center py-4 rounded-lg mb-6">
-            <h1 class="text-2xl font-bold text-amber-900">今日美容預約</h1>
+        <div class="title-header">
+            <h1>今日美容預約</h1>
         </div>
         <!-- 預約時程表 -->
-        <div class="booking-schedule bg-white rounded-lg shadow-lg overflow-x-auto">
+        <div class="booking-schedule" ref="bookingScheduleRef">
             <!-- 時間表頭 -->
-            <div class="schedule-header grid desktop-grid">
-                <div class="time-header p-3 font-semibold text-gray-800 bg-gray-100">顧客</div>
+            <div class="schedule-header">
+                <div class="time-header">顧客</div>
                 <template v-for="(slot, idx) in timeSlots" :key="slot.label">
-                    <div class="time-slot text-center font-medium text-gray-700 relative flex flex-col items-center justify-end"
-                        style="padding: 0; height: 48px; background: none;">
-                        <span v-if="!slot.isHalf" style="font-size: 1.1rem; margin-bottom: 2px;">{{ slot.label }}</span>
+                    <div class="time-slot">
+                        <span v-if="!slot.isHalf">{{ slot.label }}</span>
                         <!-- 只顯示整點主線 -->
-                        <div v-if="!slot.isHalf" class="full-hour-line"
-                            style="position: absolute; left: 50%; top: 100%; transform: translateX(-50%);"></div>
+                        <div v-if="!slot.isHalf" class="full-hour-line"></div>
                     </div>
                 </template>
             </div>
 
             <!-- 顧客預約行 -->
-            <div v-for="customer in customers" :key="customer"
-                class="customer-row relative border-b border-gray-200 hover:bg-gray-50 desktop-grid">
+            <div v-for="customer in customers" :key="customer" class="customer-row">
                 <!-- 顧客名稱 -->
-                <div class="customer-name p-4 border-r border-gray-300 bg-gray-50 font-medium text-gray-800">
+                <div class="customer-name">
                     {{ customer }}
                 </div>
 
                 <!-- 時間軸區域 -->
-                <div class="time-axis-area relative h-20"
-                    :style="{ display: 'grid', gridTemplateColumns: `repeat(${timeSlots.length}, 1fr)`, gridColumn: '2 / -1' }">
+                <div class="time-axis-area">
                     <!-- 時間格子與線條 -->
                     <template v-for="(slot, timeIndex) in timeSlots" :key="slot.label">
-                        <div class="time-cell relative" style="padding: 0; background: none;">
+                        <div class="time-cell">
                             <!-- 只顯示整點主線 -->
-                            <div v-if="!slot.isHalf" class="full-hour-line"
-                                style="position: absolute; left: 50%; top: 0; height: 100%; transform: translateX(-50%); z-index: 0;">
-                            </div>
+                            <div v-if="!slot.isHalf" class="full-hour-line"></div>
                         </div>
                     </template>
 
                     <!-- 訂單方塊層（絕對定位，僅限於時間軸區域內） -->
-                    <div class="booking-blocks-layer"
-                        style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 2; pointer-events: none;">
+                    <div class="booking-blocks-layer">
                         <template v-for="booking in todayBookings.filter(b => b.customer_name === customer)"
                             :key="booking.id">
-                            <div class="booking-item absolute flex flex-col items-center justify-center font-medium shadow-sm text-white text-xs cursor-pointer"
+                            <div class="booking-item"
                                 :style="{
                                     left: getBookingPosition(booking).left,
                                     width: getBookingPosition(booking).width,
-                                    top: '6px',
-                                    bottom: '6px',
-                                    backgroundColor: getBookingColor(booking),
-                                    borderRadius: '8px',
-                                    padding: '4px 6px',
-                                    minHeight: '60px',
-                                    pointerEvents: 'auto'
+                                    backgroundColor: getBookingColor(booking)
                                 }" @click="openModal(booking)">
-                                <div class="text-center font-semibold">{{ booking.pet_name }}{{ booking.note ? ', ' +
+                                <div class="booking-item-text">{{ booking.pet_name }}{{ booking.note ? ', ' +
                                     booking.note : '' }}</div>
-                                <div class="text-center text-xs opacity-90 mt-1">{{ booking.booking_time }}</div>
+                                <div class="booking-item-time">{{ booking.booking_time }}</div>
                             </div>
                         </template>
                     </div>
@@ -212,8 +248,6 @@ const getBookingPosition = (booking) => {
             </div>
         </div>
     </div>
-
-
 
     <!-- 待審核項目 -->
     <div class="grooming-stats-container">
@@ -230,7 +264,9 @@ const getBookingPosition = (booking) => {
         </Card>
         <Card class="grooming-stats-card" :clickable="false" :hasButton="true">
             <template #title>
-                <div class="grooming-stats-title-wrapper"><span class="grooming-stats-title">近期預約</span></div>
+                <div class="grooming-stats-title-wrapper">
+                    <span class="grooming-stats-title">近期預約</span>
+                </div>
             </template>
             <template #content>
                 <span class="grooming-stats-count">{{ reviewedCount }} 筆</span>
@@ -243,204 +279,112 @@ const getBookingPosition = (booking) => {
 
     <!-- ModalBox -->
     <template v-if="showModal">
-        <div class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 min-w-[300px] max-w-[90vw] relative">
-                <button class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-xl"
-                    @click="closeModal">×</button>
-                <h2 class="text-lg font-bold mb-4">預約詳細資訊</h2>
-                <div v-if="modalBooking">
-                    <div class="mb-2"><b>顧客：</b>{{ modalBooking.customer_name }}</div>
-                    <div class="mb-2"><b>寵物：</b>{{ modalBooking.pet_name }}</div>
-                    <div class="mb-2"><b>服務時間：</b>{{ modalBooking.booking_time }}</div>
-                    <div class="mb-2"><b>備註：</b>{{ modalBooking.note || '無' }}</div>
-                    <div class="mb-2"><b>狀態：</b>{{ modalBooking.status }}</div>
+        <div class="modal-overlay">
+            <div class="booking-receipt-modal">
+                <button class="modal-close" @click="closeModal">×</button>
+                
+                <!-- 顧客資訊標題 -->
+                <div class="customer-header">
+                    <h2 class="customer-title">顧客 {{ modalBooking?.customer_name }}</h2>
+                </div>
+                
+                <div class="receipt-content" v-if="modalBooking">
+                    <!-- 上半部：左右分欄 -->
+                    <div class="top-section">
+                        <!-- 左側資訊 -->
+                        <div class="left-section">
+                            <div class="info-row">
+                                <span class="label">聯絡電話：</span>
+                                <span class="value">{{ modalBooking.phone || '0911111111' }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">寵物名字：</span>
+                                <span class="value">{{ modalBooking.pet_name }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">寵物種類：</span>
+                                <span class="value">{{ modalBooking.pet_type || '臘腸犬' }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">寵物體型：</span>
+                                <span class="value">{{ modalBooking.pet_size || '小型' }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">顧客備註：</span>
+                                <span class="value">{{ modalBooking.note || '寵物對某些洗劑過敏，請使用低敏感型產品' }}</span>
+                            </div>
+                        </div>
+
+                        <!-- 右側訂單資訊 -->
+                        <div class="right-section">
+                            <h3 class="section-title">訂單資訊</h3>
+                            <div class="order-info">
+                                <div class="info-row">
+                                    <span class="label">預約服務：</span>
+                                    <span class="value">{{ modalBooking.service_type || '美容' }}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="label">預約日期：</span>
+                                    <span class="value">{{ modalBooking.booking_date }} (週五)</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="label">預約時間：</span>
+                                    <span class="value">{{ modalBooking.booking_time }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 下半部：兩個區塊左右分欄 -->
+                    <div class="bottom-section">
+                        <!-- 左側店家備註 -->
+                        <div class="store-notes-section">
+                            <h3 class="section-title">店家備註</h3>
+                            <textarea 
+                                class="store-notes-input" 
+                                placeholder="請輸入備註"
+                                rows="4"
+                            ></textarea>
+                        </div>
+
+                        <!-- 右側服務項目明細 -->
+                        <div class="service-details-section">
+                            <h3 class="section-title">服務項目明細</h3>
+                            <div class="service-grid">
+                                <div class="service-row">
+                                    <span class="service-label">服務項目：</span>
+                                    <span class="service-value">洗澡清潔</span>
+                                </div>
+                                <div class="service-row">
+                                    <span class="service-label">說明：</span>
+                                    <span class="service-value">包含洗毛、吹乾、清潔耳朵</span>
+                                </div>
+                                <div class="service-row">
+                                    <span class="service-label">訂單金額：</span>
+                                    <span class="service-value">NT$800</span>
+                                </div>
+                                <div class="service-row">
+                                    <span class="service-label">預計時間：</span>
+                                    <span class="service-value">約45分</span>
+                                </div>
+                                <div class="service-row">
+                                    <span class="service-label">是否接送：</span>
+                                    <span class="service-value">是</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 按鈕區域 -->
+                    <div class="action-buttons">
+                        <button class="btn-secondary" @click="closeModal">返回</button>
+                        <button class="btn-primary">儲存</button>
+                    </div>
                 </div>
             </div>
         </div>
     </template>
 </template>
 
-<style scoped>
-.grooming-stats-container {
-    display: flex;
-    align-items: stretch;
-}
+<style scoped src="../../../../styles/pages/Stores/Booking/Grooming/bk.css"></style>
 
-.grooming-stats-card {
-    flex: 1 1 340px;
-    margin: 0 1.5rem 2.2rem 1.5rem;
-    border-radius: 18px;
-    background: #fff;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.08);
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    padding: 0;
-}
-
-.grooming-stats-count {
-    display: block;
-    font-size: 2.3rem;
-    font-weight: bold;
-    color: #3d3326;
-    text-align: center;
-    margin: 2.8rem 0 2.2rem 0;
-}
-
-.grooming-stats-title-wrapper {
-    width: 100%;
-    display: block;
-}
-
-.grooming-stats-title {
-    display: block;
-    width: 100%;
-    background: #c7a47b;
-    color: #fff;
-    font-size: 2.1rem;
-    font-weight: bold;
-    text-align: center;
-    border-radius: 16px 16px 0 0;
-    padding: 1.1rem 0 0.7rem 0;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.grooming-stats-btn:hover {
-    background: #a7895a;
-}
-
-@media (min-width: 768px) {
-    .grooming-stats-container {
-        flex-direction: row;
-        gap: 0;
-        align-items: stretch;
-    }
-}
-
-.grooming-booking-container {
-    font-family: 'Microsoft JhengHei', sans-serif;
-}
-
-/* 響應式 Grid 佈局 */
-.desktop-grid {
-    display: grid;
-    grid-template-columns: 120px repeat(23, 1fr);
-    /* 桌機：適中顧客欄 + 23個時間格 */
-}
-
-.time-cell {
-    min-height: 64px;
-    position: relative;
-    padding: 0;
-    background: none;
-}
-
-.time-axis-area {
-    min-height: 80px;
-    position: relative;
-}
-
-.full-hour-line {
-    width: 2px;
-    height: 100%;
-    background: #b8895a;
-    opacity: 1;
-    border-radius: 2px;
-    z-index: 0;
-}
-
-.booking-item {
-    transition: all 0.2s ease;
-    cursor: pointer;
-}
-
-.booking-item:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.customer-name {
-    writing-mode: horizontal-tb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* 響應式設計 */
-@media (max-width: 1279px) {
-
-    /* 平板及以下：允許水平滑動 */
-    .desktop-grid {
-        grid-template-columns: 100px repeat(23, minmax(60px, 1fr));
-    }
-
-    .booking-schedule {
-        overflow-x: auto;
-        min-width: 1000px;
-        max-width: 100vw;
-        box-sizing: border-box;
-    }
-
-    .grooming-booking-container {
-        max-width: 100vw;
-        overflow-x: hidden;
-    }
-
-    .booking-item {
-        font-size: 10px;
-        padding: 2px 4px;
-    }
-}
-
-@media (max-width: 768px) {
-
-    /* 手機：更緊湊的佈局 */
-    .grooming-booking-container {
-        padding: 1rem;
-    }
-
-    .desktop-grid {
-        grid-template-columns: 80px repeat(23, minmax(50px, 1fr));
-    }
-
-    .booking-item {
-        font-size: 9px;
-        padding: 1px 2px;
-        min-height: 50px;
-    }
-
-    .time-slot {
-        font-size: 12px;
-        padding: 8px 4px;
-    }
-}
-
-@media (min-width: 1280px) {
-
-    /* 桌機及以上：無需滑動，適中的顧客欄 */
-    .booking-schedule {
-        overflow-x: visible;
-    }
-
-    .desktop-grid {
-        grid-template-columns: 120px repeat(23, 1fr);
-    }
-}
-/* grooming-booking-container 最少預留4格顧客高度，並可自動延展 */
-.grooming-booking-container {
-    font-family: 'Microsoft JhengHei', sans-serif;
-}
-
-/* 讓顧客行自動延展，最少4格 */
-.customer-row {
-    min-height: 96px;
-}
-
-.booking-schedule {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-}
-</style>

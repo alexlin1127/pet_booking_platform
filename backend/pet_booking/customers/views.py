@@ -1,4 +1,5 @@
 # customers/views.py
+import time
 import random
 from django.core.cache import cache
 from django.core.mail import send_mail
@@ -15,7 +16,17 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import CustomersProfile, LikeStore, Pet
 from .serializers import RegisterSendCodeSerializer, RegisterConfirmCodeSerializer, CustomersProfileSerializer, LikeStoreSerializer, PetSerializer
 from pet_booking.users.models import User, UserRole
+from pet_booking.coupon.models import Coupon, CouponStatus
 # from pet_booking.users.serializers import UserSerializer
+
+# ----- 生成coupon序號 -----
+def generate_coupon_number(length=7):
+    """生成隨機碼 + 毫秒時間戳，確保唯一且高效"""
+    chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    random_part = ''.join(random.choices(chars, k=length))
+    timestamp_part = str(int(time.time() * 1000))  # 毫秒級時間戳
+    return f"{random_part}{timestamp_part}"
+
 
 # ----- Auth/註冊 驗證 API -----
 
@@ -98,8 +109,29 @@ class RegisterConfirmCodeAPIView(APIView):
                 full_name=cache_data['full_name']
                 # ...如有 gender, address 再補完整
             )
+            # 檢查 reservation_id 已有值的優惠券數量
+            coupons_with_reservation = Coupon.objects.filter(
+                reservation_id__isnull=False
+            ).exclude(reservation_id="").count()
+
+            if coupons_with_reservation < 84:
+                # 生成唯一優惠券碼並寫入 Coupon
+                coupon_number = generate_coupon_number(length=7)
+                # print(Coupon.objects.all())
+                Coupon.objects.create(
+                    user_id=user,
+                    coupon_number=coupon_number,
+                    status=CouponStatus.NOT_USED
+                )
+                # print(Coupon.objects.all())
+                msg = '註冊成功，並已發放優惠券'
+            else:
+                msg = '註冊成功（優惠券已達上限，未發放）'
+
+            # 清除暫存
             cache.delete(f"register_{email}")
-            return Response({'msg': '註冊成功'}, status=201)
+            # return Response({'msg': '註冊成功'}, status=201)
+            return Response({'msg': msg}, status=201)
         return Response(serializer.errors, status=400)
     
 
@@ -115,10 +147,10 @@ class IsAdminOrOwner(BasePermission):
         # 物件必須有 user_id 欄位（ForeignKey 到 User）and # 操作的user id 要等於 發出request的 user id 
         return hasattr(obj, "user_id") and obj.user_id == request.user
 
-class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 10              # 每頁顯示 10 筆
-    page_size_query_param = 'page_size'  # 可用 URL ?page_size=20 動態調整
-    max_page_size = 50         # 最大每頁顯示數
+# class StandardResultsSetPagination(PageNumberPagination):
+#     page_size = 10              # 每頁顯示 10 筆
+#     page_size_query_param = 'page_size'  # 可用 URL ?page_size=20 動態調整
+#     max_page_size = 50         # 最大每頁顯示數
     
 class BaseOwnerViewSet(viewsets.ModelViewSet):
     """
@@ -130,7 +162,7 @@ class BaseOwnerViewSet(viewsets.ModelViewSet):
     """
     permission_classes = [IsAuthenticated, IsAdminOrOwner]
     filter_backends = [DjangoFilterBackend]
-    pagination_class = StandardResultsSetPagination
+    # pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         user = self.request.user

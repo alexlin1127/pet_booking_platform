@@ -20,25 +20,25 @@ defineProps({
     <td>{{ grooming.status }}</td>
 
     <td v-if="grooming.status === '待審核'">
-        <RouterLink :to="`/stores/grooming-booking/review?id=${grooming.id}`">
-            <button class="grooming-btn">審核</button>
+        <RouterLink :to="`/stores/grooming-bookings/review?id=${grooming.id}`">
+            <button class="grooming-btn-primary">審核</button>
         </RouterLink>
-        <button class="grooming-btn">取消</button>
+        <button class="grooming-btn-secondary">取消</button>
     </td>
     <td v-else-if="grooming.status === '已審核'">
-        <RouterLink :to="`/stores/grooming-booking/review?id=${grooming.id}`">
-            <button class="grooming-btn">詳情</button>
+        <RouterLink :to="`/stores/grooming-bookings/details?id=${grooming.id}`">
+            <button class="grooming-btn-primary">詳情</button>
         </RouterLink>
-        <button class="grooming-btn">取消</button>
-        <button class="grooming-btn">已完成</button>
+        <button class="grooming-btn-secondary">取消</button>
+        <button class="grooming-btn-primary">已完成</button>
     </td>
     <td v-else>
-        <RouterLink :to="`/stores/grooming-booking/details?id=${grooming.id}`">
-            <button class="grooming-btn">訂單詳情</button>
+        <RouterLink :to="`/stores/grooming-bookings/details?id=${grooming.id}`">
+            <button class="grooming-btn-primary">訂單詳情</button>
         </RouterLink>
-        <button class="grooming-btn">備註</button>
-        <button class="grooming-btn">列入觀察</button>
+        <button class="grooming-btn-secondary">備註</button>
+        <button class="grooming-btn-secondary">列入觀察</button>
     </td>
 </template>
 
-<style></style>
+<style scoped src="../../../../styles/pages/Stores/Booking/Grooming/card.css"></style>

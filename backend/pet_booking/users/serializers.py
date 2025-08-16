@@ -17,6 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
             'role',
             'is_store_owner',  
             'is_admin',
+            'is_active',
             'created_at',
             'updated_at',
         )

@@ -1,4 +1,4 @@
-# apps/users/views.py
+# users/views.py
 from django.utils.timezone import now
 from django.db.models.functions import TruncDate
 from django.db.models import Count
@@ -11,8 +11,14 @@ from rest_framework.pagination import PageNumberPagination
 # from django_filters import rest_framework as filter
 from django_filters.rest_framework import DjangoFilterBackend
 from datetime import timedelta
-from .models import User, UserRole
+from .models import User, UserRole, UserRefreshToken
 from .serializers import UserSerializer
+
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.views import APIView
+from rest_framework.authentication import SessionAuthentication
+from django.contrib.auth import login, logout
 
 # Create your views here.
 
@@ -36,10 +42,10 @@ class IsAdminForList(BasePermission):
                 raise PermissionDenied(detail="只有系統管理者能查看所有使用者資料")
         return True
 
-class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 10              # 每頁顯示 10 筆
-    page_size_query_param = 'page_size'  # 可用 URL ?page_size=20 動態調整
-    max_page_size = 50         # 最大每頁顯示數
+# class StandardResultsSetPagination(PageNumberPagination):
+#     page_size = 10              # 每頁顯示 10 筆
+#     page_size_query_param = 'page_size'  # 可用 URL ?page_size=20 動態調整
+#     max_page_size = 50         # 最大每頁顯示數
 
 class UserViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
@@ -47,7 +53,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['role']  # 可根據需求增加欄位
-    pagination_class = StandardResultsSetPagination
+    # pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         user = self.request.user
@@ -182,3 +188,77 @@ class UserViewSet(viewsets.ModelViewSet):
                 'store': store_daily_30
             }
         })
+    
+class BFFTokenObtainPairView(TokenObtainPairView):
+    """
+    自訂登入：
+    - 驗證帳密
+    - 儲存 refresh token 到資料庫
+    - 只回傳 access token
+    """
+    def post(self, request, *args, **kwargs):
+        # 驗證帳密
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        # 拿到剛登入的 user 實例
+        user = serializer.user
+         # 這行保證設 session，瀏覽器自動收到 sessionid cookie
+        login(request, user)
+        # 從驗證資料拿出 token
+        refresh_token = str(serializer.validated_data.get('refresh'))
+        access_token = str(serializer.validated_data.get('access'))
+        # 儲存 refresh token 到資料庫
+        UserRefreshToken.objects.update_or_create(
+            user=user,
+            defaults={'refresh_token': refresh_token}
+        )
+        # 只回傳 access token
+        return Response({'access': access_token}, status=status.HTTP_200_OK)
+
+class BFFTokenRefreshView(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        if not user.is_authenticated:
+            return Response({'detail': '請先登入'}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            stored = UserRefreshToken.objects.get(user=user)
+            # 用儲存的 refresh token 產生 Token 物件並刷新 access token
+            refresh_token = RefreshToken(stored.refresh_token)
+            new_access = refresh_token.access_token
+            # 選擇是否同時 rotate refresh token，更新資料庫
+            new_refresh_token = str(refresh_token)
+            stored.refresh_token = new_refresh_token
+            stored.save()            
+            return Response({'access': str(new_access)}, status=status.HTTP_200_OK)
+        except UserRefreshToken.DoesNotExist:
+            return Response({'detail': '找不到 refresh token'}, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception:
+            return Response({'detail': '無效的 refresh token'}, status=status.HTTP_401_UNAUTHORIZED)
+
+class LogoutView(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        if not user.is_authenticated:
+            return Response({'detail': '請先登入'}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            # 從資料庫拿 refresh token 並加入blacklist
+            user_token = UserRefreshToken.objects.get(user=user)
+            token = RefreshToken(user_token.refresh_token)
+            token.blacklist()
+            # 若有儲存在資料庫的 refresh token 也同步刪除
+            user_token.delete()
+            # 清除 Django session
+            logout(request)
+            response = Response({"detail": "登出成功"}, status=status.HTTP_205_RESET_CONTENT)
+            response.delete_cookie('sessionid')
+            return response
+        except UserRefreshToken.DoesNotExist:
+            return Response({"detail": "找不到 refresh token"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response({"detail": "無效的 token"}, status=status.HTTP_400_BAD_REQUEST)

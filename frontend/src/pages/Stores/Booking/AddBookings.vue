@@ -567,3 +567,5 @@ const catCountOptions = computed(() => {
         </div>
     </section>
 </template>
+
+<style scoped src="../../../styles/pages/Stores/Booking/addbookings.css"></style>

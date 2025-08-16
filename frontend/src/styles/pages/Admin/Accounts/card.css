@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+	/* 按鈕區塊 */
+	.btn-td {
+		@apply flex gap-4 items-center justify-center;
+	}
+	.acc-btn {
+		@apply px-6 py-2 rounded-lg font-semibold text-lg transition;
+	}
+	.acc-btn-solid {
+		@apply bg-[#C7A27C] text-white shadow hover:bg-[#b08c6a];
+	}
+	.acc-btn-outline {
+		@apply acc-btn border-2 border-[#C7A27C] text-[#C7A27C] bg-white hover:bg-[#f7f3ef];
+	}
+
+	/* modalbox */
+	.acc-modal-mask {
+		@apply fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30;
+	}
+	.acc-modal-box {
+		@apply bg-white rounded-3xl shadow-xl p-6 w-full max-w-md min-w-[280px] h-auto flex flex-col items-center relative border-2 border-[#C7A27C];
+		max-height: none;
+	}
+	.acc-modal-title {
+		@apply text-3xl font-bold text-center mb-10 mt-2;
+	}
+	.acc-modal-row {
+		@apply w-full flex justify-between items-center mb-8 text-xl;
+	}
+	.acc-modal-label {
+		@apply text-gray-700 font-medium;
+	}
+	.acc-modal-value {
+		@apply text-gray-700 text-right;
+	}
+	.acc-modal-input {
+		@apply border-2 border-[#C7A27C] rounded-lg px-4 py-2 text-right text-gray-400 text-xl w-64 focus:outline-none focus:ring-2 focus:ring-[#C7A27C];
+	}
+	.acc-modal-btns {
+		@apply flex gap-8 w-full justify-center mt-12;
+	}
+	.acc-modal-btn {
+		@apply acc-btn w-64 bg-[#C7A27C] text-white;
+	}
+	.acc-modal-btn-outline {
+		@apply acc-btn-outline w-64;
+	}
+}

@@ -123,3 +123,5 @@ function goToManage() {
         </FormTemplate>
     </div>
 </template>
+
+<style scoped src="../../../styles/pages/Stores/Posts/postsprocess.css"></style>

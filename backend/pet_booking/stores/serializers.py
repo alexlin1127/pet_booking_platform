@@ -23,8 +23,8 @@ class StoreImageSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         store = attrs.get('store')
-        if store and store.images.count() >= 8:
-            raise serializers.ValidationError("最多只能上傳8張圖片")
+        if store and store.images.count() >= 9:
+            raise serializers.ValidationError("最多只能上傳9張圖片")
         return attrs
 
 # 店家詳細頁
@@ -46,20 +46,25 @@ class StoreSerializer(serializers.ModelSerializer):
         return store
 
     def update(self, instance, validated_data):
-        # 更新其他欄位
+    # 先更新其他欄位
         images_data = validated_data.pop('images', None)
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
 
-        
-        # 刪除舊圖片
-        instance.images.all().delete()
+        # 如果要覆蓋圖片 → 先刪除舊的
+        if images_data is not None or self.context['request'].FILES.getlist('images'):
+            instance.images.all().delete()
 
-        # 從 request.FILES 取得圖片檔案
-        files = self.context['request'].FILES.getlist('images')
-        for image_file in files:
-            StoreImage.objects.create(store=instance, image_url=image_file)
+            # 處理 JSON 傳來的圖片（URL 或 dict）
+            if images_data:
+                for image_data in images_data:
+                    StoreImage.objects.create(store=instance, **image_data)
+
+            # 處理上傳的檔案
+            files = self.context['request'].FILES.getlist('images')
+            for image_file in files:
+                StoreImage.objects.create(store=instance, image_url=image_file)
 
         return instance
 
@@ -81,7 +86,7 @@ class StoreDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Store
-        fields = ['id','user_id','username', 'store_name', 'owner_name', 'address', 'phone', 'email','pick_up_service', 'created_at', 'status', 'grooming_service', 'boarding_service', 'staff_number', 'business_licences_url', 'boarding_license_dog_url', 'boarding_license_cat_url', 'grooming_single_appointment', 'reject_content']
+        fields = ['id','user_id','username', 'store_name', 'owner_name', 'address', 'phone', 'email','pick_up_service', 'created_at','boarding_pet_type', 'status', 'grooming_service', 'boarding_service', 'staff_number', 'business_licences_url', 'boarding_license_dog_url', 'boarding_license_cat_url', 'grooming_single_appointment', 'reject_content']
 
 
 

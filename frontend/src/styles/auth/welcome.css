@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 色票 */
+:root {
+  --ink: #27241d;
+  --bg-light: #ffffff;
+  --cream: #fff8ef;
+  --primary: #cda27a;
+  --primary-dark: #b48556;
+  --muted: #8b6f57;
+  --line: #eadfce;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.14);
+}
+
+.home-page {
+  font-family: "Noto Sans TC", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Arial;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+/* ───────── Hero（Scoped to .home-page） ───────── */
+.home-page .hero {
+  @apply relative flex flex-col items-center justify-center text-center px-6 pt-12 pb-16;
+  min-height: 340px;
+}
+.home-page .hero-title {
+  @apply font-extrabold leading-snug mb-8;
+  font-size: 28px;
+}
+
+/* Tabs（hp-*） */
+.home-page .hp-tab-group {
+  @apply flex gap-4;
+}
+.home-page .hp-tab {
+  @apply inline-flex items-center justify-center rounded-md font-bold transition;
+  min-width: 160px;
+  height: 40px;
+  padding: 0 18px;
+  letter-spacing: 0.2px;
+}
+.home-page .hp-tab--solid {
+  @apply text-white;
+  background: var(--primary);
+  border: 2px solid var(--primary);
+}
+.home-page .hp-tab--solid:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+.home-page .hp-tab--outline {
+  @apply bg-white;
+  color: var(--muted);
+  border: 2px solid var(--primary);
+}
+.home-page .hp-tab--outline:hover {
+  color: var(--ink);
+  background: #fff7f0;
+}
+
+/* 裝飾爪印（hp-*） */
+.home-page .hp-paw {
+  @apply absolute;
+  width: 46px;
+  fill: var(--primary-dark);
+  opacity: 0.9;
+}
+.home-page .hp-paw-1 {
+  top: 72px;
+  right: 8%;
+}
+.home-page .hp-paw-2 {
+  top: 140px;
+  left: 6%;
+}
+
+/* ───────── Cards（使用既有的 .cards/.card，但僅限本頁） ───────── */
+.home-page .cards {
+  @apply flex flex-wrap justify-center gap-6 px-6 mx-auto;
+  max-width: 1080px;
+  margin-top: 36px;
+  margin-bottom: 56px;
+}
+.home-page .card {
+  @apply bg-white rounded-2xl text-center transition no-underline;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+  flex: 0 1 280px;
+  min-width: 260px;
+  padding: 44px 24px 38px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.home-page .card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.home-page .icon {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 20px;
+  fill: var(--primary-dark);
+}
+.home-page .label-small {
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.home-page .label-big {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+/* ───────── Map（Scoped） ───────── */
+.home-page .map-wrap {
+  @apply px-6 mx-auto mb-20;
+  max-width: 1080px;
+}
+.home-page .map {
+  @apply w-full rounded-xl overflow-hidden;
+  height: 300px;
+  border: 1.5px solid #333;
+}
+
+/* ───────── Footer（Scoped） ───────── */
+.home-page .footer {
+  @apply bg-neutral-800 text-neutral-300 text-center text-sm py-7;
+}
+
+/* RWD */
+@media (max-width: 767.98px) {
+  .home-page .hero-title {
+    font-size: 22px;
+  }
+  .home-page .cards {
+    margin-top: 24px;
+  }
+  .home-page .card {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+}

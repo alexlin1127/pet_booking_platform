@@ -36,7 +36,8 @@ export const bookings = [
         status: '已完成',
         note: '',
         create_at: '2025-08-22 10:00:00',
-        service_type: '美容'
+        service_type: '美容',
+        blacklist:true,
     },
     {
         id: 4,
@@ -75,7 +76,8 @@ export const bookings = [
         status: '已完成',
         note: '有過敏史',
         create_at: '2025-07-25 10:00:00',
-        service_type: '美容'
+        service_type: '美容',
+        blacklist:false,
     },
     {
         id: 7,
@@ -101,7 +103,8 @@ export const bookings = [
         status: '已完成',
         note: '',
         create_at: '2025-07-27 10:00:00',
-        service_type: '美容'
+        service_type: '美容',
+        blacklist:false,
     },
     {
         id: 9,
@@ -140,7 +143,8 @@ export const bookings = [
         status: '已完成',
         note: '',
         create_at: '2025-07-30 10:00:00',
-        service_type: '美容'
+        service_type: '美容',
+        blacklist:false,
     },
     {
         id: 12,
@@ -179,7 +183,8 @@ export const bookings = [
         status: '已完成',
         note: '需陪伴',
         create_at: '2025-08-02 10:00:00',
-        service_type: '美容'
+        service_type: '美容',
+        blacklist:true,
     },
     {
         id: 15,
@@ -205,7 +210,8 @@ export const bookings = [
         status: '已完成',
         note: '需剪指甲',
         create_at: '2025-08-04 10:00:00',
-        service_type: '美容'
+        service_type: '美容',
+        blacklist:false,
     },
     {
         id: 17,
@@ -244,7 +250,8 @@ export const bookings = [
         status: '已完成',
         note: '',
         create_at: '2025-08-07 10:00:00',
-        service_type: '美容'
+        service_type: '美容',
+        blacklist:false,
     },
     {
         id: 20,
@@ -283,7 +290,8 @@ export const bookings = [
         status: '已完成',
         note: '',
         create_at: '2025-08-10 10:00:00',
-        service_type: '美容'
+        service_type: '美容',
+        blacklist:true,
     },
     {
         id: 23,
@@ -322,7 +330,8 @@ export const bookings = [
         status: '已完成',
         note: '怕生',
         create_at: '2025-08-13 10:00:00',
-        service_type: '美容'
+        service_type: '美容',
+        blacklist:false,
     },
     {
         id: 26,
@@ -350,7 +359,8 @@ export const bookings = [
         status: '已完成',
         note: '需餵藥',
         create_at: '2025-07-16 09:00:00',
-        service_type: '住宿'
+        service_type: '住宿',
+        blacklist:false,
     },
     {
         id: 28,
@@ -378,7 +388,8 @@ export const bookings = [
         status: '已完成',
         note: '',
         create_at: '2025-07-18 09:00:00',
-        service_type: '住宿'
+        service_type: '住宿',
+        blacklist:false,
     },
     {
         id: 30,
@@ -406,7 +417,8 @@ export const bookings = [
         status: '已完成',
         note: '有過敏',
         create_at: '2025-07-20 09:00:00',
-        service_type: '住宿'
+        service_type: '住宿',
+        blacklist:false,
     },
     {
         id: 32,
@@ -448,7 +460,8 @@ export const bookings = [
         status: '已完成',
         note: '怕吵',
         create_at: '2025-07-23 09:00:00',
-        service_type: '住宿'
+        service_type: '住宿',
+        blacklist:true,
     },
     {
         id: 35,
@@ -476,7 +489,8 @@ export const bookings = [
         status: '已完成',
         note: '怕生',
         create_at: '2025-07-25 09:00:00',
-        service_type: '住宿'
+        service_type: '住宿',
+        blacklist:false,
     },
     {
         id: 37,
@@ -518,7 +532,8 @@ export const bookings = [
         status: '已完成',
         note: '',
         create_at: '2025-07-28 09:00:00',
-        service_type: '住宿'
+        service_type: '住宿',
+        blacklist:false,
     },
     {
         id: 40,
@@ -546,7 +561,8 @@ export const bookings = [
         status: '已完成',
         note: '',
         create_at: '2025-07-30 09:00:00',
-        service_type: '住宿'
+        service_type: '住宿',
+        blacklist:true,
     },
     {
         id: 42,
@@ -586,9 +602,10 @@ export const bookings = [
         booking_time: '11:00',
         room_type: '標準房',
         status: '已完成',
-        note: true,
+        note: '怕生',
         create_at: '2025-08-02 09:00:00',
-        service_type: '住宿'
+        service_type: '住宿',
+        blacklist:false,
     },
     {
         id: 45,
@@ -630,7 +647,8 @@ export const bookings = [
         status: '已完成',
         note: '需注意飲食',
         create_at: '2025-08-05 09:00:00',
-        service_type: '住宿'
+        service_type: '住宿',
+        blacklist:true,
     },
     {
         id: 48,
@@ -672,6 +690,7 @@ export const bookings = [
         status: '已完成',
         note: '',
         create_at: '2025-08-08 09:00:00',
-        service_type: '住宿'
+        service_type: '住宿',
+        blacklist:false,
     }
 ]
