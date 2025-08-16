@@ -114,6 +114,14 @@ function goBack() {
   router.back();
 }
 
+// 定義 cleaning_frequency 中文
+const cleaningFrequencyMap = {
+  weekly: "每週一次",
+  biweekly: "每兩週一次",
+  halfmonth: "每半月一次",
+  other: "其他",
+};
+
 // --- Submit function ---
 async function submit() {
   const payload = isLodging.value
@@ -122,7 +130,7 @@ async function submit() {
         cleaning_frequency:
           lodging.cleaning_frequency === "other"
             ? lodging.cleaning_note
-            : lodging.cleaning_frequency,
+            : cleaningFrequencyMap[lodging.cleaning_frequency],
         room_type: lodging.room_type,
         room_count: lodging.room_count,
         pet_available_amount: lodging.pet_available_amount,
@@ -375,7 +383,7 @@ async function submit() {
                   min="0"
                   placeholder="金額"
                   v-model.number="price.overtime_rate"
-                  :disabled="isView || !price.overtime_charging"
+                  :disabled="isView || price.overtime_charging"
                 />
                 <div class="unit">元</div>
 
@@ -425,7 +433,7 @@ async function submit() {
             <label class="ss-label">注意事項</label>
             <textarea
               class="ss-textarea"
-              v-model="lodging.introduction"
+              v-model="lodging.notice"
               :disabled="isView"
             ></textarea>
           </div>
