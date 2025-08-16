@@ -147,10 +147,10 @@ class IsAdminOrOwner(BasePermission):
         # 物件必須有 user_id 欄位（ForeignKey 到 User）and # 操作的user id 要等於 發出request的 user id 
         return hasattr(obj, "user_id") and obj.user_id == request.user
 
-class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 10              # 每頁顯示 10 筆
-    page_size_query_param = 'page_size'  # 可用 URL ?page_size=20 動態調整
-    max_page_size = 50         # 最大每頁顯示數
+# class StandardResultsSetPagination(PageNumberPagination):
+#     page_size = 10              # 每頁顯示 10 筆
+#     page_size_query_param = 'page_size'  # 可用 URL ?page_size=20 動態調整
+#     max_page_size = 50         # 最大每頁顯示數
     
 class BaseOwnerViewSet(viewsets.ModelViewSet):
     """
@@ -162,7 +162,7 @@ class BaseOwnerViewSet(viewsets.ModelViewSet):
     """
     permission_classes = [IsAuthenticated, IsAdminOrOwner]
     filter_backends = [DjangoFilterBackend]
-    pagination_class = StandardResultsSetPagination
+    # pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         user = self.request.user

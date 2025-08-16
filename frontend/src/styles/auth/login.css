@@ -84,7 +84,7 @@
     @media (max-width: 640px) {
         .login-page {
             width: 95vw;
-            padding: 1rem;
+            padding-right: 2rem;
         }
 
         .login-social-card {

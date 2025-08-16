@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* 主容器 */
+  .boarding-container {
+    @apply p-6 max-w-6xl mx-auto;
+  }
+
+  /* 頁面標題區域 */
+  .page-header {
+    @apply mb-8;
+  }
+
+  .page-title {
+    @apply text-2xl font-bold text-gray-800 mb-4;
+  }
+
+  /* 寵物類型選擇器 */
+  .pet-type-selector {
+    @apply flex items-center gap-6;
+  }
+
+  .pet-type-option {
+    @apply flex items-center gap-2 cursor-pointer;
+  }
+
+  .pet-type-radio {
+    @apply hidden;
+  }
+
+  .pet-type-dot {
+    @apply w-4 h-4 rounded-full border-2 border-gray-400 relative;
+    transition: all 0.2s ease;
+  }
+
+  .pet-type-option input:checked + .pet-type-dot {
+    @apply border-amber-600 bg-amber-600;
+  }
+
+  .pet-type-option input:checked + .pet-type-dot::after {
+    content: '';
+    @apply absolute top-1/2 left-1/2 w-2 h-2 bg-white rounded-full;
+    transform: translate(-50%, -50%);
+  }
+
+  .pet-type-label {
+    @apply text-gray-700 font-medium;
+  }
+
+  /* 房型卡片網格 */
+  .room-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8;
+  }
+
+  .room-card {
+    @apply bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden;
+    min-height: 200px;
+  }
+
+  .room-card-empty .empty-slot {
+    @apply w-full h-full border-2 border-dashed border-blue-300 rounded-lg;
+    min-height: 200px;
+  }
+
+  .room-content {
+    @apply h-full flex flex-col;
+  }
+
+  .room-header {
+    @apply bg-amber-600 text-white py-4 px-6;
+  }
+
+  .room-title {
+    @apply text-lg font-bold text-center;
+  }
+
+  .room-body {
+    @apply flex-1 p-6 space-y-4;
+  }
+
+  .room-info {
+    @apply flex justify-between items-center;
+  }
+
+  .room-info-label {
+    @apply text-gray-600 font-medium;
+  }
+
+  .room-info-value {
+    @apply text-gray-800 font-semibold;
+  }
+
+  /* 預約統計卡片 */
+  .booking-stats-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+  }
+
+  .stats-card {
+    @apply bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden cursor-pointer;
+    transition: all 0.2s ease;
+  }
+
+  .stats-card:hover {
+    @apply shadow-lg transform -translate-y-1;
+  }
+
+  .stats-header {
+    @apply bg-amber-600 text-white py-4 px-6;
+  }
+
+  .stats-title {
+    @apply text-lg font-bold text-center;
+  }
+
+  .stats-body {
+    @apply p-6 text-center space-y-4;
+  }
+
+  .stats-number {
+    @apply text-3xl font-bold text-gray-800;
+  }
+
+  .stats-button {
+    @apply bg-amber-700 text-white px-6 py-2 rounded-lg hover:bg-amber-800 transition-colors font-medium;
+  }
+
+  /* 響應式設計 */
+  @media (max-width: 768px) {
+    .boarding-container {
+      @apply p-4;
+    }
+
+    .room-grid {
+      @apply grid-cols-1 gap-4;
+    }
+
+    .booking-stats-grid {
+      @apply grid-cols-1 gap-4;
+    }
+
+    .pet-type-selector {
+      @apply gap-4;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .room-grid {
+      @apply grid-cols-2;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .room-grid {
+      @apply grid-cols-3;
+    }
+  }
+}

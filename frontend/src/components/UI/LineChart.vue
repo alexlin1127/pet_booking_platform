@@ -32,36 +32,44 @@ const chartConfig = computed(() => ({
 </script>
 
 <template>
-  <Line
-    :data="chartConfig"
-    :options="{
-      responsive: false,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: true },
-        title: {
-          display: true,
-          text: '人數'
-        }
-      },
-      scales: {
-        y: {
+  <div class="chart-wrapper">
+    <Line
+      :data="chartConfig"
+      :options="{
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true },
           title: {
             display: true,
             text: '人數'
-          },
-          min: 0,
-          max: 10,
-          ticks: {
-            stepSize: 1,
-            callback: function(value) {
-              return Number.isInteger(value) ? value : null;
+          }
+        },
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: '人數'
+            },
+            min: 0,
+            max: 10,
+            ticks: {
+              stepSize: 1,
+              callback: function(value) {
+                return Number.isInteger(value) ? value : null;
+              }
             }
           }
         }
-      }
-    }"
-    width="600"
-    height="300"
-  />
+      }"
+    />
+  </div>
 </template>
+
+<style scoped>
+.chart-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+</style>

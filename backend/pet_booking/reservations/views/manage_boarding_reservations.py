@@ -323,11 +323,12 @@ class BoardingReservationManagementViewSet(viewsets.ViewSet):
                 }, status=status.HTTP_400_BAD_REQUEST)
 
             order_data = {
-                'reservation_boarding': reservation_id,
+                'reservation_grooming_id': reservation_id if reservation_id[:2] == 'GR' else '',
+                'reservation_boarding_id': reservation_id if reservation_id[:2] == 'BD' else '',
                 'user_id': user_id,
                 'total_price': reservation.total_price,
                 'status': 'completed',
-                'blacklist': False
+                'blacklist': False 
             }
             
             order_serializer = OrdersSerializer(data=order_data)

@@ -42,17 +42,6 @@ const title = computed(() => {
   return "店家資料"; // 預設標題
 });
 
-// 切換鈕：只有同時有美容和住宿才顯示
-// const showSwitchBtn = computed(() => hasGrooming.value && hasBoarding.value);
-
-// 美容專屬欄位
-// const showGrooming = computed(() => hasGrooming.value);
-// 住宿專屬欄位
-// const showBoarding = computed(() => hasBoarding.value);
-// const showSafety = computed(
-// () => type.value === "boarding" && hasBoarding.value;
-// );
-
 const imageList = computed(() => {
   const baseImages = [
     { title: "營業登記資料", url: currentStore.value?.business_licences_url },
@@ -86,23 +75,58 @@ const gridClass = computed(() =>
 );
 
 const bullet = (val) => (val ? "● 是   ○ 否" : "○ 是   ● 否");
+
+// modal 狀態
+const showModal = ref(false);
+const rejectReason = ref("");
+
 function AddQ() {
-  alert("加入問題件！");
+  showModal.value = true;
 }
-function approve() {
-  alert("核准完成！");
+function closeModal() {
+  showModal.value = false;
+  rejectReason.value = "";
 }
+const confirmReject = async () => {
+  try {
+    const res = await api.patch(`/admin/stores/${storeId.value}`, {
+      status: "rechecked",
+      reject_content: rejectReason.value,
+    });
+    alert("退件原因已更新：" + rejectReason.value);
+    closeModal();
+  } catch (error) {
+    console.error("更新失敗", error);
+    alert("更新失敗，請稍後再試");
+  }
+  router.push("/admin/stores/manage");
+};
+const approve = async () => {
+  try {
+    const res = await api.patch(`/admin/stores/${storeId.value}`, {
+      status: "confirmed",
+    });
+    alert("核准完成！");
+  } catch (error) {
+    console.error("核准失敗", error);
+    alert("核准失敗，請稍後再試");
+  }
+  router.push("/admin/stores/manage");
+};
 function setService(svc) {
   router.replace({ query: { ...route.query, service: svc } });
+}
+function back() {
+  router.push("/admin/stores/manage");
 }
 </script>
 
 <template>
-  <div class="sr-container max-w-4xl mx-auto">
+  <div class="sr-main-container">
     <!-- 當有店家資料時顯示內容 -->
     <div v-if="currentStore">
       <!-- demo 切換鈕，可刪 -->
-      <div class="flex gap-2 mb-4" v-if="showSwitchBtn">
+      <div class="sr-switch-bar" v-if="showSwitchBtn">
         <button class="sr-btn-outline" @click="setService('grooming')">
           寵物美容預覽
         </button>
@@ -171,48 +195,82 @@ function setService(svc) {
       </section>
 
       <!-- 圖片區 -->
-      <div :class="[gridClass, 'mt-12']">
-        <div
-          v-for="(image, idx) in imageList"
-          :key="idx"
-          class="space-y-2 text-center"
-        >
-          <p class="sr-label w-full text-sm font-medium">{{ image.title }}</p>
-          <div class="sr-box mx-auto">
+      <div :class="[gridClass, 'sr-image-list']">
+        <div v-for="(image, idx) in imageList" :key="idx" class="sr-image-item">
+          <p class="sr-image-title">{{ image.title }}</p>
+          <div class="sr-image-box">
             <img
               v-if="image.url"
               :src="image.url"
               :alt="image.title"
-              class="w-full h-auto object-contain"
+              class="sr-image-img"
             />
             <!-- 佔位用 -->
           </div>
         </div>
       </div>
 
+      <!-- 退件原因 -->
+      <div v-if="currentStore.status === 'rechecked'" class="sr-reject-content">
+        <h3 class="sr-reject-title">退件原因</h3>
+        <p class="sr-reject-text">{{ currentStore.reject_content }}</p>
+      </div>
+
       <!-- 底部按鈕 -->
-      <div
-        v-if="currentStore.status === 'pending'"
-        class="flex flex-col sm:flex-row gap-4 justify-center mt-16"
-      >
+      <div v-if="currentStore.status === 'pending'" class="sr-bottom-btns">
+        <button class="sr-btn sm:w-40" @click="back">返回</button>
         <button class="sr-btn sm:w-40" @click="AddQ">加入問題件</button>
         <button class="sr-btn sm:w-40" @click="approve">核准</button>
       </div>
-      <div
-        v-if="currentStore.status === 'confirmed'"
-        class="flex flex-col sm:flex-row gap-4 justify-center mt-16"
-      >
+
+      <!-- Modal 退件原因 -->
+      <div v-if="showModal" class="sr-modal-mask">
+        <div class="sr-modal-box">
+          <div class="sr-modal-close">
+            <button @click="closeModal">×</button>
+          </div>
+          <div class="sr-modal-row">
+            <div class="sr-modal-label">店家編號</div>
+            <div class="sr-modal-label">
+              {{ currentStore.store_id || "0000" }}
+            </div>
+          </div>
+          <div class="sr-modal-row">
+            <div class="sr-modal-label">店家名稱</div>
+            <div class="sr-modal-label">{{ currentStore.store_name }}</div>
+          </div>
+          <div class="sr-modal-row">
+            <div class="sr-modal-label">負責人姓名</div>
+            <div class="sr-modal-label">{{ currentStore.owner_name }}</div>
+          </div>
+          <div class="sr-modal-title">退件原因</div>
+          <textarea
+            v-model="rejectReason"
+            placeholder="請輸入退件原因"
+            rows="4"
+            class="sr-modal-textarea"
+          ></textarea>
+          <div class="sr-modal-btns">
+            <button @click="closeModal" class="sr-modal-btn-outline">
+              返回
+            </button>
+            <button @click="confirmReject" class="sr-modal-btn">確定</button>
+          </div>
+        </div>
+      </div>
+      <div v-if="currentStore.status === 'confirmed'" class="sr-bottom-btns">
         <RouterLink :to="`/admin/stores/manage`">
           <button type="button" class="sr-btn sm:w-40">返回</button>
         </RouterLink>
       </div>
     </div>
+
     <!-- 當沒有找到店家資料時顯示提示 -->
-    <div v-else="!currentStore" class="text-center py-16">
-      <h2 class="text-xl font-semibold text-gray-600 mb-4">找不到店家資料</h2>
-      <p class="text-gray-500">請確認 URL 中的店家 ID 是否正確</p>
+    <div v-else="!currentStore" class="sr-notfound">
+      <h2 class="sr-notfound-title">找不到店家資料</h2>
+      <p class="sr-notfound-desc">請確認 URL 中的店家 ID 是否正確</p>
     </div>
   </div>
 </template>
 
-<style></style>
+<style scoped src="../../../styles/pages/Admin/Stores/storereview.css"></style>

@@ -47,3 +47,4 @@ function goEdit() {
         </main>
     </div>
 </template>
+<style scoped src="../../../styles/pages/Stores/Posts/postsview.css"></style>

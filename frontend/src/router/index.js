@@ -4,10 +4,14 @@ import Home from "../auth/WelcomePage.vue";
 // 註冊登入
 import Login from "../auth/Login.vue";
 import Register from "../auth/Register.vue";
+import ForgotPassword from "../auth/ForgotPassword.vue";
 import CustomerRegister from "../pages/Customers/CustomerRegister.vue";
 import StoresRegister from "../pages/Stores/StoreRegister.vue";
 
 // 使用者畫面Router
+import MemberProfiles from "../pages/Customers/MemberCenter/Profiles.vue";
+import MemberPets from "../pages/Customers/MemberCenter/Pets.vue";
+import MemberChangePassword from "../pages/Customers/MemberCenter/ChangePassword.vue";
 
 // 商家畫面Router
 import StoresDashboard from "../pages/Stores/StoresDashboard.vue";
@@ -15,7 +19,11 @@ import StoresAddBookings from "../pages/Stores/Booking/AddBookings.vue";
 import StoresGrooming from "../pages/Stores/Booking/Grooming/GroomingBooking.vue";
 import StoresBoarding from "../pages/Stores/Booking/Boarding/BoardingBooking.vue";
 import StoresGroomingManage from "../pages/Stores/Booking/Grooming/GroomingManagement.vue";
+import StoresGroomingReview from "../pages/Stores/Booking/Grooming/Review.vue";
+import StoresGroomingDetails from "../pages/Stores/Booking/Grooming/Details.vue";
 import StoresBoardingManage from "../pages/Stores/Booking/Boarding/BoardingManagement.vue";
+import StoresBoardingReview from "../pages/Stores/Booking/Boarding/Review.vue";
+import StoresBoardingDetails from "../pages/Stores/Booking/Boarding/Details.vue";
 import StoresBookingHistory from "../pages/Stores/HistoryBooking/BookingHistory.vue";
 import StoresWatchLists from "../pages/Stores/Booking/WatchLists.vue";
 //
@@ -40,9 +48,10 @@ import PostReview from "../pages/Admin/Posts/PostReview.vue";
 
 // 前台頁面Router - 使用正確的路徑
 import NewsPage from "../pages/Customers/News.vue";
-import StoresPage from "../pages/Customers/StoresView.vue";
+import StoresPage from "../pages/Customers/StoresLists.vue";
 import BookingGroomingPage from "../pages/Customers/Booking/Grooming.vue";
 import BookingBoardingPage from "../pages/Customers/Booking/Boarding.vue";
+import NewsView from "../pages/Customers/NewsView.vue";
 
 const routes = [
   {
@@ -53,6 +62,11 @@ const routes = [
   {
     path: "/news",
     component: NewsPage,
+    meta: { sidebar: false },
+  },
+  {
+    path: "/news/views/:id",
+    component: NewsView,
     meta: { sidebar: false },
   },
   {
@@ -82,6 +96,16 @@ const routes = [
     meta: { sidebar: false },
   },
   {
+    path: "/password/forgot",
+    component: ForgotPassword,
+    meta: { sidebar: false },
+  },
+  {
+    path: "/password/change",
+    component: ForgotPassword,
+    meta: { sidebar: false },
+  },
+  {
     path: "/register/customers",
     component: CustomerRegister,
     meta: { sidebar: false },
@@ -91,7 +115,22 @@ const routes = [
     component: StoresRegister,
     meta: { sidebar: false },
   },
-
+  // 會員中心
+  {
+    path: "/members/profiles",
+    component: MemberProfiles,
+    meta: { sidebar: true },
+  },
+  {
+    path: "/members/pets",
+    component: MemberPets,
+    meta: { sidebar: true },
+  },
+  {
+    path: "/members/profiles/password/change",
+    component: MemberChangePassword,
+    meta: { sidebar: true },
+  },
   // 商家頁面路由
   {
     path: "/register/stores/:step",
@@ -126,6 +165,16 @@ const routes = [
     meta: { sidebar: true },
   },
   {
+    path: "/stores/grooming-bookings/review",
+    component: StoresGroomingReview,
+    meta: { sidebar: false },
+  },
+  {
+    path: "/stores/grooming-bookings/details",
+    component: StoresGroomingDetails,
+    meta: { sidebar: false },
+  },
+  {
     path: "/stores/grooming-bookings/history",
     component: StoresBookingHistory,
     meta: { sidebar: true },
@@ -139,13 +188,23 @@ const routes = [
   // 住宿預約管理
   {
     path: "/stores/boarding-bookings",
-    component: StoresDashboard,
+    component: StoresBoarding,
     meta: { sidebar: true },
   },
   {
     path: "/stores/boarding-bookings/manage",
     component: StoresBoardingManage,
     meta: { sidebar: true },
+  },
+  {
+    path: "/stores/boarding-bookings/review",
+    component: StoresBoardingReview,
+    meta: { sidebar: false },
+  },
+  {
+    path: "/stores/boarding-bookings/details",
+    component: StoresBoardingDetails,
+    meta: { sidebar: false },
   },
   {
     path: "/stores/boarding-bookings/history",
@@ -177,6 +236,11 @@ const routes = [
   // 服務
   {
     path: "/stores/services/add",
+    component: StoresAddServices,
+    meta: { sidebar: true },
+  },
+  {
+    path: "/stores/services/edit/:id/:type",
     component: StoresAddServices,
     meta: { sidebar: true },
   },

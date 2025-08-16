@@ -1,0 +1,381 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    /* 主容器 */
+    .grooming-booking-container {
+        @apply pt-6 px-6 mb-8;
+        font-family: 'Microsoft JhengHei', sans-serif;
+    }
+
+    /* 標題頭部 */
+    .title-header {
+        @apply bg-amber-200 text-center py-4 rounded-lg ;
+    }
+
+    .title-header h1 {
+        @apply text-2xl font-bold text-amber-900;
+    }
+
+    /* 預約時程表 */
+    .booking-schedule {
+        @apply bg-white rounded-lg shadow-lg overflow-x-auto flex-1 flex flex-col;
+        /* 自訂滑動條樣式 */
+        scrollbar-width: thin;
+        scrollbar-color: #cbd5e0 #f7fafc;
+    }
+
+    .booking-schedule::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .booking-schedule::-webkit-scrollbar-track {
+        background: #f7fafc;
+        border-radius: 4px;
+    }
+
+    .booking-schedule::-webkit-scrollbar-thumb {
+        background: #cbd5e0;
+        border-radius: 4px;
+    }
+
+    .booking-schedule::-webkit-scrollbar-thumb:hover {
+        background: #a0aec0;
+    }
+
+    /* 時間表頭 */
+    .schedule-header {
+        @apply grid;
+        grid-template-columns: 120px repeat(23, 1fr);
+    }
+
+    .time-header {
+        @apply p-3 font-semibold text-gray-800 bg-gray-100;
+        position: sticky;
+        left: 0;
+        z-index: 10;
+        border-right: 2px solid #e5e7eb;
+    }
+
+    .time-slot {
+        @apply text-center font-medium text-gray-700 relative flex flex-col items-center justify-end h-12 border-none bg-transparent;
+        padding: 0;
+    }
+
+    .time-slot span {
+        @apply border-none bg-transparent rounded-none p-0 m-0 shadow-none;
+    }
+
+    /* 整點線條 */
+    .full-hour-line {
+        @apply absolute left-1/2 transform -translate-x-1/2 z-0 rounded-sm;
+        width: 2px;
+        height: 100%;
+        background: #d97706;
+        opacity: 0.8;
+        top: 100%;
+    }
+
+    /* 顧客行 */
+    .customer-row {
+        @apply relative border-b border-gray-200 hover:bg-gray-50 grid min-h-16;
+        grid-template-columns: 120px repeat(23, 1fr);
+    }
+
+    .customer-name {
+        @apply p-4 border-r border-gray-300 bg-gray-50 font-medium text-gray-800 flex items-center justify-center;
+        position: sticky;
+        left: 0;
+        z-index: 10;
+        border-right: 2px solid #e5e7eb;
+    }
+
+    /* 時間軸區域 */
+    .time-axis-area {
+        @apply relative h-16 min-h-16 grid col-start-2 col-end-[-1];
+        grid-template-columns: repeat(23, 1fr);
+        height: 60px;
+        min-height: 60px;
+    }
+
+    .time-cell {
+        @apply relative p-0 bg-transparent min-h-11;
+    }
+
+    .time-cell .full-hour-line {
+        @apply absolute left-1/2 transform -translate-x-1/2 top-0 h-full z-0;
+    }
+
+    /* 預約方塊層 */
+    .booking-blocks-layer {
+        @apply absolute inset-0 z-10 pointer-events-none;
+    }
+
+    .booking-item {
+        @apply absolute flex flex-col items-center justify-center font-medium shadow-md text-white text-xs cursor-pointer rounded-md border border-white/30 top-1 bottom-1 pointer-events-auto;
+        transition: all 0.2s ease;
+        padding: 4px 6px;
+        min-height: 40px;
+    }
+
+    .booking-item:hover {
+        @apply transform -translate-y-1 shadow-lg;
+    }
+
+    .booking-item-text {
+        @apply text-center font-semibold text-white text-[11px] leading-tight;
+    }
+
+    .booking-item-time {
+        @apply text-center opacity-90 text-white text-[10px] leading-tight mt-0.5;
+    }
+
+    /* 統計卡片容器 */
+    .grooming-stats-container {
+        @apply flex justify-center my-8 gap-12;
+    }
+
+    .grooming-stats-card {
+        @apply rounded-xl bg-white shadow-xl flex flex-col p-0 overflow-hidden w-2/5;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .grooming-stats-title-wrapper {
+        @apply w-full text-center py-8 pb-5;
+        background: #caa77c;
+    }
+
+    .grooming-stats-title {
+        @apply text-white text-3xl font-bold tracking-wide;
+    }
+
+    .grooming-stats-count {
+        @apply block text-4xl font-bold text-gray-800 my-12 text-center;
+    }
+
+    .grooming-stats-btn {
+        @apply block mx-auto mb-10 py-4 px-10 bg-[#C7A27C] text-white border-none rounded-lg text-lg font-medium cursor-pointer shadow-lg hover:bg-amber-700 transition-all duration-300;
+    }
+
+    /* Modal */
+    .modal-overlay {
+        @apply fixed inset-0 bg-black/30 flex items-center justify-center z-50;
+    }
+
+    .booking-receipt-modal {
+        @apply bg-white rounded-lg shadow-2xl relative max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto;
+        font-family: 'Microsoft JhengHei', sans-serif;
+    }
+
+    .modal-close {
+        @apply absolute top-4 right-4 text-white hover:text-gray-700 text-2xl cursor-pointer z-10;
+    }
+
+    .customer-header {
+        @apply text-center py-6 text-white rounded-t-lg;
+        background: #caa77c;
+    }
+
+    .customer-title {
+        @apply text-2xl font-bold tracking-wide;
+    }
+
+    .receipt-content {
+        @apply p-6;
+    }
+
+    .top-section {
+        @apply grid grid-cols-2 gap-8 mb-6;
+    }
+
+    .bottom-section {
+        @apply grid grid-cols-2 gap-8 mb-6;
+    }
+
+    .left-section {
+        @apply space-y-3;
+    }
+
+    .right-section {
+        @apply space-y-4;
+    }
+
+    .store-notes-section {
+        @apply space-y-3;
+    }
+
+    .service-details-section {
+        @apply space-y-3;
+    }
+
+    .section-title {
+        @apply text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-200;
+    }
+
+    .info-row {
+        @apply flex items-start py-2;
+    }
+
+    .label {
+        @apply text-gray-700 font-medium min-w-24 flex-shrink-0;
+    }
+
+    .value {
+        @apply text-gray-900 ml-4 flex-1;
+    }
+
+    .order-info {
+        @apply space-y-2;
+    }
+
+    .store-notes-input {
+        @apply w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent;
+    }
+
+    .service-grid {
+        @apply space-y-3;
+    }
+
+    .service-row {
+        @apply flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0;
+    }
+
+    .service-label {
+        @apply text-gray-700 font-medium;
+    }
+
+    .service-value {
+        @apply text-gray-900 font-medium;
+    }
+
+    .action-buttons {
+        @apply flex justify-center gap-4 mt-8 pt-4 border-t border-gray-200;
+    }
+
+    .btn-secondary {
+        @apply px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors;
+    }
+
+    .btn-primary {
+        @apply px-8 py-3 bg-amber-800 text-white rounded-lg font-medium hover:bg-amber-700 transition-colors;
+    }
+
+    .modal-content {
+        @apply bg-white rounded-lg shadow-lg p-8 relative min-w-[300px] max-w-[90vw];
+    }
+
+    .modal-title {
+        @apply text-lg font-bold mb-4;
+    }
+
+    .modal-info {
+        @apply mb-2;
+    }
+
+    /* 響應式設計 - 平板及以下 */
+    @media (max-width: 1279px) {
+        .schedule-header,
+        .customer-row {
+            grid-template-columns: 100px repeat(23, minmax(60px, 1fr));
+        }
+
+        .booking-schedule {
+            @apply overflow-x-auto;
+            width: 100%;
+            max-width: 100%;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e0 #f7fafc;
+        }
+
+        .schedule-header,
+        .customer-row {
+            min-width: 1200px;
+            width: max-content;
+        }
+
+        .grooming-booking-container {
+            @apply overflow-x-hidden;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .title-header {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .booking-item {
+            @apply text-xs;
+            font-size: 10px;
+            padding: 2px 4px;
+        }
+
+        .grooming-stats-container {
+            @apply gap-6 flex-row;
+        }
+
+        .grooming-stats-card {
+            @apply w-2/5;
+        }
+    }
+
+    /* 手機設備 */
+    @media (max-width: 480px) {
+        .grooming-booking-container {
+            @apply p-4;
+        }
+
+        .schedule-header,
+        .customer-row {
+            grid-template-columns: 80px repeat(23, minmax(50px, 1fr));
+        }
+
+        .booking-item {
+            font-size: 9px;
+            padding: 1px 2px;
+            min-height: 50px;
+        }
+
+        .time-slot {
+            @apply text-xs px-1 py-2;
+            font-size: 12px;
+        }
+
+        .grooming-stats-container {
+            @apply flex-col gap-6;
+        }
+
+        .grooming-stats-card {
+            @apply w-full;
+        }
+
+        .grooming-stats-title {
+            @apply text-2xl;
+        }
+
+        .grooming-stats-count {
+            @apply text-4xl my-8;
+        }
+
+        .grooming-stats-btn {
+            @apply py-3 px-8 text-base mb-8;
+        }
+    }
+
+    /* 桌機及以上 */
+    @media (min-width: 1280px) {
+        .booking-schedule {
+            @apply overflow-visible;
+        }
+
+        .schedule-header,
+        .customer-row {
+            grid-template-columns: 120px repeat(23, 1fr);
+        }
+
+        .grooming-stats-container {
+            @apply gap-12;
+        }
+    }
+}
