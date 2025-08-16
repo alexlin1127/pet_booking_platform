@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 # app
-from pet_booking.reservations.models import ReservationGrooming, Orders
+from pet_booking.reservations.models import ReservationGrooming
 from pet_booking.reservations.serializers import StoreNoteUpdateSerializer, OrdersSerializer
 from pet_booking.stores.models import Store
 from pet_booking.customers.models import CustomersProfile  
@@ -45,14 +45,14 @@ class GroomingReservationInfoViewSet(viewsets.ReadOnlyModelViewSet):
     def list(self, request, *args, **kwargs):
         '''取得顧客當日美容預約資訊'''
         current_date = timezone.now().date()
-        store_id = request.query_params.get('store_id')
+        store_id = request.user.user_id
         
         if not store_id:
             return Response({
                 'error': 'store_id is required'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        store = get_object_or_404(Store, id=store_id)
+        store = Store.objects.filter(user_id=store_id).first()
         store_name = store.store_name
 
         # get customer booking with confirmed status
@@ -62,7 +62,11 @@ class GroomingReservationInfoViewSet(viewsets.ReadOnlyModelViewSet):
             status='confirmed'
         )
 
-        confirmed_reservations_count = confirmed_reservations.count()
+        confirmed_reservations_count = ReservationGrooming.objects.filter(
+            store_name=store_name,
+            reservation_time__date__gt=current_date,
+            status='confirmed'
+        ).count() + confirmed_reservations.count()
 
         # count customer booking with pending status
         pending_reservations_count = ReservationGrooming.objects.filter(
@@ -243,14 +247,13 @@ class GroomingReservationManagementViewSet(viewsets.ViewSet):
                 reservation_id=reservation_id,
                 status='confirmed'
             )
-            
+
             # 根據 user_name 和 user_phone 查找 user_id
             try:
-                customer_profile = CustomersProfile.objects.get(
+                user_id = CustomersProfile.objects.get(
                     full_name=reservation.user_name,
                     phone=reservation.user_phone
-                )
-                user_id = customer_profile.user_id
+                ).user_id.user_id
 
             except CustomersProfile.DoesNotExist:
                 return Response({
@@ -264,16 +267,17 @@ class GroomingReservationManagementViewSet(viewsets.ViewSet):
                     'details': f'Multiple customers found with name: {reservation.user_name} and phone: {reservation.user_phone}'
                 }, status=status.HTTP_400_BAD_REQUEST)
             
+            
             order_data = {
-                'reservation_grooming': reservation_id,
+                'reservation_grooming_id': reservation_id if reservation_id[:2] == 'GR' else '',
+                'reservation_boarding_id': reservation_id if reservation_id[:2] == 'BD' else '',
                 'user_id': user_id,
                 'total_price': reservation.total_price,
                 'status': 'completed',
-                'blacklist': False
+                'blacklist': False 
             }
-            
+
             order_serializer = OrdersSerializer(data=order_data)
-            
             if not order_serializer.is_valid():
                 return Response({
                     'error': 'Order validation failed',
@@ -350,14 +354,14 @@ class AllReservationsViewSet(viewsets.ViewSet):
 
     def list(self, request, *args, **kwargs):
         '''取得所有美容預約資料（待審核 + 近期預約）'''
-        store_id = request.query_params.get('store_id')
+        store_id = request.user.user_id
 
         if not store_id:
             return Response({
                 'error': 'store_id is required'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        store = get_object_or_404(Store, id=store_id)
+        store = Store.objects.filter(user_id=store_id).first()
         store_name = store.store_name
 
         # get grooming reservation with pending status
@@ -520,12 +524,12 @@ class PendingReservationViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = StandardResultsSetPagination
     
     def get_queryset(self):
-        store_id = self.request.query_params.get('store_id')
+        store_id = self.request.user.user_id
         if not store_id:
             return ReservationGrooming.objects.none()
         
         try:
-            store = Store.objects.get(id=store_id)
+            store = Store.objects.filter(user_id=store_id).first()
             return ReservationGrooming.objects.filter(
                 store_name=store.store_name,
                 status='pending'
@@ -534,14 +538,14 @@ class PendingReservationViewSet(viewsets.ReadOnlyModelViewSet):
             return ReservationGrooming.objects.none()
     
     def list(self, request, *args, **kwargs):
-        store_id = request.query_params.get('store_id')
+        store_id = request.user.user_id
         if not store_id:
             return Response({
                 'error': 'store_id is required'
             }, status=status.HTTP_400_BAD_REQUEST)
         
 
-        store = get_object_or_404(Store, id=store_id)
+        store = Store.objects.filter(user_id=store_id).first()
         store_name = store.store_name
 
         
@@ -599,12 +603,12 @@ class UpcomingReservationViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = StandardResultsSetPagination
     
     def get_queryset(self):
-        store_id = self.request.query_params.get('store_id')
+        store_id = self.request.user.user_id
         if not store_id:
             return ReservationGrooming.objects.none()
         
         try:
-            store = Store.objects.get(id=store_id)
+            store = Store.objects.get(user_id=store_id)
             return ReservationGrooming.objects.filter(
                 store_name=store.store_name,
                 status='confirmed'
@@ -613,13 +617,13 @@ class UpcomingReservationViewSet(viewsets.ReadOnlyModelViewSet):
             return ReservationGrooming.objects.none()
     
     def list(self, request, *args, **kwargs):
-        store_id = request.query_params.get('store_id')
+        store_id = request.user.user_id
         if not store_id:
             return Response({
                 'error': 'store_id is required'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        store = get_object_or_404(Store, id=store_id)
+        store = Store.objects.filter(user_id=store_id).first()
         store_name = store.store_name
         
         queryset = self.get_queryset()
