@@ -12,6 +12,13 @@ const userId = ref(null);
 
 const services = ref([]); // 用於存儲所有服務資料
 
+const cleaningFrequencyMap = {
+  weekly: "每週清潔",
+  biweekly: "每兩週清潔",
+  halfmonth: "每半月清潔",
+  other: "其他",
+};
+
 const getUser = async () => {
   try {
     const response = await api.get("/users/me");
@@ -33,7 +40,10 @@ const getBoardingServices = async () => {
       type: "boarding",
       tags: [item.species],
       bullets: [
-        `清潔頻率：${item.cleaning_frequency}`,
+        `清潔頻率：${
+          cleaningFrequencyMap[item.cleaning_frequency] ||
+          item.cleaning_frequency
+        }`,
         `房間數量：${item.room_count}`,
       ],
       duration: null, // 住宿服務無時長
@@ -68,6 +78,7 @@ const getGroomingServices = async () => {
 onMounted(async () => {
   await getUser();
   await Promise.all([getBoardingServices(), getGroomingServices()]);
+  console.log("Services data:", services.value);
 });
 
 // Modal 狀態
@@ -182,55 +193,64 @@ const buildInfoRows = (svc) => {
       </select>
     </div>
     <section class="space-y-10">
-      <Card
-        v-for="s in filteredServices"
-        :key="s.id"
-        type="vertical"
-        :hasButton="true"
-        :clickable="false"
-        class="service-card"
-      >
-        <!-- 不要 icon：若卡片本身會渲染空容器，就用 CSS 隱藏；或保留此具名 slot 覆蓋 -->
-        <template #icon><template v-if="false" /></template>
+      <template v-if="filteredServices.length > 0">
+        <Card
+          v-for="s in filteredServices"
+          :key="s.id"
+          type="vertical"
+          :hasButton="true"
+          :clickable="false"
+          class="service-card"
+        >
+          <!-- 不要 icon：若卡片本身會渲染空容器，就用 CSS 隱藏；或保留此具名 slot 覆蓋 -->
+          <template #icon><template v-if="false" /></template>
 
-        <template #title>
-          <div class="flex items-center justify-between">
-            <h3 class="service-item-title">
-              {{ s.title }} <span class="service-price">NT${{ s.price }}</span>
-            </h3>
-          </div>
-        </template>
-
-        <template #content>
-          <p class="service-desc">{{ s.description }}</p>
-
-          <ul class="service-bullets">
-            <li v-for="b in s.bullets" :key="b">{{ b }}</li>
-          </ul>
-
-          <div class="service-meta">
-            <div v-if="isGrooming" class="service-duration">
-              施作時間：{{ s.duration }}
+          <template #title>
+            <div class="flex items-center justify-between">
+              <h3 class="service-item-title">
+                {{ s.title }}
+                <span class="service-price">NT${{ s.price }}</span>
+              </h3>
             </div>
-            <div class="service-tags">
-              <span v-for="t in s.tags" :key="t" class="service-tag">{{
-                t
-              }}</span>
-            </div>
-          </div>
-        </template>
+          </template>
 
-        <template #button>
-          <div class="service-actions">
-            <button class="svc-btn svc-btn-outline" @click="onDelete(s)">
-              刪除服務
-            </button>
-            <button class="svc-btn svc-btn-solid" @click="onEdit(s.id, s.type)">
-              修改內容
-            </button>
-          </div>
-        </template>
-      </Card>
+          <template #content>
+            <p class="service-desc">{{ s.description }}</p>
+
+            <ul class="service-bullets">
+              <li v-for="b in s.bullets" :key="b">{{ b }}</li>
+            </ul>
+
+            <div class="service-meta">
+              <div v-if="isGrooming" class="service-duration">
+                施作時間：{{ s.duration }}
+              </div>
+              <div class="service-tags">
+                <span v-for="t in s.tags" :key="t" class="service-tag">{{
+                  t
+                }}</span>
+              </div>
+            </div>
+          </template>
+
+          <template #button>
+            <div class="service-actions">
+              <button class="svc-btn svc-btn-outline" @click="onDelete(s)">
+                刪除服務
+              </button>
+              <button
+                class="svc-btn svc-btn-solid"
+                @click="onEdit(s.id, s.type)"
+              >
+                修改內容
+              </button>
+            </div>
+          </template>
+        </Card>
+      </template>
+      <template v-else>
+        <p class="text-gray-500 text-center">目前沒有服務項目。</p>
+      </template>
     </section>
     <!-- 刪除確認 Modal -->
     <ModalBox

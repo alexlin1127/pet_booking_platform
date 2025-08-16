@@ -14,7 +14,7 @@ class BoardingServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BoardingService
-        fields = ['id', 'store_id', 'species', 'cleaning_frequency', 'room_type', 'room_count', 'pet_available_amount', 'introduction', 'created_at', 'updated_at', 'pricings']
+        fields = ['id', 'store_id', 'species', 'cleaning_frequency', 'room_type', 'room_count', 'pet_available_amount', 'introduction', 'created_at', 'updated_at', 'pricings', 'notice']
 
     def create(self, validated_data):
         pricings_data = validated_data.pop('boardingservicepricing_set', [])
