@@ -53,7 +53,6 @@ import BookingGroomingPage from "../pages/Customers/Booking/Grooming.vue";
 import BookingBoardingPage from "../pages/Customers/Booking/Boarding.vue";
 import NewsView from "../pages/Customers/NewsView.vue";
 
-
 const routes = [
   {
     path: "/",
@@ -237,6 +236,11 @@ const routes = [
   // 服務
   {
     path: "/stores/services/add",
+    component: StoresAddServices,
+    meta: { sidebar: true },
+  },
+  {
+    path: "/stores/services/edit/:id/:type",
     component: StoresAddServices,
     meta: { sidebar: true },
   },
