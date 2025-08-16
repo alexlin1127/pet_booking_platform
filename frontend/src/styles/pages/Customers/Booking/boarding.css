@@ -1,0 +1,277 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap");
+
+:root {
+  --bg: #fbf1e6;
+  --panel: #fffaf4;
+  --ink: #3d2b1f;
+  --muted: #8b6f57;
+  --accent: #cda27a;
+  --accent-strong: #b48556;
+  --line: #eadfce;
+  --success: #3bb272;
+}
+
+/* 基礎 */
+.petstay-page {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+}
+.ps-content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 36px 18px 36px 18px;
+}
+.ps-title {
+  font-size: 2rem;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: 2px;
+  margin-bottom: 2.5rem;
+}
+.ps-card {
+  background: #fff;
+  border-radius: 1.3rem;
+  border: 1.5px solid var(--line);
+  box-shadow: 0 2px 18px rgba(60, 60, 60, 0.07);
+  padding: 2.8rem 2.2rem 2.2rem 2.2rem;
+}
+.ps-label {
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  display: block;
+  color: var(--muted);
+}
+.ps-select,
+.ps-input,
+.ps-textarea {
+  border: 1.2px solid var(--line);
+  border-radius: 12px;
+  padding: 0.62rem 1rem;
+  font-size: 1.04rem;
+  background: #fff;
+  margin-bottom: 0.5rem;
+  transition: border 0.15s;
+}
+.ps-input:focus,
+.ps-select:focus,
+.ps-textarea:focus {
+  border-color: var(--accent-strong);
+  outline: none;
+}
+.ps-radio {
+  accent-color: var(--ink);
+  margin-right: 6px;
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: middle;
+}
+.ps-options-box {
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 1.2rem 1rem;
+  margin-bottom: 0.6rem;
+}
+.ps-book-btn {
+  margin-top: 2.2rem;
+  width: 220px;
+  height: 48px;
+  display: block;
+  font-weight: 700;
+  font-size: 1.13rem;
+  background: var(--accent-strong);
+  color: #fff;
+  border-radius: 1.1rem;
+  border: none;
+  transition: background 0.13s;
+  margin-left: auto;
+  margin-right: auto;
+  letter-spacing: 1.5px;
+}
+.ps-book-btn:hover {
+  background: var(--accent);
+  filter: brightness(0.98);
+}
+.ps-total-box {
+  text-align: right;
+  margin-top: 0.8rem;
+  margin-bottom: 0.5rem;
+  color: var(--muted);
+}
+
+/* 完成預約頁 */
+.ps-finish-wrap {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 30px;
+}
+.ps-finish-icon {
+  margin-bottom: 0.8rem;
+}
+.ps-finish-title {
+  color: #c57d4b;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 5px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+.ps-finish-sub {
+  color: #6a4b2d;
+  font-size: 1.13rem;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.ps-finish-wait-btn {
+  background: #806246;
+  color: #fff;
+  font-size: 1.07rem;
+  font-weight: 600;
+  border-radius: 1.3rem;
+  padding: 11px 0;
+  width: 290px;
+  text-align: center;
+  margin: 0 auto 22px;
+  letter-spacing: 2px;
+  border: none;
+}
+.ps-finish-info-card {
+  width: 100%;
+  background: #fff;
+  border: 1.2px solid #eadfce;
+  border-radius: 14px;
+  margin: 0 auto 16px;
+  padding: 20px 30px 12px 30px;
+  font-size: 1.11rem;
+  box-sizing: border-box;
+  max-width: 420px;
+}
+.ps-finish-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 11px;
+  color: #2a1b0b;
+}
+.ps-finish-info-row span {
+  font-weight: 500;
+}
+.ps-finish-info-row b {
+  font-weight: 700;
+  color: #473f2b;
+}
+.ps-finish-coupon-card {
+  margin: 0 auto 24px;
+  width: 100%;
+  background: #fff;
+  border: 1.2px solid #eadfce;
+  border-radius: 13px;
+  padding: 12px 0 12px 0;
+  text-align: center;
+  max-width: 420px;
+}
+.ps-finish-coupon-label {
+  color: #222;
+  font-size: 1rem;
+  margin-bottom: 3px;
+}
+.ps-finish-coupon-code {
+  color: #c57d4b;
+  font-size: 1.13rem;
+  font-weight: 700;
+  margin-top: 3px;
+  letter-spacing: 2px;
+}
+.ps-finish-btn {
+  display: block;
+  margin: 0 auto;
+  width: 110px;
+  background: #eadfce;
+  color: #a1753d;
+  border: none;
+  border-radius: 7px;
+  font-size: 1.09rem;
+  font-weight: 600;
+  padding: 10px 0;
+  margin-top: 9px;
+  transition: background 0.13s;
+}
+.ps-finish-btn:hover {
+  background: #e0b987;
+}
+
+@media (max-width: 700px) {
+  .ps-card,
+  .ps-finish-info-card,
+  .ps-finish-coupon-card {
+    padding-left: 2vw;
+    padding-right: 2vw;
+    min-width: 0;
+    max-width: 99vw;
+  }
+  .ps-content {
+    padding: 16px 2vw;
+  }
+  .ps-book-btn {
+    width: 90vw;
+    min-width: 0;
+    max-width: 99vw;
+  }
+  .ps-finish-wait-btn {
+    width: 90vw;
+    min-width: 0;
+    max-width: 99vw;
+  }
+}
+
+/* 新增優惠方案圓點列表樣式 */
+.ps-list {
+  margin: 0;
+  padding-left: 1.2em;
+  list-style: none;
+}
+.ps-list li {
+  position: relative;
+  padding-left: 1.2em;
+  margin-bottom: 0.4em;
+  font-size: 1.04rem;
+  color: #222;
+}
+.ps-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.5em;
+  height: 0.5em;
+  background: #222;
+  border-radius: 50%;
+  display: inline-block;
+  transform: translateY(-50%);
+}
+
+/* 兩行兩欄的日期時間佈局 */
+.ps-row {
+  display: flex;
+  gap: 28px;
+  margin-bottom: 0.5em;
+}
+.ps-col {
+  flex: 1 1 0;
+  min-width: 160px;
+}
+@media (max-width: 600px) {
+  .ps-row {
+    flex-direction: column;
+    gap: 0.1em;
+  }
+}

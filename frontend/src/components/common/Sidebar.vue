@@ -79,24 +79,6 @@ const showStore = ref(false);
           >首頁</RouterLink
         >
 
-        <!-- 公告相關 -->
-        <div class="sidebar-submenu-group">
-          <div
-            class="sidebar-link"
-            @click="showAnnouncement = !showAnnouncement"
-          >
-            公告
-          </div>
-          <template v-if="showAnnouncement">
-            <RouterLink
-              to="/customers/news"
-              class="sidebar-link sidebar-submenu"
-              active-class="sidebar-link-active"
-              >最新消息</RouterLink
-            >
-          </template>
-        </div>
-
         <!-- 服務與預約相關 -->
         <div class="sidebar-submenu-group">
           <div class="sidebar-link" @click="showService = !showService">
@@ -152,19 +134,25 @@ const showStore = ref(false);
           </div>
           <template v-if="showProfile">
             <RouterLink
-              to="/customers/profile/settings"
+              to="/members/profiles"
               class="sidebar-link sidebar-submenu"
               active-class="sidebar-link-active"
               >個人資料設定</RouterLink
             >
             <RouterLink
-              to="/customers/profile/favorites"
+              to="/members/pets"
+              class="sidebar-link sidebar-submenu"
+              active-class="sidebar-link-active"
+              >毛孩資料設定</RouterLink
+            >
+            <RouterLink
+              to="/members/favorites"
               class="sidebar-link sidebar-submenu"
               active-class="sidebar-link-active"
               >收藏/追蹤店家</RouterLink
             >
             <RouterLink
-              to="/customers/profile/security"
+              to="/members/securities"
               class="sidebar-link sidebar-submenu"
               active-class="sidebar-link-active"
               >帳戶安全性設定</RouterLink

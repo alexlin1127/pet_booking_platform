@@ -7,7 +7,7 @@ const router = useRouter();
 
 // 定義登入狀態
 const login = ref(true); // 改為 true 方便測試
-const role = ref('stores'); // 可以是 'admin', 'stores', 'customers'
+const role = ref('customers'); // 可以是 'admin', 'stores', 'customers'
 
 // 手機版選單狀態
 const isMobileMenuOpen = ref(false);
@@ -110,9 +110,9 @@ const toggleMemberSection = () => {
                 <div class="dropdown">
                     <button class="dropdown-btn">會員中心</button>
                     <div class="dropdown-menu">
-                        <RouterLink to="/member/profile" class="dropdown-item">基本資料</RouterLink>
-                        <RouterLink to="/member/pets" class="dropdown-item">毛孩資料</RouterLink>
-                        <RouterLink to="/member/bookings" class="dropdown-item">預約紀錄</RouterLink>
+                        <RouterLink to="/members/profiles" class="dropdown-item">基本資料</RouterLink>
+                        <RouterLink to="/members/pets" class="dropdown-item">毛孩資料</RouterLink>
+                        <RouterLink to="/members/bookings" class="dropdown-item">預約紀錄</RouterLink>
                     </div>
                 </div>
             </div>
