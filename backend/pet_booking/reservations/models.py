@@ -108,7 +108,7 @@ class Orders(models.Model):
     reservation_boarding_id = models.CharField(max_length=50, db_column='reservation_boarding_id', null=True, blank=True)
     user_id = models.CharField(max_length=50)
     total_price = models.IntegerField()
-    status = models.CharField(max_length=20, default='confirmed')
+    status = models.CharField(max_length=20, default='finished')
     blacklist = models.BooleanField(default=False)
     class Meta:
         db_table = 'orders'

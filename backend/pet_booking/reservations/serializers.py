@@ -62,16 +62,23 @@ class OrdersSerializer(serializers.ModelSerializer):
     reservation_grooming_id = serializers.CharField(
         max_length=50,
         required=False,
-        allow_blank=True
+        allow_blank=True,
+        allow_null=True
     )
     reservation_boarding_id = serializers.CharField(
         max_length=50,
         required=False,
-        allow_blank=True
+        allow_blank=True,
+        allow_null=True
     )
-    blacklist = serializers.BooleanField(
+    user_id = serializers.CharField(max_length=50, required=True)
+    total_price = serializers.IntegerField(required=True)
+    status = serializers.ChoiceField(
+        choices=[('pending', 'pending'), ('confirmed', 'confirmed'),
+                 ('cancelled','cancelled'), ('finished','finished')],
         required=True
     )
+    blacklist = serializers.BooleanField(required=True)
 
     class Meta:
         model = Orders
@@ -80,8 +87,5 @@ class OrdersSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data.get('reservation_grooming_id') and data.get('reservation_boarding_id'):
             raise serializers.ValidationError("Only one of reservation_grooming_id or reservation_boarding_id can be set.")
-        
-        if not isinstance(data.get('blacklist'), bool):
-            raise serializers.ValidationError("Blacklist must be a boolean value.")
         
         return data
