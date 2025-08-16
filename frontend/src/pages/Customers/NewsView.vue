@@ -18,8 +18,8 @@ const article = computed(() =>
 const title = computed(() => article.value?.title ?? '')
 const imgSrc = computed(() => article.value?.imgSrc ?? '')
 const content = computed(() => article.value?.content ?? [])
-// const store   = computed(() => article.value?.store   ?? '')
-// const date    = computed(() => article.value?.date    ?? '')
+const store = computed(() => article.value?.store ?? '')
+const date = computed(() => article.value?.date ?? '')
 
 // 4) 找不到就回列表（用 watchEffect 保證在值變更時也會反應）
 watchEffect(() => {
@@ -35,17 +35,19 @@ const goBack = () => router.push('/news')
 
 <template>
     <div class="content-area" v-if="article">
-        <img :src="imgSrc" :alt="title" class="article-img max-h-[500px]" />
+        <img :src="imgSrc" :alt="title" class="article-img" />
         <h1 class="article-title">{{ title }}</h1>
-        <p class="text-sm text-gray-500 mb-4">
-            {{ store }} · {{ date }}
-        </p>
+        <div class="article-meta">
+            <span>{{ store }}</span>
+            <span>·</span>
+            <span>{{ date }}</span>
+        </div>
 
         <div class="article-content">
             <p v-for="(para, idx) in content" :key="idx">{{ para }}</p>
         </div>
 
-        <div class="flex justify-center gap-3 mt-6">
+        <div style="display: flex; justify-content: center; gap: 0.75rem; margin-top: 1.5rem;">
             <button class="btn-back" @click="goBack">返回</button>
         </div>
     </div>
