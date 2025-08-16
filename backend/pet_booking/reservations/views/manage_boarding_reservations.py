@@ -323,27 +323,21 @@ class BoardingReservationManagementViewSet(viewsets.ViewSet):
                 }, status=status.HTTP_400_BAD_REQUEST)
 
             order_data = {
-                'reservation_grooming_id': reservation_id if reservation_id[:2] == 'GR' else '',
-                'reservation_boarding_id': reservation_id if reservation_id[:2] == 'BD' else '',
+                'reservation_grooming_id': reservation_id if reservation_id.startswith('GR') else None,
+                'reservation_boarding_id': reservation_id if reservation_id.startswith('BD') else None,
                 'user_id': user_id,
-                'total_price': reservation.total_price,
-                'status': 'completed',
-                'blacklist': False 
+                'total_price': int(reservation.total_price),
+                'status': 'finished',  
+                'blacklist': False
             }
             
             order_serializer = OrdersSerializer(data=order_data)
-            
-            if not order_serializer.is_valid():
-                return Response({
-                    'error': 'Order validation failed',
-                    'details': order_serializer.errors
-                }, status=status.HTTP_400_BAD_REQUEST)
+            order_serializer.is_valid(raise_exception=True)
+            order = order_serializer.save()
             
             reservation.status = 'finished'
             reservation.save()
-            order = order_serializer.save()
 
-            # 處理優惠券：根據 reservation_id 找到對應的優惠券並更新狀態
             try:
                 coupon = Coupon.objects.get(reservation_id=reservation_id)
                 coupon.status = CouponStatus.USED

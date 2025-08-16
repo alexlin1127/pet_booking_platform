@@ -1,5 +1,5 @@
 # origin 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 # third-party
 from rest_framework import viewsets, status
@@ -7,7 +7,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
-from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 # app
@@ -248,7 +247,6 @@ class GroomingReservationManagementViewSet(viewsets.ViewSet):
                 status='confirmed'
             )
 
-            # 根據 user_name 和 user_phone 查找 user_id
             try:
                 user_id = CustomersProfile.objects.get(
                     full_name=reservation.user_name,
@@ -267,28 +265,22 @@ class GroomingReservationManagementViewSet(viewsets.ViewSet):
                     'details': f'Multiple customers found with name: {reservation.user_name} and phone: {reservation.user_phone}'
                 }, status=status.HTTP_400_BAD_REQUEST)
             
-            
             order_data = {
-                'reservation_grooming_id': reservation_id if reservation_id[:2] == 'GR' else '',
-                'reservation_boarding_id': reservation_id if reservation_id[:2] == 'BD' else '',
+                'reservation_grooming_id': reservation_id if reservation_id.startswith('GR') else None,
+                'reservation_boarding_id': reservation_id if reservation_id.startswith('BD') else None,
                 'user_id': user_id,
-                'total_price': reservation.total_price,
-                'status': 'completed',
-                'blacklist': False 
+                'total_price': int(reservation.total_price),
+                'status': 'finished',  
+                'blacklist': False
             }
 
             order_serializer = OrdersSerializer(data=order_data)
-            if not order_serializer.is_valid():
-                return Response({
-                    'error': 'Order validation failed',
-                    'details': order_serializer.errors
-                }, status=status.HTTP_400_BAD_REQUEST)
+            order_serializer.is_valid(raise_exception=True)
+            order = order_serializer.save()
             
             reservation.status = 'finished'
             reservation.save()
-            order = order_serializer.save()
 
-            # 處理優惠券：根據 reservation_id 找到對應的優惠券並更新狀態
             try:
                 coupon = Coupon.objects.get(reservation_id=reservation_id)
                 coupon.status = CouponStatus.USED
@@ -305,6 +297,7 @@ class GroomingReservationManagementViewSet(viewsets.ViewSet):
                     store_id=store.id,
                     status=CouponStatus.USED
                 ).count()
+
                 used_coupons_total_revenue = 50 * int(used_coupons_count)
             except Store.DoesNotExist:
                 used_coupons_count = 0
@@ -671,4 +664,3 @@ class UpcomingReservationViewSet(viewsets.ReadOnlyModelViewSet):
             'reservations': [],
             'total_count': queryset.count()
         }, status=status.HTTP_200_OK)
-    
