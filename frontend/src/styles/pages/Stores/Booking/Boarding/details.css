@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* 主容器 */
+  .details-container {
+    @apply min-h-screen bg-gray-100 p-5;
+  }
+
+  .details-card {
+    @apply bg-white rounded-3xl p-8 max-w-7xl mx-auto shadow-xl;
+  }
+
+  /* 載入狀態 */
+  .loading-state {
+    @apply text-center py-12;
+  }
+
+  .loading-state p {
+    @apply text-lg text-gray-600;
+  }
+
+  /* 顧客資訊標題 */
+  .customer-header {
+    @apply bg-amber-200 text-white p-6 rounded-2xl mb-8 flex justify-between items-center;
+  }
+
+  .customer-title {
+    @apply text-2xl font-bold m-0;
+  }
+
+  .back-btn {
+    @apply bg-amber-800 text-white px-6 py-3 rounded-lg font-bold hover:bg-amber-900 transition-colors;
+  }
+
+  /* 內容網格 */
+  .content-grid {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12;
+  }
+
+  /* 左右區域 */
+  .left-section,
+  .right-section {
+    @apply space-y-6;
+  }
+
+  /* 資訊行 */
+  .info-row {
+    @apply flex items-start gap-4 mb-4;
+  }
+
+  .info-row label {
+    @apply font-bold text-gray-800 w-28 flex-shrink-0;
+  }
+
+  .info-row span {
+    @apply text-gray-600 leading-relaxed;
+  }
+
+  /* 區塊樣式 */
+  .store-note-section,
+  .order-info-section,
+  .service-detail-section {
+    @apply bg-gray-50 p-6 rounded-xl;
+  }
+
+  .store-note-section h3,
+  .order-info-section h3,
+  .service-detail-section h3 {
+    @apply text-xl font-bold text-gray-800 mb-6;
+  }
+
+  /* 店家備註文字區域 */
+  .store-note-textarea {
+    @apply w-full h-32 p-4 border-2 border-gray-300 rounded-lg resize-none bg-gray-100 text-gray-600;
+  }
+
+  /* 歷史紀錄區域 */
+  .history-section {
+    @apply mt-12;
+  }
+
+  .history-title {
+    @apply text-2xl font-bold text-gray-800 mb-8;
+  }
+
+  .history-wrapper {
+    @apply relative flex items-center;
+  }
+
+  .history-container {
+    @apply flex gap-6 overflow-x-auto scroll-smooth px-4 py-2;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .history-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .history-card {
+    @apply bg-gray-50 rounded-xl p-6 min-w-80 flex-shrink-0 space-y-4;
+  }
+
+  .history-info,
+  .history-service,
+  .history-note {
+    @apply space-y-2;
+  }
+
+  .history-info h4,
+  .history-service h4,
+  .history-note h4 {
+    @apply font-bold text-gray-800 text-lg;
+  }
+
+  .history-info p,
+  .history-service p,
+  .history-note p {
+    @apply text-gray-600 leading-relaxed;
+  }
+
+  /* 滾動按鈕 */
+  .scroll-btn {
+    @apply bg-amber-800 text-white w-12 h-12 rounded-full font-bold hover:bg-amber-900 transition-colors z-10;
+  }
+
+  .scroll-left {
+    @apply mr-4;
+  }
+
+  .scroll-right {
+    @apply ml-4;
+  }
+
+  /* 響應式設計 */
+  @media (max-width: 1024px) {
+    .details-card {
+      @apply p-6;
+    }
+
+    .content-grid {
+      @apply grid-cols-1 gap-6;
+    }
+
+    .customer-header {
+      @apply flex-col items-start gap-4;
+    }
+
+    .history-card {
+      @apply min-w-72;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .details-container {
+      @apply p-3;
+    }
+
+    .details-card {
+      @apply p-4 rounded-2xl;
+    }
+
+    .customer-header {
+      @apply p-4;
+    }
+
+    .customer-title {
+      @apply text-xl;
+    }
+
+    .history-card {
+      @apply min-w-64;
+    }
+
+    .scroll-btn {
+      @apply w-10 h-10;
+    }
+  }
+}
