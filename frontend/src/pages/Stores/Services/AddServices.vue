@@ -70,7 +70,9 @@ function addRoomPrice() {
   });
 }
 function removePricing(idx: number) {
-  boarding.pricings.splice(idx, 1);
+  if (boarding.pricings.length > 1) {
+    boarding.pricings.splice(idx, 1);
+  }
 }
 
 // --- Grooming object ---
@@ -102,7 +104,9 @@ function addChargeRow() {
   });
 }
 function removeChargeRow(idx: number) {
-  grooming.pricings.splice(idx, 1);
+  if (grooming.pricings.length > 1) {
+    grooming.pricings.splice(idx, 1);
+  }
 }
 
 // --- Utilities ---
@@ -113,14 +117,6 @@ function cryptoRandom() {
 function goBack() {
   router.back();
 }
-
-// 定義 cleaning_frequency 中文
-const cleaningFrequencyMap = {
-  weekly: "每週一次",
-  biweekly: "每兩週一次",
-  halfmonth: "每半月一次",
-  other: "其他",
-};
 
 // --- 從 URL 獲取 ID ---
 const serviceId = computed(() => route.params.id || null);
@@ -141,10 +137,7 @@ async function fetchServiceData() {
 
     if (serviceType.value === "boarding") {
       // 填充住宿
-      boarding.cleaning_frequency =
-        Object.keys(cleaningFrequencyMap).find(
-          (key) => cleaningFrequencyMap[key] === data.cleaning_frequency
-        ) || "other";
+      boarding.cleaning_frequency = data.cleaning_frequency;
       boarding.cleaning_note =
         data.cleaning_frequency === "其他" ? data.cleaning_frequency : "";
       boarding.room_type = data.room_type;
@@ -240,6 +233,76 @@ onMounted(() => {
     resetForm(); // 新增模式：重置表單
   }
 });
+
+// --- Pricing validation ---
+function validatePricing() {
+  if (isboarding.value && boarding.pricings.length === 0) {
+    alert("請至少填寫一組住宿價格。");
+    return false;
+  }
+  if (!isboarding.value && grooming.pricings.length === 0) {
+    alert("請至少填寫一組美容價格。");
+    return false;
+  }
+  return true;
+}
+
+// --- Submit function ---
+async function submit() {
+  if (!validatePricing()) {
+    return;
+  }
+
+  const payload = isboarding.value
+    ? {
+        species: pet.value,
+        cleaning_frequency: boarding.cleaning_frequency,
+        room_type: boarding.room_type,
+        room_count: boarding.room_count,
+        pet_available_amount: boarding.pet_available_amount,
+        introduction: boarding.introduction,
+        notice: boarding.notice,
+        pricings: boarding.pricings.map((p) => ({
+          duration: p.duration,
+          duration_unit: p.duration_unit,
+          pricing: p.pricing,
+          overtime_rate: p.overtime_rate,
+          overtime_charging: p.overtime_charging,
+        })),
+      }
+    : {
+        species: pet.value,
+        service_title: grooming.service_title,
+        introduction: grooming.introduction,
+        notice: grooming.notice,
+        pricings: grooming.pricings.map((r) => ({
+          fur_amount: r.fur_amount,
+          pet_size: r.pet_size,
+          grooming_duration: r.hours * 60 + r.mins, // 計算總分鐘數
+          pricing: r.pricing,
+        })),
+      };
+
+  try {
+    const apiPath = isboarding.value
+      ? "/store/boarding_services"
+      : "/store/grooming_services";
+    let response;
+    if (mode.value === "add") {
+      // 新增模式
+      response = await api.post(apiPath, payload);
+    } else if (mode.value === "edit") {
+      // 編輯模式
+      response = await api.patch(`${apiPath}/${serviceId.value}`, payload);
+    }
+
+    console.log("API response:", response.data);
+    router.back();
+  } catch (error) {
+    console.error("API error:", error);
+    alert("提交失敗，請稍後再試。");
+  }
+}
 </script>
 <template>
   <div class="storeservices-page">
