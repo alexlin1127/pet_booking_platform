@@ -17,8 +17,10 @@ import StoresGrooming from "../pages/Stores/Booking/Grooming/GroomingBooking.vue
 import StoresBoarding from "../pages/Stores/Booking/Boarding/BoardingBooking.vue";
 import StoresGroomingManage from "../pages/Stores/Booking/Grooming/GroomingManagement.vue";
 import StoresGroomingReview from "../pages/Stores/Booking/Grooming/Review.vue";
+import StoresGroomingDetails from "../pages/Stores/Booking/Grooming/Details.vue";
 import StoresBoardingManage from "../pages/Stores/Booking/Boarding/BoardingManagement.vue";
 import StoresBoardingReview from "../pages/Stores/Booking/Boarding/Review.vue";
+import StoresBoardingDetails from "../pages/Stores/Booking/Boarding/Details.vue";
 import StoresBookingHistory from "../pages/Stores/HistoryBooking/BookingHistory.vue";
 import StoresWatchLists from "../pages/Stores/Booking/WatchLists.vue";
 //
@@ -145,6 +147,11 @@ const routes = [
     meta: { sidebar: false },
   },
   {
+    path: "/stores/grooming-bookings/details",
+    component: StoresGroomingDetails,
+    meta: { sidebar: false },
+  },
+  {
     path: "/stores/grooming-bookings/history",
     component: StoresBookingHistory,
     meta: { sidebar: true },
@@ -169,6 +176,11 @@ const routes = [
   {
     path: "/stores/boarding-bookings/review",
     component: StoresBoardingReview,
+    meta: { sidebar: false },
+  },
+  {
+    path: "/stores/boarding-bookings/details",
+    component: StoresBoardingDetails,
     meta: { sidebar: false },
   },
   {
