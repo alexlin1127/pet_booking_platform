@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue";
+import { computed, ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 type Mode = "add" | "edit" | "view";
@@ -9,6 +9,7 @@ type Pet = "dog" | "cat";
 const route = useRoute();
 const router = useRouter();
 
+// --- Mode ---
 const mode = computed<Mode>(() => {
   const p = route.path;
   if (p.includes("/add")) return "add";
@@ -16,14 +17,16 @@ const mode = computed<Mode>(() => {
   return "view";
 });
 
+// --- Type & Pet ---
 const type = ref<SrvType>((route.params.type as SrvType) || "lodging");
 const pet = ref<Pet>((route.params.pet as Pet) || "dog");
 
+// --- Computed flags ---
 const lockType = computed(() => mode.value !== "add");
-
 const isView = computed(() => mode.value === "view");
 const isLodging = computed(() => type.value === "lodging");
 
+// --- Page title / button text ---
 const pageTitle = computed(() => {
   const action =
     mode.value === "add" ? "新增" : mode.value === "edit" ? "修改" : "查看";
@@ -33,69 +36,43 @@ const pageTitle = computed(() => {
 });
 const submitText = computed(() => (mode.value === "add" ? "新增" : "完成"));
 
+// --- Lodging reactive object ---
 const lodging = reactive({
-  cleaning: "weekly",
-  cleaningNote: "",
-  intro: "",
-  rooms: [
+  cleaning_frequency: "",
+  cleaning_note: "",
+  room_type: "",
+  room_count: 0,
+  pet_available_amount: 1,
+  pricings: [
     {
       _key: cryptoRandom(),
-      name: "",
-      count: 1,
-      prices: [
-        {
-          _key: cryptoRandom(),
-          nights: 1,
-          nightUnit: "day",
-          amount: 0,
-          overtime: 0,
-          noOvertime: false,
-        },
-      ],
+      duration: 1,
+      duration_unit: "day",
+      pricing: 0,
+      overtime_rate: 0,
+      overtime_charging: true,
     },
   ],
+  introduction: "",
+  notice: "",
 });
 
-function addRoom() {
-  lodging.rooms.push({
+// --- Lodging price functions ---
+function addRoomPrice() {
+  lodging.pricings.push({
     _key: cryptoRandom(),
-    name: "",
-    count: 1,
-    prices: [
-      {
-        _key: cryptoRandom(),
-        nights: 1,
-        nightUnit: "day",
-        amount: 0,
-        overtime: 0,
-        noOvertime: false,
-      },
-    ],
+    duration: 1,
+    duration_unit: "day",
+    pricing: 0,
+    overtime_rate: 0,
+    overtime_charging: true,
   });
 }
-function removeRoom(idx: number) {
-  lodging.rooms.splice(idx, 1);
-}
-function incRoomCount(room: any) {
-  room.count++;
-}
-function decRoomCount(room: any) {
-  room.count = Math.max(0, (room.count || 0) - 1);
-}
-function addRoomPrice(room: any) {
-  room.prices.push({
-    _key: cryptoRandom(),
-    nights: 1,
-    nightUnit: "day",
-    amount: 0,
-    overtime: 0,
-    noOvertime: false,
-  });
-}
-function removeRoomPrice(room: any, pIdx: number) {
-  room.prices.splice(pIdx, 1);
+function removePricing(idx: number) {
+  lodging.pricings.splice(idx, 1);
 }
 
+// --- Grooming object ---
 const grooming = reactive({
   itemName: "",
   intro: "",
@@ -125,20 +102,59 @@ function removeChargeRow(idx: number) {
   grooming.rows.splice(idx, 1);
 }
 
+// --- Utilities ---
 function cryptoRandom() {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
+
 function goBack() {
   router.back();
 }
+
+// --- Submit function ---
 function submit() {
   const payload = {
     mode: mode.value,
     type: type.value,
     pet: pet.value,
-    lodging: isLodging.value ? lodging : undefined,
-    grooming: !isLodging.value ? grooming : undefined,
+    lodging: isLodging.value
+      ? {
+          species: pet.value,
+          service_type: type.value,
+          cleaning_frequency:
+            lodging.cleaning_frequency === "other"
+              ? lodging.cleaning_note
+              : lodging.cleaning_frequency,
+          room_type: lodging.room_type,
+          room_count: lodging.room_count,
+          pet_available_amount: lodging.pet_available_amount,
+          introduction: lodging.introduction,
+          notice: lodging.notice,
+          pricings: lodging.pricings.map((p) => ({
+            duration: p.duration,
+            duration_unit: p.duration_unit,
+            pricing: p.pricing,
+            overtime_rate: p.overtime_rate,
+            overtime_charging: p.overtime_charging,
+          })),
+        }
+      : undefined,
+    grooming: !isLodging.value
+      ? {
+          item_name: grooming.itemName,
+          intro: grooming.intro,
+          notice: grooming.notice,
+          rows: grooming.rows.map((r) => ({
+            fur: r.fur,
+            size: r.size,
+            hours: r.hours,
+            mins: r.mins,
+            price: r.price,
+          })),
+        }
+      : undefined,
   };
+
   console.log("submit payload:", payload);
   router.back();
 }
@@ -207,6 +223,7 @@ function submit() {
 
       <!-- Lodging：清潔與消毒 + 房型設定 + 住宿介紹 -->
       <template v-if="isLodging">
+        <!-- 清潔與消毒 -->
         <section class="ss-card">
           <div class="ss-card-inner">
             <label class="ss-label">清潔與消毒 *</label>
@@ -216,7 +233,7 @@ function submit() {
                   class="ss-radio"
                   type="radio"
                   value="weekly"
-                  v-model="lodging.cleaning"
+                  v-model="lodging.cleaning_frequency"
                   :disabled="isView"
                 />
                 每週清潔
@@ -226,7 +243,7 @@ function submit() {
                   class="ss-radio"
                   type="radio"
                   value="biweekly"
-                  v-model="lodging.cleaning"
+                  v-model="lodging.cleaning_frequency"
                   :disabled="isView"
                 />
                 每兩週清潔
@@ -236,7 +253,7 @@ function submit() {
                   class="ss-radio"
                   type="radio"
                   value="halfmonth"
-                  v-model="lodging.cleaning"
+                  v-model="lodging.cleaning_frequency"
                   :disabled="isView"
                 />
                 每半月清潔
@@ -246,170 +263,156 @@ function submit() {
                   class="ss-radio"
                   type="radio"
                   value="other"
-                  v-model="lodging.cleaning"
+                  v-model="lodging.cleaning_frequency"
                   :disabled="isView"
                 />
                 其他
                 <input
                   class="ss-input is-name"
                   placeholder="請輸入內容"
-                  v-model="lodging.cleaningNote"
-                  :disabled="isView || lodging.cleaning !== 'other'"
+                  v-model="lodging.cleaning_note"
+                  :disabled="isView || lodging.cleaning_frequency !== 'other'"
                 />
               </label>
             </div>
-          </div>
-        </section>
 
-        <section class="ss-card">
-          <div class="ss-card-inner">
-            <label class="ss-label">房型設定 *</label>
+            <!-- 房型名稱 + 房間數 -->
+            <div class="ss-line">
+              <div class="unit">房型名稱</div>
+              <input
+                class="ss-input is-name"
+                placeholder="請輸入內容"
+                v-model="lodging.room_type"
+                :disabled="isView"
+              />
 
-            <div class="ss-dashed">
-              <div class="ss-group-title">新增房型及狗狗最大住宿數量</div>
-
-              <div
-                v-for="(room, idx) in lodging.rooms"
-                :key="room._key"
-                class="ss-row"
+              <div class="unit">房間數數量</div>
+              <button
+                class="ss-mini"
+                @click="lodging.room_count--"
+                :disabled="isView || lodging.room_count <= 0"
               >
-                <!-- 房型名稱 + 房間數 -->
-                <div class="ss-line">
-                  <div class="unit">房型名稱</div>
-                  <input
-                    class="ss-input is-name"
-                    placeholder="請輸入內容"
-                    v-model="room.name"
-                    :disabled="isView"
-                  />
-
-                  <div class="unit">房間數數量</div>
-                  <button
-                    class="ss-mini"
-                    @click="decRoomCount(room)"
-                    :disabled="isView"
-                  >
-                    -
-                  </button>
-                  <input
-                    class="ss-input is-count"
-                    v-model.number="room.count"
-                    type="number"
-                    min="0"
-                    :disabled="isView"
-                  />
-                  <button
-                    class="ss-mini"
-                    @click="incRoomCount(room)"
-                    :disabled="isView"
-                  >
-                    +
-                  </button>
-                  <div class="unit">間</div>
-                </div>
-
-                <!-- 價格設定：可新增多筆 -->
-                <div
-                  v-for="(price, pIdx) in room.prices"
-                  :key="price._key"
-                  class="mt-3"
-                >
-                  <div class="ss-line">
-                    <div class="unit unit-strong">價格設定</div>
-                    <div class="unit">住</div>
-                    <input
-                      class="ss-input is-count"
-                      type="number"
-                      min="1"
-                      v-model.number="price.nights"
-                      :disabled="isView"
-                    />
-                    <select
-                      class="ss-select is-count"
-                      v-model="price.nightUnit"
-                      :disabled="isView"
-                    >
-                      <option value="day">天</option>
-                      <option value="month">月</option>
-                    </select>
-
-                    <div class="unit">每晚價格：</div>
-                    <input
-                      class="ss-input is-price"
-                      type="number"
-                      min="0"
-                      placeholder="金額"
-                      v-model.number="price.amount"
-                      :disabled="isView"
-                    />
-                    <div class="unit">元</div>
-                  </div>
-
-                  <div class="ss-line">
-                    <div class="unit unit-strong">超時收費 *</div>
-                    <div class="unit">每小時：</div>
-                    <input
-                      class="ss-input is-price"
-                      type="number"
-                      min="0"
-                      placeholder="金額"
-                      v-model.number="price.overtime"
-                      :disabled="isView || price.noOvertime"
-                    />
-                    <div class="unit">元</div>
-
-                    <label class="ss-line">
-                      <input
-                        class="ss-checkbox"
-                        type="checkbox"
-                        v-model="price.noOvertime"
-                        :disabled="isView"
-                      />
-                      不加收
-                    </label>
-                  </div>
-
-                  <button
-                    v-if="!isView"
-                    class="ss-icon-btn"
-                    title="刪除價格"
-                    @click="removeRoomPrice(room, pIdx)"
-                  >
-                    ×
-                  </button>
-                </div>
-
-                <div class="ss-line mt-2" v-if="!isView">
-                  <button class="btn-primary" @click="addRoomPrice(room)">
-                    新增價格
-                  </button>
-                </div>
-
-                <button
-                  v-if="!isView"
-                  class="ss-icon-btn"
-                  style="right: -10px; top: -10px"
-                  title="刪除房型"
-                  @click="removeRoom(idx)"
-                >
-                  ×
-                </button>
-              </div>
-
-              <div class="ss-line" v-if="!isView">
-                <button class="btn-ghost" @click="addRoom">新增房型</button>
-              </div>
+                -
+              </button>
+              <input
+                class="ss-input is-count"
+                v-model.number="lodging.room_count"
+                type="number"
+                min="0"
+                :disabled="isView"
+              />
+              <button
+                class="ss-mini"
+                @click="lodging.room_count++"
+                :disabled="isView"
+              >
+                +
+              </button>
+              <div class="unit">間</div>
+              <div class="unit">可容納寵物數量</div>
+              <input
+                class="ss-input is-count"
+                v-model.number="lodging.pet_count"
+                type="number"
+                min="0"
+                :disabled="isView"
+              />
+              <div class="unit">隻</div>
             </div>
           </div>
         </section>
 
+        <!-- 價格設定 -->
+        <section class="ss-card">
+          <div class="ss-card-inner">
+            <label class="ss-label">價格設定 *</label>
+
+            <div
+              v-for="(price, idx) in lodging.pricings"
+              :key="price._key"
+              class="ss-row"
+            >
+              <div class="ss-line">
+                <div class="unit unit-strong">價格設定</div>
+                <div class="unit">住</div>
+                <input
+                  class="ss-input is-count"
+                  type="number"
+                  min="1"
+                  v-model.number="price.duration"
+                  :disabled="isView"
+                />
+                <select
+                  class="ss-select is-count"
+                  v-model="price.duration_unit"
+                  :disabled="isView"
+                >
+                  <option value="day">天</option>
+                  <option value="month">月</option>
+                </select>
+
+                <div class="unit">每晚價格：</div>
+                <input
+                  class="ss-input is-price"
+                  type="number"
+                  min="0"
+                  placeholder="金額"
+                  v-model.number="price.pricing"
+                  :disabled="isView"
+                />
+                <div class="unit">元</div>
+              </div>
+
+              <div class="ss-line">
+                <div class="unit unit-strong">超時收費 *</div>
+                <div class="unit">每小時：</div>
+                <input
+                  class="ss-input is-price"
+                  type="number"
+                  min="0"
+                  placeholder="金額"
+                  v-model.number="price.overtime_rate"
+                  :disabled="isView || !price.overtime_charging"
+                />
+                <div class="unit">元</div>
+
+                <label class="ss-line">
+                  <input
+                    class="ss-checkbox"
+                    type="checkbox"
+                    v-model="price.overtime_charging"
+                    :disabled="isView"
+                  />
+                  不加收
+                </label>
+              </div>
+
+              <button
+                v-if="!isView"
+                class="ss-icon-btn"
+                title="刪除價格"
+                @click="removePricing(idx)"
+              >
+                ×
+              </button>
+            </div>
+
+            <div class="ss-line" v-if="!isView">
+              <button class="btn-primary" @click="addRoomPrice">
+                新增價格
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 住宿介紹 -->
         <section class="ss-card">
           <div class="ss-card-inner">
             <label class="ss-label">住宿介紹 *</label>
             <textarea
               class="ss-textarea"
               placeholder="請輸入住宿介紹"
-              v-model="lodging.intro"
+              v-model="lodging.introduction"
               :disabled="isView"
             ></textarea>
           </div>
