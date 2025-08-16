@@ -238,7 +238,7 @@ class StoreNoteUpdateViewSet(viewsets.ViewSet):
                     'error': 'Reservation not found'
                 }, status=status.HTTP_404_NOT_FOUND)
 
-class BoardingReservationDetailsViewSet(viewsets.ViewSet):
+class ReservationDetailsViewSet(viewsets.ViewSet):
     """預約詳情"""
     permission_classes = [IsAuthenticated]
     

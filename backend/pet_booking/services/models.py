@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 # 住宿
 class BoardingService(models.Model):
-    store_id = models.ForeignKey('stores.Store', on_delete=models.CASCADE)
+    store_id = models.ForeignKey('stores.Store', db_column='store_id', on_delete=models.CASCADE)
     species = models.CharField(max_length=10, choices=[('cat', 'Cat'), ('dog', 'Dog')], default='dog')
     cleaning_frequency = models.CharField(max_length=32)
     room_type = models.CharField(max_length=100, default='Standard')
@@ -26,12 +26,10 @@ class BoardingServicePricing(models.Model):
     pricing = models.IntegerField()
     overtime_rate = models.IntegerField(blank=True, null=True)
     overtime_charging = models.BooleanField(default=False)
-   
-
 
 # 美容
 class GroomingService(models.Model):
-    store_id = models.ForeignKey('stores.Store', on_delete=models.CASCADE)
+    store_id = models.ForeignKey('stores.Store', db_column='store_id', on_delete=models.CASCADE)
     species = models.CharField(max_length=10, choices=[('cat', 'Cat'), ('dog', 'Dog')])
     service_title = models.CharField(max_length=64)
     introduction = models.TextField(max_length=500)

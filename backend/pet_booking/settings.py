@@ -73,6 +73,20 @@ INSTALLED_APPS = [
     'pet_booking.users.apps.UsersConfig',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
+}
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
@@ -102,19 +116,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "pet_booking.wsgi.application"
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend'
-    ],
-}
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -151,7 +152,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Taipei"
 
 USE_I18N = True
 
@@ -171,7 +172,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = 'users.User'
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=30),  # Access Token 有效時間
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=1),  # Access Token 有效時間
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),     # Refresh Token 有效時間
     'ROTATE_REFRESH_TOKENS': True,          # 是否在 refresh 時換新 token（配合黑名單用）
     'BLACKLIST_AFTER_ROTATION': True,       # 將舊 refresh token 加入黑名單（需token_blacklist app）
@@ -187,6 +188,16 @@ OAUTH2_PROVIDER = {
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL= '/media/'
 
+# Cookie 將適用於哪個 domain
+SESSION_COOKIE_DOMAIN = None  # 預設為 None，表示和請求伺服器同域，開發時常用
+# Cookie 是否只能被 HTTP/HTTPS 請求存取，JS 無法取得
+SESSION_COOKIE_HTTPONLY = True  # 強烈建議 True（預設值也是 True）
+# Cookie 是否只在 HTTPS 流量下發送（正式場合強烈建議 True，本地測試可設 False）
+SESSION_COOKIE_SECURE = False   # 本地測試時設 False，部署 HTTPS 時設 True
+# Cookie 名稱（預設為 sessionid，一般可不用改）
+SESSION_COOKIE_NAME = 'sessionid'
+# 是否關閉瀏覽器時自動刪除 session（非必要）
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
