@@ -48,6 +48,7 @@ import NewsPage from "../pages/Customers/News.vue";
 import StoresPage from "../pages/Customers/StoresView.vue";
 import BookingGroomingPage from "../pages/Customers/Booking/Grooming.vue";
 import BookingBoardingPage from "../pages/Customers/Booking/Boarding.vue";
+import NewsView from "../pages/Customers/NewsView.vue";
 
 
 const routes = [
@@ -59,6 +60,11 @@ const routes = [
   {
     path: "/news",
     component: NewsPage,
+    meta: { sidebar: false },
+  },
+  {
+    path: "/news/views/:id",
+    component: NewsView,
     meta: { sidebar: false },
   },
   {
