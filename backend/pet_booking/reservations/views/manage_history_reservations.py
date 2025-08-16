@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
-from django.shortcuts import get_object_or_404
 
 # app
 from ..models import ReservationGrooming, ReservationBoarding, Orders
@@ -183,111 +182,111 @@ class StoreNoteUpdateViewSet(viewsets.ViewSet):
                     'error': 'Reservation not found'
                 }, status=status.HTTP_404_NOT_FOUND)
 
-# class ReservationDetailsViewSet(viewsets.ViewSet):
-#     """預約詳情"""
-#     permission_classes = [IsAuthenticated]
+class ReservationDetailsViewSet(viewsets.ViewSet):
+    """預約詳情"""
+    permission_classes = [IsAuthenticated]
     
-#     def list(self, request, *args, **kwargs):
-#         '''取得預約詳情：根據 reservation_id 取得 confirmed 預約 + 該客戶在該店家的所有 finished 預約'''
-#         reservation_id = request.query_params.get('reservation_id')
+    def list(self, request, *args, **kwargs):
+        '''取得預約詳情：根據 reservation_id 取得 confirmed 預約 + 該客戶在該店家的所有 finished 預約'''
+        reservation_id = request.query_params.get('reservation_id')
 
         
-#         if not reservation_id:
-#             return Response({
-#                 'error': 'reservation_id is required'
-#             }, status=status.HTTP_400_BAD_REQUEST)
+        if not reservation_id:
+            return Response({
+                'error': 'reservation_id is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
 
-#         if reservation_id[:2] == 'GR':
-#             try:
-#                 # 取得指定的 confirmed 預約資料
-#                 current_reservation = ReservationGrooming.objects.get(
-#                     reservation_id=reservation_id,
-#                     status='finished'
-#                 )
-#                 reservation_datetime = current_reservation.reservation_time
-#                 reservation_date = reservation_datetime.date()
-#                 reservation_start_time = reservation_datetime.time()
-#                 end_datetime = reservation_datetime + timedelta(minutes=current_reservation.grooming_period)
-#                 reservation_end_time = end_datetime.time() 
+        if reservation_id[:2] == 'GR':
+            try:
+                # 取得指定的 confirmed 預約資料
+                current_reservation = ReservationGrooming.objects.get(
+                    reservation_id=reservation_id,
+                    status='finished'
+                )
+                reservation_datetime = current_reservation.reservation_time
+                reservation_date = reservation_datetime.date()
+                reservation_start_time = reservation_datetime.time()
+                end_datetime = reservation_datetime + timedelta(minutes=current_reservation.grooming_period)
+                reservation_end_time = end_datetime.time() 
 
-#                 current_reservation_data = {
-#                     'reservation_id': current_reservation.reservation_id,
-#                     'user_name': current_reservation.user_name,
-#                     'user_phone': current_reservation.user_phone,
-#                     'grooming_services_name': current_reservation.grooming_services_name,
-#                     'pet_name': current_reservation.pet_name,
-#                     'pet_breed': current_reservation.pet_breed,
-#                     'pet_size': current_reservation.pet_size,
-#                     'pick_up_service': current_reservation.pick_up_service,
-#                     'reservation_date': reservation_date,
-#                     'start_time': reservation_start_time,
-#                     'end_time': reservation_end_time,
-#                     'customer_note': current_reservation.customer_note,
-#                     'store_note': current_reservation.store_note,
-#                     'total_price': current_reservation.total_price,
-#                     'grooming_duration': current_reservation.grooming_period
-#                 }
-#                 return Response(current_reservation_data, status=status.HTTP_200_OK)
+                current_reservation_data = {
+                    'reservation_id': current_reservation.reservation_id,
+                    'user_name': current_reservation.user_name,
+                    'user_phone': current_reservation.user_phone,
+                    'grooming_services_name': current_reservation.grooming_services_name,
+                    'pet_name': current_reservation.pet_name,
+                    'pet_breed': current_reservation.pet_breed,
+                    'pet_size': current_reservation.pet_size,
+                    'pick_up_service': current_reservation.pick_up_service,
+                    'reservation_date': reservation_date,
+                    'start_time': reservation_start_time,
+                    'end_time': reservation_end_time,
+                    'customer_note': current_reservation.customer_note,
+                    'store_note': current_reservation.store_note,
+                    'total_price': current_reservation.total_price,
+                    'grooming_duration': current_reservation.grooming_period
+                }
+                return Response(current_reservation_data, status=status.HTTP_200_OK)
 
-#             except ReservationGrooming.DoesNotExist:
-#                 return Response({
-#                     'error': 'finished reservation not found',
-#                     'details': f'No finished reservation found with ID: {reservation_id}'
-#                 }, status=status.HTTP_404_NOT_FOUND)
+            except ReservationGrooming.DoesNotExist:
+                return Response({
+                    'error': 'finished reservation not found',
+                    'details': f'No finished reservation found with ID: {reservation_id}'
+                }, status=status.HTTP_404_NOT_FOUND)
 
-#         elif reservation_id[:2] == 'BD':
-#             try:
-#                 current_reservation = ReservationBoarding.objects.get(
-#                     reservation_id=reservation_id,
-#                     status='finished'
-#                 )
+        elif reservation_id[:2] == 'BD':
+            try:
+                current_reservation = ReservationBoarding.objects.get(
+                    reservation_id=reservation_id,
+                    status='finished'
+                )
 
-#                 # 透過 Orders 模型來取得 user_id
-#                 order = Orders.objects.filter(reservation_boarding=current_reservation).first()
-#                 user_id = order.user_id
+                # 透過 Orders 模型來取得 user_id
+                order = Orders.objects.filter(reservation_boarding=current_reservation).first()
+                user_id = order.user_id
                 
-#                 # 取得寵物品種和尺寸資訊
-#                 pet = None
-#                 pet_breed = None
-#                 pet_size = None
-#                 if user_id:
-#                     pet = Pet.objects.filter(user_id=user_id, name=current_reservation.pet_name).values('breed', 'size').first()
-#                     pet_breed = pet['breed'] if pet else None
-#                     pet_size = pet['size'] if pet else None
+                # 取得寵物品種和尺寸資訊
+                pet = None
+                pet_breed = None
+                pet_size = None
+                if user_id:
+                    pet = Pet.objects.filter(user_id=user_id, name=current_reservation.pet_name).values('breed', 'size').first()
+                    pet_breed = pet['breed'] if pet else None
+                    pet_size = pet['size'] if pet else None
                 
-#                 checkin_date = current_reservation.checkin_date.date()
-#                 checkout_date = current_reservation.checkout_date.date()
+                checkin_date = current_reservation.checkin_date.date()
+                checkout_date = current_reservation.checkout_date.date()
 
-#                 current_reservation_data = {
-#                     'reservation_id': current_reservation.reservation_id,
-#                     'user_name': current_reservation.user_name,
-#                     'user_phone': current_reservation.user_phone,
-#                     'pet_name': current_reservation.pet_name,
-#                     'pet_breed': pet_breed,
-#                     'pet_size': pet_size,
-#                     'checkin_date': checkin_date,
-#                     'checkout_date': checkout_date,
-#                     'boarding_duration': current_reservation.boarding_durations,
-#                     'pick_up_service': current_reservation.pick_up_service,
-#                     'customer_note': current_reservation.customer_note,
-#                     'store_note': current_reservation.store_note,
-#                     'total_price': current_reservation.total_price,
-#                     'service_type': '住宿'
-#                 }
+                current_reservation_data = {
+                    'reservation_id': current_reservation.reservation_id,
+                    'user_name': current_reservation.user_name,
+                    'user_phone': current_reservation.user_phone,
+                    'pet_name': current_reservation.pet_name,
+                    'pet_breed': pet_breed,
+                    'pet_size': pet_size,
+                    'checkin_date': checkin_date,
+                    'checkout_date': checkout_date,
+                    'boarding_duration': current_reservation.boarding_durations,
+                    'pick_up_service': current_reservation.pick_up_service,
+                    'customer_note': current_reservation.customer_note,
+                    'store_note': current_reservation.store_note,
+                    'total_price': current_reservation.total_price,
+                    'service_type': '住宿'
+                }
 
-#                 return Response(current_reservation_data, status=status.HTTP_200_OK)
+                return Response(current_reservation_data, status=status.HTTP_200_OK)
 
-#             except ReservationBoarding.DoesNotExist:
-#                 return Response({
-#                     'error': 'finished reservation not found',
-#                     'details': f'No finished reservation found with ID: {reservation_id}'
-#                 }, status=status.HTTP_404_NOT_FOUND)
+            except ReservationBoarding.DoesNotExist:
+                return Response({
+                    'error': 'finished reservation not found',
+                    'details': f'No finished reservation found with ID: {reservation_id}'
+                }, status=status.HTTP_404_NOT_FOUND)
             
-#         else:
-#             return Response({
-#                 'error': 'Invalid reservation ID format',
-#                 'details': 'Reservation ID must start with "GR" for grooming or "BD" for boarding'
-#             }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({
+                'error': 'Invalid reservation ID format',
+                'details': 'Reservation ID must start with "GR" for grooming or "BD" for boarding'
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CustomerObservationViewSet(viewsets.ViewSet):

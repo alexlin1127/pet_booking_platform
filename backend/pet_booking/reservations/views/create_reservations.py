@@ -39,7 +39,7 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_store_queryset(self, store_id: str) -> QuerySet:
         """獲取店家 QuerySet"""
-        return Store.objects.filter(user_id__user_id=store_id)
+        return Store.objects.filter(user_id=store_id)
 
     def get_user_pets_queryset(self, user_id: int) -> QuerySet:
         """獲取用戶寵物 QuerySet"""
@@ -47,10 +47,12 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_grooming_services_queryset(self, store_id: str) -> QuerySet:
         """獲取美容服務 QuerySet"""
+        store_id = Store.objects.get(user_id=store_id)
         return GroomingService.objects.filter(store_id=store_id)
 
     def get_boarding_services_queryset(self, store_id: str) -> QuerySet:
         """獲取住宿服務 QuerySet"""
+        store_id = Store.objects.get(user_id=store_id)
         return BoardingService.objects.filter(store_id=store_id)
 
     def create_pet_info_dict(self, pet: Pet) -> Dict:
@@ -90,32 +92,37 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
         """創建美容服務標題列表"""
         return [service.service_title for service in grooming_services_queryset]
 
-    def create_boarding_pricing_info(self, room_type: BoardingService) -> Optional[Dict]:
+    def create_boarding_pricing_info(self, room_type_id: str) -> Optional[Dict]:
         """創建住宿定價資訊"""
         try:
-            boarding_pricing = BoardingServicePricing.objects.get(room_type=room_type)
-            return {
-                'duration': boarding_pricing.duration,
-                'duration_unit': boarding_pricing.duration_unit,
-                'pricing': boarding_pricing.pricing,
-                'overtime_price': boarding_pricing.overtime_rate,
-                'overtime_charging': boarding_pricing.overtime_charging
-            }
+            boarding_price_info = []
+            boarding_pricing = BoardingServicePricing.objects.filter(boarding_service_id=room_type_id)
+            for pricing in boarding_pricing:
+                boarding_price_info.append({
+                    'duration': pricing.duration,
+                    'duration_unit': pricing.duration_unit,
+                    'pricing': pricing.pricing,
+                    'overtime_price': pricing.overtime_rate,
+                    'overtime_charging': pricing.overtime_charging
+                })
+
+            return boarding_price_info
+           
         except BoardingServicePricing.DoesNotExist:
             return None
 
     def create_boarding_room_type_data(self, boarding_service: BoardingService) -> Optional[Dict]:
         """創建住宿房間類型資料"""
         try:
-            boarding_room_type = BoardingService.objects.get(boarding_service=boarding_service)
-            pricing_info = self.create_boarding_pricing_info(boarding_room_type)
-            
+            room_type_id = boarding_service.id
+            pricing_info = self.create_boarding_pricing_info(room_type_id)
+
             return {
-                'id': boarding_room_type.id,
-                'species': boarding_room_type.species,
-                'room_type': boarding_room_type.room_type,
-                'room_count': boarding_room_type.room_count,
-                'pet_available_amount': boarding_room_type.pet_available_amount,
+                'id': room_type_id,
+                'species': boarding_service.species,
+                'room_type': boarding_service.room_type,
+                'room_count': boarding_service.room_count,
+                'pet_available_amount': boarding_service.pet_available_amount,
                 'pricing_info': pricing_info
             }
         except BoardingService.DoesNotExist:
@@ -127,7 +134,7 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
         
         for boarding_service in boarding_services_queryset:
             room_type_data = self.create_boarding_room_type_data(boarding_service)
-            
+
             boarding_data.append({
                 'id': boarding_service.id,
                 'cleaning_frequency': boarding_service.cleaning_frequency,
@@ -177,7 +184,7 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
         try:
             store_queryset = self.get_store_queryset(store_id)
             store = store_queryset.first()
-            
+
             if not store:
                 return Response({
                     'error': '店家不存在或已停用'
@@ -186,7 +193,6 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
             # 獲取用戶寵物資訊
             pets_queryset = self.get_user_pets_queryset(user_id)
             user_pets = self.create_user_pets_list(pets_queryset)
-            
             if service_type == 'grooming':
                 grooming_services_queryset = self.get_grooming_services_queryset(store_id)
                 service_titles = self.create_grooming_services_list(grooming_services_queryset)
@@ -198,7 +204,7 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
                 boarding_services_queryset = self.get_boarding_services_queryset(store_id)
                 boarding_data = self.create_boarding_services_list(boarding_services_queryset)
                 response_data = self.create_boarding_response_data(store, boarding_data, user_pets)
-                
+                print(boarding_data)
                 return Response(response_data, status=status.HTTP_200_OK)
 
             else:
@@ -214,7 +220,7 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
     @action(detail=False, methods=['get'], url_path='storedata1')
     def get_store_info_storeside(self, request):
         """獲取店家資訊和服務選項(店家端)"""
-        store_id = request.query_params.get('store_id')
+        store_id = request.user.user_id
         service_type = request.query_params.get('service_type')
 
         if not store_id:
@@ -225,17 +231,9 @@ class StoreInfoViewSet(viewsets.ReadOnlyModelViewSet):
         try:
             store_queryset = self.get_store_queryset(store_id)
             store = store_queryset.first()
-            
-            if not store:
-                return Response({
-                    'error': '店家不存在或已停用'
-                }, status=status.HTTP_404_NOT_FOUND)
-            else:
-                store_id = store.id
                 
             if service_type == 'grooming':
                 grooming_services_queryset = self.get_grooming_services_queryset(store_id)
-                
                 service_titles = self.create_grooming_services_list(grooming_services_queryset)
                 response_data = {
                     'store': self.create_store_info_dict(store),
@@ -723,9 +721,9 @@ class GroomingReservationViewSet(viewsets.ModelViewSet):
     def parse_datetime(self, reservation_date: str, reservation_time: str) -> Tuple[Optional[datetime], Optional[Response]]:
         """解析日期時間"""
         try:
-            reservation_date_obj = datetime.now().strptime(reservation_date, "%Y-%m-%d").date()
-            reservation_time_obj = datetime.now().strptime(reservation_time, "%H:%M").time()
-            reservation_datetime = datetime.now().combine(reservation_date_obj, reservation_time_obj)
+            reservation_date_obj = datetime.strptime(reservation_date, "%Y-%m-%d").date()
+            reservation_time_obj = datetime.strptime(reservation_time, "%H:%M").time()
+            reservation_datetime = datetime.combine(reservation_date_obj, reservation_time_obj)
             return reservation_datetime, None
         except ValueError:
             error_response = self.create_error_response(
