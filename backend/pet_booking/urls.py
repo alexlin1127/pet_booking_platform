@@ -64,7 +64,7 @@ router.register(r'reservations/grooming/actions', GroomingReservationManagementV
 router.register(r'reservations/grooming/pending', PendingReservationViewSet, basename='pending-reservations')
 router.register(r'reservations/grooming/upcoming', UpcomingReservationViewSet, basename='upcoming-reservations')
 router.register(r'reservations/grooming/overview', AllReservationsViewSet, basename='reservations-overview')
-router.register(r'reservations/grooming/details', ReservationDetailsViewSet, basename='reservation-details')
+router.register(r'reservations/grooming/details', GroomingReservationDetailsViewSet, basename='grooming-details')
 
 # Boarding room availability endpoint
 router.register(r'reservations/boarding/availability', BoardingRoomAvailabilityViewSet, basename='boarding-availability')
@@ -74,7 +74,7 @@ router.register(r'reservations/boarding/overview', BoardingAllReservationsViewSe
 router.register(r'reservations/boarding/details', BoardingReservationDetailsViewSet, basename='boarding-details')
 router.register(r'reservations/boarding/pending', BoardingPendingReservationViewSet, basename='boarding-pending')
 router.register(r'reservations/boarding/upcoming', BoardingUpcomingReservationViewSet, basename='boarding-upcoming')
-router.register(r'reservations/boarding/pending-detail', BoardingPendingReservationDetailViewSet, basename='boarding-pending-detail')
+router.register(r'reservations/boarding/pending/detail', BoardingPendingReservationDetailViewSet, basename='boarding-pending-detail')
 
 # History endpoints
 router.register(r'reservations/grooming/history', GroomingHistoryViewSet, basename='grooming-history')
@@ -87,6 +87,7 @@ router.register(r'reservations/customer-observation', CustomerObservationViewSet
 router.register(r'reservations/risk/grooming', RiskGroomingViewSet, basename='risk-grooming')
 router.register(r'reservations/risk/boarding', RiskBoardingViewSet, basename='risk-boarding')
 router.register(r'reservations/risk/notes', RiskStoreNoteUpdateViewSet, basename='risk-notes')
+router.register(r'reservations/details', ReservationDetailsViewSet, basename='reservation-details')
 
 urlpatterns = [
     path("admin/", admin.site.urls),

@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class Store(models.Model):
-    user_id = models.ForeignKey('users.User',to_field='user_id', on_delete=models.CASCADE)
+    user_id = models.ForeignKey('users.User',to_field='user_id', db_column='user_id', on_delete=models.CASCADE)
     store_name = models.CharField(max_length=100)
     owner_name = models.CharField(max_length=100)
     address = models.JSONField()

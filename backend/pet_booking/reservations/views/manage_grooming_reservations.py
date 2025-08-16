@@ -433,7 +433,7 @@ class AllReservationsViewSet(viewsets.ViewSet):
         }, status=status.HTTP_200_OK)
 
 
-class ReservationDetailsViewSet(viewsets.ViewSet):
+class GroomingReservationDetailsViewSet(viewsets.ViewSet):
     """預約詳情"""
     permission_classes = [IsAuthenticated]
     
