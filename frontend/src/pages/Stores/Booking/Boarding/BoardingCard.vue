@@ -25,7 +25,7 @@ defineProps({
         <button class="boarding-btn">取消</button>
     </td>
     <td v-else-if="boarding.status === '已審核'">
-        <RouterLink :to="`/stores/boarding-bookings/review?id=${boarding.id}`">
+        <RouterLink :to="`/stores/boarding-bookings/details?id=${boarding.id}`">
             <button class="boarding-btn">詳情</button>
         </RouterLink>
         <button class="boarding-btn">取消</button>
