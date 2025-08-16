@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, reactive } from "vue";
+import { computed, ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import api from "../../../api/api";
 
 type Mode = "add" | "edit" | "view";
-type SrvType = "grooming" | "lodging";
+type SrvType = "grooming" | "boarding";
 type Pet = "dog" | "cat";
 
 const route = useRoute();
@@ -19,13 +19,13 @@ const mode = computed<Mode>(() => {
 });
 
 // --- Type & Pet ---
-const type = ref<SrvType>((route.params.type as SrvType) || "lodging");
+const type = ref<SrvType>((route.params.type as SrvType) || "grooming");
 const pet = ref<Pet>((route.params.pet as Pet) || "dog");
 
 // --- Computed flags ---
 const lockType = computed(() => mode.value !== "add");
 const isView = computed(() => mode.value === "view");
-const isLodging = computed(() => type.value === "lodging");
+const isboarding = computed(() => type.value === "boarding");
 
 // --- Page title / button text ---
 const pageTitle = computed(() => {
@@ -37,8 +37,8 @@ const pageTitle = computed(() => {
 });
 const submitText = computed(() => (mode.value === "add" ? "新增" : "完成"));
 
-// --- Lodging reactive object ---
-const lodging = reactive({
+// --- boarding reactive object ---
+const boarding = reactive({
   cleaning_frequency: "",
   cleaning_note: "", //其他清潔說明
   room_type: "",
@@ -58,9 +58,9 @@ const lodging = reactive({
   notice: "",
 });
 
-// --- Lodging price functions ---
+// --- boarding price functions ---
 function addRoomPrice() {
-  lodging.pricings.push({
+  boarding.pricings.push({
     _key: cryptoRandom(),
     duration: 1,
     duration_unit: "day",
@@ -70,7 +70,7 @@ function addRoomPrice() {
   });
 }
 function removePricing(idx: number) {
-  lodging.pricings.splice(idx, 1);
+  boarding.pricings.splice(idx, 1);
 }
 
 // --- Grooming object ---
@@ -122,53 +122,124 @@ const cleaningFrequencyMap = {
   other: "其他",
 };
 
-// --- Submit function ---
-async function submit() {
-  const payload = isLodging.value
-    ? {
-        species: pet.value,
-        cleaning_frequency:
-          lodging.cleaning_frequency === "other"
-            ? lodging.cleaning_note
-            : cleaningFrequencyMap[lodging.cleaning_frequency],
-        room_type: lodging.room_type,
-        room_count: lodging.room_count,
-        pet_available_amount: lodging.pet_available_amount,
-        introduction: lodging.introduction,
-        notice: lodging.notice,
-        pricings: lodging.pricings.map((p) => ({
-          duration: p.duration,
-          duration_unit: p.duration_unit,
-          pricing: p.pricing,
-          overtime_rate: p.overtime_rate,
-          overtime_charging: p.overtime_charging,
-        })),
-      }
-    : {
-        species: pet.value,
-        service_title: grooming.service_title,
-        introduction: grooming.introduction,
-        notice: grooming.notice,
-        pricings: grooming.pricings.map((r) => ({
-          fur_amount: r.fur_amount,
-          pet_size: r.pet_size,
-          grooming_duration: r.hours * 60 + r.mins, // 計算總分鐘數
-          pricing: r.pricing,
-        })),
-      };
+// --- 從 URL 獲取 ID ---
+const serviceId = computed(() => route.params.id || null);
+console.log(serviceId.value);
+const serviceType = computed(() => route.params.type || "boarding");
+console.log(serviceType.value);
+// --- 獲取數據填表單 ---
+async function fetchServiceData() {
+  if (!serviceId.value) return;
 
   try {
-    const apiPath = isLodging.value
-      ? "/store/boarding_services"
-      : "/store/grooming_services";
-    const response = await api.post(apiPath, payload);
-    console.log("API response:", response.data);
-    router.back();
+    const apiPath =
+      serviceType.value === "boarding"
+        ? `/store/boarding_services/${serviceId.value}`
+        : `/store/grooming_services/${serviceId.value}`;
+    const response = await api.get(apiPath);
+    const data = response.data;
+
+    if (serviceType.value === "boarding") {
+      // 填充住宿
+      boarding.cleaning_frequency =
+        Object.keys(cleaningFrequencyMap).find(
+          (key) => cleaningFrequencyMap[key] === data.cleaning_frequency
+        ) || "other";
+      boarding.cleaning_note =
+        data.cleaning_frequency === "其他" ? data.cleaning_frequency : "";
+      boarding.room_type = data.room_type;
+      boarding.room_count = data.room_count;
+      boarding.pet_available_amount = data.pet_available_amount;
+      boarding.introduction = data.introduction;
+      boarding.notice = data.notice;
+
+      // 添加價格
+      boarding.pricings = [];
+      data.pricings.forEach((pricing) => {
+        addRoomPrice();
+        const lastPricing = boarding.pricings[boarding.pricings.length - 1];
+        lastPricing.duration = pricing.duration;
+        lastPricing.duration_unit = pricing.duration_unit;
+        lastPricing.pricing = pricing.pricing;
+        lastPricing.overtime_rate = pricing.overtime_rate;
+        lastPricing.overtime_charging = pricing.overtime_charging;
+      });
+    } else {
+      // 填充美容表單
+      grooming.service_title = data.service_title;
+      grooming.introduction = data.introduction;
+      grooming.notice = data.notice;
+
+      // 動態添加價格行
+      grooming.pricings = [];
+      data.pricings.forEach((pricing) => {
+        addChargeRow();
+        const lastPricing = grooming.pricings[grooming.pricings.length - 1];
+        lastPricing.fur_amount = pricing.fur_amount;
+        lastPricing.pet_size = pricing.pet_size;
+        lastPricing.grooming_duration = pricing.grooming_duration;
+        lastPricing.hours = Math.floor(pricing.grooming_duration / 60);
+        lastPricing.mins = pricing.grooming_duration % 60;
+        lastPricing.pricing = pricing.pricing;
+      });
+    }
   } catch (error) {
-    console.error("API error:", error);
-    alert("提交失敗，請稍後再試。");
+    console.error("Error fetching service data:", error);
+    alert("無法加載服務數據，請稍後再試。");
   }
 }
+
+// --- 確保新增和編輯模式的分離 ---
+function resetForm() {
+  if (isboarding.value) {
+    // 重置住宿表單
+    Object.assign(boarding, {
+      cleaning_frequency: "",
+      cleaning_note: "",
+      room_type: "",
+      room_count: 0,
+      pet_available_amount: 1,
+      pricings: [
+        {
+          _key: cryptoRandom(),
+          duration: 1,
+          duration_unit: "day",
+          pricing: 0,
+          overtime_rate: 0,
+          overtime_charging: false,
+        },
+      ],
+      introduction: "",
+      notice: "",
+    });
+  } else {
+    // 重置美容表單
+    Object.assign(grooming, {
+      service_title: "",
+      introduction: "",
+      notice: "",
+      pricings: [
+        {
+          _key: cryptoRandom(),
+          fur_amount: "none",
+          pet_size: "small",
+          grooming_duration: 0,
+          hours: 0,
+          mins: 0,
+          pricing: 0,
+        },
+      ],
+    });
+  }
+}
+
+onMounted(() => {
+  if (mode.value === "edit") {
+    fetchServiceData(); // 編輯模式：加載數據
+  } else {
+    resetForm(); // 新增模式：重置表單
+  }
+});
 </script>
 <template>
   <div class="storeservices-page">
@@ -221,7 +292,7 @@ async function submit() {
                 <input
                   class="ss-radio"
                   type="radio"
-                  value="lodging"
+                  value="boarding"
                   v-model="type"
                   :disabled="lockType || isView"
                 />
@@ -232,8 +303,8 @@ async function submit() {
         </div>
       </section>
 
-      <!-- Lodging：清潔與消毒 + 房型設定 + 住宿介紹 -->
-      <template v-if="isLodging">
+      <!-- boarding：清潔與消毒 + 房型設定 + 住宿介紹 -->
+      <template v-if="isboarding">
         <!-- 清潔與消毒 -->
         <section class="ss-card">
           <div class="ss-card-inner">
@@ -244,7 +315,7 @@ async function submit() {
                   class="ss-radio"
                   type="radio"
                   value="weekly"
-                  v-model="lodging.cleaning_frequency"
+                  v-model="boarding.cleaning_frequency"
                   :disabled="isView"
                 />
                 每週清潔
@@ -254,7 +325,7 @@ async function submit() {
                   class="ss-radio"
                   type="radio"
                   value="biweekly"
-                  v-model="lodging.cleaning_frequency"
+                  v-model="boarding.cleaning_frequency"
                   :disabled="isView"
                 />
                 每兩週清潔
@@ -264,7 +335,7 @@ async function submit() {
                   class="ss-radio"
                   type="radio"
                   value="halfmonth"
-                  v-model="lodging.cleaning_frequency"
+                  v-model="boarding.cleaning_frequency"
                   :disabled="isView"
                 />
                 每半月清潔
@@ -274,15 +345,15 @@ async function submit() {
                   class="ss-radio"
                   type="radio"
                   value="other"
-                  v-model="lodging.cleaning_frequency"
+                  v-model="boarding.cleaning_frequency"
                   :disabled="isView"
                 />
                 其他
                 <input
                   class="ss-input is-name"
                   placeholder="請輸入內容"
-                  v-model="lodging.cleaning_note"
-                  :disabled="isView || lodging.cleaning_frequency !== 'other'"
+                  v-model="boarding.cleaning_note"
+                  :disabled="isView || boarding.cleaning_frequency !== 'other'"
                 />
               </label>
             </div>
@@ -293,28 +364,28 @@ async function submit() {
               <input
                 class="ss-input is-name"
                 placeholder="請輸入內容"
-                v-model="lodging.room_type"
+                v-model="boarding.room_type"
                 :disabled="isView"
               />
 
               <div class="unit">房間數數量</div>
               <button
                 class="ss-mini"
-                @click="lodging.room_count--"
-                :disabled="isView || lodging.room_count <= 0"
+                @click="boarding.room_count--"
+                :disabled="isView || boarding.room_count <= 0"
               >
                 -
               </button>
               <input
                 class="ss-input is-count"
-                v-model.number="lodging.room_count"
+                v-model.number="boarding.room_count"
                 type="number"
                 min="0"
                 :disabled="isView"
               />
               <button
                 class="ss-mini"
-                @click="lodging.room_count++"
+                @click="boarding.room_count++"
                 :disabled="isView"
               >
                 +
@@ -323,7 +394,7 @@ async function submit() {
               <div class="unit">可容納寵物數量</div>
               <input
                 class="ss-input is-count"
-                v-model.number="lodging.pet_available_amount"
+                v-model.number="boarding.pet_available_amount"
                 type="number"
                 min="0"
                 :disabled="isView"
@@ -339,7 +410,7 @@ async function submit() {
             <label class="ss-label">價格設定 *</label>
 
             <div
-              v-for="(price, idx) in lodging.pricings"
+              v-for="(price, idx) in boarding.pricings"
               :key="price._key"
               class="ss-row"
             >
@@ -422,7 +493,7 @@ async function submit() {
             <label class="ss-label">住宿介紹 *</label>
             <textarea
               class="ss-textarea"
-              v-model="lodging.introduction"
+              v-model="boarding.introduction"
               :disabled="isView"
             ></textarea>
           </div>
@@ -433,7 +504,7 @@ async function submit() {
             <label class="ss-label">注意事項</label>
             <textarea
               class="ss-textarea"
-              v-model="lodging.notice"
+              v-model="boarding.notice"
               :disabled="isView"
             ></textarea>
           </div>

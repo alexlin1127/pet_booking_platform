@@ -82,7 +82,9 @@ const tagOptions = ["dog", "cat"];
 const selectedTag = ref("全部");
 
 // 操作事件
-const onEdit = (id) => console.log("edit", id);
+const onEdit = (id, type) => {
+  router.push(`/stores/services/edit/${id}/${type}`);
+};
 const onDelete = (svc) => {
   //  改成接收整個物件，不是 id
   pending.value = svc; //  存起要刪除的項目
@@ -207,7 +209,9 @@ const buildInfoRows = (svc) => {
           </ul>
 
           <div class="service-meta">
-            <div class="service-duration">施作時間：{{ s.duration }}</div>
+            <div v-if="isGrooming" class="service-duration">
+              施作時間：{{ s.duration }}
+            </div>
             <div class="service-tags">
               <span v-for="t in s.tags" :key="t" class="service-tag">{{
                 t
@@ -221,7 +225,7 @@ const buildInfoRows = (svc) => {
             <button class="svc-btn svc-btn-outline" @click="onDelete(s)">
               刪除服務
             </button>
-            <button class="svc-btn svc-btn-solid" @click="onEdit(s.id)">
+            <button class="svc-btn svc-btn-solid" @click="onEdit(s.id, s.type)">
               修改內容
             </button>
           </div>
