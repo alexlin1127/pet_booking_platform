@@ -9,6 +9,9 @@ import CustomerRegister from "../pages/Customers/CustomerRegister.vue";
 import StoresRegister from "../pages/Stores/StoreRegister.vue";
 
 // 使用者畫面Router
+import MemberProfiles from "../pages/Customers/MemberCenter/Profiles.vue";
+import MemberPets from "../pages/Customers/MemberCenter/Pets.vue";
+import MemberChangePassword from "../pages/Customers/MemberCenter/ChangePassword.vue";
 
 // 商家畫面Router
 import StoresDashboard from "../pages/Stores/StoresDashboard.vue";
@@ -45,7 +48,7 @@ import PostReview from "../pages/Admin/Posts/PostReview.vue";
 
 // 前台頁面Router - 使用正確的路徑
 import NewsPage from "../pages/Customers/News.vue";
-import StoresPage from "../pages/Customers/StoresView.vue";
+import StoresPage from "../pages/Customers/StoresLists.vue";
 import BookingGroomingPage from "../pages/Customers/Booking/Grooming.vue";
 import BookingBoardingPage from "../pages/Customers/Booking/Boarding.vue";
 import NewsView from "../pages/Customers/NewsView.vue";
@@ -113,7 +116,22 @@ const routes = [
     component: StoresRegister,
     meta: { sidebar: false },
   },
-
+  // 會員中心
+  {
+    path: "/members/profiles",
+    component: MemberProfiles,
+    meta: { sidebar: true },
+  },
+  {
+    path: "/members/pets",
+    component: MemberPets,
+    meta: { sidebar: true },
+  },
+  {
+    path: "/members/profiles/password/change",
+    component: MemberChangePassword,
+    meta: { sidebar: true },
+  },
   // 商家頁面路由
   {
     path: "/register/stores/:step",
