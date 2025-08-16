@@ -1,0 +1,103 @@
+/* NewsView 樣式 */
+.content-area {
+  max-width: 56rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2rem 1rem;
+  min-height: calc(100vh - 80px);
+  padding-top: 100px; /* 導航欄高度 */
+}
+
+.article-img {
+  width: 100%;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  object-fit: cover;
+  max-height: 400px;
+}
+
+.article-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1rem;
+  line-height: 1.25;
+}
+
+.article-meta {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.article-content {
+  max-width: none;
+}
+
+.article-content p {
+  margin-bottom: 1rem;
+  color: #374151;
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+.article-content p:empty {
+  margin-bottom: 0.5rem;
+  height: 0.5rem;
+}
+
+.btn-back {
+  background-color: #d97706;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-back:hover {
+  background-color: #b45309;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .content-area {
+    padding: 1rem;
+    padding-top: 90px;
+  }
+  
+  .article-title {
+    font-size: 1.5rem;
+  }
+  
+  .article-img {
+    max-height: 250px;
+  }
+  
+  .article-content p {
+    font-size: 15px;
+  }
+}
+
+/* 文章內容特殊格式 */
+.article-content p:first-child {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #b45309;
+  margin-bottom: 1.5rem;
+}
+
+.article-content p:last-child {
+  text-align: center;
+  font-weight: 500;
+  color: #d97706;
+  margin-top: 2rem;
+}

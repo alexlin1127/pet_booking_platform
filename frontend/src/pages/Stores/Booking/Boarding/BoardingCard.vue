@@ -19,20 +19,20 @@ defineProps({
     <td>{{ boarding.room_type }}</td>
     <td>{{ boarding.status }}</td>
     <td v-if="boarding.status === '待審核'">
-        <RouterLink :to="`/stores/boarding-booking/review?id=${boarding.id}`">
+        <RouterLink :to="`/stores/boarding-bookings/review?id=${boarding.id}`">
             <button class="boarding-btn">審核</button>
         </RouterLink>
         <button class="boarding-btn">取消</button>
     </td>
     <td v-else-if="boarding.status === '已審核'">
-        <RouterLink :to="`/stores/boarding-booking/review?id=${boarding.id}`">
+        <RouterLink :to="`/stores/boarding-bookings/details?id=${boarding.id}`">
             <button class="boarding-btn">詳情</button>
         </RouterLink>
         <button class="boarding-btn">取消</button>
         <button class="boarding-btn">已完成</button>
     </td>
     <td v-else>
-        <RouterLink :to="`/stores/boarding-booking/details?id=${boarding.id}`">
+        <RouterLink :to="`/stores/boarding-bookings/details?id=${boarding.id}`">
             <button class="boarding-btn">訂單詳情</button>
         </RouterLink>
         <button class="boarding-btn">備註</button>
