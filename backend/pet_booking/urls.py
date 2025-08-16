@@ -87,7 +87,7 @@ router.register(r'reservations/customer-observation', CustomerObservationViewSet
 router.register(r'reservations/risk/grooming', RiskGroomingViewSet, basename='risk-grooming')
 router.register(r'reservations/risk/boarding', RiskBoardingViewSet, basename='risk-boarding')
 router.register(r'reservations/risk/notes', RiskStoreNoteUpdateViewSet, basename='risk-notes')
-router.register(r'reservations/details', ReservationDetailsViewSet, basename='reservation-details')
+# router.register(r'reservations/details', ReservationDetailsViewSet, basename='reservation-details')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
