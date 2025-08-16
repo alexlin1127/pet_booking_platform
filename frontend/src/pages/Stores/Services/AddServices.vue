@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import api from "../../../api/api";
 
 type Mode = "add" | "edit" | "view";
 type SrvType = "grooming" | "lodging";
@@ -39,7 +40,7 @@ const submitText = computed(() => (mode.value === "add" ? "新增" : "完成"));
 // --- Lodging reactive object ---
 const lodging = reactive({
   cleaning_frequency: "",
-  cleaning_note: "",
+  cleaning_note: "", //其他清潔說明
   room_type: "",
   room_count: 0,
   pet_available_amount: 1,
@@ -50,7 +51,7 @@ const lodging = reactive({
       duration_unit: "day",
       pricing: 0,
       overtime_rate: 0,
-      overtime_charging: true,
+      overtime_charging: false,
     },
   ],
   introduction: "",
@@ -65,7 +66,7 @@ function addRoomPrice() {
     duration_unit: "day",
     pricing: 0,
     overtime_rate: 0,
-    overtime_charging: true,
+    overtime_charging: false,
   });
 }
 function removePricing(idx: number) {
@@ -74,32 +75,34 @@ function removePricing(idx: number) {
 
 // --- Grooming object ---
 const grooming = reactive({
-  itemName: "",
-  intro: "",
+  service_title: "",
+  introduction: "",
   notice: "",
-  rows: [
+  pricings: [
     {
       _key: cryptoRandom(),
-      fur: "none",
-      size: "small",
-      hours: 0,
-      mins: 0,
-      price: 0,
+      fur_amount: "none",
+      pet_size: "small",
+      grooming_duration: 0, // 以分鐘為單位
+      hours: 0, // 新增小時屬性
+      mins: 0, // 新增分鐘屬性
+      pricing: 0,
     },
   ],
 });
 function addChargeRow() {
-  grooming.rows.push({
+  grooming.pricings.push({
     _key: cryptoRandom(),
-    fur: "none",
-    size: "small",
+    fur_amount: "none",
+    pet_size: "small",
+    grooming_duration: 0,
     hours: 0,
     mins: 0,
-    price: 0,
+    pricing: 0,
   });
 }
 function removeChargeRow(idx: number) {
-  grooming.rows.splice(idx, 1);
+  grooming.pricings.splice(idx, 1);
 }
 
 // --- Utilities ---
@@ -112,51 +115,51 @@ function goBack() {
 }
 
 // --- Submit function ---
-function submit() {
-  const payload = {
-    mode: mode.value,
-    type: type.value,
-    pet: pet.value,
-    lodging: isLodging.value
-      ? {
-          species: pet.value,
-          service_type: type.value,
-          cleaning_frequency:
-            lodging.cleaning_frequency === "other"
-              ? lodging.cleaning_note
-              : lodging.cleaning_frequency,
-          room_type: lodging.room_type,
-          room_count: lodging.room_count,
-          pet_available_amount: lodging.pet_available_amount,
-          introduction: lodging.introduction,
-          notice: lodging.notice,
-          pricings: lodging.pricings.map((p) => ({
-            duration: p.duration,
-            duration_unit: p.duration_unit,
-            pricing: p.pricing,
-            overtime_rate: p.overtime_rate,
-            overtime_charging: p.overtime_charging,
-          })),
-        }
-      : undefined,
-    grooming: !isLodging.value
-      ? {
-          item_name: grooming.itemName,
-          intro: grooming.intro,
-          notice: grooming.notice,
-          rows: grooming.rows.map((r) => ({
-            fur: r.fur,
-            size: r.size,
-            hours: r.hours,
-            mins: r.mins,
-            price: r.price,
-          })),
-        }
-      : undefined,
-  };
+async function submit() {
+  const payload = isLodging.value
+    ? {
+        species: pet.value,
+        cleaning_frequency:
+          lodging.cleaning_frequency === "other"
+            ? lodging.cleaning_note
+            : lodging.cleaning_frequency,
+        room_type: lodging.room_type,
+        room_count: lodging.room_count,
+        pet_available_amount: lodging.pet_available_amount,
+        introduction: lodging.introduction,
+        notice: lodging.notice,
+        pricings: lodging.pricings.map((p) => ({
+          duration: p.duration,
+          duration_unit: p.duration_unit,
+          pricing: p.pricing,
+          overtime_rate: p.overtime_rate,
+          overtime_charging: p.overtime_charging,
+        })),
+      }
+    : {
+        species: pet.value,
+        service_title: grooming.service_title,
+        introduction: grooming.introduction,
+        notice: grooming.notice,
+        pricings: grooming.pricings.map((r) => ({
+          fur_amount: r.fur_amount,
+          pet_size: r.pet_size,
+          grooming_duration: r.hours * 60 + r.mins, // 計算總分鐘數
+          pricing: r.pricing,
+        })),
+      };
 
-  console.log("submit payload:", payload);
-  router.back();
+  try {
+    const apiPath = isLodging.value
+      ? "/store/boarding_services"
+      : "/store/grooming_services";
+    const response = await api.post(apiPath, payload);
+    console.log("API response:", response.data);
+    router.back();
+  } catch (error) {
+    console.error("API error:", error);
+    alert("提交失敗，請稍後再試。");
+  }
 }
 </script>
 <template>
@@ -312,7 +315,7 @@ function submit() {
               <div class="unit">可容納寵物數量</div>
               <input
                 class="ss-input is-count"
-                v-model.number="lodging.pet_count"
+                v-model.number="lodging.pet_available_amount"
                 type="number"
                 min="0"
                 :disabled="isView"
@@ -411,7 +414,17 @@ function submit() {
             <label class="ss-label">住宿介紹 *</label>
             <textarea
               class="ss-textarea"
-              placeholder="請輸入住宿介紹"
+              v-model="lodging.introduction"
+              :disabled="isView"
+            ></textarea>
+          </div>
+        </section>
+        <!-- 注意事項 -->
+        <section class="ss-card">
+          <div class="ss-card-inner">
+            <label class="ss-label">注意事項</label>
+            <textarea
+              class="ss-textarea"
               v-model="lodging.introduction"
               :disabled="isView"
             ></textarea>
@@ -428,7 +441,7 @@ function submit() {
               <input
                 class="ss-input is-name"
                 placeholder="請輸入更新的服務 / 服務名稱"
-                v-model="grooming.itemName"
+                v-model="grooming.service_title"
                 :disabled="isView"
               />
             </div>
@@ -443,7 +456,7 @@ function submit() {
               <div class="ss-group-title">設定收費標準</div>
 
               <div
-                v-for="(row, idx) in grooming.rows"
+                v-for="(row, idx) in grooming.pricings"
                 :key="row._key"
                 class="ss-row"
               >
@@ -452,7 +465,7 @@ function submit() {
 
                   <select
                     class="ss-select is-count"
-                    v-model="row.fur"
+                    v-model="row.fur_amount"
                     :disabled="isView"
                   >
                     <option value="none">無毛</option>
@@ -463,7 +476,7 @@ function submit() {
 
                   <select
                     class="ss-select is-count"
-                    v-model="row.size"
+                    v-model="row.pet_size"
                     :disabled="isView"
                   >
                     <option value="small">小型</option>
@@ -494,7 +507,7 @@ function submit() {
                     type="number"
                     min="0"
                     placeholder="金額"
-                    v-model.number="row.price"
+                    v-model.number="row.pricing"
                     :disabled="isView"
                   />
                   <div class="unit">元</div>
@@ -523,7 +536,7 @@ function submit() {
             <textarea
               class="ss-textarea"
               placeholder="請輸入服務簡介"
-              v-model="grooming.intro"
+              v-model="grooming.introduction"
               :disabled="isView"
             ></textarea>
           </div>
@@ -531,7 +544,7 @@ function submit() {
 
         <section class="ss-card">
           <div class="ss-card-inner">
-            <label class="ss-label">注意事項 *</label>
+            <label class="ss-label">注意事項</label>
             <textarea
               class="ss-textarea"
               placeholder="請輸入注意事項"
